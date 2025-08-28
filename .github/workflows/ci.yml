@@ -29,19 +29,19 @@ jobs:
         with:
           version: 9
 
-      - name: Install dependencies (workspace: ${{ matrix.path }})
+      - name: Install dependencies
         run: pnpm install
         working-directory: ${{ matrix.path }}
 
-      - name: Run lint (workspace: ${{ matrix.path }})
+      - name: Run lint
         run: pnpm lint
         working-directory: ${{ matrix.path }}
 
-      - name: Run tests (workspace: ${{ matrix.path }})
+      - name: Run tests
         run: pnpm test
         working-directory: ${{ matrix.path }}
 
-      - name: Build (workspace: ${{ matrix.path }})
+      - name: Build
         run: pnpm build
         working-directory: ${{ matrix.path }}
         if: exists("${{ matrix.path }}/package.json") && contains(fromJSON(inputs).scripts, 'build')
