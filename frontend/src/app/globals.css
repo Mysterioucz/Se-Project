@@ -5,12 +5,18 @@
   --foreground: #171717;
 }
 
-/* Example of tailwind customizations @forfaii may need to look into */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+}
+
+/* Example of tailwind customizations @forfaii may need to look into */
+@theme {
+    --color-primary-950: #011319;
+    --color-primary-900: #022b39;
+    --color-primary-800: #044359;
 }
 
 @media (prefers-color-scheme: dark) {
