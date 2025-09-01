@@ -15,12 +15,168 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Airport {
+  AirportID   String    @id @db.VarChar(10)
+  AirportName String    @db.VarChar(100)
+  City        String    @db.VarChar(100)
+  Country     String    @db.VarChar(100)
+}
+
+model Airline {
+  AirlineName      String    @id @db.VarChar(100)
+  Website          String?   @db.VarChar(255)
+  AmountOfAircraft Int
+  Logo             String?   @db.VarChar(255)
+}
+
+model Aircraft {
+  AircraftRegNo String  @id @db.VarChar(20)
+  AirlineName   String  @db.VarChar(100)
+  SeatCapacity  Int
+  ModelName     String  @db.VarChar(100)
+}
+
 model Flight {
   FlightNo           String   @id @db.VarChar(10)
   Schedule           DateTime
-  ArrivalAirportID   String   @unique @db.Char(3)     
-  DepartureAirportID String   @unique @db.Char(3)        
-  AirlineName        String   @db.VarChar(100)   
-  AircraftRegNo      String   @db.VarChar(20) 
+  ArrivalAirportID   String   @db.VarChar(10)
+  DepartureAirportID String   @db.VarChar(10)
+  AirlineName        String   @db.VarChar(100)
+  AircraftRegNo      String   @db.VarChar(20)
 }
 
+model Ticket {
+  TicketID          String    @id @db.VarChar(50)
+  Price             Float
+  TicketStatus      String
+  PassengerName     String
+  PassengerLastName String
+  Gender            String
+  DateOfBirth       DateTime
+  Nationality       String
+  BaggageChecked    Boolean
+  BaggageClaimNo    String?
+  SeatNo            String
+  AircraftRegNo     String
+  FlightNo          String
+  Schedule          DateTime
+}
+
+model Operate {
+  AirportID   String    @db.VarChar(10)
+  AirlineName String    @db.VarChar(100)
+  
+  @@id([AirportID, AirlineName])
+}
+
+model Assigned_To {
+  FlightNo       String    @db.VarChar(10)
+  UserAccountID  String    @db.VarChar(50)
+  
+  @@id([FlightNo, UserAccountID])
+}
+
+model Contact {
+  AdminAccountID    String  @db.VarChar(50)
+  AirlineMessageID  String  @db.VarChar(50)
+  ContactStatus     String
+  
+  @@id([AdminAccountID, AirlineMessageID])
+}
+
+model Report_To {
+  UserAccountID   String @db.VarChar(50)
+  ReportID        String @db.VarChar(50)
+
+  @@id([UserAccountID, ReportID])
+}
+
+model CabinClass {
+  Class String @id @db.VarChar(20)
+}
+
+model Seat {
+  SeatNo        String @id @db.VarChar(10)
+  SeatType      String
+  AircraftRegNo String @db.VarChar(20)
+}
+
+model Admin {
+  UserAccountID String @id @db.VarChar(50)
+  AdminID       String @db.VarChar(50) @unique
+  AdminMessage  String @db.VarChar(100)
+}
+
+model Airline_Message {
+  AirlineMessageID String @id @db.VarChar(50)
+  AdminAccountID   String @db.VarChar(50)
+  MessageText      String
+}
+
+model Account {
+  AccountID  String @id @db.VarChar(50)
+  Password   String
+  FirstName  String
+  LastName   String
+}
+
+model User {
+  UserAccountID String  @id @db.VarChar(50)
+  Email         String  @unique
+  IPAddress     String?
+}
+
+model User_Tel_No {
+  TelNo         String @id @db.VarChar(20)
+  UserAccountID String @db.VarChar(50)
+}
+
+model Report {
+  ReportID          String @id @db.VarChar(50)
+  ReportDescription String
+  BookingID         String
+  Attachment        String?
+  UserAccountID     String @db.VarChar(50)
+  AdminAccountID    String @db.VarChar(50)
+  ReportStatus      String
+  Email             String
+  TelNo             String
+  PassengerName     String
+}
+
+model Domestic_Ticket {
+  TicketID String @id @db.VarChar(50)
+}
+
+model International_Ticket {
+  TicketID       String @id @db.VarChar(50)
+  PassportNo     String
+  IssuedCountry  String
+  PassportExpiry DateTime
+}
+
+model Round_Trip_Ticket {
+  TicketID   String @id @db.VarChar(50)
+  TicketID2  String @db.VarChar(50)
+}
+
+model Purchase {
+  PurchaseID    String @id @db.VarChar(50)
+  TicketID      String @db.VarChar(50)
+  PaymentID     String @db.VarChar(50)
+  UserAccountID String @db.VarChar(50)
+}
+
+model Payment {
+  PaymentID       String   @id @db.VarChar(50)
+  PaymentDateTime DateTime
+  Timestamp       DateTime
+  PaymentMethod   String
+  TransactionStatus String
+  Amount          Float
+}
+
+model Airline_Tel_No {
+  TelNo       String @id @db.VarChar(20)
+  AirlineName String @db.VarChar(100)
+}
