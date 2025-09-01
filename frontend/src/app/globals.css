@@ -6,17 +6,98 @@
 }
 
 @theme inline {
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --font-sans: var(--font-geist-sans);
-    --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* --font-sans: var(--font-geist-sans); */
+  --font-mono: var(--font-geist-mono);
 }
 
 /* Example of tailwind customizations @forfaii may need to look into */
 @theme {
-    --color-primary-950: #011319;
-    --color-primary-900: #022b39;
-    --color-primary-800: #044359;
+  --font-sans: "Sarabun", "IBM Plex Sans Thai", sans-serif;
+
+  --color-common-white: #FFFFFF;
+  --color-common-black: #000000;
+
+  --color-primary-950: #011319;
+  --color-primary-900: #022b39;
+  --color-primary-800: #044359;
+  --color-primary-700: #025B79;
+  --color-primary-600: #067399;
+  --color-primary-500: #068CB7;
+  --color-primary-400: #30A2C5;
+  --color-primary-300: #5EB8D3;
+  --color-primary-200: #8BCEE1;
+  --color-primary-100: #B8E4EF;
+  --color-primary-50: #E7F9FE;
+
+  --color-gray-950: #0C0E0E;
+  --color-gray-900: #14191A;
+  --color-gray-800: #1C2426;
+  --color-gray-700: #262F32;
+  --color-gray-600: #2F3A3D;
+  --color-gray-500: #3A474B;
+  --color-gray-400: #5F696C;
+  --color-gray-300: #848B8F;
+  --color-gray-200: #A9ADB1;
+  --color-gray-100: #CECFD3;
+  --color-gray-50: #F1F3F4;
+
+  --color-disable-contrasttext: #FFFFFF;
+  --color-disable-darker: #323232;
+  --color-disable-dark: #7C7C7C;
+  --color-disable-main: #C4C4C4;
+  --color-disable-light: #D6D6D6;
+  --color-disable-lighter: #F1F3F4;
+
+  --color-error-contrasttext: #FFFFFF;
+  --color-error-darker: #5A1A1A;
+  --color-error-dark: #7D2424;
+  --color-error-main: #C53737;
+  --color-error-light: #D97F7F;
+  --color-error-lighter: #EDC7C7;
+
+  --color-warning-contrasttext: #FFFFFF;
+  --color-warning-darker: #705B1A;
+  --color-warning-dark: #C8A332;
+  --color-warning-main: #F2C83D;
+  --color-warning-light: #F6DC81;
+  --color-warning-lighter: #FAF0C5;
+
+  --color-success-contrasttext: #FFFFFF;
+  --color-success-darker: #1F4E22;
+  --color-success-dark: #2B6C2F;
+  --color-success-main: #42A647;
+  --color-success-light: #86C689;
+  --color-success-lighter: #CAE6CB;
+
+  --text-display: 48px/120% var(--font-sans);      
+  --text-subdisplay: 40px/120% var(--font-sans);   
+  --text-h1: 32px/120% var(--font-sans);         
+  --text-h2: 24px/120% var(--font-sans);       
+  --text-h3: 20px/120% var(--font-sans);          
+  --text-body-lg: 18px/120% var(--font-sans);  
+  --text-body: 16px/120% var(--font-sans);     
+  --text-body-sm: 14px/120% var(--font-sans);   
+  --text-caption: 12px/120% var(--font-sans); 
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-sm-md: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 40px;
+  --spacing-xxxl: 64px;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm-md: 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+  --shadow-lg: 0 8px 12px rgba(0,0,0,0.1);
 }
 
 @media (prefers-color-scheme: dark) {
