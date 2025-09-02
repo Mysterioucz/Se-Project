@@ -1,21 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-
-type ButtonState = "enabled" | "disabled";
-type ButtonStyle = "fill" | "stroke" | "text";
-type ButtonSize = "sm" | "md" | "lg";
-
-interface ButtonProps {
-    text: string;
-    iconStart?: string;
-    iconEnd?: string;
-    onClick?: () => void;
-    disabled?: boolean;
-    styleType?: ButtonStyle;  // fill, stroke, text
-    size?: ButtonSize;        // sm, md, lg
-    href: string;
-}
+import { ButtonStyle, ButtonSize, ButtonProps } from "./Helper";
 
 export default function Button({
     text,
