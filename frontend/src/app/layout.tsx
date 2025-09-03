@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Sarabun } from "next/font/google";
 import "./globals.css";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 
 const sarabun = Sarabun({
     variable: "--font-sarabun",
@@ -23,7 +24,9 @@ export default function RootLayout({
             <body
                 className={`${sarabun.variable} antialiased`}
             >
-                {children}
+                <AppRouterCacheProvider options={{enableCssLayer: true}}>
+                    {children}
+                </AppRouterCacheProvider>
             </body>
         </html>
     );
