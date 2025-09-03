@@ -4,7 +4,8 @@ import "./globals.css";
 
 const sarabun = Sarabun({
     variable: "--font-sarabun",
-    weight: ["400", "700"],
+    subsets: ["latin"],
+    weight: ["400", "700"]
 });
 
 export const metadata: Metadata = {
