@@ -8,7 +8,7 @@ interface Props {
     title: string;
 }
 
-export default function Item({ prefixIcon, title }: Props) {
+export default function ItemComponent({ prefixIcon, title }: Props) {
     function resolveTextColor(state: ItemState) {
         switch (state) {
             case "enabled":

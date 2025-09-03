@@ -5,6 +5,9 @@ interface Props {
     labelId: string;
     id: string;
     value: string;
+    error?: boolean;
+    disabled?: boolean;
+
     onChange?: (
         event:
             | React.ChangeEvent<HTMLInputElement>
@@ -15,20 +18,26 @@ interface Props {
     children?: React.ReactNode;
 }
 
-export default function SelectShowList({
+export default function SelectComponent({
     labelId,
     id,
     value,
+    error,
+    disabled,
     onChange,
     children,
 }: Props) {
     return (
         <Select
-        // need to add group className at Parent element to let tailwind overwrite the default styles of child element
+            error={error}
+            disabled={disabled}
+            // need to add group className at Parent element to let tailwind overwrite the default styles of child element
             className="group"
             slotProps={{
                 notchedOutline: {
-                    className: ` group-[.Mui-error]:border-error-main border-primary-600 `,
+                    className: `border-gray-200 ${
+                        disabled ? "" : "group-hover:border-gray-400"
+                    } group-[.Mui-focused]:border-primary-600 group-[.Mui-error]:border-error-main  `,
                 },
             }}
             labelId={labelId}
