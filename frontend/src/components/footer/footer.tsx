@@ -29,7 +29,7 @@ export default function Footer() {
           <div className="flex flex-col justify-center items-start gap-3 self-stretch">
             <div className="flex items-center gap-2">
               <img
-                src="/icons/fi-br-call-history.png"
+                src="/icons/icon_stroke/fi-br-call-history.svg"
                 alt="telephone"
                 className="flex w-[16px] h-[16px] justify-center items-center aspect-square"
               />
@@ -40,7 +40,7 @@ export default function Footer() {
 
             <div className="flex items-center gap-2">
               <img
-                src="/icons/fi-br-envelope.png"
+                src="/icons/icon_stroke/fi-br-envelope.svg"
                 alt="email"
                 className="flex w-[16px] h-[16px] justify-center items-center aspect-square"
               />
