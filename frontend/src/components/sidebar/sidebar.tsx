@@ -1,7 +1,13 @@
 import Link from "next/link";
-import React from "react";
+import React, { ReactNode } from "react";
 
-export function SidebarItem({logo, label, href = "#"}) {
+interface SidebarItemProps {
+  logo?: ReactNode;       // Can be a React element like an <img> or <svg>
+  label?: string;
+  href?: string;
+}
+
+export function SidebarItem({logo, label, href = "#"}: SidebarItemProps) {
   return (
     <Link href={href}>
       <div className="flex flex-col justify-center items-start gap-4 p-4 self-stretch rounded-sm bg-white hover:bg-gray-100 cursor-pointer">
@@ -14,7 +20,11 @@ export function SidebarItem({logo, label, href = "#"}) {
   );
 }
 
-export default function Sidebar({children}) {
+interface SidebarProps {
+  children?: ReactNode;
+}
+
+export default function Sidebar({children}: SidebarProps) {
   return (
     <div className="flex flex-col items-start w-[250px] p-6 gap-2 rounded-sm bg-white">
       {children}
