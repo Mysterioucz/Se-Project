@@ -8,6 +8,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import QuantitySelector from './quantity_selector';
 import '../app/globals.css'
 import { useState } from 'react';
+// import Date_Picker from './date_picker';
 
 export default function Flight_Search_Bar() {
     
@@ -104,46 +105,33 @@ export default function Flight_Search_Bar() {
                     {/* Leave */}
                     <div className='relative flex flex-row w-full'>
                         <button 
-                        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-[#022b39] border-[#067399] rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
-                        onClick={() => {
-                            setLeaveClicked(! isLeaveClicked);
-                            if (isClassClicked) {
-                                setClassClicked(! isClassClicked);
-                            }
-                            if (isFlightClicked) {
-                                setLeaveClicked(! isFlightClicked);
-                            }
-                            if (isGoClicked) {
-                                setGoClicked(! isGoClicked);
-                            }
-                            if (isDepartReturnClicked) {
-                                setDepartReturnClicked(! isDepartReturnClicked);
-                            }
-                            if (isPassengersClicked) {
-                                setPassengersClicked(! isPassengersClicked);
-                            }
-                        }}
+                            className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-[#022b39] border-[#067399] rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
+                            onClick={() => {
+                                setLeaveClicked(!isLeaveClicked);
+                                if (isClassClicked) setClassClicked(!isClassClicked);
+                                if (isFlightClicked) setLeaveClicked(!isFlightClicked);
+                                if (isGoClicked) setGoClicked(!isGoClicked);
+                                if (isDepartReturnClicked) setDepartReturnClicked(!isDepartReturnClicked);
+                                if (isPassengersClicked) setPassengersClicked(!isPassengersClicked);
+                            }}
                         >
-                            
                             <div className="flex items-center">
                                 <FlightTakeoffIcon className="mr-2" />
                                 <span>Leaving From?</span>
                             </div>
-                            { ! isLeaveClicked && (<ArrowDropDown className='mr-2' />) }
-                            { isLeaveClicked && (<ArrowDropUpIcon className='mr-2' />) }
+                            {!isLeaveClicked && (<ArrowDropDown className='mr-2' />)}
+                            {isLeaveClicked && (<ArrowDropUpIcon className='mr-2' />)}
                         </button>
                         {isLeaveClicked && (
-                            <ul className="absolute mt-2 max-h-50 w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setLeaveClicked(false);}}>test1</li> 
-                                {/* add set value in the onclick event (store state of value selected too and chaneg the span to {selected value}) */}
-                                {/* will fix later when fetch api */}
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setLeaveClicked(false);}}>test2</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setLeaveClicked(false);}}>test3</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setLeaveClicked(false);}}>test4</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setLeaveClicked(false);}}>test5</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setLeaveClicked(false);}}>test6</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setLeaveClicked(false);}}>test7</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setLeaveClicked(false);}}>test8</li> 
+                            <ul className="absolute top-full max-h-50 w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setLeaveClicked(false); }}>test1</li> 
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setLeaveClicked(false); }}>test2</li> 
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setLeaveClicked(false); }}>test3</li> 
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setLeaveClicked(false); }}>test4</li> 
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setLeaveClicked(false); }}>test5</li> 
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setLeaveClicked(false); }}>test6</li> 
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setLeaveClicked(false); }}>test7</li> 
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => { setLeaveClicked(false); }}>test8</li> 
                             </ul>
                         )}
                     </div>
@@ -179,7 +167,7 @@ export default function Flight_Search_Bar() {
                         { isGoClicked && (<ArrowDropUpIcon className='mr-2' />) }
                     </button>
                     {isGoClicked && (
-                        <ul className="absolute mt-2 max-h-50 w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
+                        <ul className="absolute top-full max-h-50 w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
                             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setGoClicked(false);}}>test1</li> 
                             {/* add set value in the onclick event (store state of value selected too and chaneg the span to {selected value}) */}
                             {/* will fix later when fetch api */}
@@ -225,11 +213,8 @@ export default function Flight_Search_Bar() {
                             { isDepartReturnClicked && (<ArrowDropUpIcon className='mr-2' />) }
                         </button>
                         {isDepartReturnClicked && (
-                            <div className="absolute mt-2 w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
-                                <QuantitySelector label="Adults" description="12+ years old" init={1} />
-                                <QuantitySelector label="Children" description="2 - 11 years old" init={1} />
-                                <QuantitySelector label="Infants" description="Under 2 years old" init={0} />
-                            </div>
+                            // <DatePicker />
+                            <h1>yay</h1>
                         )}
                     </div>
                     
@@ -264,18 +249,11 @@ export default function Flight_Search_Bar() {
                             { isPassengersClicked && (<ArrowDropUpIcon className='mr-2' />) }
                         </button>
                         {isPassengersClicked && (
-                            <ul className="absolute mt-2 max-h-50 w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setPassengersClicked(false);}}>test1</li> 
-                                {/* add set value in the onclick event (store state of value selected too and chaneg the span to {selected value}) */}
-                                {/* will fix later when fetch api */}
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setPassengersClicked(false);}}>test2</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setPassengersClicked(false);}}>test3</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setPassengersClicked(false);}}>test4</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setPassengersClicked(false);}}>test5</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setPassengersClicked(false);}}>test6</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setPassengersClicked(false);}}>test7</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setPassengersClicked(false);}}>test8</li> 
-                            </ul>
+                            <div className="absolute top-full w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10">
+                                <QuantitySelector label="Adult" description="12+ years old" init={1} />
+                                <QuantitySelector label="Children" description="2 - 11 years old" init={1} />
+                                <QuantitySelector label="Infants" description="Under 2 years old" init={0} />
+                            </div>
                         )}
                     </div>
                     

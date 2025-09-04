@@ -1,17 +1,17 @@
-'use client'
+ 'use client'
 import React, { useState } from 'react';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
 export default function TimeSlider ({label} : {label:string}) {
     const marks = [
-        { value: 0},
-        { value: 4},
-        { value: 8},
-        { value: 12},
-        { value: 16},
-        { value: 20},
-        { value: 24},
+        { value: 0 },
+        { value: 4 },
+        { value: 8 },
+        { value: 12 },
+        { value: 16 },
+        { value: 20 },
+        { value: 24 }
     ];
 
     const [value, setValue] = useState([0, 4]);
