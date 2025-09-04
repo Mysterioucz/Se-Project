@@ -8,7 +8,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import QuantitySelector from './quantity_selector';
 import '../app/globals.css'
 import { useState } from 'react';
-// import Date_Picker from './date_picker';
+import Date_Picker from './date_picker';
 
 export default function Flight_Search_Bar() {
     
@@ -19,6 +19,21 @@ export default function Flight_Search_Bar() {
     const [isGoClicked, setGoClicked] = useState(false);
     const [isDepartReturnClicked, setDepartReturnClicked] = useState(false);
     const [isPassengersClicked, setPassengersClicked] = useState(false);
+
+    const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+    const formatDate = (date: Date | null): string => {
+    if (!date) return '';
+        return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+
+    const getDateButtonText = () => {
+        if (selectedDate) {
+        return formatDate(selectedDate);
+        }
+        return 'Depart Return';
+    }
 
     return (
         <div className="w-full mx-auto --font-sans">
@@ -159,9 +174,9 @@ export default function Flight_Search_Bar() {
                             }}
                         >
 
-                        <div className="flex items-center">
+                        <div className="flex items-center text-md">
                             <FlightLandIcon className="mr-2" />
-                            <span>Going to?</span>
+                            Going to?
                         </div>
                         { ! isGoClicked && (<ArrowDropDown className='mr-2' />) }
                         { isGoClicked && (<ArrowDropUpIcon className='mr-2' />) }
@@ -185,37 +200,7 @@ export default function Flight_Search_Bar() {
                     
                     {/* Depart - Return */}
                     <div className='relative flex flex-row w-full'>
-                        <button className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-[#022b39] border-[#067399] rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
-                        onClick={() => {
-                                setDepartReturnClicked(! isDepartReturnClicked);
-                                if (isClassClicked) {
-                                    setClassClicked(! isClassClicked);
-                                }
-                                if (isLeaveClicked) {
-                                    setLeaveClicked(! isLeaveClicked);
-                                }
-                                if (isGoClicked) {
-                                    setGoClicked(! isGoClicked);
-                                }
-                                if (isFlightClicked) {
-                                    setFlightClicked(! isFlightClicked);
-                                }
-                                if (isPassengersClicked) {
-                                    setPassengersClicked(! isPassengersClicked);
-                                }
-                            }}>
-                            
-                            <div className="flex items-center">
-                                <CalendarTodayIcon className="mr-2" />
-                                <span>Depart - Return</span>
-                            </div>
-                            { ! isDepartReturnClicked && (<ArrowDropDown className='mr-2' />) }
-                            { isDepartReturnClicked && (<ArrowDropUpIcon className='mr-2' />) }
-                        </button>
-                        {isDepartReturnClicked && (
-                            // <DatePicker />
-                            <h1>yay</h1>
-                        )}
+                        <Date_Picker />
                     </div>
                     
                     
