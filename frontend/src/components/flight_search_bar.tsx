@@ -5,6 +5,7 @@ import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PersonIcon from '@mui/icons-material/Person';
+import QuantitySelector from './quantity_selector';
 import '../app/globals.css'
 import { useState } from 'react';
 
@@ -224,18 +225,11 @@ export default function Flight_Search_Bar() {
                             { isDepartReturnClicked && (<ArrowDropUpIcon className='mr-2' />) }
                         </button>
                         {isDepartReturnClicked && (
-                            <ul className="absolute mt-2 max-h-50 w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setDepartReturnClicked(false);}}>test1</li> 
-                                {/* add set value in the onclick event (store state of value selected too and chaneg the span to {selected value}) */}
-                                {/* will fix later when fetch api */}
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setDepartReturnClicked(false);}}>test2</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setDepartReturnClicked(false);}}>test3</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setDepartReturnClicked(false);}}>test4</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setDepartReturnClicked(false);}}>test5</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setDepartReturnClicked(false);}}>test6</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setDepartReturnClicked(false);}}>test7</li> 
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {setDepartReturnClicked(false);}}>test8</li> 
-                            </ul>
+                            <div className="absolute mt-2 w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
+                                <QuantitySelector label="Adults" description="12+ years old" init={1} />
+                                <QuantitySelector label="Children" description="2 - 11 years old" init={1} />
+                                <QuantitySelector label="Infants" description="Under 2 years old" init={0} />
+                            </div>
                         )}
                     </div>
                     
