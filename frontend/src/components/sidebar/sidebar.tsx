@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { ReactNode } from "react";
 
 interface SidebarItemProps {
-  logo?: ReactNode;       // Can be a React element like an <img> or <svg>
+  logo?: ReactNode;
   label?: string;
   href?: string;
 }
