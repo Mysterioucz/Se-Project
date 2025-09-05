@@ -14,7 +14,7 @@ export default function Navbar({ isSignIn, displayName }: NavbarProps) {
   const [clicked, setClicked] = useState(false);
 
   return (
-    <nav className="bg-[var(--color-primary-400)] flex mb-[1.5rem] items-center w-full justify-between py-[var(--spacing-sm)] px-[var(--spacing-xl)] sticky top-0">
+    <nav className="bg-[var(--color-primary-400)] flex mb-[1.5rem] items-center w-full justify-between py-[var(--spacing-sm)] px-[var(--spacing-xl)] sticky top-0 z-99">
       {/* Navigate to main page */}
       <Link href="">
         <Image
