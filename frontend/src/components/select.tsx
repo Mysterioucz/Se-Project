@@ -1,4 +1,3 @@
-"use client";
 import { createTheme, Select } from "@mui/material";
 
 interface Props {

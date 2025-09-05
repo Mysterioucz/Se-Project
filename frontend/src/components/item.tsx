@@ -4,11 +4,12 @@ import { ReactNode, useState } from "react";
 type ItemState = "enabled" | "focused" | "hover";
 
 interface Props {
-    prefixIcon: ReactNode;
-    title: string;
+    prefix: ReactNode;
+    label: string;
+    onClick?: () => void;
 }
 
-export default function ItemComponent({ prefixIcon, title }: Props) {
+export default function ItemComponent({ prefix, label, onClick }: Props) {
     function resolveTextColor(state: ItemState) {
         switch (state) {
             case "enabled":
@@ -52,18 +53,21 @@ export default function ItemComponent({ prefixIcon, title }: Props) {
     const bgColor = resolveBackgroundColor(state);
 
     return (
-        <div
-            className={`flex p-4 ${bgColor} gap-[0.625rem] w-[15.625rem] h-fit rounded-sm`}
+        <button
+            className={`flex items-center p-4 ${bgColor} gap-[0.625rem] w-[15.625rem] h-fit rounded-sm`}
             onMouseEnter={() => handleStateChange("hover")}
             onMouseLeave={() => handleStateChange("enabled")}
             onFocus={() => handleStateChange("focused")}
+            onClick={onClick}
         >
-            <div className={`h-[1.25rem] w-[1.25rem] ${iconColor}`}>
-                {prefixIcon}
+            <div
+                className={`max-w-[1.25rem] max-h-[1.25rem] h-[1.25rem] w-[1.25rem] ${iconColor}`}
+            >
+                {prefix}
             </div>
-            <div className="flex-1">
-                <h3 className={`font-bold ${textColor}`}>{title}</h3>
+            <div className="flex h-fit items-center">
+                <h3 className={`font-bold ${textColor}`}>{label}</h3>
             </div>
-        </div>
+        </button>
     );
 }
