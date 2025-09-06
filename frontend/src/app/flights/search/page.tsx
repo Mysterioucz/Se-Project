@@ -1,9 +1,16 @@
+"use client";
 import Footer from '../../../components/footer/footer';
 import Sidebar, { SidebarItem } from "../../../components/sidebar/sidebar";
+import BasicSelect from '../../../components/select/select';
+import { useState } from 'react';
 
 
 // test
 export default function Page() {
+    const [age, setAge] = useState('');
+    const [error, setError] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+
     return (
         <div>
             <div>Flight Search</div>
@@ -14,6 +21,58 @@ export default function Page() {
                 <SidebarItem label="Profile" href="/profile" logo={<img src="/icons/icon_stroke/fi-br-user.svg" alt="user" className="w-5 h-5 aspect-square"/>}/>
                 <SidebarItem label="Settings" href="/settings" logo={<img src="/icons/icon_stroke/fi-br-settings.svg" alt="settings" className="w-5 h-5 aspect-square"/>}/>
             </Sidebar>
+            {/* Example Select Compoonent */}
+            <div className="flex flex-col p-4 items-center gap-3">
+                <BasicSelect
+                label="Age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                options={[
+                    { label: "Ten", value: "10" },
+                    { label: "Twenty", value: "20" },
+                    { label: "Thirty", value: "30" },
+                ]}
+                state={error ? "error" : disabled ? "disabled" : "enabled"}
+                helperText={error ? "This field is required" : ""}
+                />
+                <BasicSelect
+                    label="Disabled"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    options={[
+                        { label: "Ten", value: "10" },
+                        { label: "Twenty", value: "20" },
+                        { label: "Thirty", value: "30" },
+                    ]}
+                    state="disabled"
+                    helperText={error ? "This field is required" : ""}
+                />
+                <BasicSelect
+                    label="Error"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    options={[
+                        { label: "Ten", value: "10" },
+                        { label: "Twenty", value: "20" },
+                        { label: "Thirty", value: "30" },
+                    ]}
+                    state="error"
+                    helperText={error ? "This field is required" : ""}
+                />
+                <BasicSelect
+                    label="Focused"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    options={[
+                        { label: "Ten", value: "10" },
+                        { label: "Twenty", value: "20" },
+                        { label: "Thirty", value: "30" },
+                    ]}
+                    state="focused"
+                    helperText={error ? "This field is required" : ""}
+                />
+            </div>
+            {/* Example footer*/}
             <Footer />
         </div>
     );
