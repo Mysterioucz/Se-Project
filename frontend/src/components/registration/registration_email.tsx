@@ -60,7 +60,7 @@ export default function RegistrationEmail() {
                   ? "border-error-main"
                   : focused
                   ? "border-primary-400"
-                  : "border-primary-300"
+                  : "border-gray-400"
               } rounded-sm items-center`}
             >
               <input
