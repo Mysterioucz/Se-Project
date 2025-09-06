@@ -34,10 +34,14 @@ export default function Page() {
                 labelId="flight-search"
                 id="flight-search-select"
                 value={selectValue}
-                onChange={(event) => {
+                onChange={(
+                    event:
+                        | React.ChangeEvent<HTMLInputElement>
+                        | React.ChangeEvent<{ value: unknown }>
+                        | (Event & { target: { value: string; name?: string } })
+                ) => {
                     // Handles MUI Select event signature
-                    const value =
-                        event?.target?.value ?? (event as any)?.value ?? "";
+                    const value = event.target.value ?? "";
                     setSelectValue(value as string);
                 }}
             >

@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import TelPrefix from "./prefix/tel_prefix";
-import { resolve } from "path";
 interface Props {
     label: string;
     textValue: string;
@@ -22,7 +21,6 @@ export default function TextFieldComponent({
     telValue,
     placeHolder,
     telForm = true,
-    required,
     disabled,
     error,
     helperText,
@@ -69,7 +67,7 @@ export default function TextFieldComponent({
             setState("enabled");
         }
         console.log("State changed to:", state);
-    }, [disabled, error]);
+    }, [disabled, error, state]);
 
     return (
         <div className="flex flex-col w-full h-fit gap-3">
@@ -111,7 +109,11 @@ export default function TextFieldComponent({
                     }
                 />
             </div>
-            {helperText && <p className={`${resolveHelperTextColor(state)}`}>{helperText}</p>}
+            {helperText && (
+                <p className={`${resolveHelperTextColor(state)}`}>
+                    {helperText}
+                </p>
+            )}
         </div>
     );
 }

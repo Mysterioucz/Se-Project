@@ -1,6 +1,6 @@
 interface Props {
     icons?: React.ReactNode[];
-    options: any[];
+    options: string[];
     maxHeight?: string;
     itemWidth?: string;
     onClick?: () => void;
@@ -26,11 +26,10 @@ export default function ListChoice({
             <div
                 className={`p-2 cursor-pointer ${itemWidth}`}
                 onClick={() => {
-                    onClick && onClick();
-                    onChange &&
-                        onChange({ target: { value } } as React.ChangeEvent<{
-                            value: unknown;
-                        }>);
+                    onClick?.();
+                    onChange?.({ target: { value } } as React.ChangeEvent<{
+                        value: unknown;
+                    }>);
                 }}
             >
                 {icon}

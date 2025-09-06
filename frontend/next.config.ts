@@ -6,12 +6,6 @@ const nextConfig: NextConfig = {
 
     webpack(config) {
         // Exclude svg from Next's default file loader
-        const fileLoaderRule = config.module.rules.find(
-            (rule: any) => rule.test && rule.test.test(".svg")
-        );
-        if (fileLoaderRule) {
-            fileLoaderRule.exclude = /\.svg$/i;
-        }
 
         config.module.rules.push({
             test: /\.svg$/,
