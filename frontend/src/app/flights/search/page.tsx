@@ -38,7 +38,9 @@ export default function Page() {
                     event:
                         | React.ChangeEvent<HTMLInputElement>
                         | React.ChangeEvent<{ value: unknown }>
-                        | (Event & { target: { value: string; name?: string } })
+                        | (Event & {
+                              target: { value: string; name?: string };
+                          }),
                 ) => {
                     // Handles MUI Select event signature
                     const value = event.target.value ?? "";
@@ -54,6 +56,7 @@ export default function Page() {
                 textValue={textValue}
                 telValue={telValue}
                 onChange={handleTextFieldChange}
+                telForm={true}
             />
         </div>
     );

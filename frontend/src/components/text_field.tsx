@@ -20,7 +20,7 @@ export default function TextFieldComponent({
     textValue,
     telValue,
     placeHolder,
-    telForm = true,
+    telForm,
     disabled,
     error,
     helperText,
@@ -66,8 +66,7 @@ export default function TextFieldComponent({
         } else {
             setState("enabled");
         }
-        console.log("State changed to:", state);
-    }, [disabled, error, state]);
+    }, [disabled, error]);
 
     return (
         <div className="flex flex-col w-full h-fit gap-3">
@@ -77,10 +76,14 @@ export default function TextFieldComponent({
                     state
                 )}`}
                 onFocus={() => {
-                    if (!disabled) setState("focused");
+                    if (!disabled) {
+                        setState("focused");
+                    }
                 }}
                 onMouseEnter={() => {
-                    if (!disabled) setState("hover");
+                    if (!disabled) {
+                        setState("hover");
+                    }
                 }}
                 onMouseLeave={() =>
                     setState(
