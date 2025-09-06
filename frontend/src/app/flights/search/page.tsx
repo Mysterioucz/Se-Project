@@ -11,6 +11,10 @@ export default function Page() {
     const [error, setError] = useState(false);
     const [disabled, setDisabled] = useState(false);
 
+    const [name, setName] = useState('');
+    const [error1, setError1] = useState(false);
+    const [disabled1, setDisabled1] = useState(false);
+
     return (
         <div>
             <div>Flight Search</div>
@@ -36,9 +40,9 @@ export default function Page() {
                 helperText={error ? "This field is required" : ""}
                 />
                 <BasicSelect
-                    label="Disabled"
-                    value={age}
-                    onChange={(e) => setAge(e.target.value)}
+                    label="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     options={[
                         { label: "Ten", value: "10" },
                         { label: "Twenty", value: "20" },
@@ -48,7 +52,7 @@ export default function Page() {
                     helperText={error ? "This field is required" : ""}
                 />
                 <BasicSelect
-                    label="Error"
+                    label="Age"
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
                     options={[
@@ -57,18 +61,6 @@ export default function Page() {
                         { label: "Thirty", value: "30" },
                     ]}
                     state="error"
-                    helperText={error ? "This field is required" : ""}
-                />
-                <BasicSelect
-                    label="Focused"
-                    value={age}
-                    onChange={(e) => setAge(e.target.value)}
-                    options={[
-                        { label: "Ten", value: "10" },
-                        { label: "Twenty", value: "20" },
-                        { label: "Thirty", value: "30" },
-                    ]}
-                    state="focused"
                     helperText={error ? "This field is required" : ""}
                 />
             </div>
