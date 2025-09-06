@@ -25,7 +25,7 @@ export default function TextFieldComponent({
     required,
     disabled,
     error,
-    helperText = "helper text",
+    helperText,
     onChange,
 }: Props) {
     const [state, setState] = useState<
