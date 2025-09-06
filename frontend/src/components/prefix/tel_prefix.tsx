@@ -2,24 +2,11 @@
 import { TelArray } from "@/data/mockTelPrefix";
 import SmallArrowDown from "../icons/fi-sr-angle-small-down.svg";
 import { useEffect, useRef, useState } from "react";
+import ListChoice from "../list_choice";
 interface Props {
     value: string;
     onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
     disabled?: boolean;
-}
-
-function OptionContainer({
-    value,
-    onClick,
-}: {
-    value: string;
-    onClick: () => void;
-}) {
-    return (
-        <div className="p-2 cursor-pointer" onClick={onClick}>
-            {value}
-        </div>
-    );
 }
 
 export default function TelPrefix({ value, onChange, disabled }: Props) {
@@ -58,21 +45,11 @@ export default function TelPrefix({ value, onChange, disabled }: Props) {
                 <SmallArrowDown />
             </button>
             {isOpen && (
-                <div className="flex w-fit shadow-lg/20 p-1 max-h-[12.5rem] top-[100%] bg-common-white flex-col absolute z-10 overflow-y-auto overflow-x-clip">
-                    {TelArray.map((tel, index) => (
-                        <OptionContainer
-                            key={index}
-                            value={tel}
-                            onClick={() => {
-                                setIsOpen(false);
-                                onChange &&
-                                    onChange({
-                                        target: { value: tel },
-                                    } as React.ChangeEvent<{ value: unknown }>);
-                            }}
-                        />
-                    ))}
-                </div>
+                <ListChoice
+                    options={TelArray}
+                    onClick={() => setIsOpen(false)}
+                    onChange={onChange}
+                />
             )}
         </div>
     );

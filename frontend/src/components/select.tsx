@@ -1,4 +1,4 @@
-import { createTheme, Select } from "@mui/material";
+import { Select } from "@mui/material";
 
 interface Props {
     labelId: string;
