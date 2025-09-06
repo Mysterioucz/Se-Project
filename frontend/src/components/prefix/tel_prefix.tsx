@@ -1,21 +1,19 @@
-import NativeSelect from "@mui/material/NativeSelect";
-
+// Update the import path to the correct location of SmallArrowDown
+import SmallArrowDown from "../icons/fi-sr-angle-small-down.svg";
 interface Props {
     value?: string;
+    maxSize?: number;
     onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
 
-export default function TelPrefix({ value, onChange }: Props) {
+console.log(SmallArrowDown);
+
+export default function TelPrefix({ value, maxSize = 5, onChange }: Props) {
     return (
-        <select className="outline-none" name="tel-prefix" id="tel-prefix" value={value} onChange={onChange}>
-            <option value="+1">+1</option>
-            <option value="+44">+44</option>
-            <option value="+61">+61</option>
-            <option value="+66">+66</option>
-            <option value="+81">+81</option>
-            <option value="+82">+82</option>
-            <option value="+84">+84</option>
-            <option value="+86">+86</option>
-        </select>
+        <div className="flex">
+            <button>
+            </button>
+                <SmallArrowDown />
+        </div>
     );
 }
