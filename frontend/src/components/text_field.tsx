@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import TelPrefix from "./prefix/tel_prefix";
+import { resolve } from "path";
 interface Props {
     label: string;
     textValue: string;
@@ -24,7 +25,7 @@ export default function TextFieldComponent({
     required,
     disabled,
     error,
-    helperText,
+    helperText = "helper text",
     onChange,
 }: Props) {
     const [state, setState] = useState<
@@ -45,6 +46,17 @@ export default function TextFieldComponent({
                 return "border-gray-100";
             default:
                 return "border-gray-200";
+        }
+    }
+
+    function resolveHelperTextColor(state: string) {
+        switch (state) {
+            case "error":
+                return "text-error-light";
+            case "disabled":
+                return "text-gray-400";
+            default:
+                return "text-gray-400";
         }
     }
 
@@ -99,6 +111,7 @@ export default function TextFieldComponent({
                     }
                 />
             </div>
+            {helperText && <p className={`${resolveHelperTextColor(state)}`}>{helperText}</p>}
         </div>
     );
 }
