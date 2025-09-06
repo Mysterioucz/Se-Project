@@ -1,0 +1,1 @@
+export { default as SmallArrowDown } from "./fi-sr-angle-small-down.svg";
