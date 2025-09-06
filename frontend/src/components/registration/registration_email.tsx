@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"; // Main form hook
 import { z } from "zod"; // Schema validation library
 import { zodResolver } from "@hookform/resolvers/zod"; // Connect Zod to React Hook Form
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   email: z
@@ -16,6 +17,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function RegistrationEmail() {
   let [focused, setFocused] = useState(false);
+  const router = useRouter();
 
   const {
     register, // Connects inputs to form
@@ -27,6 +29,7 @@ export default function RegistrationEmail() {
 
   const onSubmit = (data: FormData) => {
     console.log("✅ Valid email:", data.email);
+    router.push("/registration/name");
   };
 
   return (
