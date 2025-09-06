@@ -1,6 +1,5 @@
-export default function Page() {
+export default function RegistrationEmail() {
   return (
-    <div className="flex items-center justify-center h-screen">
       <div className="flex flex-col justify-center gap-8 w-[32.5rem]">
         {/* Top Part */}
         <p className="text-[2.5rem] font-medium text-primary-900">
@@ -23,7 +22,7 @@ export default function Page() {
             </div>
           </div>
           {/* CheckBox Part */}
-            <div className="flex items-center gap-2 py-2 px-2.5">
+          <div className="flex items-center gap-2 py-2 px-2.5">
             <input
               type="checkbox"
               id="terms"
@@ -33,16 +32,15 @@ export default function Page() {
               Yes, I would like Fly with Sigma to send me info about new
               promotion, events, or other related-content.
             </p>
-            </div>
+          </div>
         </div>
 
         {/* Bottom Part */}
         <div className="flex justify-center">
-        <button className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px]">
-          Next
-        </button>
+          <button className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px]">
+            Next
+          </button>
         </div>
       </div>
-    </div>
   );
 }
