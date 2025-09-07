@@ -19,7 +19,8 @@ const schema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "Passwords not match",
+    path: ["confirmPassword"], // Set the error on the confirmPassword field
   });
 
 type FormData = z.infer<typeof schema>;
@@ -39,7 +40,8 @@ export default function RegistrationPassword() {
   });
 
   const onSubmit = (data: FormData) => {
-    console.log("✅ Valid password:", data.password);
+    // TODO: remove this log
+    console.log("✅ Valid password:", data.password, data.confirmPassword);
     router.push("/registration/password");
   };
 
@@ -98,9 +100,15 @@ export default function RegistrationPassword() {
           </p>
           <p
             className={`text-[1rem] ${
-              Object.values(errors.password?.types || {}).at(1)?.toString().includes("capital")
+              Object.values(errors.password?.types || {})
+                .at(1)
+                ?.toString()
+                .includes("capital")
                 ? "text-error-main"
-                : Object.values(errors.password?.types || {}).at(0)?.toString().includes("capital")
+                : Object.values(errors.password?.types || {})
+                    .at(0)
+                    ?.toString()
+                    .includes("capital")
                 ? "text-error-main"
                 : "text-gray-300"
             }`}
@@ -109,9 +117,15 @@ export default function RegistrationPassword() {
           </p>
           <p
             className={`text-[1rem] ${
-                Object.values(errors.password?.types || {}).at(1)?.toString().includes("numbers")
+              Object.values(errors.password?.types || {})
+                .at(1)
+                ?.toString()
+                .includes("numbers")
                 ? "text-error-main"
-                : Object.values(errors.password?.types || {}).at(0)?.toString().includes("numbers")
+                : Object.values(errors.password?.types || {})
+                    .at(0)
+                    ?.toString()
+                    .includes("numbers")
                 ? "text-error-main"
                 : "text-gray-300"
             }`}
@@ -132,23 +146,30 @@ export default function RegistrationPassword() {
             >
               Confirm Password*
             </p>
-            <div
-              className={`flex gap-2.5 p-4 h-[3.1875rem] border-1 ${
-                errors.confirmPassword
-                  ? "border-error-main"
-                  : confirmPasswordFocused
-                  ? "border-primary-400"
-                  : "border-gray-400"
-              } rounded-sm items-center`}
-            >
-              <input
-                type="text"
-                {...register("confirmPassword")}
-                placeholder="Enter your password"
-                className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
-                onFocus={() => setConfirmPasswordFocused(true)}
-                onBlur={() => setConfirmPasswordFocused(false)}
-              />
+            <div className="flex flex-col gap-1">
+              <div
+                className={`flex gap-2.5 p-4 h-[3.1875rem] border-1 ${
+                  errors.confirmPassword
+                    ? "border-error-main"
+                    : confirmPasswordFocused
+                    ? "border-primary-400"
+                    : "border-gray-400"
+                } rounded-sm items-center`}
+              >
+                <input
+                  type="text"
+                  {...register("confirmPassword")}
+                  placeholder="Enter your password"
+                  className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
+                  onFocus={() => setConfirmPasswordFocused(true)}
+                  onBlur={() => setConfirmPasswordFocused(false)}
+                />
+              </div>
+              {errors.confirmPassword && (
+                <p className="text-[1rem] text-error-main">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -161,7 +182,7 @@ export default function RegistrationPassword() {
         <button
           type="button"
           className="w-[7rem] h-[2.1875rem] bg-white rounded-md items-center justify-center text-primary-400 border-1 border-primary-400 text-[16px] cursor-pointer hover:opacity-90"
-          onClick={() => router.push("/registration/email")}
+          onClick={() => router.push("/registration/name")}
         >
           Back
         </button>
@@ -169,7 +190,7 @@ export default function RegistrationPassword() {
           type="submit"
           className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px] cursor-pointer hover:opacity-90"
           onClick={() => {
-            console.log(Object.values(errors.password?.types || {}).at(0)?.toString());
+            errors.confirmPassword?.message;
           }}
         >
           Next
