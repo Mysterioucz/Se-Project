@@ -28,10 +28,10 @@ const schema = z
 type FormData = z.infer<typeof schema>;
 
 export default function RegistrationPassword() {
-  let [passwordFocused, setPasswordFocused] = useState(false);
-  let [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
-  let [showPassword, setShowPassword] = useState(false);
-  let [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
   const {

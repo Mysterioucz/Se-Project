@@ -6,7 +6,7 @@ import { termsText } from "@/components/registration/terms_and_conditions";
 import React from "react";
 
 export default function RegistrationTerms() {
-  let [accepted, setAccepted] = useState(false);
+  const [accepted, setAccepted] = useState(false);
   const router = useRouter();
 
   return (

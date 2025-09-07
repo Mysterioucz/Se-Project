@@ -16,7 +16,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function RegistrationEmail() {
-  let [focused, setFocused] = useState(false);
+  const [focused, setFocused] = useState(false);
   const router = useRouter();
 
   const {
