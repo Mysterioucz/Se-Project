@@ -6,36 +6,40 @@ import { zodResolver } from "@hookform/resolvers/zod"; // Connect Zod to React H
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const schema = z.object({
-  firstName: z
-    .string()
-    .min(2, "First name must be at least 2 characters")
-    .max(100, "First name must be at most 100 characters")
-    .nonempty("First name is required"),
-  lastName: z
-    .string()
-    .min(2, "Last name must be at least 2 characters")
-    .max(100, "Last name must be at most 100 characters")
-    .nonempty("Last name is required"),
-});
+const schema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters long")
+      .regex(/[A-Z]/, "Password must include at least 1 capital letter")
+      .regex(
+        /[0-9!@#$%^&*(),.?":{}|<>]/,
+        "Password must include numbers or symbols"
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+  });
 
 type FormData = z.infer<typeof schema>;
 
-export default function RegistrationName() {
-  let [nameFocused, setNameFocused] = useState(false);
-  let [lastNameFocused, setLastNameFocused] = useState(false);
+export default function RegistrationPassword() {
+  let [passwordFocused, setPasswordFocused] = useState(false);
+  let [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
   const router = useRouter();
 
   const {
-    register, // Connects inputs to form
-    handleSubmit, // Handles form submission and validation
-    formState: { errors }, // Stores validation errors
+    register,
+    handleSubmit,
+    formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(schema), // Connect Zod schema for validation
+    resolver: zodResolver(schema),
+    criteriaMode: "all", // collect all errors per field
   });
 
   const onSubmit = (data: FormData) => {
-    console.log("✅ Valid name:", data.firstName, data.lastName);
+    console.log("✅ Valid password:", data.password);
     router.push("/registration/password");
   };
 
@@ -49,40 +53,71 @@ export default function RegistrationName() {
         Enter Your Information
       </p>
 
-      {/* First Name Part */}
+      {/* Last Name Part */}
       <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-3">
-          <p
-            className={`text-[1.125rem] font-semibold ${
-              errors.firstName ? "text-error-main" : "text-primary-900"
-            }`}
-          >
-            First Name*
-          </p>
-          <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
+            <p
+              className={`text-[1.125rem] font-semibold ${
+                errors.password ? "text-error-main" : "text-primary-900"
+              }`}
+            >
+              Password*
+            </p>
             <div
               className={`flex gap-2.5 p-4 h-[3.1875rem] border-1 ${
-                errors.firstName
+                errors.password
                   ? "border-error-main"
-                  : nameFocused
+                  : passwordFocused
                   ? "border-primary-400"
                   : "border-gray-400"
               } rounded-sm items-center`}
             >
               <input
-                {...register("firstName")}
-                placeholder="Enter your first name"
+                type="text"
+                {...register("password")}
+                placeholder="Enter your password"
                 className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
-                onFocus={() => setNameFocused(true)}
-                onBlur={() => setNameFocused(false)}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
               />
             </div>
-            {errors.firstName && (
-              <p className="text-error-main text-sm">
-                {errors.firstName.message}
-              </p>
-            )}
           </div>
+        </div>
+        {/* TODO: add link */}
+        <div className="flex flex-col">
+          <p
+            className={`text-[1rem] ${
+              Object.values(errors.password?.types || {}).at(0) ===
+              "Password must be at least 8 characters long"
+                ? "text-error-main"
+                : "text-gray-300"
+            }`}
+          >
+            Must be at least 8 characters long
+          </p>
+          <p
+            className={`text-[1rem] ${
+              Object.values(errors.password?.types || {}).at(1)?.toString().includes("capital")
+                ? "text-error-main"
+                : Object.values(errors.password?.types || {}).at(0)?.toString().includes("capital")
+                ? "text-error-main"
+                : "text-gray-300"
+            }`}
+          >
+            Must include at least 1 capital letter
+          </p>
+          <p
+            className={`text-[1rem] ${
+                Object.values(errors.password?.types || {}).at(1)?.toString().includes("numbers")
+                ? "text-error-main"
+                : Object.values(errors.password?.types || {}).at(0)?.toString().includes("numbers")
+                ? "text-error-main"
+                : "text-gray-300"
+            }`}
+          >
+            Must include numbers or symbols
+          </p>
         </div>
       </div>
 
@@ -92,35 +127,28 @@ export default function RegistrationName() {
           <div className="flex flex-col gap-3">
             <p
               className={`text-[1.125rem] font-semibold ${
-                errors.lastName ? "text-error-main" : "text-primary-900"
+                errors.confirmPassword ? "text-error-main" : "text-primary-900"
               }`}
             >
-              Last Name*
+              Confirm Password*
             </p>
-            <div className="flex flex-col gap-1">
-              <div
-                className={`flex gap-2.5 p-4 h-[3.1875rem] border-1 ${
-                  errors.lastName
-                    ? "border-error-main"
-                    : lastNameFocused
-                    ? "border-primary-400"
-                    : "border-gray-400"
-                } rounded-sm items-center`}
-              >
-                <input
-                  type="text"
-                  {...register("lastName")}
-                  placeholder="Enter your last name"
-                  className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
-                  onFocus={() => setLastNameFocused(true)}
-                  onBlur={() => setLastNameFocused(false)}
-                />
-              </div>
-              {errors.lastName && (
-                <p className="text-error-main text-sm">
-                  {errors.lastName.message}
-                </p>
-              )}
+            <div
+              className={`flex gap-2.5 p-4 h-[3.1875rem] border-1 ${
+                errors.confirmPassword
+                  ? "border-error-main"
+                  : confirmPasswordFocused
+                  ? "border-primary-400"
+                  : "border-gray-400"
+              } rounded-sm items-center`}
+            >
+              <input
+                type="text"
+                {...register("confirmPassword")}
+                placeholder="Enter your password"
+                className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
+                onFocus={() => setConfirmPasswordFocused(true)}
+                onBlur={() => setConfirmPasswordFocused(false)}
+              />
             </div>
           </div>
         </div>
@@ -140,6 +168,9 @@ export default function RegistrationName() {
         <button
           type="submit"
           className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px] cursor-pointer hover:opacity-90"
+          onClick={() => {
+            console.log(Object.values(errors.password?.types || {}).at(0)?.toString());
+          }}
         >
           Next
         </button>
