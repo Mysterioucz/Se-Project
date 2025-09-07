@@ -5,6 +5,8 @@ import { z } from "zod"; // Schema validation library
 import { zodResolver } from "@hookform/resolvers/zod"; // Connect Zod to React Hook Form
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import SvgOpenEye from "@/components/icons/openEye.svg";
+import SvgCloseEye from "@/components/icons/closeEye.svg";
 
 const schema = z
   .object({
@@ -28,6 +30,8 @@ type FormData = z.infer<typeof schema>;
 export default function RegistrationPassword() {
   let [passwordFocused, setPasswordFocused] = useState(false);
   let [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
+  let [showPassword, setShowPassword] = useState(false);
+  let [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
   const {
@@ -41,8 +45,7 @@ export default function RegistrationPassword() {
 
   const onSubmit = (data: FormData) => {
     // TODO: remove this log
-    console.log("✅ Valid password:", data.password, data.confirmPassword);
-    router.push("/registration/password");
+    router.push("/registration/terms");
   };
 
   return (
@@ -55,7 +58,7 @@ export default function RegistrationPassword() {
         Enter Your Information
       </p>
 
-      {/* Last Name Part */}
+      {/* Password Part */}
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-3">
@@ -67,7 +70,7 @@ export default function RegistrationPassword() {
               Password*
             </p>
             <div
-              className={`flex gap-2.5 p-4 h-[3.1875rem] border-1 ${
+              className={`flex gap-2.5 p-4 h-[3.1875rem] border-1 justify-between ${
                 errors.password
                   ? "border-error-main"
                   : passwordFocused
@@ -76,17 +79,22 @@ export default function RegistrationPassword() {
               } rounded-sm items-center`}
             >
               <input
-                type="text"
+                type={showPassword ? "text" : "password"}
                 {...register("password")}
                 placeholder="Enter your password"
                 className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
                 onFocus={() => setPasswordFocused(true)}
                 onBlur={() => setPasswordFocused(false)}
               />
+              <div
+                className="cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <SvgCloseEye /> : <SvgOpenEye />}
+              </div>
             </div>
           </div>
         </div>
-        {/* TODO: add link */}
         <div className="flex flex-col">
           <p
             className={`text-[1rem] ${
@@ -148,7 +156,7 @@ export default function RegistrationPassword() {
             </p>
             <div className="flex flex-col gap-1">
               <div
-                className={`flex gap-2.5 p-4 h-[3.1875rem] border-1 ${
+                className={`flex gap-2.5 p-4 h-[3.1875rem] border-1 justify-between ${
                   errors.confirmPassword
                     ? "border-error-main"
                     : confirmPasswordFocused
@@ -157,13 +165,19 @@ export default function RegistrationPassword() {
                 } rounded-sm items-center`}
               >
                 <input
-                  type="text"
+                  type={showConfirmPassword ? "text" : "password"}
                   {...register("confirmPassword")}
                   placeholder="Enter your password"
                   className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
                   onFocus={() => setConfirmPasswordFocused(true)}
                   onBlur={() => setConfirmPasswordFocused(false)}
                 />
+                <div
+                  className="cursor-pointer"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <SvgCloseEye /> : <SvgOpenEye />}
+                </div>
               </div>
               {errors.confirmPassword && (
                 <p className="text-[1rem] text-error-main">
@@ -189,9 +203,6 @@ export default function RegistrationPassword() {
         <button
           type="submit"
           className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px] cursor-pointer hover:opacity-90"
-          onClick={() => {
-            errors.confirmPassword?.message;
-          }}
         >
           Next
         </button>
