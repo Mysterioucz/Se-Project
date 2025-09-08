@@ -1,5 +1,9 @@
 import { Select } from "@mui/material";
 
+export type OnChangeEvent =
+    | React.ChangeEvent<Omit<HTMLInputElement, "value"> & { value: string }>
+    | (Event & { target: { value: string; name: string } });
+
 interface Props {
     labelId: string;
     id: string;
@@ -7,13 +11,7 @@ interface Props {
     error?: boolean;
     disabled?: boolean;
 
-    onChange?: (
-        event:
-            | React.ChangeEvent<HTMLInputElement>
-            | React.ChangeEvent<{ value: unknown }>
-            | (Event & { target: { value: string; name?: string } }),
-        child?: React.ReactNode
-    ) => void;
+    onChange: (event: OnChangeEvent, child: React.ReactNode) => void;
     children?: React.ReactNode;
 }
 
@@ -31,7 +29,7 @@ export default function SelectComponent({
             error={error}
             disabled={disabled}
             // need to add group className at Parent element to let tailwind overwrite the default styles of child element
-            className="group"
+            className="group w-full"
             slotProps={{
                 notchedOutline: {
                     className: `border-2 border-gray-200 ${

@@ -1,8 +1,30 @@
-'use client';
+"use client";
 import FlightCard from "@/components/flightCard/flight_card";
+import SelectPassengerPanel, {
+    PanelData,
+} from "@/components/selectPassengerPanel/select_passenger_panel";
 import { mockFlightData } from "@/data/mockFlightData";
+import { useState } from "react";
 
 export default function Page() {
+    const [panelData, setPanelData] = useState<PanelData>({
+        adultCount: 1,
+        childCount: 0,
+        infantCount: 0,
+        seatClass: "",
+    });
+
+    const handlePanelDataChange = (
+        key: keyof PanelData,
+        value: number | string
+    ) => {
+        setPanelData((prev) => ({
+            ...prev,
+            [key]: value,
+        }));
+        console.log({ ...panelData, [key]: value });
+    };
+
     return (
         <div className="flex flex-col p-8">
             <FlightCard
@@ -12,6 +34,7 @@ export default function Page() {
                     onClick: () => {},
                 }}
             />
+            <SelectPassengerPanel panelData={panelData} onChange={handlePanelDataChange} />
         </div>
     );
 }
