@@ -16,6 +16,8 @@ interface Props {
     // The onChange event returns an object with the structure { tel: string, text: string }
 }
 
+type State = "enabled" | "focused" | "hover" | "error" | "disabled";
+
 export default function TextFieldComponent({
     label,
     textValue,
@@ -32,17 +34,17 @@ export default function TextFieldComponent({
         "enabled" | "focused" | "hover" | "error" | "disabled"
     >("enabled");
 
-    function handleStateChage(newState: string) {
+    function handleStateChage(newState: State) {
         if (disabled) {
             setState("disabled");
         } else if (error) {
             setState("error");
         } else {
-            setState(newState as any);
+            setState(newState as State);
         }
     }
 
-    function resolveBorderColor(state: string) {
+    function resolveBorderColor(state: State) {
         switch (state) {
             case "enabled":
                 return "border-gray-200";
@@ -59,7 +61,7 @@ export default function TextFieldComponent({
         }
     }
 
-    function resolveHelperTextColor(state: string) {
+    function resolveHelperTextColor(state: State) {
         switch (state) {
             case "error":
                 return "text-error-light";
