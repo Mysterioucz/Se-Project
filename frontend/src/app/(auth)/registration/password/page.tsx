@@ -2,7 +2,7 @@ import RegistrationPassword from "@/components/registration/registration_passwor
 
 export default function Page() {
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center">
         <RegistrationPassword />
     </div>
   );
