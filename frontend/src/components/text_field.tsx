@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import TelPrefix from "./prefix/tel_prefix";
 interface Props {
-    label: string;
+    label?: string;
     textValue: string;
-    telValue: string;
+    telValue?: string;
     placeHolder?: string;
     telForm?: boolean;
     required?: boolean;
@@ -12,23 +12,35 @@ interface Props {
     error?: boolean;
     helperText?: string;
     onChange?: (value: unknown) => void;
+    onInput?: (value: unknown) => void;
     // The onChange event returns an object with the structure { tel: string, text: string }
 }
 
 export default function TextFieldComponent({
     label,
     textValue,
-    telValue,
+    telValue = "+66",
     placeHolder,
     telForm,
     disabled,
     error,
     helperText,
     onChange,
+    onInput,
 }: Props) {
     const [state, setState] = useState<
         "enabled" | "focused" | "hover" | "error" | "disabled"
     >("enabled");
+
+    function handleStateChage(newState: string) {
+        if (disabled) {
+            setState("disabled");
+        } else if (error) {
+            setState("error");
+        } else {
+            setState(newState as any);
+        }
+    }
 
     function resolveBorderColor(state: string) {
         switch (state) {
@@ -39,7 +51,7 @@ export default function TextFieldComponent({
             case "hover":
                 return "border-gray-400";
             case "error":
-                return "border-error-500";
+                return "border-error-main";
             case "disabled":
                 return "border-gray-100";
             default:
@@ -75,21 +87,9 @@ export default function TextFieldComponent({
                 className={`flex p-4 gap-2.5 justify-center text-primary-900 text-[1rem] rounded-[0.25rem] border-2 ${resolveBorderColor(
                     state
                 )}`}
-                onFocus={() => {
-                    if (!disabled) {
-                        setState("focused");
-                    }
-                }}
-                onMouseEnter={() => {
-                    if (!disabled) {
-                        setState("hover");
-                    }
-                }}
-                onMouseLeave={() =>
-                    setState(
-                        disabled ? "disabled" : error ? "error" : "enabled"
-                    )
-                }
+                onFocus={() => handleStateChage("focused")}
+                onMouseEnter={() => handleStateChage("hover")}
+                onMouseLeave={() => handleStateChage("enabled")}
             >
                 {telForm && (
                     <TelPrefix
@@ -110,6 +110,7 @@ export default function TextFieldComponent({
                         onChange &&
                         onChange({ tel: telValue, text: e.target.value })
                     }
+                    onInput={onInput}
                 />
             </div>
             {helperText && (
