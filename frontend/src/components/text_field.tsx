@@ -20,7 +20,7 @@ export default function TextFieldComponent({
     textValue,
     telValue,
     placeHolder,
-    telForm = true,
+    telForm,
     disabled,
     error,
     helperText,
@@ -66,21 +66,24 @@ export default function TextFieldComponent({
         } else {
             setState("enabled");
         }
-        console.log("State changed to:", state);
-    }, [disabled, error, state]);
+    }, [disabled, error]);
 
     return (
         <div className="flex flex-col w-full h-fit gap-3">
-            <h3 className="text-primary-900 font-bold">{label}</h3>
+            <h3 className="text-lg text-primary-900 font-bold">{label}</h3>
             <div
                 className={`flex p-4 gap-2.5 justify-center text-primary-900 text-[1rem] rounded-[0.25rem] border-2 ${resolveBorderColor(
                     state
                 )}`}
                 onFocus={() => {
-                    if (!disabled) setState("focused");
+                    if (!disabled) {
+                        setState("focused");
+                    }
                 }}
                 onMouseEnter={() => {
-                    if (!disabled) setState("hover");
+                    if (!disabled) {
+                        setState("hover");
+                    }
                 }}
                 onMouseLeave={() =>
                     setState(
