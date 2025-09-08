@@ -310,7 +310,7 @@ model Airline_Tel_No {
   @@id([TelNo, AirlineName])
 }
 
-// Added from ERD, but not present in initial schema
+
 model Session {
   SessionID         String    @id
   UserAccountID     String    @db.VarChar(50)
