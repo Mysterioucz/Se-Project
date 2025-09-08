@@ -1,0 +1,84 @@
+@layer theme, base, mui, components, utilities;
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Example of tailwind customizations @forfaii may need to look into */
+@theme {
+  --font-sans: "Sarabun", "IBM Plex Sans Thai", sans-serif;
+
+  --color-common-white: #ffffff;
+  --color-common-black: #000000;
+
+  --color-primary-950: #011319;
+  --color-primary-900: #022b39;
+  --color-primary-800: #044359;
+  --color-primary-700: #025B79;
+  --color-primary-600: #067399;
+  --color-primary-500: #068CB7;
+  --color-primary-400: #30A2C5;
+  --color-primary-300: #5EB8D3;
+  --color-primary-200: #8BCEE1;
+  --color-primary-100: #B8E4EF;
+  --color-primary-50: #E7F9FE;
+
+  --color-gray-950: #0C0E0E;
+  --color-gray-900: #14191A;
+  --color-gray-800: #1C2426;
+  --color-gray-700: #262F32;
+  --color-gray-600: #2F3A3D;
+  --color-gray-500: #3A474B;
+  --color-gray-400: #5F696C;
+  --color-gray-300: #848B8F;
+  --color-gray-200: #A9ADB1;
+  --color-gray-100: #CECFD3;
+  --color-gray-50: #F1F3F4;
+
+  --color-disable-contrasttext: #FFFFFF;
+  --color-disable-darker: #323232;
+  --color-disable-dark: #7C7C7C;
+  --color-disable-main: #C4C4C4;
+  --color-disable-light: #D6D6D6;
+  --color-disable-lighter: #F1F3F4;
+
+  --color-error-contrasttext: #FFFFFF;
+  --color-error-darker: #5A1A1A;
+  --color-error-dark: #7D2424;
+  --color-error-main: #C53737;
+  --color-error-light: #D97F7F;
+  --color-error-lighter: #EDC7C7;
+
+  --color-warning-contrasttext: #FFFFFF;
+  --color-warning-darker: #705B1A;
+  --color-warning-dark: #C8A332;
+  --color-warning-main: #F2C83D;
+  --color-warning-light: #F6DC81;
+  --color-warning-lighter: #FAF0C5;
+
+  --color-success-contrasttext: #FFFFFF;
+  --color-success-darker: #1F4E22;
+  --color-success-dark: #2B6C2F;
+  --color-success-main: #42A647;
+  --color-success-light: #86C689;
+  --color-success-lighter: #CAE6CB;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+}
