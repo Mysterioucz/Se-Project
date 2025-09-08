@@ -20,7 +20,7 @@ export default function ModalDeleteAccount({
                   will be permanently deleted. You will lose access to all services and
                   cannot recover your account."
       leftButtonText="Cancel"
-      rightButtonText="Delete"
+      rightButtonText="Yes, Delete Forever"
       onLeftButton={() => {}}
       onRightButton={() => {}}
       variant="criticalwarning"
