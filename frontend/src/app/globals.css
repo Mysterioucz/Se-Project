@@ -9,7 +9,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  /* --font-sans: var(--font-geist-sans); */
   --font-mono: var(--font-geist-mono);
 }
 
@@ -17,7 +16,7 @@
 @theme {
   --font-sans: "Sarabun", "IBM Plex Sans Thai", sans-serif;
 
-  --color-common-white: #FFFFFF;
+  --color-common-white: #ffffff;
   --color-common-black: #000000;
 
   --color-primary-950: #011319;
