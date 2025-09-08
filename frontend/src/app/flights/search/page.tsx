@@ -1,3 +1,3 @@
-export default function Page(){
-    return <div>Flight Search</div>
+export default function Page() {
+    return <div className="flex">FlightSearch</div>;
 }
