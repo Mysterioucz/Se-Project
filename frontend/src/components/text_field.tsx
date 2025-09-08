@@ -4,7 +4,7 @@ import TelPrefix from "./prefix/tel_prefix";
 interface Props {
     label: string;
     textValue: string;
-    telValue: string;
+    telValue?: string;
     placeHolder?: string;
     telForm?: boolean;
     required?: boolean;
@@ -70,7 +70,7 @@ export default function TextFieldComponent({
 
     return (
         <div className="flex flex-col w-full h-fit gap-3">
-            <h3 className="text-primary-900 font-bold">{label}</h3>
+            <h3 className="text-lg text-primary-900 font-bold">{label}</h3>
             <div
                 className={`flex p-4 gap-2.5 justify-center text-primary-900 text-[1rem] rounded-[0.25rem] border-2 ${resolveBorderColor(
                     state
