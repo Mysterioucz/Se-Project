@@ -19,10 +19,10 @@ export default function RegistrationSuccess() {
         </div>
       </div>
       <div className="flex justify-center">
-        {/* TODO: Goto login page */}
         <button
           type="submit"
           className="flex w-[10.875rem] h-[2.25rem] p-2 gap-4 bg-primary-600 rounded-md items-center justify-center text-white text-[16px] cursor-pointer hover:opacity-90"
+          onClick={() => router.push("/login")}
         >
           <SvgArrowLeft />
           <p className="flex items-center justify-center">Back to login</p>
