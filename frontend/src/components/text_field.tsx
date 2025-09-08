@@ -4,7 +4,7 @@ import TelPrefix from "./prefix/tel_prefix";
 interface Props {
     label: string;
     textValue: string;
-    telValue?: string;
+    telValue: string;
     placeHolder?: string;
     telForm?: boolean;
     required?: boolean;
