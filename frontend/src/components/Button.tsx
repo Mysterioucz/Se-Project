@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 
-type ButtonStyle = "fill" | "stroke" | "text";
+type ButtonStyle = "fill" | "stroke" | "text" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {
@@ -63,6 +63,10 @@ const styleClasses: Record<ButtonStyle, string> = {
       ${clicked ? "text-primary-300" : "text-primary-400"}
       bg-transparent
       hover:text-primary-600
+    `,
+    danger: `
+      ${clicked ? "border-2 border-error-main bg-white text-error-main" : "border-2 border-error-main bg-white text-error-main"}
+      hover:bg-error-lighter
     `,
 };
 

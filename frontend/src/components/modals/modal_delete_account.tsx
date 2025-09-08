@@ -4,11 +4,12 @@ import Modal from "@components/Modal"; // adjust the path as needed
 
 interface ModalDeleteAccountProps {
   isOpen: boolean;
+  onClose: () => void;
 }
 
 // TODO: connect with backend
 export default function ModalDeleteAccount({
-  isOpen,
+  isOpen, onClose
 }: ModalDeleteAccountProps) {
   return (
     <Modal
@@ -22,7 +23,7 @@ export default function ModalDeleteAccount({
                   cannot recover your account."
       leftButtonText="Cancel"
       rightButtonText="Yes, Delete Forever"
-      onLeftButton={() => {}}
+      onLeftButton={() => {onClose}}
       onRightButton={() => {}}
       variant="criticalwarning"
       preventClose={false}
