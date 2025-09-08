@@ -1,0 +1,103 @@
+"use client";
+
+import React, { useState } from "react";
+import Image from "next/image";
+import { useRouter } from 'next/navigation';
+
+type ButtonStyle = "fill" | "stroke" | "text";
+type ButtonSize = "sm" | "md" | "lg";
+
+interface ButtonProps {
+    text: string;
+    iconStart?: string;
+    iconEnd?: string;
+    onClick?: () => void;
+    disabled?: boolean;
+    styleType?: ButtonStyle;  // fill, stroke, text
+    size?: ButtonSize;        // sm, md, lg
+    href: string;
+}
+
+export default function Button({
+    text,
+    iconStart,
+    iconEnd,
+    onClick,
+    disabled = false,
+    styleType = "fill",
+    size = "md",
+}: ButtonProps) {
+    const [clicked, setClicked] = useState(false);
+    
+    const router = useRouter();
+    const goTo = (path: string) => {
+        router.push(path); // เปลี่ยนหน้าไป path ที่กำหนด
+    };
+
+    const handleClick = () => {
+        if (!disabled) {
+            setClicked(!clicked); // toggle สี
+            goTo("/");
+        }
+    };
+
+const sizeClasses: Record<ButtonSize, string> = {
+    sm: "py-[var(--spacing-sm)] px-[var(--spacing-sm)] text-[var(--text-body-sm)]",
+    md: "py-[var(--spacing-sm)] px-[var(--spacing-md)] text-[var(--text-body)]",
+    lg: "py-[var(--spacing-md)] px-[var(--spacing-lg)] text-[var(--text-body-lg)]",
+};
+
+const styleClasses: Record<ButtonStyle, string> = {
+    fill: `
+      ${clicked ? "bg-[var(--color-primary-300)] text-[var(--color-common-white)]" : "bg-[var(--color-primary-400)] text-[var(--color-common-white)]"}
+      hover:bg-[var(--color-primary-600)]
+    `,
+    stroke: `
+      ${clicked ? "border-2 border-[var(--color-primary-300)] text-[var(--color-primary-300)]" : "border-2 border-[var(--color-primary-400)] text-[var(--color-primary-400)]"}
+      bg-[var(--color-common-white)]
+      hover:border-[var(--color-primary-600)] hover:text-[var(--color-primary-600)]
+    `,
+    text: `
+      ${clicked ? "text-[var(--color-primary-300)]" : "text-[var(--color-primary-400)]"}
+      bg-transparent 
+      hover:text-[var(--color-primary-600)]
+    `,
+};
+
+return (
+    <button
+        onClick={handleClick}
+        disabled={disabled}
+        className={`
+        flex items-center gap-[var(--spacing-md)]
+        w-fit h-full rounded-[var(--radius-md)]
+        transition-colors duration-200
+        ${sizeClasses[size]}
+        ${styleClasses[styleType]}
+        ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+      `}
+    >
+        {
+            iconStart
+            &&
+            <Image
+                src={iconStart}
+                alt="Icon start"
+                width={20}
+                height={20}
+                className="w-[1.25rem] h-[1.25rem]" />
+        }
+        <span className="text-inherit">{text}</span>
+        {
+            iconEnd
+            &&
+            <Image
+                src={iconEnd}
+                alt="Icon end"
+                width={20}
+                height={20}
+                className="w-[1.25rem] h-[1.25rem]" />
+        }
+    </button>
+);
+}
