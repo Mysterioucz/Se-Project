@@ -41,7 +41,7 @@ export default function Footer() {
                         </div>
 
                         <div className="flex items-center gap-2">
-                            <img
+                            <Image
                                 src="/icons/icon_stroke/fi-br-envelope.svg"
                                 alt="email"
                                 className="flex w-[16px] h-[16px] justify-center items-center aspect-square"
