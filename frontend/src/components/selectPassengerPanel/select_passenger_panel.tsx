@@ -93,7 +93,10 @@ function SelectPassengerPanel({ panelData, onClick, onChange }: Props) {
             />
             <div className="flex flex-col justify-baseline">
                 {/* TODO: Replace with Button Component */}
-                <button className="bg-primary-400 text-common-white rounded-sm m-2 p-2">
+                <button
+                    className="bg-primary-400 text-common-white rounded-sm m-2 p-2"
+                    onClick={onClick}
+                >
                     Apply
                 </button>
             </div>
