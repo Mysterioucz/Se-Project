@@ -1,3 +1,4 @@
+'use client";';
 import AirlineTimestamp, { AirlineTimestampProps } from "./airline_timestamp";
 import PriceCabinClass, { PriceCabinClassProps } from "./price_cabin_class";
 
@@ -11,7 +12,7 @@ export default function FlightCard({
     priceCabinClass,
 }: Props) {
     return (
-        <div className="flex p-2 bg-primary-100">
+        <div className="flex p-2 bg-primary-100 w-fit h-fit rounded-sm">
             <AirlineTimestamp {...airlineTimeStamp} />
             <PriceCabinClass {...priceCabinClass} />
         </div>

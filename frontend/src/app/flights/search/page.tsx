@@ -1,3 +1,4 @@
+'use client';
 import FlightCard from "@/components/flightCard/flight_card";
 import { mockFlightData } from "@/data/mockFlightData";
 

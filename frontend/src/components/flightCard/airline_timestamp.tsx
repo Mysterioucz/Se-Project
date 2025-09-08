@@ -16,7 +16,7 @@ export interface AirlineTimestampProps {
 
 function AirlineName({ airlineName }: { airlineName: string }) {
     return (
-        <div className="flex">
+        <div className="flex gap-2">
             <FiSrPlane />
             <h2 className="text-primary-600">{airlineName}</h2>
         </div>
@@ -35,7 +35,7 @@ function FlightTimestamp({
     stops?: number;
 }) {
     return (
-        <div className="flex pl-8 pr-8">
+        <div className="flex pl-8 pr-8 items-center">
             <div className="flex flex-col gap-1 pl-4 pr-4 pb-2">
                 <h2>{depart.time}</h2>
                 <p>{depart.airport}</p>
@@ -61,7 +61,7 @@ function FlightTimestamp({
 
 function AirlineTimestamp(props: AirlineTimestampProps) {
     return (
-        <div className="flex flex-col p-4 bg-common-white">
+        <div className="flex flex-col p-4 gap-2 bg-common-white rounded-sm">
             <AirlineName airlineName={props.airlineName} />
             <FlightTimestamp
                 depart={props.depart}
