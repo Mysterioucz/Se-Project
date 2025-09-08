@@ -35,29 +35,29 @@ export const themeColors: Record<
     description: "var(--color-gray-300)",
     button: {
       left: {
-        color: "var(--color-primary-600)",
+        color: "var(--color-primary-400)",
         border: "var(--color-primary-400)",
       },
       right: {
-        bg: "var(--color-primary-600)",
+        bg: "var(--color-primary-400)",
         color: "var(--color-common-white)",
         hoverBg: "var(--color-primary-700)",
       },
     },
   },
   criticalwarning: {
-    topic: "var(--color-error-700)",
-    subTopic: "var(--color-error-500)",
+    topic: "var(--color-error-main)",
+    subTopic: "var(--color-error-main)",
     description: "var(--color-gray-300)",
     button: {
       left: {
-        color: "var(--color-error-600)",
-        border: "var(--color-error-400)",
+        color: "var(--color-error-main)",
+        border: "var(--color-error-main)",
       },
       right: {
-        bg: "var(--color-error-600)",
+        bg: "var(--color-error-main)",
         color: "var(--color-common-white)",
-        hoverBg: "var(--color-error-700)",
+        hoverBg: "var(--color-error-main)",
       },
     },
   },
