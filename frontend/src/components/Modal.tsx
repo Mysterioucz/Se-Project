@@ -54,8 +54,8 @@ export default function Modal({
         },
         paper: {
           sx: {
-            borderRadius: '16px',
-            padding: '32px',
+            borderRadius: '1rem',
+            padding: '2rem',
           },
         },
       }}
@@ -89,7 +89,7 @@ export default function Modal({
           sx={{
             color: colors.button.left.color,
             borderColor: colors.button.left.border,
-            borderRadius: '8px',
+            borderRadius: '0.5rem',
           }}
         >
           {leftButtonText}
@@ -113,7 +113,7 @@ export default function Modal({
                 ? "var(--color-gray-400)"
                 : colors.button.right.hoverBg,
             },
-            borderRadius: '8px',
+            borderRadius: '0.5rem',
           }}
         >
           {rightButtonText}
