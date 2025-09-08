@@ -44,7 +44,6 @@ export default function RegistrationPassword() {
   });
 
   const onSubmit = (data: FormData) => {
-    // TODO: remove this log
     router.push("/registration/terms");
   };
 
