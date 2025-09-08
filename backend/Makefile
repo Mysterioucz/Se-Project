@@ -7,5 +7,5 @@ setup:
 	npx prisma migrate deploy
 
 # Run the app after setup
-start: setup
+start:
 	npm run dev
