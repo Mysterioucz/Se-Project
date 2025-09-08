@@ -6,6 +6,7 @@ interface ModalSignOutProps {
   isOpen: boolean;
 }
 
+// TODO: connect with backend
 export default function ModalSignOut({ isOpen }: ModalSignOutProps) {
   return (
     <Modal

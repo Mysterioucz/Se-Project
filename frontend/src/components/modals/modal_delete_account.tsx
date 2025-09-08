@@ -6,6 +6,7 @@ interface ModalDeleteAccountProps {
   isOpen: boolean;
 }
 
+// TODO: connect with backend
 export default function ModalDeleteAccount({
   isOpen,
 }: ModalDeleteAccountProps) {
