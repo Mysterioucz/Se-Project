@@ -129,6 +129,7 @@ exports.Prisma.AirportScalarFieldEnum = {
 
 exports.Prisma.AirlineScalarFieldEnum = {
   AirlineName: 'AirlineName',
+  AirlineCaption: 'AirlineCaption',
   Website: 'Website',
   AmountOfAircraft: 'AmountOfAircraft',
   Logo: 'Logo'
@@ -160,7 +161,7 @@ exports.Prisma.TicketScalarFieldEnum = {
   DateOfBirth: 'DateOfBirth',
   Nationality: 'Nationality',
   BaggageChecked: 'BaggageChecked',
-  BaggageClaimNo: 'BaggageClaimNo',
+  BaggageCabin: 'BaggageCabin',
   SeatNo: 'SeatNo',
   AircraftRegNo: 'AircraftRegNo',
   FlightNo: 'FlightNo',
@@ -174,38 +175,41 @@ exports.Prisma.OperateScalarFieldEnum = {
 
 exports.Prisma.Assigned_ToScalarFieldEnum = {
   FlightNo: 'FlightNo',
+  Schedule: 'Schedule',
   UserAccountID: 'UserAccountID'
 };
 
 exports.Prisma.ContactScalarFieldEnum = {
   AdminAccountID: 'AdminAccountID',
-  AirlineMessageID: 'AirlineMessageID',
+  AirlineName: 'AirlineName',
   ContactStatus: 'ContactStatus'
 };
 
 exports.Prisma.Report_ToScalarFieldEnum = {
   UserAccountID: 'UserAccountID',
-  ReportID: 'ReportID'
+  AdminAccountID: 'AdminAccountID',
+  ReportStatus: 'ReportStatus'
 };
 
 exports.Prisma.CabinClassScalarFieldEnum = {
-  Class: 'Class'
+  AircraftRegNo: 'AircraftRegNo',
+  Class: 'Class',
+  StandardPrice: 'StandardPrice'
 };
 
 exports.Prisma.SeatScalarFieldEnum = {
+  AircraftRegNo: 'AircraftRegNo',
   SeatNo: 'SeatNo',
-  SeatType: 'SeatType',
-  AircraftRegNo: 'AircraftRegNo'
+  SeatType: 'SeatType'
 };
 
 exports.Prisma.AdminScalarFieldEnum = {
-  UserAccountID: 'UserAccountID',
-  AdminID: 'AdminID',
-  AdminMessage: 'AdminMessage'
+  AdminAccountID: 'AdminAccountID',
+  IPAddress: 'IPAddress'
 };
 
 exports.Prisma.Airline_MessageScalarFieldEnum = {
-  AirlineMessageID: 'AirlineMessageID',
+  AirlineName: 'AirlineName',
   AdminAccountID: 'AdminAccountID',
   MessageText: 'MessageText'
 };
@@ -219,13 +223,12 @@ exports.Prisma.AccountScalarFieldEnum = {
 
 exports.Prisma.UserScalarFieldEnum = {
   UserAccountID: 'UserAccountID',
-  Email: 'Email',
-  IPAddress: 'IPAddress'
+  Email: 'Email'
 };
 
 exports.Prisma.User_Tel_NoScalarFieldEnum = {
-  TelNo: 'TelNo',
-  UserAccountID: 'UserAccountID'
+  UserAccountID: 'UserAccountID',
+  TelNo: 'TelNo'
 };
 
 exports.Prisma.ReportScalarFieldEnum = {
@@ -235,7 +238,6 @@ exports.Prisma.ReportScalarFieldEnum = {
   Attachment: 'Attachment',
   UserAccountID: 'UserAccountID',
   AdminAccountID: 'AdminAccountID',
-  ReportStatus: 'ReportStatus',
   Email: 'Email',
   TelNo: 'TelNo',
   PassengerName: 'PassengerName'
@@ -258,7 +260,6 @@ exports.Prisma.Round_Trip_TicketScalarFieldEnum = {
 };
 
 exports.Prisma.PurchaseScalarFieldEnum = {
-  PurchaseID: 'PurchaseID',
   TicketID: 'TicketID',
   PaymentID: 'PaymentID',
   UserAccountID: 'UserAccountID'
@@ -267,7 +268,6 @@ exports.Prisma.PurchaseScalarFieldEnum = {
 exports.Prisma.PaymentScalarFieldEnum = {
   PaymentID: 'PaymentID',
   PaymentDateTime: 'PaymentDateTime',
-  Timestamp: 'Timestamp',
   PaymentMethod: 'PaymentMethod',
   TransactionStatus: 'TransactionStatus',
   Amount: 'Amount'
@@ -276,6 +276,18 @@ exports.Prisma.PaymentScalarFieldEnum = {
 exports.Prisma.Airline_Tel_NoScalarFieldEnum = {
   TelNo: 'TelNo',
   AirlineName: 'AirlineName'
+};
+
+exports.Prisma.SessionScalarFieldEnum = {
+  SessionID: 'SessionID',
+  UserAccountID: 'UserAccountID',
+  TokenHash: 'TokenHash',
+  CreatedAt: 'CreatedAt',
+  LastSeenAt: 'LastSeenAt',
+  IdleExpiresAt: 'IdleExpiresAt',
+  AbsoluteExpiresAt: 'AbsoluteExpiresAt',
+  RevokedAt: 'RevokedAt',
+  RevokeReason: 'RevokeReason'
 };
 
 exports.Prisma.SortOrder = {
@@ -317,7 +329,8 @@ exports.Prisma.ModelName = {
   Round_Trip_Ticket: 'Round_Trip_Ticket',
   Purchase: 'Purchase',
   Payment: 'Payment',
-  Airline_Tel_No: 'Airline_Tel_No'
+  Airline_Tel_No: 'Airline_Tel_No',
+  Session: 'Session'
 };
 
 /**

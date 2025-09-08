@@ -128,6 +128,11 @@ export type Payment = $Result.DefaultSelection<Prisma.$PaymentPayload>
  * 
  */
 export type Airline_Tel_No = $Result.DefaultSelection<Prisma.$Airline_Tel_NoPayload>
+/**
+ * Model Session
+ * 
+ */
+export type Session = $Result.DefaultSelection<Prisma.$SessionPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -476,6 +481,16 @@ export class PrismaClient<
     * ```
     */
   get airline_Tel_No(): Prisma.Airline_Tel_NoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.session`: Exposes CRUD operations for the **Session** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Sessions
+    * const sessions = await prisma.session.findMany()
+    * ```
+    */
+  get session(): Prisma.SessionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -938,7 +953,8 @@ export namespace Prisma {
     Round_Trip_Ticket: 'Round_Trip_Ticket',
     Purchase: 'Purchase',
     Payment: 'Payment',
-    Airline_Tel_No: 'Airline_Tel_No'
+    Airline_Tel_No: 'Airline_Tel_No',
+    Session: 'Session'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -957,7 +973,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "airport" | "airline" | "aircraft" | "flight" | "ticket" | "operate" | "assigned_To" | "contact" | "report_To" | "cabinClass" | "seat" | "admin" | "airline_Message" | "account" | "user" | "user_Tel_No" | "report" | "domestic_Ticket" | "international_Ticket" | "round_Trip_Ticket" | "purchase" | "payment" | "airline_Tel_No"
+      modelProps: "airport" | "airline" | "aircraft" | "flight" | "ticket" | "operate" | "assigned_To" | "contact" | "report_To" | "cabinClass" | "seat" | "admin" | "airline_Message" | "account" | "user" | "user_Tel_No" | "report" | "domestic_Ticket" | "international_Ticket" | "round_Trip_Ticket" | "purchase" | "payment" | "airline_Tel_No" | "session"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2663,6 +2679,80 @@ export namespace Prisma {
           }
         }
       }
+      Session: {
+        payload: Prisma.$SessionPayload<ExtArgs>
+        fields: Prisma.SessionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+          }
+          findFirst: {
+            args: Prisma.SessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+          }
+          findMany: {
+            args: Prisma.SessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>[]
+          }
+          create: {
+            args: Prisma.SessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+          }
+          createMany: {
+            args: Prisma.SessionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SessionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>[]
+          }
+          delete: {
+            args: Prisma.SessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+          }
+          update: {
+            args: Prisma.SessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SessionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SessionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SessionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>[]
+          }
+          upsert: {
+            args: Prisma.SessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SessionPayload>
+          }
+          aggregate: {
+            args: Prisma.SessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSession>
+          }
+          groupBy: {
+            args: Prisma.SessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SessionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SessionCountArgs<ExtArgs>
+            result: $Utils.Optional<SessionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2782,6 +2872,7 @@ export namespace Prisma {
     purchase?: PurchaseOmit
     payment?: PaymentOmit
     airline_Tel_No?: Airline_Tel_NoOmit
+    session?: SessionOmit
   }
 
   /* Types for Logging */
@@ -2856,6 +2947,397 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type AirportCountOutputType
+   */
+
+  export type AirportCountOutputType = {
+    operates: number
+    departureFlights: number
+    arrivalFlights: number
+  }
+
+  export type AirportCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    operates?: boolean | AirportCountOutputTypeCountOperatesArgs
+    departureFlights?: boolean | AirportCountOutputTypeCountDepartureFlightsArgs
+    arrivalFlights?: boolean | AirportCountOutputTypeCountArrivalFlightsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AirportCountOutputType without action
+   */
+  export type AirportCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AirportCountOutputType
+     */
+    select?: AirportCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AirportCountOutputType without action
+   */
+  export type AirportCountOutputTypeCountOperatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OperateWhereInput
+  }
+
+  /**
+   * AirportCountOutputType without action
+   */
+  export type AirportCountOutputTypeCountDepartureFlightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlightWhereInput
+  }
+
+  /**
+   * AirportCountOutputType without action
+   */
+  export type AirportCountOutputTypeCountArrivalFlightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlightWhereInput
+  }
+
+
+  /**
+   * Count Type AirlineCountOutputType
+   */
+
+  export type AirlineCountOutputType = {
+    operates: number
+    aircrafts: number
+    flights: number
+    telNos: number
+    messages: number
+    contacts: number
+  }
+
+  export type AirlineCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    operates?: boolean | AirlineCountOutputTypeCountOperatesArgs
+    aircrafts?: boolean | AirlineCountOutputTypeCountAircraftsArgs
+    flights?: boolean | AirlineCountOutputTypeCountFlightsArgs
+    telNos?: boolean | AirlineCountOutputTypeCountTelNosArgs
+    messages?: boolean | AirlineCountOutputTypeCountMessagesArgs
+    contacts?: boolean | AirlineCountOutputTypeCountContactsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AirlineCountOutputType without action
+   */
+  export type AirlineCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AirlineCountOutputType
+     */
+    select?: AirlineCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AirlineCountOutputType without action
+   */
+  export type AirlineCountOutputTypeCountOperatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OperateWhereInput
+  }
+
+  /**
+   * AirlineCountOutputType without action
+   */
+  export type AirlineCountOutputTypeCountAircraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AircraftWhereInput
+  }
+
+  /**
+   * AirlineCountOutputType without action
+   */
+  export type AirlineCountOutputTypeCountFlightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlightWhereInput
+  }
+
+  /**
+   * AirlineCountOutputType without action
+   */
+  export type AirlineCountOutputTypeCountTelNosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Airline_Tel_NoWhereInput
+  }
+
+  /**
+   * AirlineCountOutputType without action
+   */
+  export type AirlineCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Airline_MessageWhereInput
+  }
+
+  /**
+   * AirlineCountOutputType without action
+   */
+  export type AirlineCountOutputTypeCountContactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactWhereInput
+  }
+
+
+  /**
+   * Count Type AircraftCountOutputType
+   */
+
+  export type AircraftCountOutputType = {
+    seats: number
+    flights: number
+    cabins: number
+  }
+
+  export type AircraftCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    seats?: boolean | AircraftCountOutputTypeCountSeatsArgs
+    flights?: boolean | AircraftCountOutputTypeCountFlightsArgs
+    cabins?: boolean | AircraftCountOutputTypeCountCabinsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AircraftCountOutputType without action
+   */
+  export type AircraftCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AircraftCountOutputType
+     */
+    select?: AircraftCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AircraftCountOutputType without action
+   */
+  export type AircraftCountOutputTypeCountSeatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SeatWhereInput
+  }
+
+  /**
+   * AircraftCountOutputType without action
+   */
+  export type AircraftCountOutputTypeCountFlightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlightWhereInput
+  }
+
+  /**
+   * AircraftCountOutputType without action
+   */
+  export type AircraftCountOutputTypeCountCabinsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CabinClassWhereInput
+  }
+
+
+  /**
+   * Count Type FlightCountOutputType
+   */
+
+  export type FlightCountOutputType = {
+    passengers: number
+    tickets: number
+  }
+
+  export type FlightCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    passengers?: boolean | FlightCountOutputTypeCountPassengersArgs
+    tickets?: boolean | FlightCountOutputTypeCountTicketsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FlightCountOutputType without action
+   */
+  export type FlightCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlightCountOutputType
+     */
+    select?: FlightCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FlightCountOutputType without action
+   */
+  export type FlightCountOutputTypeCountPassengersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Assigned_ToWhereInput
+  }
+
+  /**
+   * FlightCountOutputType without action
+   */
+  export type FlightCountOutputTypeCountTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TicketWhereInput
+  }
+
+
+  /**
+   * Count Type Report_ToCountOutputType
+   */
+
+  export type Report_ToCountOutputType = {
+    Reports: number
+  }
+
+  export type Report_ToCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Reports?: boolean | Report_ToCountOutputTypeCountReportsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Report_ToCountOutputType without action
+   */
+  export type Report_ToCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Report_ToCountOutputType
+     */
+    select?: Report_ToCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Report_ToCountOutputType without action
+   */
+  export type Report_ToCountOutputTypeCountReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReportWhereInput
+  }
+
+
+  /**
+   * Count Type SeatCountOutputType
+   */
+
+  export type SeatCountOutputType = {
+    tickets: number
+  }
+
+  export type SeatCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tickets?: boolean | SeatCountOutputTypeCountTicketsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SeatCountOutputType without action
+   */
+  export type SeatCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeatCountOutputType
+     */
+    select?: SeatCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SeatCountOutputType without action
+   */
+  export type SeatCountOutputTypeCountTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TicketWhereInput
+  }
+
+
+  /**
+   * Count Type AdminCountOutputType
+   */
+
+  export type AdminCountOutputType = {
+    sentAirlineMessages: number
+    contacts: number
+    involvedInReports: number
+  }
+
+  export type AdminCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sentAirlineMessages?: boolean | AdminCountOutputTypeCountSentAirlineMessagesArgs
+    contacts?: boolean | AdminCountOutputTypeCountContactsArgs
+    involvedInReports?: boolean | AdminCountOutputTypeCountInvolvedInReportsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AdminCountOutputType without action
+   */
+  export type AdminCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCountOutputType
+     */
+    select?: AdminCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AdminCountOutputType without action
+   */
+  export type AdminCountOutputTypeCountSentAirlineMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Airline_MessageWhereInput
+  }
+
+  /**
+   * AdminCountOutputType without action
+   */
+  export type AdminCountOutputTypeCountContactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactWhereInput
+  }
+
+  /**
+   * AdminCountOutputType without action
+   */
+  export type AdminCountOutputTypeCountInvolvedInReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Report_ToWhereInput
+  }
+
+
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    telNos: number
+    assignedFlights: number
+    purchases: number
+    involvedInReports: number
+    sessions: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    telNos?: boolean | UserCountOutputTypeCountTelNosArgs
+    assignedFlights?: boolean | UserCountOutputTypeCountAssignedFlightsArgs
+    purchases?: boolean | UserCountOutputTypeCountPurchasesArgs
+    involvedInReports?: boolean | UserCountOutputTypeCountInvolvedInReportsArgs
+    sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTelNosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: User_Tel_NoWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssignedFlightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Assigned_ToWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PurchaseWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountInvolvedInReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Report_ToWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SessionWhereInput
+  }
 
 
   /**
@@ -3018,6 +3500,10 @@ export namespace Prisma {
     AirportName?: boolean
     City?: boolean
     Country?: boolean
+    operates?: boolean | Airport$operatesArgs<ExtArgs>
+    departureFlights?: boolean | Airport$departureFlightsArgs<ExtArgs>
+    arrivalFlights?: boolean | Airport$arrivalFlightsArgs<ExtArgs>
+    _count?: boolean | AirportCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["airport"]>
 
   export type AirportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3042,10 +3528,22 @@ export namespace Prisma {
   }
 
   export type AirportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AirportID" | "AirportName" | "City" | "Country", ExtArgs["result"]["airport"]>
+  export type AirportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    operates?: boolean | Airport$operatesArgs<ExtArgs>
+    departureFlights?: boolean | Airport$departureFlightsArgs<ExtArgs>
+    arrivalFlights?: boolean | Airport$arrivalFlightsArgs<ExtArgs>
+    _count?: boolean | AirportCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AirportIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type AirportIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $AirportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Airport"
-    objects: {}
+    objects: {
+      operates: Prisma.$OperatePayload<ExtArgs>[]
+      departureFlights: Prisma.$FlightPayload<ExtArgs>[]
+      arrivalFlights: Prisma.$FlightPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       AirportID: string
       AirportName: string
@@ -3445,6 +3943,9 @@ export namespace Prisma {
    */
   export interface Prisma__AirportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    operates<T extends Airport$operatesArgs<ExtArgs> = {}>(args?: Subset<T, Airport$operatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    departureFlights<T extends Airport$departureFlightsArgs<ExtArgs> = {}>(args?: Subset<T, Airport$departureFlightsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    arrivalFlights<T extends Airport$arrivalFlightsArgs<ExtArgs> = {}>(args?: Subset<T, Airport$arrivalFlightsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3495,6 +3996,10 @@ export namespace Prisma {
      */
     omit?: AirportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
+    /**
      * Filter, which Airport to fetch.
      */
     where: AirportWhereUniqueInput
@@ -3513,6 +4018,10 @@ export namespace Prisma {
      */
     omit?: AirportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
+    /**
      * Filter, which Airport to fetch.
      */
     where: AirportWhereUniqueInput
@@ -3530,6 +4039,10 @@ export namespace Prisma {
      * Omit specific fields from the Airport
      */
     omit?: AirportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
     /**
      * Filter, which Airport to fetch.
      */
@@ -3579,6 +4092,10 @@ export namespace Prisma {
      */
     omit?: AirportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
+    /**
      * Filter, which Airport to fetch.
      */
     where?: AirportWhereInput
@@ -3627,6 +4144,10 @@ export namespace Prisma {
      */
     omit?: AirportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
+    /**
      * Filter, which Airports to fetch.
      */
     where?: AirportWhereInput
@@ -3669,6 +4190,10 @@ export namespace Prisma {
      * Omit specific fields from the Airport
      */
     omit?: AirportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
     /**
      * The data needed to create a Airport.
      */
@@ -3717,6 +4242,10 @@ export namespace Prisma {
      * Omit specific fields from the Airport
      */
     omit?: AirportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
     /**
      * The data needed to update a Airport.
      */
@@ -3784,6 +4313,10 @@ export namespace Prisma {
      */
     omit?: AirportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
+    /**
      * The filter to search for the Airport to update in case it exists.
      */
     where: AirportWhereUniqueInput
@@ -3810,6 +4343,10 @@ export namespace Prisma {
      */
     omit?: AirportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
+    /**
      * Filter which Airport to delete.
      */
     where: AirportWhereUniqueInput
@@ -3830,6 +4367,78 @@ export namespace Prisma {
   }
 
   /**
+   * Airport.operates
+   */
+  export type Airport$operatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Operate
+     */
+    select?: OperateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Operate
+     */
+    omit?: OperateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
+    where?: OperateWhereInput
+    orderBy?: OperateOrderByWithRelationInput | OperateOrderByWithRelationInput[]
+    cursor?: OperateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OperateScalarFieldEnum | OperateScalarFieldEnum[]
+  }
+
+  /**
+   * Airport.departureFlights
+   */
+  export type Airport$departureFlightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Flight
+     */
+    select?: FlightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Flight
+     */
+    omit?: FlightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    where?: FlightWhereInput
+    orderBy?: FlightOrderByWithRelationInput | FlightOrderByWithRelationInput[]
+    cursor?: FlightWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlightScalarFieldEnum | FlightScalarFieldEnum[]
+  }
+
+  /**
+   * Airport.arrivalFlights
+   */
+  export type Airport$arrivalFlightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Flight
+     */
+    select?: FlightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Flight
+     */
+    omit?: FlightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    where?: FlightWhereInput
+    orderBy?: FlightOrderByWithRelationInput | FlightOrderByWithRelationInput[]
+    cursor?: FlightWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlightScalarFieldEnum | FlightScalarFieldEnum[]
+  }
+
+  /**
    * Airport without action
    */
   export type AirportDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3841,6 +4450,10 @@ export namespace Prisma {
      * Omit specific fields from the Airport
      */
     omit?: AirportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirportInclude<ExtArgs> | null
   }
 
 
@@ -3866,6 +4479,7 @@ export namespace Prisma {
 
   export type AirlineMinAggregateOutputType = {
     AirlineName: string | null
+    AirlineCaption: string | null
     Website: string | null
     AmountOfAircraft: number | null
     Logo: string | null
@@ -3873,6 +4487,7 @@ export namespace Prisma {
 
   export type AirlineMaxAggregateOutputType = {
     AirlineName: string | null
+    AirlineCaption: string | null
     Website: string | null
     AmountOfAircraft: number | null
     Logo: string | null
@@ -3880,6 +4495,7 @@ export namespace Prisma {
 
   export type AirlineCountAggregateOutputType = {
     AirlineName: number
+    AirlineCaption: number
     Website: number
     AmountOfAircraft: number
     Logo: number
@@ -3897,6 +4513,7 @@ export namespace Prisma {
 
   export type AirlineMinAggregateInputType = {
     AirlineName?: true
+    AirlineCaption?: true
     Website?: true
     AmountOfAircraft?: true
     Logo?: true
@@ -3904,6 +4521,7 @@ export namespace Prisma {
 
   export type AirlineMaxAggregateInputType = {
     AirlineName?: true
+    AirlineCaption?: true
     Website?: true
     AmountOfAircraft?: true
     Logo?: true
@@ -3911,6 +4529,7 @@ export namespace Prisma {
 
   export type AirlineCountAggregateInputType = {
     AirlineName?: true
+    AirlineCaption?: true
     Website?: true
     AmountOfAircraft?: true
     Logo?: true
@@ -4005,6 +4624,7 @@ export namespace Prisma {
 
   export type AirlineGroupByOutputType = {
     AirlineName: string
+    AirlineCaption: string
     Website: string | null
     AmountOfAircraft: number
     Logo: string | null
@@ -4031,13 +4651,22 @@ export namespace Prisma {
 
   export type AirlineSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     AirlineName?: boolean
+    AirlineCaption?: boolean
     Website?: boolean
     AmountOfAircraft?: boolean
     Logo?: boolean
+    operates?: boolean | Airline$operatesArgs<ExtArgs>
+    aircrafts?: boolean | Airline$aircraftsArgs<ExtArgs>
+    flights?: boolean | Airline$flightsArgs<ExtArgs>
+    telNos?: boolean | Airline$telNosArgs<ExtArgs>
+    messages?: boolean | Airline$messagesArgs<ExtArgs>
+    contacts?: boolean | Airline$contactsArgs<ExtArgs>
+    _count?: boolean | AirlineCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["airline"]>
 
   export type AirlineSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     AirlineName?: boolean
+    AirlineCaption?: boolean
     Website?: boolean
     AmountOfAircraft?: boolean
     Logo?: boolean
@@ -4045,6 +4674,7 @@ export namespace Prisma {
 
   export type AirlineSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     AirlineName?: boolean
+    AirlineCaption?: boolean
     Website?: boolean
     AmountOfAircraft?: boolean
     Logo?: boolean
@@ -4052,18 +4682,38 @@ export namespace Prisma {
 
   export type AirlineSelectScalar = {
     AirlineName?: boolean
+    AirlineCaption?: boolean
     Website?: boolean
     AmountOfAircraft?: boolean
     Logo?: boolean
   }
 
-  export type AirlineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AirlineName" | "Website" | "AmountOfAircraft" | "Logo", ExtArgs["result"]["airline"]>
+  export type AirlineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AirlineName" | "AirlineCaption" | "Website" | "AmountOfAircraft" | "Logo", ExtArgs["result"]["airline"]>
+  export type AirlineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    operates?: boolean | Airline$operatesArgs<ExtArgs>
+    aircrafts?: boolean | Airline$aircraftsArgs<ExtArgs>
+    flights?: boolean | Airline$flightsArgs<ExtArgs>
+    telNos?: boolean | Airline$telNosArgs<ExtArgs>
+    messages?: boolean | Airline$messagesArgs<ExtArgs>
+    contacts?: boolean | Airline$contactsArgs<ExtArgs>
+    _count?: boolean | AirlineCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AirlineIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type AirlineIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $AirlinePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Airline"
-    objects: {}
+    objects: {
+      operates: Prisma.$OperatePayload<ExtArgs>[]
+      aircrafts: Prisma.$AircraftPayload<ExtArgs>[]
+      flights: Prisma.$FlightPayload<ExtArgs>[]
+      telNos: Prisma.$Airline_Tel_NoPayload<ExtArgs>[]
+      messages: Prisma.$Airline_MessagePayload<ExtArgs>[]
+      contacts: Prisma.$ContactPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       AirlineName: string
+      AirlineCaption: string
       Website: string | null
       AmountOfAircraft: number
       Logo: string | null
@@ -4461,6 +5111,12 @@ export namespace Prisma {
    */
   export interface Prisma__AirlineClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    operates<T extends Airline$operatesArgs<ExtArgs> = {}>(args?: Subset<T, Airline$operatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OperatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    aircrafts<T extends Airline$aircraftsArgs<ExtArgs> = {}>(args?: Subset<T, Airline$aircraftsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AircraftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    flights<T extends Airline$flightsArgs<ExtArgs> = {}>(args?: Subset<T, Airline$flightsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    telNos<T extends Airline$telNosArgs<ExtArgs> = {}>(args?: Subset<T, Airline$telNosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Airline_Tel_NoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    messages<T extends Airline$messagesArgs<ExtArgs> = {}>(args?: Subset<T, Airline$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Airline_MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contacts<T extends Airline$contactsArgs<ExtArgs> = {}>(args?: Subset<T, Airline$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4491,6 +5147,7 @@ export namespace Prisma {
    */
   interface AirlineFieldRefs {
     readonly AirlineName: FieldRef<"Airline", 'String'>
+    readonly AirlineCaption: FieldRef<"Airline", 'String'>
     readonly Website: FieldRef<"Airline", 'String'>
     readonly AmountOfAircraft: FieldRef<"Airline", 'Int'>
     readonly Logo: FieldRef<"Airline", 'String'>
@@ -4511,6 +5168,10 @@ export namespace Prisma {
      */
     omit?: AirlineOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
+    /**
      * Filter, which Airline to fetch.
      */
     where: AirlineWhereUniqueInput
@@ -4529,6 +5190,10 @@ export namespace Prisma {
      */
     omit?: AirlineOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
+    /**
      * Filter, which Airline to fetch.
      */
     where: AirlineWhereUniqueInput
@@ -4546,6 +5211,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline
      */
     omit?: AirlineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
     /**
      * Filter, which Airline to fetch.
      */
@@ -4595,6 +5264,10 @@ export namespace Prisma {
      */
     omit?: AirlineOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
+    /**
      * Filter, which Airline to fetch.
      */
     where?: AirlineWhereInput
@@ -4643,6 +5316,10 @@ export namespace Prisma {
      */
     omit?: AirlineOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
+    /**
      * Filter, which Airlines to fetch.
      */
     where?: AirlineWhereInput
@@ -4685,6 +5362,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline
      */
     omit?: AirlineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
     /**
      * The data needed to create a Airline.
      */
@@ -4733,6 +5414,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline
      */
     omit?: AirlineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
     /**
      * The data needed to update a Airline.
      */
@@ -4800,6 +5485,10 @@ export namespace Prisma {
      */
     omit?: AirlineOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
+    /**
      * The filter to search for the Airline to update in case it exists.
      */
     where: AirlineWhereUniqueInput
@@ -4826,6 +5515,10 @@ export namespace Prisma {
      */
     omit?: AirlineOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
+    /**
      * Filter which Airline to delete.
      */
     where: AirlineWhereUniqueInput
@@ -4846,6 +5539,150 @@ export namespace Prisma {
   }
 
   /**
+   * Airline.operates
+   */
+  export type Airline$operatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Operate
+     */
+    select?: OperateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Operate
+     */
+    omit?: OperateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
+    where?: OperateWhereInput
+    orderBy?: OperateOrderByWithRelationInput | OperateOrderByWithRelationInput[]
+    cursor?: OperateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OperateScalarFieldEnum | OperateScalarFieldEnum[]
+  }
+
+  /**
+   * Airline.aircrafts
+   */
+  export type Airline$aircraftsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Aircraft
+     */
+    select?: AircraftSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Aircraft
+     */
+    omit?: AircraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
+    where?: AircraftWhereInput
+    orderBy?: AircraftOrderByWithRelationInput | AircraftOrderByWithRelationInput[]
+    cursor?: AircraftWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AircraftScalarFieldEnum | AircraftScalarFieldEnum[]
+  }
+
+  /**
+   * Airline.flights
+   */
+  export type Airline$flightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Flight
+     */
+    select?: FlightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Flight
+     */
+    omit?: FlightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    where?: FlightWhereInput
+    orderBy?: FlightOrderByWithRelationInput | FlightOrderByWithRelationInput[]
+    cursor?: FlightWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlightScalarFieldEnum | FlightScalarFieldEnum[]
+  }
+
+  /**
+   * Airline.telNos
+   */
+  export type Airline$telNosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Airline_Tel_No
+     */
+    select?: Airline_Tel_NoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Airline_Tel_No
+     */
+    omit?: Airline_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
+    where?: Airline_Tel_NoWhereInput
+    orderBy?: Airline_Tel_NoOrderByWithRelationInput | Airline_Tel_NoOrderByWithRelationInput[]
+    cursor?: Airline_Tel_NoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Airline_Tel_NoScalarFieldEnum | Airline_Tel_NoScalarFieldEnum[]
+  }
+
+  /**
+   * Airline.messages
+   */
+  export type Airline$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Airline_Message
+     */
+    select?: Airline_MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Airline_Message
+     */
+    omit?: Airline_MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
+    where?: Airline_MessageWhereInput
+    orderBy?: Airline_MessageOrderByWithRelationInput | Airline_MessageOrderByWithRelationInput[]
+    cursor?: Airline_MessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Airline_MessageScalarFieldEnum | Airline_MessageScalarFieldEnum[]
+  }
+
+  /**
+   * Airline.contacts
+   */
+  export type Airline$contactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contact
+     */
+    select?: ContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contact
+     */
+    omit?: ContactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
+    where?: ContactWhereInput
+    orderBy?: ContactOrderByWithRelationInput | ContactOrderByWithRelationInput[]
+    cursor?: ContactWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContactScalarFieldEnum | ContactScalarFieldEnum[]
+  }
+
+  /**
    * Airline without action
    */
   export type AirlineDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4857,6 +5694,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline
      */
     omit?: AirlineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AirlineInclude<ExtArgs> | null
   }
 
 
@@ -5050,6 +5891,11 @@ export namespace Prisma {
     AirlineName?: boolean
     SeatCapacity?: boolean
     ModelName?: boolean
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+    seats?: boolean | Aircraft$seatsArgs<ExtArgs>
+    flights?: boolean | Aircraft$flightsArgs<ExtArgs>
+    cabins?: boolean | Aircraft$cabinsArgs<ExtArgs>
+    _count?: boolean | AircraftCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["aircraft"]>
 
   export type AircraftSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5057,6 +5903,7 @@ export namespace Prisma {
     AirlineName?: boolean
     SeatCapacity?: boolean
     ModelName?: boolean
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["aircraft"]>
 
   export type AircraftSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5064,6 +5911,7 @@ export namespace Prisma {
     AirlineName?: boolean
     SeatCapacity?: boolean
     ModelName?: boolean
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["aircraft"]>
 
   export type AircraftSelectScalar = {
@@ -5074,10 +5922,28 @@ export namespace Prisma {
   }
 
   export type AircraftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AircraftRegNo" | "AirlineName" | "SeatCapacity" | "ModelName", ExtArgs["result"]["aircraft"]>
+  export type AircraftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+    seats?: boolean | Aircraft$seatsArgs<ExtArgs>
+    flights?: boolean | Aircraft$flightsArgs<ExtArgs>
+    cabins?: boolean | Aircraft$cabinsArgs<ExtArgs>
+    _count?: boolean | AircraftCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AircraftIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
+  export type AircraftIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
 
   export type $AircraftPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Aircraft"
-    objects: {}
+    objects: {
+      airline: Prisma.$AirlinePayload<ExtArgs>
+      seats: Prisma.$SeatPayload<ExtArgs>[]
+      flights: Prisma.$FlightPayload<ExtArgs>[]
+      cabins: Prisma.$CabinClassPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       AircraftRegNo: string
       AirlineName: string
@@ -5477,6 +6343,10 @@ export namespace Prisma {
    */
   export interface Prisma__AircraftClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    airline<T extends AirlineDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AirlineDefaultArgs<ExtArgs>>): Prisma__AirlineClient<$Result.GetResult<Prisma.$AirlinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    seats<T extends Aircraft$seatsArgs<ExtArgs> = {}>(args?: Subset<T, Aircraft$seatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    flights<T extends Aircraft$flightsArgs<ExtArgs> = {}>(args?: Subset<T, Aircraft$flightsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlightPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cabins<T extends Aircraft$cabinsArgs<ExtArgs> = {}>(args?: Subset<T, Aircraft$cabinsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CabinClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5527,6 +6397,10 @@ export namespace Prisma {
      */
     omit?: AircraftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
+    /**
      * Filter, which Aircraft to fetch.
      */
     where: AircraftWhereUniqueInput
@@ -5545,6 +6419,10 @@ export namespace Prisma {
      */
     omit?: AircraftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
+    /**
      * Filter, which Aircraft to fetch.
      */
     where: AircraftWhereUniqueInput
@@ -5562,6 +6440,10 @@ export namespace Prisma {
      * Omit specific fields from the Aircraft
      */
     omit?: AircraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
     /**
      * Filter, which Aircraft to fetch.
      */
@@ -5611,6 +6493,10 @@ export namespace Prisma {
      */
     omit?: AircraftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
+    /**
      * Filter, which Aircraft to fetch.
      */
     where?: AircraftWhereInput
@@ -5659,6 +6545,10 @@ export namespace Prisma {
      */
     omit?: AircraftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
+    /**
      * Filter, which Aircraft to fetch.
      */
     where?: AircraftWhereInput
@@ -5702,6 +6592,10 @@ export namespace Prisma {
      */
     omit?: AircraftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
+    /**
      * The data needed to create a Aircraft.
      */
     data: XOR<AircraftCreateInput, AircraftUncheckedCreateInput>
@@ -5735,6 +6629,10 @@ export namespace Prisma {
      */
     data: AircraftCreateManyInput | AircraftCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5749,6 +6647,10 @@ export namespace Prisma {
      * Omit specific fields from the Aircraft
      */
     omit?: AircraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
     /**
      * The data needed to update a Aircraft.
      */
@@ -5801,6 +6703,10 @@ export namespace Prisma {
      * Limit how many Aircraft to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5815,6 +6721,10 @@ export namespace Prisma {
      * Omit specific fields from the Aircraft
      */
     omit?: AircraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
     /**
      * The filter to search for the Aircraft to update in case it exists.
      */
@@ -5842,6 +6752,10 @@ export namespace Prisma {
      */
     omit?: AircraftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
+    /**
      * Filter which Aircraft to delete.
      */
     where: AircraftWhereUniqueInput
@@ -5862,6 +6776,78 @@ export namespace Prisma {
   }
 
   /**
+   * Aircraft.seats
+   */
+  export type Aircraft$seatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Seat
+     */
+    select?: SeatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Seat
+     */
+    omit?: SeatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
+    where?: SeatWhereInput
+    orderBy?: SeatOrderByWithRelationInput | SeatOrderByWithRelationInput[]
+    cursor?: SeatWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SeatScalarFieldEnum | SeatScalarFieldEnum[]
+  }
+
+  /**
+   * Aircraft.flights
+   */
+  export type Aircraft$flightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Flight
+     */
+    select?: FlightSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Flight
+     */
+    omit?: FlightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    where?: FlightWhereInput
+    orderBy?: FlightOrderByWithRelationInput | FlightOrderByWithRelationInput[]
+    cursor?: FlightWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlightScalarFieldEnum | FlightScalarFieldEnum[]
+  }
+
+  /**
+   * Aircraft.cabins
+   */
+  export type Aircraft$cabinsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CabinClass
+     */
+    select?: CabinClassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CabinClass
+     */
+    omit?: CabinClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
+    where?: CabinClassWhereInput
+    orderBy?: CabinClassOrderByWithRelationInput | CabinClassOrderByWithRelationInput[]
+    cursor?: CabinClassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CabinClassScalarFieldEnum | CabinClassScalarFieldEnum[]
+  }
+
+  /**
    * Aircraft without action
    */
   export type AircraftDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5873,6 +6859,10 @@ export namespace Prisma {
      * Omit specific fields from the Aircraft
      */
     omit?: AircraftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AircraftInclude<ExtArgs> | null
   }
 
 
@@ -6048,6 +7038,13 @@ export namespace Prisma {
     DepartureAirportID?: boolean
     AirlineName?: boolean
     AircraftRegNo?: boolean
+    arrivalAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    departureAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+    passengers?: boolean | Flight$passengersArgs<ExtArgs>
+    tickets?: boolean | Flight$ticketsArgs<ExtArgs>
+    _count?: boolean | FlightCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flight"]>
 
   export type FlightSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6057,6 +7054,10 @@ export namespace Prisma {
     DepartureAirportID?: boolean
     AirlineName?: boolean
     AircraftRegNo?: boolean
+    arrivalAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    departureAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flight"]>
 
   export type FlightSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6066,6 +7067,10 @@ export namespace Prisma {
     DepartureAirportID?: boolean
     AirlineName?: boolean
     AircraftRegNo?: boolean
+    arrivalAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    departureAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flight"]>
 
   export type FlightSelectScalar = {
@@ -6078,10 +7083,38 @@ export namespace Prisma {
   }
 
   export type FlightOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"FlightNo" | "Schedule" | "ArrivalAirportID" | "DepartureAirportID" | "AirlineName" | "AircraftRegNo", ExtArgs["result"]["flight"]>
+  export type FlightInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    arrivalAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    departureAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+    passengers?: boolean | Flight$passengersArgs<ExtArgs>
+    tickets?: boolean | Flight$ticketsArgs<ExtArgs>
+    _count?: boolean | FlightCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FlightIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    arrivalAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    departureAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+  }
+  export type FlightIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    arrivalAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    departureAirport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+  }
 
   export type $FlightPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Flight"
-    objects: {}
+    objects: {
+      arrivalAirport: Prisma.$AirportPayload<ExtArgs>
+      departureAirport: Prisma.$AirportPayload<ExtArgs>
+      airline: Prisma.$AirlinePayload<ExtArgs>
+      aircraft: Prisma.$AircraftPayload<ExtArgs>
+      passengers: Prisma.$Assigned_ToPayload<ExtArgs>[]
+      tickets: Prisma.$TicketPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       FlightNo: string
       Schedule: Date
@@ -6483,6 +7516,12 @@ export namespace Prisma {
    */
   export interface Prisma__FlightClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    arrivalAirport<T extends AirportDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AirportDefaultArgs<ExtArgs>>): Prisma__AirportClient<$Result.GetResult<Prisma.$AirportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    departureAirport<T extends AirportDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AirportDefaultArgs<ExtArgs>>): Prisma__AirportClient<$Result.GetResult<Prisma.$AirportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    airline<T extends AirlineDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AirlineDefaultArgs<ExtArgs>>): Prisma__AirlineClient<$Result.GetResult<Prisma.$AirlinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    aircraft<T extends AircraftDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AircraftDefaultArgs<ExtArgs>>): Prisma__AircraftClient<$Result.GetResult<Prisma.$AircraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    passengers<T extends Flight$passengersArgs<ExtArgs> = {}>(args?: Subset<T, Flight$passengersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Assigned_ToPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tickets<T extends Flight$ticketsArgs<ExtArgs> = {}>(args?: Subset<T, Flight$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6535,6 +7574,10 @@ export namespace Prisma {
      */
     omit?: FlightOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    /**
      * Filter, which Flight to fetch.
      */
     where: FlightWhereUniqueInput
@@ -6553,6 +7596,10 @@ export namespace Prisma {
      */
     omit?: FlightOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    /**
      * Filter, which Flight to fetch.
      */
     where: FlightWhereUniqueInput
@@ -6570,6 +7617,10 @@ export namespace Prisma {
      * Omit specific fields from the Flight
      */
     omit?: FlightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
     /**
      * Filter, which Flight to fetch.
      */
@@ -6619,6 +7670,10 @@ export namespace Prisma {
      */
     omit?: FlightOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    /**
      * Filter, which Flight to fetch.
      */
     where?: FlightWhereInput
@@ -6667,6 +7722,10 @@ export namespace Prisma {
      */
     omit?: FlightOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    /**
      * Filter, which Flights to fetch.
      */
     where?: FlightWhereInput
@@ -6710,6 +7769,10 @@ export namespace Prisma {
      */
     omit?: FlightOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    /**
      * The data needed to create a Flight.
      */
     data: XOR<FlightCreateInput, FlightUncheckedCreateInput>
@@ -6743,6 +7806,10 @@ export namespace Prisma {
      */
     data: FlightCreateManyInput | FlightCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6757,6 +7824,10 @@ export namespace Prisma {
      * Omit specific fields from the Flight
      */
     omit?: FlightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
     /**
      * The data needed to update a Flight.
      */
@@ -6809,6 +7880,10 @@ export namespace Prisma {
      * Limit how many Flights to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6823,6 +7898,10 @@ export namespace Prisma {
      * Omit specific fields from the Flight
      */
     omit?: FlightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
     /**
      * The filter to search for the Flight to update in case it exists.
      */
@@ -6850,6 +7929,10 @@ export namespace Prisma {
      */
     omit?: FlightOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
+    /**
      * Filter which Flight to delete.
      */
     where: FlightWhereUniqueInput
@@ -6870,6 +7953,54 @@ export namespace Prisma {
   }
 
   /**
+   * Flight.passengers
+   */
+  export type Flight$passengersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Assigned_To
+     */
+    select?: Assigned_ToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Assigned_To
+     */
+    omit?: Assigned_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
+    where?: Assigned_ToWhereInput
+    orderBy?: Assigned_ToOrderByWithRelationInput | Assigned_ToOrderByWithRelationInput[]
+    cursor?: Assigned_ToWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Assigned_ToScalarFieldEnum | Assigned_ToScalarFieldEnum[]
+  }
+
+  /**
+   * Flight.tickets
+   */
+  export type Flight$ticketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ticket
+     */
+    select?: TicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ticket
+     */
+    omit?: TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    where?: TicketWhereInput
+    orderBy?: TicketOrderByWithRelationInput | TicketOrderByWithRelationInput[]
+    cursor?: TicketWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TicketScalarFieldEnum | TicketScalarFieldEnum[]
+  }
+
+  /**
    * Flight without action
    */
   export type FlightDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6881,6 +8012,10 @@ export namespace Prisma {
      * Omit specific fields from the Flight
      */
     omit?: FlightOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlightInclude<ExtArgs> | null
   }
 
 
@@ -6898,10 +8033,14 @@ export namespace Prisma {
 
   export type TicketAvgAggregateOutputType = {
     Price: number | null
+    BaggageChecked: number | null
+    BaggageCabin: number | null
   }
 
   export type TicketSumAggregateOutputType = {
     Price: number | null
+    BaggageChecked: number | null
+    BaggageCabin: number | null
   }
 
   export type TicketMinAggregateOutputType = {
@@ -6913,8 +8052,8 @@ export namespace Prisma {
     Gender: string | null
     DateOfBirth: Date | null
     Nationality: string | null
-    BaggageChecked: boolean | null
-    BaggageClaimNo: string | null
+    BaggageChecked: number | null
+    BaggageCabin: number | null
     SeatNo: string | null
     AircraftRegNo: string | null
     FlightNo: string | null
@@ -6930,8 +8069,8 @@ export namespace Prisma {
     Gender: string | null
     DateOfBirth: Date | null
     Nationality: string | null
-    BaggageChecked: boolean | null
-    BaggageClaimNo: string | null
+    BaggageChecked: number | null
+    BaggageCabin: number | null
     SeatNo: string | null
     AircraftRegNo: string | null
     FlightNo: string | null
@@ -6948,7 +8087,7 @@ export namespace Prisma {
     DateOfBirth: number
     Nationality: number
     BaggageChecked: number
-    BaggageClaimNo: number
+    BaggageCabin: number
     SeatNo: number
     AircraftRegNo: number
     FlightNo: number
@@ -6959,10 +8098,14 @@ export namespace Prisma {
 
   export type TicketAvgAggregateInputType = {
     Price?: true
+    BaggageChecked?: true
+    BaggageCabin?: true
   }
 
   export type TicketSumAggregateInputType = {
     Price?: true
+    BaggageChecked?: true
+    BaggageCabin?: true
   }
 
   export type TicketMinAggregateInputType = {
@@ -6975,7 +8118,7 @@ export namespace Prisma {
     DateOfBirth?: true
     Nationality?: true
     BaggageChecked?: true
-    BaggageClaimNo?: true
+    BaggageCabin?: true
     SeatNo?: true
     AircraftRegNo?: true
     FlightNo?: true
@@ -6992,7 +8135,7 @@ export namespace Prisma {
     DateOfBirth?: true
     Nationality?: true
     BaggageChecked?: true
-    BaggageClaimNo?: true
+    BaggageCabin?: true
     SeatNo?: true
     AircraftRegNo?: true
     FlightNo?: true
@@ -7009,7 +8152,7 @@ export namespace Prisma {
     DateOfBirth?: true
     Nationality?: true
     BaggageChecked?: true
-    BaggageClaimNo?: true
+    BaggageCabin?: true
     SeatNo?: true
     AircraftRegNo?: true
     FlightNo?: true
@@ -7112,8 +8255,8 @@ export namespace Prisma {
     Gender: string
     DateOfBirth: Date
     Nationality: string
-    BaggageChecked: boolean
-    BaggageClaimNo: string | null
+    BaggageChecked: number
+    BaggageCabin: number
     SeatNo: string
     AircraftRegNo: string
     FlightNo: string
@@ -7149,11 +8292,18 @@ export namespace Prisma {
     DateOfBirth?: boolean
     Nationality?: boolean
     BaggageChecked?: boolean
-    BaggageClaimNo?: boolean
+    BaggageCabin?: boolean
     SeatNo?: boolean
     AircraftRegNo?: boolean
     FlightNo?: boolean
     Schedule?: boolean
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    seat?: boolean | SeatDefaultArgs<ExtArgs>
+    purchase?: boolean | Ticket$purchaseArgs<ExtArgs>
+    domesticTicket?: boolean | Ticket$domesticTicketArgs<ExtArgs>
+    internationalTicket?: boolean | Ticket$internationalTicketArgs<ExtArgs>
+    roundTripTicketPart1?: boolean | Ticket$roundTripTicketPart1Args<ExtArgs>
+    roundTripTicketPart2?: boolean | Ticket$roundTripTicketPart2Args<ExtArgs>
   }, ExtArgs["result"]["ticket"]>
 
   export type TicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7166,11 +8316,13 @@ export namespace Prisma {
     DateOfBirth?: boolean
     Nationality?: boolean
     BaggageChecked?: boolean
-    BaggageClaimNo?: boolean
+    BaggageCabin?: boolean
     SeatNo?: boolean
     AircraftRegNo?: boolean
     FlightNo?: boolean
     Schedule?: boolean
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    seat?: boolean | SeatDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ticket"]>
 
   export type TicketSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7183,11 +8335,13 @@ export namespace Prisma {
     DateOfBirth?: boolean
     Nationality?: boolean
     BaggageChecked?: boolean
-    BaggageClaimNo?: boolean
+    BaggageCabin?: boolean
     SeatNo?: boolean
     AircraftRegNo?: boolean
     FlightNo?: boolean
     Schedule?: boolean
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    seat?: boolean | SeatDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ticket"]>
 
   export type TicketSelectScalar = {
@@ -7200,18 +8354,43 @@ export namespace Prisma {
     DateOfBirth?: boolean
     Nationality?: boolean
     BaggageChecked?: boolean
-    BaggageClaimNo?: boolean
+    BaggageCabin?: boolean
     SeatNo?: boolean
     AircraftRegNo?: boolean
     FlightNo?: boolean
     Schedule?: boolean
   }
 
-  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"TicketID" | "Price" | "TicketStatus" | "PassengerName" | "PassengerLastName" | "Gender" | "DateOfBirth" | "Nationality" | "BaggageChecked" | "BaggageClaimNo" | "SeatNo" | "AircraftRegNo" | "FlightNo" | "Schedule", ExtArgs["result"]["ticket"]>
+  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"TicketID" | "Price" | "TicketStatus" | "PassengerName" | "PassengerLastName" | "Gender" | "DateOfBirth" | "Nationality" | "BaggageChecked" | "BaggageCabin" | "SeatNo" | "AircraftRegNo" | "FlightNo" | "Schedule", ExtArgs["result"]["ticket"]>
+  export type TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    seat?: boolean | SeatDefaultArgs<ExtArgs>
+    purchase?: boolean | Ticket$purchaseArgs<ExtArgs>
+    domesticTicket?: boolean | Ticket$domesticTicketArgs<ExtArgs>
+    internationalTicket?: boolean | Ticket$internationalTicketArgs<ExtArgs>
+    roundTripTicketPart1?: boolean | Ticket$roundTripTicketPart1Args<ExtArgs>
+    roundTripTicketPart2?: boolean | Ticket$roundTripTicketPart2Args<ExtArgs>
+  }
+  export type TicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    seat?: boolean | SeatDefaultArgs<ExtArgs>
+  }
+  export type TicketIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    seat?: boolean | SeatDefaultArgs<ExtArgs>
+  }
 
   export type $TicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Ticket"
-    objects: {}
+    objects: {
+      flight: Prisma.$FlightPayload<ExtArgs>
+      seat: Prisma.$SeatPayload<ExtArgs>
+      purchase: Prisma.$PurchasePayload<ExtArgs> | null
+      domesticTicket: Prisma.$Domestic_TicketPayload<ExtArgs> | null
+      internationalTicket: Prisma.$International_TicketPayload<ExtArgs> | null
+      roundTripTicketPart1: Prisma.$Round_Trip_TicketPayload<ExtArgs> | null
+      roundTripTicketPart2: Prisma.$Round_Trip_TicketPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       TicketID: string
       Price: number
@@ -7221,8 +8400,8 @@ export namespace Prisma {
       Gender: string
       DateOfBirth: Date
       Nationality: string
-      BaggageChecked: boolean
-      BaggageClaimNo: string | null
+      BaggageChecked: number
+      BaggageCabin: number
       SeatNo: string
       AircraftRegNo: string
       FlightNo: string
@@ -7621,6 +8800,13 @@ export namespace Prisma {
    */
   export interface Prisma__TicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    flight<T extends FlightDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlightDefaultArgs<ExtArgs>>): Prisma__FlightClient<$Result.GetResult<Prisma.$FlightPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    seat<T extends SeatDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SeatDefaultArgs<ExtArgs>>): Prisma__SeatClient<$Result.GetResult<Prisma.$SeatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    purchase<T extends Ticket$purchaseArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$purchaseArgs<ExtArgs>>): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    domesticTicket<T extends Ticket$domesticTicketArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$domesticTicketArgs<ExtArgs>>): Prisma__Domestic_TicketClient<$Result.GetResult<Prisma.$Domestic_TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    internationalTicket<T extends Ticket$internationalTicketArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$internationalTicketArgs<ExtArgs>>): Prisma__International_TicketClient<$Result.GetResult<Prisma.$International_TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    roundTripTicketPart1<T extends Ticket$roundTripTicketPart1Args<ExtArgs> = {}>(args?: Subset<T, Ticket$roundTripTicketPart1Args<ExtArgs>>): Prisma__Round_Trip_TicketClient<$Result.GetResult<Prisma.$Round_Trip_TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    roundTripTicketPart2<T extends Ticket$roundTripTicketPart2Args<ExtArgs> = {}>(args?: Subset<T, Ticket$roundTripTicketPart2Args<ExtArgs>>): Prisma__Round_Trip_TicketClient<$Result.GetResult<Prisma.$Round_Trip_TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7658,8 +8844,8 @@ export namespace Prisma {
     readonly Gender: FieldRef<"Ticket", 'String'>
     readonly DateOfBirth: FieldRef<"Ticket", 'DateTime'>
     readonly Nationality: FieldRef<"Ticket", 'String'>
-    readonly BaggageChecked: FieldRef<"Ticket", 'Boolean'>
-    readonly BaggageClaimNo: FieldRef<"Ticket", 'String'>
+    readonly BaggageChecked: FieldRef<"Ticket", 'Float'>
+    readonly BaggageCabin: FieldRef<"Ticket", 'Float'>
     readonly SeatNo: FieldRef<"Ticket", 'String'>
     readonly AircraftRegNo: FieldRef<"Ticket", 'String'>
     readonly FlightNo: FieldRef<"Ticket", 'String'>
@@ -7681,6 +8867,10 @@ export namespace Prisma {
      */
     omit?: TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Ticket to fetch.
      */
     where: TicketWhereUniqueInput
@@ -7699,6 +8889,10 @@ export namespace Prisma {
      */
     omit?: TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Ticket to fetch.
      */
     where: TicketWhereUniqueInput
@@ -7716,6 +8910,10 @@ export namespace Prisma {
      * Omit specific fields from the Ticket
      */
     omit?: TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
     /**
      * Filter, which Ticket to fetch.
      */
@@ -7765,6 +8963,10 @@ export namespace Prisma {
      */
     omit?: TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Ticket to fetch.
      */
     where?: TicketWhereInput
@@ -7813,6 +9015,10 @@ export namespace Prisma {
      */
     omit?: TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Tickets to fetch.
      */
     where?: TicketWhereInput
@@ -7856,6 +9062,10 @@ export namespace Prisma {
      */
     omit?: TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    /**
      * The data needed to create a Ticket.
      */
     data: XOR<TicketCreateInput, TicketUncheckedCreateInput>
@@ -7889,6 +9099,10 @@ export namespace Prisma {
      */
     data: TicketCreateManyInput | TicketCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7903,6 +9117,10 @@ export namespace Prisma {
      * Omit specific fields from the Ticket
      */
     omit?: TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
     /**
      * The data needed to update a Ticket.
      */
@@ -7955,6 +9173,10 @@ export namespace Prisma {
      * Limit how many Tickets to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7969,6 +9191,10 @@ export namespace Prisma {
      * Omit specific fields from the Ticket
      */
     omit?: TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
     /**
      * The filter to search for the Ticket to update in case it exists.
      */
@@ -7996,6 +9222,10 @@ export namespace Prisma {
      */
     omit?: TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    /**
      * Filter which Ticket to delete.
      */
     where: TicketWhereUniqueInput
@@ -8016,6 +9246,101 @@ export namespace Prisma {
   }
 
   /**
+   * Ticket.purchase
+   */
+  export type Ticket$purchaseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purchase
+     */
+    omit?: PurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
+    where?: PurchaseWhereInput
+  }
+
+  /**
+   * Ticket.domesticTicket
+   */
+  export type Ticket$domesticTicketArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Domestic_Ticket
+     */
+    select?: Domestic_TicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Domestic_Ticket
+     */
+    omit?: Domestic_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
+    where?: Domestic_TicketWhereInput
+  }
+
+  /**
+   * Ticket.internationalTicket
+   */
+  export type Ticket$internationalTicketArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the International_Ticket
+     */
+    select?: International_TicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the International_Ticket
+     */
+    omit?: International_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
+    where?: International_TicketWhereInput
+  }
+
+  /**
+   * Ticket.roundTripTicketPart1
+   */
+  export type Ticket$roundTripTicketPart1Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round_Trip_Ticket
+     */
+    select?: Round_Trip_TicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round_Trip_Ticket
+     */
+    omit?: Round_Trip_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
+    where?: Round_Trip_TicketWhereInput
+  }
+
+  /**
+   * Ticket.roundTripTicketPart2
+   */
+  export type Ticket$roundTripTicketPart2Args<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Round_Trip_Ticket
+     */
+    select?: Round_Trip_TicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Round_Trip_Ticket
+     */
+    omit?: Round_Trip_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
+    where?: Round_Trip_TicketWhereInput
+  }
+
+  /**
    * Ticket without action
    */
   export type TicketDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8027,6 +9352,10 @@ export namespace Prisma {
      * Omit specific fields from the Ticket
      */
     omit?: TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
   }
 
 
@@ -8170,16 +9499,22 @@ export namespace Prisma {
   export type OperateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     AirportID?: boolean
     AirlineName?: boolean
+    airport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["operate"]>
 
   export type OperateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     AirportID?: boolean
     AirlineName?: boolean
+    airport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["operate"]>
 
   export type OperateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     AirportID?: boolean
     AirlineName?: boolean
+    airport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["operate"]>
 
   export type OperateSelectScalar = {
@@ -8188,10 +9523,25 @@ export namespace Prisma {
   }
 
   export type OperateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AirportID" | "AirlineName", ExtArgs["result"]["operate"]>
+  export type OperateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    airport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
+  export type OperateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    airport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
+  export type OperateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    airport?: boolean | AirportDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
 
   export type $OperatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Operate"
-    objects: {}
+    objects: {
+      airport: Prisma.$AirportPayload<ExtArgs>
+      airline: Prisma.$AirlinePayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       AirportID: string
       AirlineName: string
@@ -8589,6 +9939,8 @@ export namespace Prisma {
    */
   export interface Prisma__OperateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    airport<T extends AirportDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AirportDefaultArgs<ExtArgs>>): Prisma__AirportClient<$Result.GetResult<Prisma.$AirportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    airline<T extends AirlineDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AirlineDefaultArgs<ExtArgs>>): Prisma__AirlineClient<$Result.GetResult<Prisma.$AirlinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8637,6 +9989,10 @@ export namespace Prisma {
      */
     omit?: OperateOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
+    /**
      * Filter, which Operate to fetch.
      */
     where: OperateWhereUniqueInput
@@ -8655,6 +10011,10 @@ export namespace Prisma {
      */
     omit?: OperateOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
+    /**
      * Filter, which Operate to fetch.
      */
     where: OperateWhereUniqueInput
@@ -8672,6 +10032,10 @@ export namespace Prisma {
      * Omit specific fields from the Operate
      */
     omit?: OperateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
     /**
      * Filter, which Operate to fetch.
      */
@@ -8721,6 +10085,10 @@ export namespace Prisma {
      */
     omit?: OperateOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
+    /**
      * Filter, which Operate to fetch.
      */
     where?: OperateWhereInput
@@ -8769,6 +10137,10 @@ export namespace Prisma {
      */
     omit?: OperateOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
+    /**
      * Filter, which Operates to fetch.
      */
     where?: OperateWhereInput
@@ -8812,6 +10184,10 @@ export namespace Prisma {
      */
     omit?: OperateOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
+    /**
      * The data needed to create a Operate.
      */
     data: XOR<OperateCreateInput, OperateUncheckedCreateInput>
@@ -8845,6 +10221,10 @@ export namespace Prisma {
      */
     data: OperateCreateManyInput | OperateCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -8859,6 +10239,10 @@ export namespace Prisma {
      * Omit specific fields from the Operate
      */
     omit?: OperateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
     /**
      * The data needed to update a Operate.
      */
@@ -8911,6 +10295,10 @@ export namespace Prisma {
      * Limit how many Operates to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -8925,6 +10313,10 @@ export namespace Prisma {
      * Omit specific fields from the Operate
      */
     omit?: OperateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
     /**
      * The filter to search for the Operate to update in case it exists.
      */
@@ -8951,6 +10343,10 @@ export namespace Prisma {
      * Omit specific fields from the Operate
      */
     omit?: OperateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
     /**
      * Filter which Operate to delete.
      */
@@ -8983,6 +10379,10 @@ export namespace Prisma {
      * Omit specific fields from the Operate
      */
     omit?: OperateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OperateInclude<ExtArgs> | null
   }
 
 
@@ -8998,16 +10398,19 @@ export namespace Prisma {
 
   export type Assigned_ToMinAggregateOutputType = {
     FlightNo: string | null
+    Schedule: Date | null
     UserAccountID: string | null
   }
 
   export type Assigned_ToMaxAggregateOutputType = {
     FlightNo: string | null
+    Schedule: Date | null
     UserAccountID: string | null
   }
 
   export type Assigned_ToCountAggregateOutputType = {
     FlightNo: number
+    Schedule: number
     UserAccountID: number
     _all: number
   }
@@ -9015,16 +10418,19 @@ export namespace Prisma {
 
   export type Assigned_ToMinAggregateInputType = {
     FlightNo?: true
+    Schedule?: true
     UserAccountID?: true
   }
 
   export type Assigned_ToMaxAggregateInputType = {
     FlightNo?: true
+    Schedule?: true
     UserAccountID?: true
   }
 
   export type Assigned_ToCountAggregateInputType = {
     FlightNo?: true
+    Schedule?: true
     UserAccountID?: true
     _all?: true
   }
@@ -9103,6 +10509,7 @@ export namespace Prisma {
 
   export type Assigned_ToGroupByOutputType = {
     FlightNo: string
+    Schedule: Date
     UserAccountID: string
     _count: Assigned_ToCountAggregateOutputType | null
     _min: Assigned_ToMinAggregateOutputType | null
@@ -9125,31 +10532,57 @@ export namespace Prisma {
 
   export type Assigned_ToSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     FlightNo?: boolean
+    Schedule?: boolean
     UserAccountID?: boolean
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["assigned_To"]>
 
   export type Assigned_ToSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     FlightNo?: boolean
+    Schedule?: boolean
     UserAccountID?: boolean
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["assigned_To"]>
 
   export type Assigned_ToSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     FlightNo?: boolean
+    Schedule?: boolean
     UserAccountID?: boolean
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["assigned_To"]>
 
   export type Assigned_ToSelectScalar = {
     FlightNo?: boolean
+    Schedule?: boolean
     UserAccountID?: boolean
   }
 
-  export type Assigned_ToOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"FlightNo" | "UserAccountID", ExtArgs["result"]["assigned_To"]>
+  export type Assigned_ToOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"FlightNo" | "Schedule" | "UserAccountID", ExtArgs["result"]["assigned_To"]>
+  export type Assigned_ToInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type Assigned_ToIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type Assigned_ToIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flight?: boolean | FlightDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $Assigned_ToPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Assigned_To"
-    objects: {}
+    objects: {
+      flight: Prisma.$FlightPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       FlightNo: string
+      Schedule: Date
       UserAccountID: string
     }, ExtArgs["result"]["assigned_To"]>
     composites: {}
@@ -9545,6 +10978,8 @@ export namespace Prisma {
    */
   export interface Prisma__Assigned_ToClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    flight<T extends FlightDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlightDefaultArgs<ExtArgs>>): Prisma__FlightClient<$Result.GetResult<Prisma.$FlightPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9575,6 +11010,7 @@ export namespace Prisma {
    */
   interface Assigned_ToFieldRefs {
     readonly FlightNo: FieldRef<"Assigned_To", 'String'>
+    readonly Schedule: FieldRef<"Assigned_To", 'DateTime'>
     readonly UserAccountID: FieldRef<"Assigned_To", 'String'>
   }
     
@@ -9592,6 +11028,10 @@ export namespace Prisma {
      * Omit specific fields from the Assigned_To
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
     /**
      * Filter, which Assigned_To to fetch.
      */
@@ -9611,6 +11051,10 @@ export namespace Prisma {
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
+    /**
      * Filter, which Assigned_To to fetch.
      */
     where: Assigned_ToWhereUniqueInput
@@ -9628,6 +11072,10 @@ export namespace Prisma {
      * Omit specific fields from the Assigned_To
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
     /**
      * Filter, which Assigned_To to fetch.
      */
@@ -9677,6 +11125,10 @@ export namespace Prisma {
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
+    /**
      * Filter, which Assigned_To to fetch.
      */
     where?: Assigned_ToWhereInput
@@ -9725,6 +11177,10 @@ export namespace Prisma {
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
+    /**
      * Filter, which Assigned_Tos to fetch.
      */
     where?: Assigned_ToWhereInput
@@ -9768,6 +11224,10 @@ export namespace Prisma {
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
+    /**
      * The data needed to create a Assigned_To.
      */
     data: XOR<Assigned_ToCreateInput, Assigned_ToUncheckedCreateInput>
@@ -9801,6 +11261,10 @@ export namespace Prisma {
      */
     data: Assigned_ToCreateManyInput | Assigned_ToCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -9815,6 +11279,10 @@ export namespace Prisma {
      * Omit specific fields from the Assigned_To
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
     /**
      * The data needed to update a Assigned_To.
      */
@@ -9867,6 +11335,10 @@ export namespace Prisma {
      * Limit how many Assigned_Tos to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -9881,6 +11353,10 @@ export namespace Prisma {
      * Omit specific fields from the Assigned_To
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
     /**
      * The filter to search for the Assigned_To to update in case it exists.
      */
@@ -9907,6 +11383,10 @@ export namespace Prisma {
      * Omit specific fields from the Assigned_To
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
     /**
      * Filter which Assigned_To to delete.
      */
@@ -9939,6 +11419,10 @@ export namespace Prisma {
      * Omit specific fields from the Assigned_To
      */
     omit?: Assigned_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
   }
 
 
@@ -9954,19 +11438,19 @@ export namespace Prisma {
 
   export type ContactMinAggregateOutputType = {
     AdminAccountID: string | null
-    AirlineMessageID: string | null
+    AirlineName: string | null
     ContactStatus: string | null
   }
 
   export type ContactMaxAggregateOutputType = {
     AdminAccountID: string | null
-    AirlineMessageID: string | null
+    AirlineName: string | null
     ContactStatus: string | null
   }
 
   export type ContactCountAggregateOutputType = {
     AdminAccountID: number
-    AirlineMessageID: number
+    AirlineName: number
     ContactStatus: number
     _all: number
   }
@@ -9974,19 +11458,19 @@ export namespace Prisma {
 
   export type ContactMinAggregateInputType = {
     AdminAccountID?: true
-    AirlineMessageID?: true
+    AirlineName?: true
     ContactStatus?: true
   }
 
   export type ContactMaxAggregateInputType = {
     AdminAccountID?: true
-    AirlineMessageID?: true
+    AirlineName?: true
     ContactStatus?: true
   }
 
   export type ContactCountAggregateInputType = {
     AdminAccountID?: true
-    AirlineMessageID?: true
+    AirlineName?: true
     ContactStatus?: true
     _all?: true
   }
@@ -10065,7 +11549,7 @@ export namespace Prisma {
 
   export type ContactGroupByOutputType = {
     AdminAccountID: string
-    AirlineMessageID: string
+    AirlineName: string
     ContactStatus: string
     _count: ContactCountAggregateOutputType | null
     _min: ContactMinAggregateOutputType | null
@@ -10088,36 +11572,57 @@ export namespace Prisma {
 
   export type ContactSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     AdminAccountID?: boolean
-    AirlineMessageID?: boolean
+    AirlineName?: boolean
     ContactStatus?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contact"]>
 
   export type ContactSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     AdminAccountID?: boolean
-    AirlineMessageID?: boolean
+    AirlineName?: boolean
     ContactStatus?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contact"]>
 
   export type ContactSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     AdminAccountID?: boolean
-    AirlineMessageID?: boolean
+    AirlineName?: boolean
     ContactStatus?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contact"]>
 
   export type ContactSelectScalar = {
     AdminAccountID?: boolean
-    AirlineMessageID?: boolean
+    AirlineName?: boolean
     ContactStatus?: boolean
   }
 
-  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AdminAccountID" | "AirlineMessageID" | "ContactStatus", ExtArgs["result"]["contact"]>
+  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AdminAccountID" | "AirlineName" | "ContactStatus", ExtArgs["result"]["contact"]>
+  export type ContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
+  export type ContactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
+  export type ContactIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
 
   export type $ContactPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Contact"
-    objects: {}
+    objects: {
+      admin: Prisma.$AdminPayload<ExtArgs>
+      airline: Prisma.$AirlinePayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       AdminAccountID: string
-      AirlineMessageID: string
+      AirlineName: string
       ContactStatus: string
     }, ExtArgs["result"]["contact"]>
     composites: {}
@@ -10513,6 +12018,8 @@ export namespace Prisma {
    */
   export interface Prisma__ContactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    airline<T extends AirlineDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AirlineDefaultArgs<ExtArgs>>): Prisma__AirlineClient<$Result.GetResult<Prisma.$AirlinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10543,7 +12050,7 @@ export namespace Prisma {
    */
   interface ContactFieldRefs {
     readonly AdminAccountID: FieldRef<"Contact", 'String'>
-    readonly AirlineMessageID: FieldRef<"Contact", 'String'>
+    readonly AirlineName: FieldRef<"Contact", 'String'>
     readonly ContactStatus: FieldRef<"Contact", 'String'>
   }
     
@@ -10561,6 +12068,10 @@ export namespace Prisma {
      * Omit specific fields from the Contact
      */
     omit?: ContactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
     /**
      * Filter, which Contact to fetch.
      */
@@ -10580,6 +12091,10 @@ export namespace Prisma {
      */
     omit?: ContactOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
+    /**
      * Filter, which Contact to fetch.
      */
     where: ContactWhereUniqueInput
@@ -10597,6 +12112,10 @@ export namespace Prisma {
      * Omit specific fields from the Contact
      */
     omit?: ContactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
     /**
      * Filter, which Contact to fetch.
      */
@@ -10646,6 +12165,10 @@ export namespace Prisma {
      */
     omit?: ContactOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
+    /**
      * Filter, which Contact to fetch.
      */
     where?: ContactWhereInput
@@ -10694,6 +12217,10 @@ export namespace Prisma {
      */
     omit?: ContactOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
+    /**
      * Filter, which Contacts to fetch.
      */
     where?: ContactWhereInput
@@ -10737,6 +12264,10 @@ export namespace Prisma {
      */
     omit?: ContactOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
+    /**
      * The data needed to create a Contact.
      */
     data: XOR<ContactCreateInput, ContactUncheckedCreateInput>
@@ -10770,6 +12301,10 @@ export namespace Prisma {
      */
     data: ContactCreateManyInput | ContactCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -10784,6 +12319,10 @@ export namespace Prisma {
      * Omit specific fields from the Contact
      */
     omit?: ContactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
     /**
      * The data needed to update a Contact.
      */
@@ -10836,6 +12375,10 @@ export namespace Prisma {
      * Limit how many Contacts to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -10850,6 +12393,10 @@ export namespace Prisma {
      * Omit specific fields from the Contact
      */
     omit?: ContactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
     /**
      * The filter to search for the Contact to update in case it exists.
      */
@@ -10876,6 +12423,10 @@ export namespace Prisma {
      * Omit specific fields from the Contact
      */
     omit?: ContactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
     /**
      * Filter which Contact to delete.
      */
@@ -10908,6 +12459,10 @@ export namespace Prisma {
      * Omit specific fields from the Contact
      */
     omit?: ContactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
   }
 
 
@@ -10923,34 +12478,40 @@ export namespace Prisma {
 
   export type Report_ToMinAggregateOutputType = {
     UserAccountID: string | null
-    ReportID: string | null
+    AdminAccountID: string | null
+    ReportStatus: string | null
   }
 
   export type Report_ToMaxAggregateOutputType = {
     UserAccountID: string | null
-    ReportID: string | null
+    AdminAccountID: string | null
+    ReportStatus: string | null
   }
 
   export type Report_ToCountAggregateOutputType = {
     UserAccountID: number
-    ReportID: number
+    AdminAccountID: number
+    ReportStatus: number
     _all: number
   }
 
 
   export type Report_ToMinAggregateInputType = {
     UserAccountID?: true
-    ReportID?: true
+    AdminAccountID?: true
+    ReportStatus?: true
   }
 
   export type Report_ToMaxAggregateInputType = {
     UserAccountID?: true
-    ReportID?: true
+    AdminAccountID?: true
+    ReportStatus?: true
   }
 
   export type Report_ToCountAggregateInputType = {
     UserAccountID?: true
-    ReportID?: true
+    AdminAccountID?: true
+    ReportStatus?: true
     _all?: true
   }
 
@@ -11028,7 +12589,8 @@ export namespace Prisma {
 
   export type Report_ToGroupByOutputType = {
     UserAccountID: string
-    ReportID: string
+    AdminAccountID: string
+    ReportStatus: string
     _count: Report_ToCountAggregateOutputType | null
     _min: Report_ToMinAggregateOutputType | null
     _max: Report_ToMaxAggregateOutputType | null
@@ -11050,32 +12612,63 @@ export namespace Prisma {
 
   export type Report_ToSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     UserAccountID?: boolean
-    ReportID?: boolean
+    AdminAccountID?: boolean
+    ReportStatus?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    Reports?: boolean | Report_To$ReportsArgs<ExtArgs>
+    _count?: boolean | Report_ToCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["report_To"]>
 
   export type Report_ToSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     UserAccountID?: boolean
-    ReportID?: boolean
+    AdminAccountID?: boolean
+    ReportStatus?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["report_To"]>
 
   export type Report_ToSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     UserAccountID?: boolean
-    ReportID?: boolean
+    AdminAccountID?: boolean
+    ReportStatus?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["report_To"]>
 
   export type Report_ToSelectScalar = {
     UserAccountID?: boolean
-    ReportID?: boolean
+    AdminAccountID?: boolean
+    ReportStatus?: boolean
   }
 
-  export type Report_ToOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"UserAccountID" | "ReportID", ExtArgs["result"]["report_To"]>
+  export type Report_ToOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"UserAccountID" | "AdminAccountID" | "ReportStatus", ExtArgs["result"]["report_To"]>
+  export type Report_ToInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    Reports?: boolean | Report_To$ReportsArgs<ExtArgs>
+    _count?: boolean | Report_ToCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type Report_ToIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type Report_ToIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $Report_ToPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Report_To"
-    objects: {}
+    objects: {
+      admin: Prisma.$AdminPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+      Reports: Prisma.$ReportPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       UserAccountID: string
-      ReportID: string
+      AdminAccountID: string
+      ReportStatus: string
     }, ExtArgs["result"]["report_To"]>
     composites: {}
   }
@@ -11470,6 +13063,9 @@ export namespace Prisma {
    */
   export interface Prisma__Report_ToClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    Reports<T extends Report_To$ReportsArgs<ExtArgs> = {}>(args?: Subset<T, Report_To$ReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11500,7 +13096,8 @@ export namespace Prisma {
    */
   interface Report_ToFieldRefs {
     readonly UserAccountID: FieldRef<"Report_To", 'String'>
-    readonly ReportID: FieldRef<"Report_To", 'String'>
+    readonly AdminAccountID: FieldRef<"Report_To", 'String'>
+    readonly ReportStatus: FieldRef<"Report_To", 'String'>
   }
     
 
@@ -11517,6 +13114,10 @@ export namespace Prisma {
      * Omit specific fields from the Report_To
      */
     omit?: Report_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
     /**
      * Filter, which Report_To to fetch.
      */
@@ -11536,6 +13137,10 @@ export namespace Prisma {
      */
     omit?: Report_ToOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
+    /**
      * Filter, which Report_To to fetch.
      */
     where: Report_ToWhereUniqueInput
@@ -11553,6 +13158,10 @@ export namespace Prisma {
      * Omit specific fields from the Report_To
      */
     omit?: Report_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
     /**
      * Filter, which Report_To to fetch.
      */
@@ -11602,6 +13211,10 @@ export namespace Prisma {
      */
     omit?: Report_ToOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
+    /**
      * Filter, which Report_To to fetch.
      */
     where?: Report_ToWhereInput
@@ -11650,6 +13263,10 @@ export namespace Prisma {
      */
     omit?: Report_ToOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
+    /**
      * Filter, which Report_Tos to fetch.
      */
     where?: Report_ToWhereInput
@@ -11693,6 +13310,10 @@ export namespace Prisma {
      */
     omit?: Report_ToOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
+    /**
      * The data needed to create a Report_To.
      */
     data: XOR<Report_ToCreateInput, Report_ToUncheckedCreateInput>
@@ -11726,6 +13347,10 @@ export namespace Prisma {
      */
     data: Report_ToCreateManyInput | Report_ToCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -11740,6 +13365,10 @@ export namespace Prisma {
      * Omit specific fields from the Report_To
      */
     omit?: Report_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
     /**
      * The data needed to update a Report_To.
      */
@@ -11792,6 +13421,10 @@ export namespace Prisma {
      * Limit how many Report_Tos to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -11806,6 +13439,10 @@ export namespace Prisma {
      * Omit specific fields from the Report_To
      */
     omit?: Report_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
     /**
      * The filter to search for the Report_To to update in case it exists.
      */
@@ -11833,6 +13470,10 @@ export namespace Prisma {
      */
     omit?: Report_ToOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
+    /**
      * Filter which Report_To to delete.
      */
     where: Report_ToWhereUniqueInput
@@ -11853,6 +13494,30 @@ export namespace Prisma {
   }
 
   /**
+   * Report_To.Reports
+   */
+  export type Report_To$ReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Report
+     */
+    select?: ReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Report
+     */
+    omit?: ReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
+    where?: ReportWhereInput
+    orderBy?: ReportOrderByWithRelationInput | ReportOrderByWithRelationInput[]
+    cursor?: ReportWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReportScalarFieldEnum | ReportScalarFieldEnum[]
+  }
+
+  /**
    * Report_To without action
    */
   export type Report_ToDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11864,6 +13529,10 @@ export namespace Prisma {
      * Omit specific fields from the Report_To
      */
     omit?: Report_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
   }
 
 
@@ -11873,34 +13542,64 @@ export namespace Prisma {
 
   export type AggregateCabinClass = {
     _count: CabinClassCountAggregateOutputType | null
+    _avg: CabinClassAvgAggregateOutputType | null
+    _sum: CabinClassSumAggregateOutputType | null
     _min: CabinClassMinAggregateOutputType | null
     _max: CabinClassMaxAggregateOutputType | null
   }
 
+  export type CabinClassAvgAggregateOutputType = {
+    StandardPrice: number | null
+  }
+
+  export type CabinClassSumAggregateOutputType = {
+    StandardPrice: number | null
+  }
+
   export type CabinClassMinAggregateOutputType = {
+    AircraftRegNo: string | null
     Class: string | null
+    StandardPrice: number | null
   }
 
   export type CabinClassMaxAggregateOutputType = {
+    AircraftRegNo: string | null
     Class: string | null
+    StandardPrice: number | null
   }
 
   export type CabinClassCountAggregateOutputType = {
+    AircraftRegNo: number
     Class: number
+    StandardPrice: number
     _all: number
   }
 
 
+  export type CabinClassAvgAggregateInputType = {
+    StandardPrice?: true
+  }
+
+  export type CabinClassSumAggregateInputType = {
+    StandardPrice?: true
+  }
+
   export type CabinClassMinAggregateInputType = {
+    AircraftRegNo?: true
     Class?: true
+    StandardPrice?: true
   }
 
   export type CabinClassMaxAggregateInputType = {
+    AircraftRegNo?: true
     Class?: true
+    StandardPrice?: true
   }
 
   export type CabinClassCountAggregateInputType = {
+    AircraftRegNo?: true
     Class?: true
+    StandardPrice?: true
     _all?: true
   }
 
@@ -11942,6 +13641,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: CabinClassAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CabinClassSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: CabinClassMinAggregateInputType
@@ -11972,13 +13683,19 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: CabinClassCountAggregateInputType | true
+    _avg?: CabinClassAvgAggregateInputType
+    _sum?: CabinClassSumAggregateInputType
     _min?: CabinClassMinAggregateInputType
     _max?: CabinClassMaxAggregateInputType
   }
 
   export type CabinClassGroupByOutputType = {
+    AircraftRegNo: string
     Class: string
+    StandardPrice: number
     _count: CabinClassCountAggregateOutputType | null
+    _avg: CabinClassAvgAggregateOutputType | null
+    _sum: CabinClassSumAggregateOutputType | null
     _min: CabinClassMinAggregateOutputType | null
     _max: CabinClassMaxAggregateOutputType | null
   }
@@ -11998,28 +13715,52 @@ export namespace Prisma {
 
 
   export type CabinClassSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    AircraftRegNo?: boolean
     Class?: boolean
+    StandardPrice?: boolean
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cabinClass"]>
 
   export type CabinClassSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    AircraftRegNo?: boolean
     Class?: boolean
+    StandardPrice?: boolean
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cabinClass"]>
 
   export type CabinClassSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    AircraftRegNo?: boolean
     Class?: boolean
+    StandardPrice?: boolean
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cabinClass"]>
 
   export type CabinClassSelectScalar = {
+    AircraftRegNo?: boolean
     Class?: boolean
+    StandardPrice?: boolean
   }
 
-  export type CabinClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Class", ExtArgs["result"]["cabinClass"]>
+  export type CabinClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AircraftRegNo" | "Class" | "StandardPrice", ExtArgs["result"]["cabinClass"]>
+  export type CabinClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+  }
+  export type CabinClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+  }
+  export type CabinClassIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+  }
 
   export type $CabinClassPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CabinClass"
-    objects: {}
+    objects: {
+      aircraft: Prisma.$AircraftPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
+      AircraftRegNo: string
       Class: string
+      StandardPrice: number
     }, ExtArgs["result"]["cabinClass"]>
     composites: {}
   }
@@ -12103,8 +13844,8 @@ export namespace Prisma {
      * // Get first 10 CabinClasses
      * const cabinClasses = await prisma.cabinClass.findMany({ take: 10 })
      * 
-     * // Only select the `Class`
-     * const cabinClassWithClassOnly = await prisma.cabinClass.findMany({ select: { Class: true } })
+     * // Only select the `AircraftRegNo`
+     * const cabinClassWithAircraftRegNoOnly = await prisma.cabinClass.findMany({ select: { AircraftRegNo: true } })
      * 
      */
     findMany<T extends CabinClassFindManyArgs>(args?: SelectSubset<T, CabinClassFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CabinClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -12148,9 +13889,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many CabinClasses and only return the `Class`
-     * const cabinClassWithClassOnly = await prisma.cabinClass.createManyAndReturn({
-     *   select: { Class: true },
+     * // Create many CabinClasses and only return the `AircraftRegNo`
+     * const cabinClassWithAircraftRegNoOnly = await prisma.cabinClass.createManyAndReturn({
+     *   select: { AircraftRegNo: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -12239,9 +13980,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more CabinClasses and only return the `Class`
-     * const cabinClassWithClassOnly = await prisma.cabinClass.updateManyAndReturn({
-     *   select: { Class: true },
+     * // Update zero or more CabinClasses and only return the `AircraftRegNo`
+     * const cabinClassWithAircraftRegNoOnly = await prisma.cabinClass.updateManyAndReturn({
+     *   select: { AircraftRegNo: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -12414,6 +14155,7 @@ export namespace Prisma {
    */
   export interface Prisma__CabinClassClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    aircraft<T extends AircraftDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AircraftDefaultArgs<ExtArgs>>): Prisma__AircraftClient<$Result.GetResult<Prisma.$AircraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12443,7 +14185,9 @@ export namespace Prisma {
    * Fields of the CabinClass model
    */
   interface CabinClassFieldRefs {
+    readonly AircraftRegNo: FieldRef<"CabinClass", 'String'>
     readonly Class: FieldRef<"CabinClass", 'String'>
+    readonly StandardPrice: FieldRef<"CabinClass", 'Float'>
   }
     
 
@@ -12460,6 +14204,10 @@ export namespace Prisma {
      * Omit specific fields from the CabinClass
      */
     omit?: CabinClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
     /**
      * Filter, which CabinClass to fetch.
      */
@@ -12479,6 +14227,10 @@ export namespace Prisma {
      */
     omit?: CabinClassOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
+    /**
      * Filter, which CabinClass to fetch.
      */
     where: CabinClassWhereUniqueInput
@@ -12496,6 +14248,10 @@ export namespace Prisma {
      * Omit specific fields from the CabinClass
      */
     omit?: CabinClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
     /**
      * Filter, which CabinClass to fetch.
      */
@@ -12545,6 +14301,10 @@ export namespace Prisma {
      */
     omit?: CabinClassOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
+    /**
      * Filter, which CabinClass to fetch.
      */
     where?: CabinClassWhereInput
@@ -12593,6 +14353,10 @@ export namespace Prisma {
      */
     omit?: CabinClassOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
+    /**
      * Filter, which CabinClasses to fetch.
      */
     where?: CabinClassWhereInput
@@ -12636,6 +14400,10 @@ export namespace Prisma {
      */
     omit?: CabinClassOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
+    /**
      * The data needed to create a CabinClass.
      */
     data: XOR<CabinClassCreateInput, CabinClassUncheckedCreateInput>
@@ -12669,6 +14437,10 @@ export namespace Prisma {
      */
     data: CabinClassCreateManyInput | CabinClassCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -12683,6 +14455,10 @@ export namespace Prisma {
      * Omit specific fields from the CabinClass
      */
     omit?: CabinClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
     /**
      * The data needed to update a CabinClass.
      */
@@ -12735,6 +14511,10 @@ export namespace Prisma {
      * Limit how many CabinClasses to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -12749,6 +14529,10 @@ export namespace Prisma {
      * Omit specific fields from the CabinClass
      */
     omit?: CabinClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
     /**
      * The filter to search for the CabinClass to update in case it exists.
      */
@@ -12775,6 +14559,10 @@ export namespace Prisma {
      * Omit specific fields from the CabinClass
      */
     omit?: CabinClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
     /**
      * Filter which CabinClass to delete.
      */
@@ -12807,6 +14595,10 @@ export namespace Prisma {
      * Omit specific fields from the CabinClass
      */
     omit?: CabinClassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CabinClassInclude<ExtArgs> | null
   }
 
 
@@ -12821,41 +14613,41 @@ export namespace Prisma {
   }
 
   export type SeatMinAggregateOutputType = {
+    AircraftRegNo: string | null
     SeatNo: string | null
     SeatType: string | null
-    AircraftRegNo: string | null
   }
 
   export type SeatMaxAggregateOutputType = {
+    AircraftRegNo: string | null
     SeatNo: string | null
     SeatType: string | null
-    AircraftRegNo: string | null
   }
 
   export type SeatCountAggregateOutputType = {
+    AircraftRegNo: number
     SeatNo: number
     SeatType: number
-    AircraftRegNo: number
     _all: number
   }
 
 
   export type SeatMinAggregateInputType = {
+    AircraftRegNo?: true
     SeatNo?: true
     SeatType?: true
-    AircraftRegNo?: true
   }
 
   export type SeatMaxAggregateInputType = {
+    AircraftRegNo?: true
     SeatNo?: true
     SeatType?: true
-    AircraftRegNo?: true
   }
 
   export type SeatCountAggregateInputType = {
+    AircraftRegNo?: true
     SeatNo?: true
     SeatType?: true
-    AircraftRegNo?: true
     _all?: true
   }
 
@@ -12932,9 +14724,9 @@ export namespace Prisma {
   }
 
   export type SeatGroupByOutputType = {
+    AircraftRegNo: string
     SeatNo: string
     SeatType: string
-    AircraftRegNo: string
     _count: SeatCountAggregateOutputType | null
     _min: SeatMinAggregateOutputType | null
     _max: SeatMaxAggregateOutputType | null
@@ -12955,38 +14747,57 @@ export namespace Prisma {
 
 
   export type SeatSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    AircraftRegNo?: boolean
     SeatNo?: boolean
     SeatType?: boolean
-    AircraftRegNo?: boolean
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+    tickets?: boolean | Seat$ticketsArgs<ExtArgs>
+    _count?: boolean | SeatCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["seat"]>
 
   export type SeatSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    AircraftRegNo?: boolean
     SeatNo?: boolean
     SeatType?: boolean
-    AircraftRegNo?: boolean
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["seat"]>
 
   export type SeatSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    AircraftRegNo?: boolean
     SeatNo?: boolean
     SeatType?: boolean
-    AircraftRegNo?: boolean
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["seat"]>
 
   export type SeatSelectScalar = {
+    AircraftRegNo?: boolean
     SeatNo?: boolean
     SeatType?: boolean
-    AircraftRegNo?: boolean
   }
 
-  export type SeatOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"SeatNo" | "SeatType" | "AircraftRegNo", ExtArgs["result"]["seat"]>
+  export type SeatOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AircraftRegNo" | "SeatNo" | "SeatType", ExtArgs["result"]["seat"]>
+  export type SeatInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+    tickets?: boolean | Seat$ticketsArgs<ExtArgs>
+    _count?: boolean | SeatCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SeatIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+  }
+  export type SeatIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    aircraft?: boolean | AircraftDefaultArgs<ExtArgs>
+  }
 
   export type $SeatPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Seat"
-    objects: {}
+    objects: {
+      aircraft: Prisma.$AircraftPayload<ExtArgs>
+      tickets: Prisma.$TicketPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
+      AircraftRegNo: string
       SeatNo: string
       SeatType: string
-      AircraftRegNo: string
     }, ExtArgs["result"]["seat"]>
     composites: {}
   }
@@ -13070,8 +14881,8 @@ export namespace Prisma {
      * // Get first 10 Seats
      * const seats = await prisma.seat.findMany({ take: 10 })
      * 
-     * // Only select the `SeatNo`
-     * const seatWithSeatNoOnly = await prisma.seat.findMany({ select: { SeatNo: true } })
+     * // Only select the `AircraftRegNo`
+     * const seatWithAircraftRegNoOnly = await prisma.seat.findMany({ select: { AircraftRegNo: true } })
      * 
      */
     findMany<T extends SeatFindManyArgs>(args?: SelectSubset<T, SeatFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -13115,9 +14926,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many Seats and only return the `SeatNo`
-     * const seatWithSeatNoOnly = await prisma.seat.createManyAndReturn({
-     *   select: { SeatNo: true },
+     * // Create many Seats and only return the `AircraftRegNo`
+     * const seatWithAircraftRegNoOnly = await prisma.seat.createManyAndReturn({
+     *   select: { AircraftRegNo: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -13206,9 +15017,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Seats and only return the `SeatNo`
-     * const seatWithSeatNoOnly = await prisma.seat.updateManyAndReturn({
-     *   select: { SeatNo: true },
+     * // Update zero or more Seats and only return the `AircraftRegNo`
+     * const seatWithAircraftRegNoOnly = await prisma.seat.updateManyAndReturn({
+     *   select: { AircraftRegNo: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -13381,6 +15192,8 @@ export namespace Prisma {
    */
   export interface Prisma__SeatClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    aircraft<T extends AircraftDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AircraftDefaultArgs<ExtArgs>>): Prisma__AircraftClient<$Result.GetResult<Prisma.$AircraftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    tickets<T extends Seat$ticketsArgs<ExtArgs> = {}>(args?: Subset<T, Seat$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13410,9 +15223,9 @@ export namespace Prisma {
    * Fields of the Seat model
    */
   interface SeatFieldRefs {
+    readonly AircraftRegNo: FieldRef<"Seat", 'String'>
     readonly SeatNo: FieldRef<"Seat", 'String'>
     readonly SeatType: FieldRef<"Seat", 'String'>
-    readonly AircraftRegNo: FieldRef<"Seat", 'String'>
   }
     
 
@@ -13429,6 +15242,10 @@ export namespace Prisma {
      * Omit specific fields from the Seat
      */
     omit?: SeatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
     /**
      * Filter, which Seat to fetch.
      */
@@ -13448,6 +15265,10 @@ export namespace Prisma {
      */
     omit?: SeatOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
+    /**
      * Filter, which Seat to fetch.
      */
     where: SeatWhereUniqueInput
@@ -13465,6 +15286,10 @@ export namespace Prisma {
      * Omit specific fields from the Seat
      */
     omit?: SeatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
     /**
      * Filter, which Seat to fetch.
      */
@@ -13514,6 +15339,10 @@ export namespace Prisma {
      */
     omit?: SeatOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
+    /**
      * Filter, which Seat to fetch.
      */
     where?: SeatWhereInput
@@ -13562,6 +15391,10 @@ export namespace Prisma {
      */
     omit?: SeatOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
+    /**
      * Filter, which Seats to fetch.
      */
     where?: SeatWhereInput
@@ -13605,6 +15438,10 @@ export namespace Prisma {
      */
     omit?: SeatOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
+    /**
      * The data needed to create a Seat.
      */
     data: XOR<SeatCreateInput, SeatUncheckedCreateInput>
@@ -13638,6 +15475,10 @@ export namespace Prisma {
      */
     data: SeatCreateManyInput | SeatCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -13652,6 +15493,10 @@ export namespace Prisma {
      * Omit specific fields from the Seat
      */
     omit?: SeatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
     /**
      * The data needed to update a Seat.
      */
@@ -13704,6 +15549,10 @@ export namespace Prisma {
      * Limit how many Seats to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -13718,6 +15567,10 @@ export namespace Prisma {
      * Omit specific fields from the Seat
      */
     omit?: SeatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
     /**
      * The filter to search for the Seat to update in case it exists.
      */
@@ -13745,6 +15598,10 @@ export namespace Prisma {
      */
     omit?: SeatOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
+    /**
      * Filter which Seat to delete.
      */
     where: SeatWhereUniqueInput
@@ -13765,6 +15622,30 @@ export namespace Prisma {
   }
 
   /**
+   * Seat.tickets
+   */
+  export type Seat$ticketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ticket
+     */
+    select?: TicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ticket
+     */
+    omit?: TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    where?: TicketWhereInput
+    orderBy?: TicketOrderByWithRelationInput | TicketOrderByWithRelationInput[]
+    cursor?: TicketWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TicketScalarFieldEnum | TicketScalarFieldEnum[]
+  }
+
+  /**
    * Seat without action
    */
   export type SeatDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13776,6 +15657,10 @@ export namespace Prisma {
      * Omit specific fields from the Seat
      */
     omit?: SeatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeatInclude<ExtArgs> | null
   }
 
 
@@ -13790,41 +15675,35 @@ export namespace Prisma {
   }
 
   export type AdminMinAggregateOutputType = {
-    UserAccountID: string | null
-    AdminID: string | null
-    AdminMessage: string | null
+    AdminAccountID: string | null
+    IPAddress: string | null
   }
 
   export type AdminMaxAggregateOutputType = {
-    UserAccountID: string | null
-    AdminID: string | null
-    AdminMessage: string | null
+    AdminAccountID: string | null
+    IPAddress: string | null
   }
 
   export type AdminCountAggregateOutputType = {
-    UserAccountID: number
-    AdminID: number
-    AdminMessage: number
+    AdminAccountID: number
+    IPAddress: number
     _all: number
   }
 
 
   export type AdminMinAggregateInputType = {
-    UserAccountID?: true
-    AdminID?: true
-    AdminMessage?: true
+    AdminAccountID?: true
+    IPAddress?: true
   }
 
   export type AdminMaxAggregateInputType = {
-    UserAccountID?: true
-    AdminID?: true
-    AdminMessage?: true
+    AdminAccountID?: true
+    IPAddress?: true
   }
 
   export type AdminCountAggregateInputType = {
-    UserAccountID?: true
-    AdminID?: true
-    AdminMessage?: true
+    AdminAccountID?: true
+    IPAddress?: true
     _all?: true
   }
 
@@ -13901,9 +15780,8 @@ export namespace Prisma {
   }
 
   export type AdminGroupByOutputType = {
-    UserAccountID: string
-    AdminID: string
-    AdminMessage: string
+    AdminAccountID: string
+    IPAddress: string | null
     _count: AdminCountAggregateOutputType | null
     _min: AdminMinAggregateOutputType | null
     _max: AdminMaxAggregateOutputType | null
@@ -13924,38 +15802,58 @@ export namespace Prisma {
 
 
   export type AdminSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    UserAccountID?: boolean
-    AdminID?: boolean
-    AdminMessage?: boolean
+    AdminAccountID?: boolean
+    IPAddress?: boolean
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+    sentAirlineMessages?: boolean | Admin$sentAirlineMessagesArgs<ExtArgs>
+    contacts?: boolean | Admin$contactsArgs<ExtArgs>
+    involvedInReports?: boolean | Admin$involvedInReportsArgs<ExtArgs>
+    _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type AdminSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    UserAccountID?: boolean
-    AdminID?: boolean
-    AdminMessage?: boolean
+    AdminAccountID?: boolean
+    IPAddress?: boolean
+    account?: boolean | AccountDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type AdminSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    UserAccountID?: boolean
-    AdminID?: boolean
-    AdminMessage?: boolean
+    AdminAccountID?: boolean
+    IPAddress?: boolean
+    account?: boolean | AccountDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type AdminSelectScalar = {
-    UserAccountID?: boolean
-    AdminID?: boolean
-    AdminMessage?: boolean
+    AdminAccountID?: boolean
+    IPAddress?: boolean
   }
 
-  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"UserAccountID" | "AdminID" | "AdminMessage", ExtArgs["result"]["admin"]>
+  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AdminAccountID" | "IPAddress", ExtArgs["result"]["admin"]>
+  export type AdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+    sentAirlineMessages?: boolean | Admin$sentAirlineMessagesArgs<ExtArgs>
+    contacts?: boolean | Admin$contactsArgs<ExtArgs>
+    involvedInReports?: boolean | Admin$involvedInReportsArgs<ExtArgs>
+    _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AdminIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }
+  export type AdminIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }
 
   export type $AdminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Admin"
-    objects: {}
+    objects: {
+      account: Prisma.$AccountPayload<ExtArgs>
+      sentAirlineMessages: Prisma.$Airline_MessagePayload<ExtArgs>[]
+      contacts: Prisma.$ContactPayload<ExtArgs>[]
+      involvedInReports: Prisma.$Report_ToPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
-      UserAccountID: string
-      AdminID: string
-      AdminMessage: string
+      AdminAccountID: string
+      IPAddress: string | null
     }, ExtArgs["result"]["admin"]>
     composites: {}
   }
@@ -14039,8 +15937,8 @@ export namespace Prisma {
      * // Get first 10 Admins
      * const admins = await prisma.admin.findMany({ take: 10 })
      * 
-     * // Only select the `UserAccountID`
-     * const adminWithUserAccountIDOnly = await prisma.admin.findMany({ select: { UserAccountID: true } })
+     * // Only select the `AdminAccountID`
+     * const adminWithAdminAccountIDOnly = await prisma.admin.findMany({ select: { AdminAccountID: true } })
      * 
      */
     findMany<T extends AdminFindManyArgs>(args?: SelectSubset<T, AdminFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -14084,9 +15982,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many Admins and only return the `UserAccountID`
-     * const adminWithUserAccountIDOnly = await prisma.admin.createManyAndReturn({
-     *   select: { UserAccountID: true },
+     * // Create many Admins and only return the `AdminAccountID`
+     * const adminWithAdminAccountIDOnly = await prisma.admin.createManyAndReturn({
+     *   select: { AdminAccountID: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -14175,9 +16073,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Admins and only return the `UserAccountID`
-     * const adminWithUserAccountIDOnly = await prisma.admin.updateManyAndReturn({
-     *   select: { UserAccountID: true },
+     * // Update zero or more Admins and only return the `AdminAccountID`
+     * const adminWithAdminAccountIDOnly = await prisma.admin.updateManyAndReturn({
+     *   select: { AdminAccountID: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -14350,6 +16248,10 @@ export namespace Prisma {
    */
   export interface Prisma__AdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    account<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sentAirlineMessages<T extends Admin$sentAirlineMessagesArgs<ExtArgs> = {}>(args?: Subset<T, Admin$sentAirlineMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Airline_MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contacts<T extends Admin$contactsArgs<ExtArgs> = {}>(args?: Subset<T, Admin$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    involvedInReports<T extends Admin$involvedInReportsArgs<ExtArgs> = {}>(args?: Subset<T, Admin$involvedInReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Report_ToPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14379,9 +16281,8 @@ export namespace Prisma {
    * Fields of the Admin model
    */
   interface AdminFieldRefs {
-    readonly UserAccountID: FieldRef<"Admin", 'String'>
-    readonly AdminID: FieldRef<"Admin", 'String'>
-    readonly AdminMessage: FieldRef<"Admin", 'String'>
+    readonly AdminAccountID: FieldRef<"Admin", 'String'>
+    readonly IPAddress: FieldRef<"Admin", 'String'>
   }
     
 
@@ -14398,6 +16299,10 @@ export namespace Prisma {
      * Omit specific fields from the Admin
      */
     omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
     /**
      * Filter, which Admin to fetch.
      */
@@ -14417,6 +16322,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * Filter, which Admin to fetch.
      */
     where: AdminWhereUniqueInput
@@ -14434,6 +16343,10 @@ export namespace Prisma {
      * Omit specific fields from the Admin
      */
     omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
     /**
      * Filter, which Admin to fetch.
      */
@@ -14483,6 +16396,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * Filter, which Admin to fetch.
      */
     where?: AdminWhereInput
@@ -14531,6 +16448,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * Filter, which Admins to fetch.
      */
     where?: AdminWhereInput
@@ -14574,6 +16495,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * The data needed to create a Admin.
      */
     data: XOR<AdminCreateInput, AdminUncheckedCreateInput>
@@ -14607,6 +16532,10 @@ export namespace Prisma {
      */
     data: AdminCreateManyInput | AdminCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -14621,6 +16550,10 @@ export namespace Prisma {
      * Omit specific fields from the Admin
      */
     omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
     /**
      * The data needed to update a Admin.
      */
@@ -14673,6 +16606,10 @@ export namespace Prisma {
      * Limit how many Admins to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -14687,6 +16624,10 @@ export namespace Prisma {
      * Omit specific fields from the Admin
      */
     omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
     /**
      * The filter to search for the Admin to update in case it exists.
      */
@@ -14714,6 +16655,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * Filter which Admin to delete.
      */
     where: AdminWhereUniqueInput
@@ -14734,6 +16679,78 @@ export namespace Prisma {
   }
 
   /**
+   * Admin.sentAirlineMessages
+   */
+  export type Admin$sentAirlineMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Airline_Message
+     */
+    select?: Airline_MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Airline_Message
+     */
+    omit?: Airline_MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
+    where?: Airline_MessageWhereInput
+    orderBy?: Airline_MessageOrderByWithRelationInput | Airline_MessageOrderByWithRelationInput[]
+    cursor?: Airline_MessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Airline_MessageScalarFieldEnum | Airline_MessageScalarFieldEnum[]
+  }
+
+  /**
+   * Admin.contacts
+   */
+  export type Admin$contactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Contact
+     */
+    select?: ContactSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Contact
+     */
+    omit?: ContactOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactInclude<ExtArgs> | null
+    where?: ContactWhereInput
+    orderBy?: ContactOrderByWithRelationInput | ContactOrderByWithRelationInput[]
+    cursor?: ContactWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContactScalarFieldEnum | ContactScalarFieldEnum[]
+  }
+
+  /**
+   * Admin.involvedInReports
+   */
+  export type Admin$involvedInReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Report_To
+     */
+    select?: Report_ToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Report_To
+     */
+    omit?: Report_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
+    where?: Report_ToWhereInput
+    orderBy?: Report_ToOrderByWithRelationInput | Report_ToOrderByWithRelationInput[]
+    cursor?: Report_ToWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Report_ToScalarFieldEnum | Report_ToScalarFieldEnum[]
+  }
+
+  /**
    * Admin without action
    */
   export type AdminDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14745,6 +16762,10 @@ export namespace Prisma {
      * Omit specific fields from the Admin
      */
     omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
   }
 
 
@@ -14759,19 +16780,19 @@ export namespace Prisma {
   }
 
   export type Airline_MessageMinAggregateOutputType = {
-    AirlineMessageID: string | null
+    AirlineName: string | null
     AdminAccountID: string | null
     MessageText: string | null
   }
 
   export type Airline_MessageMaxAggregateOutputType = {
-    AirlineMessageID: string | null
+    AirlineName: string | null
     AdminAccountID: string | null
     MessageText: string | null
   }
 
   export type Airline_MessageCountAggregateOutputType = {
-    AirlineMessageID: number
+    AirlineName: number
     AdminAccountID: number
     MessageText: number
     _all: number
@@ -14779,19 +16800,19 @@ export namespace Prisma {
 
 
   export type Airline_MessageMinAggregateInputType = {
-    AirlineMessageID?: true
+    AirlineName?: true
     AdminAccountID?: true
     MessageText?: true
   }
 
   export type Airline_MessageMaxAggregateInputType = {
-    AirlineMessageID?: true
+    AirlineName?: true
     AdminAccountID?: true
     MessageText?: true
   }
 
   export type Airline_MessageCountAggregateInputType = {
-    AirlineMessageID?: true
+    AirlineName?: true
     AdminAccountID?: true
     MessageText?: true
     _all?: true
@@ -14870,7 +16891,7 @@ export namespace Prisma {
   }
 
   export type Airline_MessageGroupByOutputType = {
-    AirlineMessageID: string
+    AirlineName: string
     AdminAccountID: string
     MessageText: string
     _count: Airline_MessageCountAggregateOutputType | null
@@ -14893,36 +16914,57 @@ export namespace Prisma {
 
 
   export type Airline_MessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    AirlineMessageID?: boolean
+    AirlineName?: boolean
     AdminAccountID?: boolean
     MessageText?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["airline_Message"]>
 
   export type Airline_MessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    AirlineMessageID?: boolean
+    AirlineName?: boolean
     AdminAccountID?: boolean
     MessageText?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["airline_Message"]>
 
   export type Airline_MessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    AirlineMessageID?: boolean
+    AirlineName?: boolean
     AdminAccountID?: boolean
     MessageText?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["airline_Message"]>
 
   export type Airline_MessageSelectScalar = {
-    AirlineMessageID?: boolean
+    AirlineName?: boolean
     AdminAccountID?: boolean
     MessageText?: boolean
   }
 
-  export type Airline_MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AirlineMessageID" | "AdminAccountID" | "MessageText", ExtArgs["result"]["airline_Message"]>
+  export type Airline_MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AirlineName" | "AdminAccountID" | "MessageText", ExtArgs["result"]["airline_Message"]>
+  export type Airline_MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
+  export type Airline_MessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
+  export type Airline_MessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
 
   export type $Airline_MessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Airline_Message"
-    objects: {}
+    objects: {
+      admin: Prisma.$AdminPayload<ExtArgs>
+      airline: Prisma.$AirlinePayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
-      AirlineMessageID: string
+      AirlineName: string
       AdminAccountID: string
       MessageText: string
     }, ExtArgs["result"]["airline_Message"]>
@@ -15008,8 +17050,8 @@ export namespace Prisma {
      * // Get first 10 Airline_Messages
      * const airline_Messages = await prisma.airline_Message.findMany({ take: 10 })
      * 
-     * // Only select the `AirlineMessageID`
-     * const airline_MessageWithAirlineMessageIDOnly = await prisma.airline_Message.findMany({ select: { AirlineMessageID: true } })
+     * // Only select the `AirlineName`
+     * const airline_MessageWithAirlineNameOnly = await prisma.airline_Message.findMany({ select: { AirlineName: true } })
      * 
      */
     findMany<T extends Airline_MessageFindManyArgs>(args?: SelectSubset<T, Airline_MessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Airline_MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -15053,9 +17095,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many Airline_Messages and only return the `AirlineMessageID`
-     * const airline_MessageWithAirlineMessageIDOnly = await prisma.airline_Message.createManyAndReturn({
-     *   select: { AirlineMessageID: true },
+     * // Create many Airline_Messages and only return the `AirlineName`
+     * const airline_MessageWithAirlineNameOnly = await prisma.airline_Message.createManyAndReturn({
+     *   select: { AirlineName: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -15144,9 +17186,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Airline_Messages and only return the `AirlineMessageID`
-     * const airline_MessageWithAirlineMessageIDOnly = await prisma.airline_Message.updateManyAndReturn({
-     *   select: { AirlineMessageID: true },
+     * // Update zero or more Airline_Messages and only return the `AirlineName`
+     * const airline_MessageWithAirlineNameOnly = await prisma.airline_Message.updateManyAndReturn({
+     *   select: { AirlineName: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -15319,6 +17361,8 @@ export namespace Prisma {
    */
   export interface Prisma__Airline_MessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    airline<T extends AirlineDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AirlineDefaultArgs<ExtArgs>>): Prisma__AirlineClient<$Result.GetResult<Prisma.$AirlinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15348,7 +17392,7 @@ export namespace Prisma {
    * Fields of the Airline_Message model
    */
   interface Airline_MessageFieldRefs {
-    readonly AirlineMessageID: FieldRef<"Airline_Message", 'String'>
+    readonly AirlineName: FieldRef<"Airline_Message", 'String'>
     readonly AdminAccountID: FieldRef<"Airline_Message", 'String'>
     readonly MessageText: FieldRef<"Airline_Message", 'String'>
   }
@@ -15368,6 +17412,10 @@ export namespace Prisma {
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
+    /**
      * Filter, which Airline_Message to fetch.
      */
     where: Airline_MessageWhereUniqueInput
@@ -15386,6 +17434,10 @@ export namespace Prisma {
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
+    /**
      * Filter, which Airline_Message to fetch.
      */
     where: Airline_MessageWhereUniqueInput
@@ -15403,6 +17455,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Message
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
     /**
      * Filter, which Airline_Message to fetch.
      */
@@ -15452,6 +17508,10 @@ export namespace Prisma {
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
+    /**
      * Filter, which Airline_Message to fetch.
      */
     where?: Airline_MessageWhereInput
@@ -15500,6 +17560,10 @@ export namespace Prisma {
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
+    /**
      * Filter, which Airline_Messages to fetch.
      */
     where?: Airline_MessageWhereInput
@@ -15543,6 +17607,10 @@ export namespace Prisma {
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
+    /**
      * The data needed to create a Airline_Message.
      */
     data: XOR<Airline_MessageCreateInput, Airline_MessageUncheckedCreateInput>
@@ -15576,6 +17644,10 @@ export namespace Prisma {
      */
     data: Airline_MessageCreateManyInput | Airline_MessageCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -15590,6 +17662,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Message
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
     /**
      * The data needed to update a Airline_Message.
      */
@@ -15642,6 +17718,10 @@ export namespace Prisma {
      * Limit how many Airline_Messages to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -15656,6 +17736,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Message
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
     /**
      * The filter to search for the Airline_Message to update in case it exists.
      */
@@ -15682,6 +17766,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Message
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
     /**
      * Filter which Airline_Message to delete.
      */
@@ -15714,6 +17802,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Message
      */
     omit?: Airline_MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_MessageInclude<ExtArgs> | null
   }
 
 
@@ -15873,6 +17965,8 @@ export namespace Prisma {
     Password?: boolean
     FirstName?: boolean
     LastName?: boolean
+    user?: boolean | Account$userArgs<ExtArgs>
+    admin?: boolean | Account$adminArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
   export type AccountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -15897,10 +17991,19 @@ export namespace Prisma {
   }
 
   export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"AccountID" | "Password" | "FirstName" | "LastName", ExtArgs["result"]["account"]>
+  export type AccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Account$userArgs<ExtArgs>
+    admin?: boolean | Account$adminArgs<ExtArgs>
+  }
+  export type AccountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type AccountIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $AccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Account"
-    objects: {}
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs> | null
+      admin: Prisma.$AdminPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       AccountID: string
       Password: string
@@ -16300,6 +18403,8 @@ export namespace Prisma {
    */
   export interface Prisma__AccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends Account$userArgs<ExtArgs> = {}>(args?: Subset<T, Account$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    admin<T extends Account$adminArgs<ExtArgs> = {}>(args?: Subset<T, Account$adminArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16350,6 +18455,10 @@ export namespace Prisma {
      */
     omit?: AccountOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
+    /**
      * Filter, which Account to fetch.
      */
     where: AccountWhereUniqueInput
@@ -16368,6 +18477,10 @@ export namespace Prisma {
      */
     omit?: AccountOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
+    /**
      * Filter, which Account to fetch.
      */
     where: AccountWhereUniqueInput
@@ -16385,6 +18498,10 @@ export namespace Prisma {
      * Omit specific fields from the Account
      */
     omit?: AccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
     /**
      * Filter, which Account to fetch.
      */
@@ -16434,6 +18551,10 @@ export namespace Prisma {
      */
     omit?: AccountOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
+    /**
      * Filter, which Account to fetch.
      */
     where?: AccountWhereInput
@@ -16482,6 +18603,10 @@ export namespace Prisma {
      */
     omit?: AccountOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
+    /**
      * Filter, which Accounts to fetch.
      */
     where?: AccountWhereInput
@@ -16524,6 +18649,10 @@ export namespace Prisma {
      * Omit specific fields from the Account
      */
     omit?: AccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
     /**
      * The data needed to create a Account.
      */
@@ -16572,6 +18701,10 @@ export namespace Prisma {
      * Omit specific fields from the Account
      */
     omit?: AccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
     /**
      * The data needed to update a Account.
      */
@@ -16639,6 +18772,10 @@ export namespace Prisma {
      */
     omit?: AccountOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
+    /**
      * The filter to search for the Account to update in case it exists.
      */
     where: AccountWhereUniqueInput
@@ -16665,6 +18802,10 @@ export namespace Prisma {
      */
     omit?: AccountOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
+    /**
      * Filter which Account to delete.
      */
     where: AccountWhereUniqueInput
@@ -16685,6 +18826,44 @@ export namespace Prisma {
   }
 
   /**
+   * Account.user
+   */
+  export type Account$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Account.admin
+   */
+  export type Account$adminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Admin
+     */
+    select?: AdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    where?: AdminWhereInput
+  }
+
+  /**
    * Account without action
    */
   export type AccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16696,6 +18875,10 @@ export namespace Prisma {
      * Omit specific fields from the Account
      */
     omit?: AccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
   }
 
 
@@ -16712,19 +18895,16 @@ export namespace Prisma {
   export type UserMinAggregateOutputType = {
     UserAccountID: string | null
     Email: string | null
-    IPAddress: string | null
   }
 
   export type UserMaxAggregateOutputType = {
     UserAccountID: string | null
     Email: string | null
-    IPAddress: string | null
   }
 
   export type UserCountAggregateOutputType = {
     UserAccountID: number
     Email: number
-    IPAddress: number
     _all: number
   }
 
@@ -16732,19 +18912,16 @@ export namespace Prisma {
   export type UserMinAggregateInputType = {
     UserAccountID?: true
     Email?: true
-    IPAddress?: true
   }
 
   export type UserMaxAggregateInputType = {
     UserAccountID?: true
     Email?: true
-    IPAddress?: true
   }
 
   export type UserCountAggregateInputType = {
     UserAccountID?: true
     Email?: true
-    IPAddress?: true
     _all?: true
   }
 
@@ -16823,7 +19000,6 @@ export namespace Prisma {
   export type UserGroupByOutputType = {
     UserAccountID: string
     Email: string
-    IPAddress: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -16846,36 +19022,62 @@ export namespace Prisma {
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     UserAccountID?: boolean
     Email?: boolean
-    IPAddress?: boolean
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+    telNos?: boolean | User$telNosArgs<ExtArgs>
+    assignedFlights?: boolean | User$assignedFlightsArgs<ExtArgs>
+    purchases?: boolean | User$purchasesArgs<ExtArgs>
+    involvedInReports?: boolean | User$involvedInReportsArgs<ExtArgs>
+    sessions?: boolean | User$sessionsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     UserAccountID?: boolean
     Email?: boolean
-    IPAddress?: boolean
+    account?: boolean | AccountDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     UserAccountID?: boolean
     Email?: boolean
-    IPAddress?: boolean
+    account?: boolean | AccountDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     UserAccountID?: boolean
     Email?: boolean
-    IPAddress?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"UserAccountID" | "Email" | "IPAddress", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"UserAccountID" | "Email", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+    telNos?: boolean | User$telNosArgs<ExtArgs>
+    assignedFlights?: boolean | User$assignedFlightsArgs<ExtArgs>
+    purchases?: boolean | User$purchasesArgs<ExtArgs>
+    involvedInReports?: boolean | User$involvedInReportsArgs<ExtArgs>
+    sessions?: boolean | User$sessionsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    account?: boolean | AccountDefaultArgs<ExtArgs>
+  }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      account: Prisma.$AccountPayload<ExtArgs>
+      telNos: Prisma.$User_Tel_NoPayload<ExtArgs>[]
+      assignedFlights: Prisma.$Assigned_ToPayload<ExtArgs>[]
+      purchases: Prisma.$PurchasePayload<ExtArgs>[]
+      involvedInReports: Prisma.$Report_ToPayload<ExtArgs>[]
+      sessions: Prisma.$SessionPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       UserAccountID: string
       Email: string
-      IPAddress: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -17270,6 +19472,12 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    account<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    telNos<T extends User$telNosArgs<ExtArgs> = {}>(args?: Subset<T, User$telNosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$User_Tel_NoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignedFlights<T extends User$assignedFlightsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedFlightsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Assigned_ToPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    purchases<T extends User$purchasesArgs<ExtArgs> = {}>(args?: Subset<T, User$purchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    involvedInReports<T extends User$involvedInReportsArgs<ExtArgs> = {}>(args?: Subset<T, User$involvedInReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Report_ToPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17301,7 +19509,6 @@ export namespace Prisma {
   interface UserFieldRefs {
     readonly UserAccountID: FieldRef<"User", 'String'>
     readonly Email: FieldRef<"User", 'String'>
-    readonly IPAddress: FieldRef<"User", 'String'>
   }
     
 
@@ -17318,6 +19525,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -17337,6 +19548,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -17354,6 +19569,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -17403,6 +19622,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -17451,6 +19674,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -17494,6 +19721,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The data needed to create a User.
      */
     data: XOR<UserCreateInput, UserUncheckedCreateInput>
@@ -17527,6 +19758,10 @@ export namespace Prisma {
      */
     data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -17541,6 +19776,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -17593,6 +19832,10 @@ export namespace Prisma {
      * Limit how many Users to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -17607,6 +19850,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The filter to search for the User to update in case it exists.
      */
@@ -17634,6 +19881,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -17654,6 +19905,126 @@ export namespace Prisma {
   }
 
   /**
+   * User.telNos
+   */
+  export type User$telNosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User_Tel_No
+     */
+    select?: User_Tel_NoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User_Tel_No
+     */
+    omit?: User_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
+    where?: User_Tel_NoWhereInput
+    orderBy?: User_Tel_NoOrderByWithRelationInput | User_Tel_NoOrderByWithRelationInput[]
+    cursor?: User_Tel_NoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: User_Tel_NoScalarFieldEnum | User_Tel_NoScalarFieldEnum[]
+  }
+
+  /**
+   * User.assignedFlights
+   */
+  export type User$assignedFlightsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Assigned_To
+     */
+    select?: Assigned_ToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Assigned_To
+     */
+    omit?: Assigned_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Assigned_ToInclude<ExtArgs> | null
+    where?: Assigned_ToWhereInput
+    orderBy?: Assigned_ToOrderByWithRelationInput | Assigned_ToOrderByWithRelationInput[]
+    cursor?: Assigned_ToWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Assigned_ToScalarFieldEnum | Assigned_ToScalarFieldEnum[]
+  }
+
+  /**
+   * User.purchases
+   */
+  export type User$purchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purchase
+     */
+    omit?: PurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
+    where?: PurchaseWhereInput
+    orderBy?: PurchaseOrderByWithRelationInput | PurchaseOrderByWithRelationInput[]
+    cursor?: PurchaseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PurchaseScalarFieldEnum | PurchaseScalarFieldEnum[]
+  }
+
+  /**
+   * User.involvedInReports
+   */
+  export type User$involvedInReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Report_To
+     */
+    select?: Report_ToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Report_To
+     */
+    omit?: Report_ToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Report_ToInclude<ExtArgs> | null
+    where?: Report_ToWhereInput
+    orderBy?: Report_ToOrderByWithRelationInput | Report_ToOrderByWithRelationInput[]
+    cursor?: Report_ToWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Report_ToScalarFieldEnum | Report_ToScalarFieldEnum[]
+  }
+
+  /**
+   * User.sessions
+   */
+  export type User$sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    where?: SessionWhereInput
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    cursor?: SessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17665,6 +20036,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -17679,35 +20054,35 @@ export namespace Prisma {
   }
 
   export type User_Tel_NoMinAggregateOutputType = {
-    TelNo: string | null
     UserAccountID: string | null
+    TelNo: string | null
   }
 
   export type User_Tel_NoMaxAggregateOutputType = {
-    TelNo: string | null
     UserAccountID: string | null
+    TelNo: string | null
   }
 
   export type User_Tel_NoCountAggregateOutputType = {
-    TelNo: number
     UserAccountID: number
+    TelNo: number
     _all: number
   }
 
 
   export type User_Tel_NoMinAggregateInputType = {
-    TelNo?: true
     UserAccountID?: true
+    TelNo?: true
   }
 
   export type User_Tel_NoMaxAggregateInputType = {
-    TelNo?: true
     UserAccountID?: true
+    TelNo?: true
   }
 
   export type User_Tel_NoCountAggregateInputType = {
-    TelNo?: true
     UserAccountID?: true
+    TelNo?: true
     _all?: true
   }
 
@@ -17784,8 +20159,8 @@ export namespace Prisma {
   }
 
   export type User_Tel_NoGroupByOutputType = {
-    TelNo: string
     UserAccountID: string
+    TelNo: string
     _count: User_Tel_NoCountAggregateOutputType | null
     _min: User_Tel_NoMinAggregateOutputType | null
     _max: User_Tel_NoMaxAggregateOutputType | null
@@ -17806,33 +20181,47 @@ export namespace Prisma {
 
 
   export type User_Tel_NoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    TelNo?: boolean
     UserAccountID?: boolean
+    TelNo?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user_Tel_No"]>
 
   export type User_Tel_NoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    TelNo?: boolean
     UserAccountID?: boolean
+    TelNo?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user_Tel_No"]>
 
   export type User_Tel_NoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    TelNo?: boolean
     UserAccountID?: boolean
+    TelNo?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user_Tel_No"]>
 
   export type User_Tel_NoSelectScalar = {
-    TelNo?: boolean
     UserAccountID?: boolean
+    TelNo?: boolean
   }
 
-  export type User_Tel_NoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"TelNo" | "UserAccountID", ExtArgs["result"]["user_Tel_No"]>
+  export type User_Tel_NoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"UserAccountID" | "TelNo", ExtArgs["result"]["user_Tel_No"]>
+  export type User_Tel_NoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type User_Tel_NoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type User_Tel_NoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $User_Tel_NoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User_Tel_No"
-    objects: {}
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
-      TelNo: string
       UserAccountID: string
+      TelNo: string
     }, ExtArgs["result"]["user_Tel_No"]>
     composites: {}
   }
@@ -17916,8 +20305,8 @@ export namespace Prisma {
      * // Get first 10 User_Tel_Nos
      * const user_Tel_Nos = await prisma.user_Tel_No.findMany({ take: 10 })
      * 
-     * // Only select the `TelNo`
-     * const user_Tel_NoWithTelNoOnly = await prisma.user_Tel_No.findMany({ select: { TelNo: true } })
+     * // Only select the `UserAccountID`
+     * const user_Tel_NoWithUserAccountIDOnly = await prisma.user_Tel_No.findMany({ select: { UserAccountID: true } })
      * 
      */
     findMany<T extends User_Tel_NoFindManyArgs>(args?: SelectSubset<T, User_Tel_NoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$User_Tel_NoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -17961,9 +20350,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many User_Tel_Nos and only return the `TelNo`
-     * const user_Tel_NoWithTelNoOnly = await prisma.user_Tel_No.createManyAndReturn({
-     *   select: { TelNo: true },
+     * // Create many User_Tel_Nos and only return the `UserAccountID`
+     * const user_Tel_NoWithUserAccountIDOnly = await prisma.user_Tel_No.createManyAndReturn({
+     *   select: { UserAccountID: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -18052,9 +20441,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more User_Tel_Nos and only return the `TelNo`
-     * const user_Tel_NoWithTelNoOnly = await prisma.user_Tel_No.updateManyAndReturn({
-     *   select: { TelNo: true },
+     * // Update zero or more User_Tel_Nos and only return the `UserAccountID`
+     * const user_Tel_NoWithUserAccountIDOnly = await prisma.user_Tel_No.updateManyAndReturn({
+     *   select: { UserAccountID: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -18227,6 +20616,7 @@ export namespace Prisma {
    */
   export interface Prisma__User_Tel_NoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18256,8 +20646,8 @@ export namespace Prisma {
    * Fields of the User_Tel_No model
    */
   interface User_Tel_NoFieldRefs {
-    readonly TelNo: FieldRef<"User_Tel_No", 'String'>
     readonly UserAccountID: FieldRef<"User_Tel_No", 'String'>
+    readonly TelNo: FieldRef<"User_Tel_No", 'String'>
   }
     
 
@@ -18274,6 +20664,10 @@ export namespace Prisma {
      * Omit specific fields from the User_Tel_No
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
     /**
      * Filter, which User_Tel_No to fetch.
      */
@@ -18293,6 +20687,10 @@ export namespace Prisma {
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
+    /**
      * Filter, which User_Tel_No to fetch.
      */
     where: User_Tel_NoWhereUniqueInput
@@ -18310,6 +20708,10 @@ export namespace Prisma {
      * Omit specific fields from the User_Tel_No
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
     /**
      * Filter, which User_Tel_No to fetch.
      */
@@ -18359,6 +20761,10 @@ export namespace Prisma {
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
+    /**
      * Filter, which User_Tel_No to fetch.
      */
     where?: User_Tel_NoWhereInput
@@ -18407,6 +20813,10 @@ export namespace Prisma {
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
+    /**
      * Filter, which User_Tel_Nos to fetch.
      */
     where?: User_Tel_NoWhereInput
@@ -18450,6 +20860,10 @@ export namespace Prisma {
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
+    /**
      * The data needed to create a User_Tel_No.
      */
     data: XOR<User_Tel_NoCreateInput, User_Tel_NoUncheckedCreateInput>
@@ -18483,6 +20897,10 @@ export namespace Prisma {
      */
     data: User_Tel_NoCreateManyInput | User_Tel_NoCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -18497,6 +20915,10 @@ export namespace Prisma {
      * Omit specific fields from the User_Tel_No
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
     /**
      * The data needed to update a User_Tel_No.
      */
@@ -18549,6 +20971,10 @@ export namespace Prisma {
      * Limit how many User_Tel_Nos to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -18563,6 +20989,10 @@ export namespace Prisma {
      * Omit specific fields from the User_Tel_No
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
     /**
      * The filter to search for the User_Tel_No to update in case it exists.
      */
@@ -18589,6 +21019,10 @@ export namespace Prisma {
      * Omit specific fields from the User_Tel_No
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
     /**
      * Filter which User_Tel_No to delete.
      */
@@ -18621,6 +21055,10 @@ export namespace Prisma {
      * Omit specific fields from the User_Tel_No
      */
     omit?: User_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: User_Tel_NoInclude<ExtArgs> | null
   }
 
 
@@ -18641,7 +21079,6 @@ export namespace Prisma {
     Attachment: string | null
     UserAccountID: string | null
     AdminAccountID: string | null
-    ReportStatus: string | null
     Email: string | null
     TelNo: string | null
     PassengerName: string | null
@@ -18654,7 +21091,6 @@ export namespace Prisma {
     Attachment: string | null
     UserAccountID: string | null
     AdminAccountID: string | null
-    ReportStatus: string | null
     Email: string | null
     TelNo: string | null
     PassengerName: string | null
@@ -18667,7 +21103,6 @@ export namespace Prisma {
     Attachment: number
     UserAccountID: number
     AdminAccountID: number
-    ReportStatus: number
     Email: number
     TelNo: number
     PassengerName: number
@@ -18682,7 +21117,6 @@ export namespace Prisma {
     Attachment?: true
     UserAccountID?: true
     AdminAccountID?: true
-    ReportStatus?: true
     Email?: true
     TelNo?: true
     PassengerName?: true
@@ -18695,7 +21129,6 @@ export namespace Prisma {
     Attachment?: true
     UserAccountID?: true
     AdminAccountID?: true
-    ReportStatus?: true
     Email?: true
     TelNo?: true
     PassengerName?: true
@@ -18708,7 +21141,6 @@ export namespace Prisma {
     Attachment?: true
     UserAccountID?: true
     AdminAccountID?: true
-    ReportStatus?: true
     Email?: true
     TelNo?: true
     PassengerName?: true
@@ -18794,7 +21226,6 @@ export namespace Prisma {
     Attachment: string | null
     UserAccountID: string
     AdminAccountID: string
-    ReportStatus: string
     Email: string
     TelNo: string
     PassengerName: string
@@ -18824,10 +21255,10 @@ export namespace Prisma {
     Attachment?: boolean
     UserAccountID?: boolean
     AdminAccountID?: boolean
-    ReportStatus?: boolean
     Email?: boolean
     TelNo?: boolean
     PassengerName?: boolean
+    creator?: boolean | Report_ToDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["report"]>
 
   export type ReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18837,10 +21268,10 @@ export namespace Prisma {
     Attachment?: boolean
     UserAccountID?: boolean
     AdminAccountID?: boolean
-    ReportStatus?: boolean
     Email?: boolean
     TelNo?: boolean
     PassengerName?: boolean
+    creator?: boolean | Report_ToDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["report"]>
 
   export type ReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18850,10 +21281,10 @@ export namespace Prisma {
     Attachment?: boolean
     UserAccountID?: boolean
     AdminAccountID?: boolean
-    ReportStatus?: boolean
     Email?: boolean
     TelNo?: boolean
     PassengerName?: boolean
+    creator?: boolean | Report_ToDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["report"]>
 
   export type ReportSelectScalar = {
@@ -18863,17 +21294,27 @@ export namespace Prisma {
     Attachment?: boolean
     UserAccountID?: boolean
     AdminAccountID?: boolean
-    ReportStatus?: boolean
     Email?: boolean
     TelNo?: boolean
     PassengerName?: boolean
   }
 
-  export type ReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"ReportID" | "ReportDescription" | "BookingID" | "Attachment" | "UserAccountID" | "AdminAccountID" | "ReportStatus" | "Email" | "TelNo" | "PassengerName", ExtArgs["result"]["report"]>
+  export type ReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"ReportID" | "ReportDescription" | "BookingID" | "Attachment" | "UserAccountID" | "AdminAccountID" | "Email" | "TelNo" | "PassengerName", ExtArgs["result"]["report"]>
+  export type ReportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creator?: boolean | Report_ToDefaultArgs<ExtArgs>
+  }
+  export type ReportIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creator?: boolean | Report_ToDefaultArgs<ExtArgs>
+  }
+  export type ReportIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    creator?: boolean | Report_ToDefaultArgs<ExtArgs>
+  }
 
   export type $ReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Report"
-    objects: {}
+    objects: {
+      creator: Prisma.$Report_ToPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       ReportID: string
       ReportDescription: string
@@ -18881,7 +21322,6 @@ export namespace Prisma {
       Attachment: string | null
       UserAccountID: string
       AdminAccountID: string
-      ReportStatus: string
       Email: string
       TelNo: string
       PassengerName: string
@@ -19279,6 +21719,7 @@ export namespace Prisma {
    */
   export interface Prisma__ReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    creator<T extends Report_ToDefaultArgs<ExtArgs> = {}>(args?: Subset<T, Report_ToDefaultArgs<ExtArgs>>): Prisma__Report_ToClient<$Result.GetResult<Prisma.$Report_ToPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19314,7 +21755,6 @@ export namespace Prisma {
     readonly Attachment: FieldRef<"Report", 'String'>
     readonly UserAccountID: FieldRef<"Report", 'String'>
     readonly AdminAccountID: FieldRef<"Report", 'String'>
-    readonly ReportStatus: FieldRef<"Report", 'String'>
     readonly Email: FieldRef<"Report", 'String'>
     readonly TelNo: FieldRef<"Report", 'String'>
     readonly PassengerName: FieldRef<"Report", 'String'>
@@ -19335,6 +21775,10 @@ export namespace Prisma {
      */
     omit?: ReportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
+    /**
      * Filter, which Report to fetch.
      */
     where: ReportWhereUniqueInput
@@ -19353,6 +21797,10 @@ export namespace Prisma {
      */
     omit?: ReportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
+    /**
      * Filter, which Report to fetch.
      */
     where: ReportWhereUniqueInput
@@ -19370,6 +21818,10 @@ export namespace Prisma {
      * Omit specific fields from the Report
      */
     omit?: ReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
     /**
      * Filter, which Report to fetch.
      */
@@ -19419,6 +21871,10 @@ export namespace Prisma {
      */
     omit?: ReportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
+    /**
      * Filter, which Report to fetch.
      */
     where?: ReportWhereInput
@@ -19467,6 +21923,10 @@ export namespace Prisma {
      */
     omit?: ReportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
+    /**
      * Filter, which Reports to fetch.
      */
     where?: ReportWhereInput
@@ -19510,6 +21970,10 @@ export namespace Prisma {
      */
     omit?: ReportOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
+    /**
      * The data needed to create a Report.
      */
     data: XOR<ReportCreateInput, ReportUncheckedCreateInput>
@@ -19543,6 +22007,10 @@ export namespace Prisma {
      */
     data: ReportCreateManyInput | ReportCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -19557,6 +22025,10 @@ export namespace Prisma {
      * Omit specific fields from the Report
      */
     omit?: ReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
     /**
      * The data needed to update a Report.
      */
@@ -19609,6 +22081,10 @@ export namespace Prisma {
      * Limit how many Reports to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -19623,6 +22099,10 @@ export namespace Prisma {
      * Omit specific fields from the Report
      */
     omit?: ReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
     /**
      * The filter to search for the Report to update in case it exists.
      */
@@ -19649,6 +22129,10 @@ export namespace Prisma {
      * Omit specific fields from the Report
      */
     omit?: ReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
     /**
      * Filter which Report to delete.
      */
@@ -19681,6 +22165,10 @@ export namespace Prisma {
      * Omit specific fields from the Report
      */
     omit?: ReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReportInclude<ExtArgs> | null
   }
 
 
@@ -19816,14 +22304,17 @@ export namespace Prisma {
 
   export type Domestic_TicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     TicketID?: boolean
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["domestic_Ticket"]>
 
   export type Domestic_TicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     TicketID?: boolean
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["domestic_Ticket"]>
 
   export type Domestic_TicketSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     TicketID?: boolean
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["domestic_Ticket"]>
 
   export type Domestic_TicketSelectScalar = {
@@ -19831,10 +22322,21 @@ export namespace Prisma {
   }
 
   export type Domestic_TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"TicketID", ExtArgs["result"]["domestic_Ticket"]>
+  export type Domestic_TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+  }
+  export type Domestic_TicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+  }
+  export type Domestic_TicketIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+  }
 
   export type $Domestic_TicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Domestic_Ticket"
-    objects: {}
+    objects: {
+      ticket: Prisma.$TicketPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       TicketID: string
     }, ExtArgs["result"]["domestic_Ticket"]>
@@ -20231,6 +22733,7 @@ export namespace Prisma {
    */
   export interface Prisma__Domestic_TicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    ticket<T extends TicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TicketDefaultArgs<ExtArgs>>): Prisma__TicketClient<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20278,6 +22781,10 @@ export namespace Prisma {
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Domestic_Ticket to fetch.
      */
     where: Domestic_TicketWhereUniqueInput
@@ -20296,6 +22803,10 @@ export namespace Prisma {
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Domestic_Ticket to fetch.
      */
     where: Domestic_TicketWhereUniqueInput
@@ -20313,6 +22824,10 @@ export namespace Prisma {
      * Omit specific fields from the Domestic_Ticket
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
     /**
      * Filter, which Domestic_Ticket to fetch.
      */
@@ -20362,6 +22877,10 @@ export namespace Prisma {
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Domestic_Ticket to fetch.
      */
     where?: Domestic_TicketWhereInput
@@ -20410,6 +22929,10 @@ export namespace Prisma {
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Domestic_Tickets to fetch.
      */
     where?: Domestic_TicketWhereInput
@@ -20453,6 +22976,10 @@ export namespace Prisma {
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
+    /**
      * The data needed to create a Domestic_Ticket.
      */
     data: XOR<Domestic_TicketCreateInput, Domestic_TicketUncheckedCreateInput>
@@ -20486,6 +23013,10 @@ export namespace Prisma {
      */
     data: Domestic_TicketCreateManyInput | Domestic_TicketCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -20500,6 +23031,10 @@ export namespace Prisma {
      * Omit specific fields from the Domestic_Ticket
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
     /**
      * The data needed to update a Domestic_Ticket.
      */
@@ -20552,6 +23087,10 @@ export namespace Prisma {
      * Limit how many Domestic_Tickets to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -20566,6 +23105,10 @@ export namespace Prisma {
      * Omit specific fields from the Domestic_Ticket
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
     /**
      * The filter to search for the Domestic_Ticket to update in case it exists.
      */
@@ -20592,6 +23135,10 @@ export namespace Prisma {
      * Omit specific fields from the Domestic_Ticket
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
     /**
      * Filter which Domestic_Ticket to delete.
      */
@@ -20624,6 +23171,10 @@ export namespace Prisma {
      * Omit specific fields from the Domestic_Ticket
      */
     omit?: Domestic_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Domestic_TicketInclude<ExtArgs> | null
   }
 
 
@@ -20783,6 +23334,7 @@ export namespace Prisma {
     PassportNo?: boolean
     IssuedCountry?: boolean
     PassportExpiry?: boolean
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["international_Ticket"]>
 
   export type International_TicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -20790,6 +23342,7 @@ export namespace Prisma {
     PassportNo?: boolean
     IssuedCountry?: boolean
     PassportExpiry?: boolean
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["international_Ticket"]>
 
   export type International_TicketSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -20797,6 +23350,7 @@ export namespace Prisma {
     PassportNo?: boolean
     IssuedCountry?: boolean
     PassportExpiry?: boolean
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["international_Ticket"]>
 
   export type International_TicketSelectScalar = {
@@ -20807,10 +23361,21 @@ export namespace Prisma {
   }
 
   export type International_TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"TicketID" | "PassportNo" | "IssuedCountry" | "PassportExpiry", ExtArgs["result"]["international_Ticket"]>
+  export type International_TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+  }
+  export type International_TicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+  }
+  export type International_TicketIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+  }
 
   export type $International_TicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "International_Ticket"
-    objects: {}
+    objects: {
+      ticket: Prisma.$TicketPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       TicketID: string
       PassportNo: string
@@ -21210,6 +23775,7 @@ export namespace Prisma {
    */
   export interface Prisma__International_TicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    ticket<T extends TicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TicketDefaultArgs<ExtArgs>>): Prisma__TicketClient<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -21260,6 +23826,10 @@ export namespace Prisma {
      */
     omit?: International_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which International_Ticket to fetch.
      */
     where: International_TicketWhereUniqueInput
@@ -21278,6 +23848,10 @@ export namespace Prisma {
      */
     omit?: International_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which International_Ticket to fetch.
      */
     where: International_TicketWhereUniqueInput
@@ -21295,6 +23869,10 @@ export namespace Prisma {
      * Omit specific fields from the International_Ticket
      */
     omit?: International_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
     /**
      * Filter, which International_Ticket to fetch.
      */
@@ -21344,6 +23922,10 @@ export namespace Prisma {
      */
     omit?: International_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which International_Ticket to fetch.
      */
     where?: International_TicketWhereInput
@@ -21392,6 +23974,10 @@ export namespace Prisma {
      */
     omit?: International_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which International_Tickets to fetch.
      */
     where?: International_TicketWhereInput
@@ -21435,6 +24021,10 @@ export namespace Prisma {
      */
     omit?: International_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
+    /**
      * The data needed to create a International_Ticket.
      */
     data: XOR<International_TicketCreateInput, International_TicketUncheckedCreateInput>
@@ -21468,6 +24058,10 @@ export namespace Prisma {
      */
     data: International_TicketCreateManyInput | International_TicketCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -21482,6 +24076,10 @@ export namespace Prisma {
      * Omit specific fields from the International_Ticket
      */
     omit?: International_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
     /**
      * The data needed to update a International_Ticket.
      */
@@ -21534,6 +24132,10 @@ export namespace Prisma {
      * Limit how many International_Tickets to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -21548,6 +24150,10 @@ export namespace Prisma {
      * Omit specific fields from the International_Ticket
      */
     omit?: International_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
     /**
      * The filter to search for the International_Ticket to update in case it exists.
      */
@@ -21574,6 +24180,10 @@ export namespace Prisma {
      * Omit specific fields from the International_Ticket
      */
     omit?: International_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
     /**
      * Filter which International_Ticket to delete.
      */
@@ -21606,6 +24216,10 @@ export namespace Prisma {
      * Omit specific fields from the International_Ticket
      */
     omit?: International_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: International_TicketInclude<ExtArgs> | null
   }
 
 
@@ -21749,16 +24363,22 @@ export namespace Prisma {
   export type Round_Trip_TicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     TicketID?: boolean
     TicketID2?: boolean
+    ticket1?: boolean | TicketDefaultArgs<ExtArgs>
+    ticket2?: boolean | TicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["round_Trip_Ticket"]>
 
   export type Round_Trip_TicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     TicketID?: boolean
     TicketID2?: boolean
+    ticket1?: boolean | TicketDefaultArgs<ExtArgs>
+    ticket2?: boolean | TicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["round_Trip_Ticket"]>
 
   export type Round_Trip_TicketSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     TicketID?: boolean
     TicketID2?: boolean
+    ticket1?: boolean | TicketDefaultArgs<ExtArgs>
+    ticket2?: boolean | TicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["round_Trip_Ticket"]>
 
   export type Round_Trip_TicketSelectScalar = {
@@ -21767,10 +24387,25 @@ export namespace Prisma {
   }
 
   export type Round_Trip_TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"TicketID" | "TicketID2", ExtArgs["result"]["round_Trip_Ticket"]>
+  export type Round_Trip_TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket1?: boolean | TicketDefaultArgs<ExtArgs>
+    ticket2?: boolean | TicketDefaultArgs<ExtArgs>
+  }
+  export type Round_Trip_TicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket1?: boolean | TicketDefaultArgs<ExtArgs>
+    ticket2?: boolean | TicketDefaultArgs<ExtArgs>
+  }
+  export type Round_Trip_TicketIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket1?: boolean | TicketDefaultArgs<ExtArgs>
+    ticket2?: boolean | TicketDefaultArgs<ExtArgs>
+  }
 
   export type $Round_Trip_TicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Round_Trip_Ticket"
-    objects: {}
+    objects: {
+      ticket1: Prisma.$TicketPayload<ExtArgs>
+      ticket2: Prisma.$TicketPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       TicketID: string
       TicketID2: string
@@ -22168,6 +24803,8 @@ export namespace Prisma {
    */
   export interface Prisma__Round_Trip_TicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    ticket1<T extends TicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TicketDefaultArgs<ExtArgs>>): Prisma__TicketClient<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    ticket2<T extends TicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TicketDefaultArgs<ExtArgs>>): Prisma__TicketClient<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -22216,6 +24853,10 @@ export namespace Prisma {
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Round_Trip_Ticket to fetch.
      */
     where: Round_Trip_TicketWhereUniqueInput
@@ -22234,6 +24875,10 @@ export namespace Prisma {
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Round_Trip_Ticket to fetch.
      */
     where: Round_Trip_TicketWhereUniqueInput
@@ -22251,6 +24896,10 @@ export namespace Prisma {
      * Omit specific fields from the Round_Trip_Ticket
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
     /**
      * Filter, which Round_Trip_Ticket to fetch.
      */
@@ -22300,6 +24949,10 @@ export namespace Prisma {
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Round_Trip_Ticket to fetch.
      */
     where?: Round_Trip_TicketWhereInput
@@ -22348,6 +25001,10 @@ export namespace Prisma {
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
+    /**
      * Filter, which Round_Trip_Tickets to fetch.
      */
     where?: Round_Trip_TicketWhereInput
@@ -22391,6 +25048,10 @@ export namespace Prisma {
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
+    /**
      * The data needed to create a Round_Trip_Ticket.
      */
     data: XOR<Round_Trip_TicketCreateInput, Round_Trip_TicketUncheckedCreateInput>
@@ -22424,6 +25085,10 @@ export namespace Prisma {
      */
     data: Round_Trip_TicketCreateManyInput | Round_Trip_TicketCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -22438,6 +25103,10 @@ export namespace Prisma {
      * Omit specific fields from the Round_Trip_Ticket
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
     /**
      * The data needed to update a Round_Trip_Ticket.
      */
@@ -22490,6 +25159,10 @@ export namespace Prisma {
      * Limit how many Round_Trip_Tickets to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -22504,6 +25177,10 @@ export namespace Prisma {
      * Omit specific fields from the Round_Trip_Ticket
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
     /**
      * The filter to search for the Round_Trip_Ticket to update in case it exists.
      */
@@ -22530,6 +25207,10 @@ export namespace Prisma {
      * Omit specific fields from the Round_Trip_Ticket
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
     /**
      * Filter which Round_Trip_Ticket to delete.
      */
@@ -22562,6 +25243,10 @@ export namespace Prisma {
      * Omit specific fields from the Round_Trip_Ticket
      */
     omit?: Round_Trip_TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Round_Trip_TicketInclude<ExtArgs> | null
   }
 
 
@@ -22576,21 +25261,18 @@ export namespace Prisma {
   }
 
   export type PurchaseMinAggregateOutputType = {
-    PurchaseID: string | null
     TicketID: string | null
     PaymentID: string | null
     UserAccountID: string | null
   }
 
   export type PurchaseMaxAggregateOutputType = {
-    PurchaseID: string | null
     TicketID: string | null
     PaymentID: string | null
     UserAccountID: string | null
   }
 
   export type PurchaseCountAggregateOutputType = {
-    PurchaseID: number
     TicketID: number
     PaymentID: number
     UserAccountID: number
@@ -22599,21 +25281,18 @@ export namespace Prisma {
 
 
   export type PurchaseMinAggregateInputType = {
-    PurchaseID?: true
     TicketID?: true
     PaymentID?: true
     UserAccountID?: true
   }
 
   export type PurchaseMaxAggregateInputType = {
-    PurchaseID?: true
     TicketID?: true
     PaymentID?: true
     UserAccountID?: true
   }
 
   export type PurchaseCountAggregateInputType = {
-    PurchaseID?: true
     TicketID?: true
     PaymentID?: true
     UserAccountID?: true
@@ -22693,7 +25372,6 @@ export namespace Prisma {
   }
 
   export type PurchaseGroupByOutputType = {
-    PurchaseID: string
     TicketID: string
     PaymentID: string
     UserAccountID: string
@@ -22717,40 +25395,63 @@ export namespace Prisma {
 
 
   export type PurchaseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    PurchaseID?: boolean
     TicketID?: boolean
     PaymentID?: boolean
     UserAccountID?: boolean
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+    payment?: boolean | PaymentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["purchase"]>
 
   export type PurchaseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    PurchaseID?: boolean
     TicketID?: boolean
     PaymentID?: boolean
     UserAccountID?: boolean
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+    payment?: boolean | PaymentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["purchase"]>
 
   export type PurchaseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    PurchaseID?: boolean
     TicketID?: boolean
     PaymentID?: boolean
     UserAccountID?: boolean
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+    payment?: boolean | PaymentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["purchase"]>
 
   export type PurchaseSelectScalar = {
-    PurchaseID?: boolean
     TicketID?: boolean
     PaymentID?: boolean
     UserAccountID?: boolean
   }
 
-  export type PurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"PurchaseID" | "TicketID" | "PaymentID" | "UserAccountID", ExtArgs["result"]["purchase"]>
+  export type PurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"TicketID" | "PaymentID" | "UserAccountID", ExtArgs["result"]["purchase"]>
+  export type PurchaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+    payment?: boolean | PaymentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PurchaseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+    payment?: boolean | PaymentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PurchaseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>
+    payment?: boolean | PaymentDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $PurchasePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Purchase"
-    objects: {}
+    objects: {
+      ticket: Prisma.$TicketPayload<ExtArgs>
+      payment: Prisma.$PaymentPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
-      PurchaseID: string
       TicketID: string
       PaymentID: string
       UserAccountID: string
@@ -22837,8 +25538,8 @@ export namespace Prisma {
      * // Get first 10 Purchases
      * const purchases = await prisma.purchase.findMany({ take: 10 })
      * 
-     * // Only select the `PurchaseID`
-     * const purchaseWithPurchaseIDOnly = await prisma.purchase.findMany({ select: { PurchaseID: true } })
+     * // Only select the `TicketID`
+     * const purchaseWithTicketIDOnly = await prisma.purchase.findMany({ select: { TicketID: true } })
      * 
      */
     findMany<T extends PurchaseFindManyArgs>(args?: SelectSubset<T, PurchaseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -22882,9 +25583,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many Purchases and only return the `PurchaseID`
-     * const purchaseWithPurchaseIDOnly = await prisma.purchase.createManyAndReturn({
-     *   select: { PurchaseID: true },
+     * // Create many Purchases and only return the `TicketID`
+     * const purchaseWithTicketIDOnly = await prisma.purchase.createManyAndReturn({
+     *   select: { TicketID: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -22973,9 +25674,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Purchases and only return the `PurchaseID`
-     * const purchaseWithPurchaseIDOnly = await prisma.purchase.updateManyAndReturn({
-     *   select: { PurchaseID: true },
+     * // Update zero or more Purchases and only return the `TicketID`
+     * const purchaseWithTicketIDOnly = await prisma.purchase.updateManyAndReturn({
+     *   select: { TicketID: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -23148,6 +25849,9 @@ export namespace Prisma {
    */
   export interface Prisma__PurchaseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    ticket<T extends TicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TicketDefaultArgs<ExtArgs>>): Prisma__TicketClient<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    payment<T extends PaymentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PaymentDefaultArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -23177,7 +25881,6 @@ export namespace Prisma {
    * Fields of the Purchase model
    */
   interface PurchaseFieldRefs {
-    readonly PurchaseID: FieldRef<"Purchase", 'String'>
     readonly TicketID: FieldRef<"Purchase", 'String'>
     readonly PaymentID: FieldRef<"Purchase", 'String'>
     readonly UserAccountID: FieldRef<"Purchase", 'String'>
@@ -23198,6 +25901,10 @@ export namespace Prisma {
      */
     omit?: PurchaseOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
+    /**
      * Filter, which Purchase to fetch.
      */
     where: PurchaseWhereUniqueInput
@@ -23216,6 +25923,10 @@ export namespace Prisma {
      */
     omit?: PurchaseOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
+    /**
      * Filter, which Purchase to fetch.
      */
     where: PurchaseWhereUniqueInput
@@ -23233,6 +25944,10 @@ export namespace Prisma {
      * Omit specific fields from the Purchase
      */
     omit?: PurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
     /**
      * Filter, which Purchase to fetch.
      */
@@ -23282,6 +25997,10 @@ export namespace Prisma {
      */
     omit?: PurchaseOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
+    /**
      * Filter, which Purchase to fetch.
      */
     where?: PurchaseWhereInput
@@ -23330,6 +26049,10 @@ export namespace Prisma {
      */
     omit?: PurchaseOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
+    /**
      * Filter, which Purchases to fetch.
      */
     where?: PurchaseWhereInput
@@ -23373,6 +26096,10 @@ export namespace Prisma {
      */
     omit?: PurchaseOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
+    /**
      * The data needed to create a Purchase.
      */
     data: XOR<PurchaseCreateInput, PurchaseUncheckedCreateInput>
@@ -23406,6 +26133,10 @@ export namespace Prisma {
      */
     data: PurchaseCreateManyInput | PurchaseCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -23420,6 +26151,10 @@ export namespace Prisma {
      * Omit specific fields from the Purchase
      */
     omit?: PurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
     /**
      * The data needed to update a Purchase.
      */
@@ -23472,6 +26207,10 @@ export namespace Prisma {
      * Limit how many Purchases to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -23486,6 +26225,10 @@ export namespace Prisma {
      * Omit specific fields from the Purchase
      */
     omit?: PurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
     /**
      * The filter to search for the Purchase to update in case it exists.
      */
@@ -23512,6 +26255,10 @@ export namespace Prisma {
      * Omit specific fields from the Purchase
      */
     omit?: PurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
     /**
      * Filter which Purchase to delete.
      */
@@ -23544,6 +26291,10 @@ export namespace Prisma {
      * Omit specific fields from the Purchase
      */
     omit?: PurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
   }
 
 
@@ -23570,7 +26321,6 @@ export namespace Prisma {
   export type PaymentMinAggregateOutputType = {
     PaymentID: string | null
     PaymentDateTime: Date | null
-    Timestamp: Date | null
     PaymentMethod: string | null
     TransactionStatus: string | null
     Amount: number | null
@@ -23579,7 +26329,6 @@ export namespace Prisma {
   export type PaymentMaxAggregateOutputType = {
     PaymentID: string | null
     PaymentDateTime: Date | null
-    Timestamp: Date | null
     PaymentMethod: string | null
     TransactionStatus: string | null
     Amount: number | null
@@ -23588,7 +26337,6 @@ export namespace Prisma {
   export type PaymentCountAggregateOutputType = {
     PaymentID: number
     PaymentDateTime: number
-    Timestamp: number
     PaymentMethod: number
     TransactionStatus: number
     Amount: number
@@ -23607,7 +26355,6 @@ export namespace Prisma {
   export type PaymentMinAggregateInputType = {
     PaymentID?: true
     PaymentDateTime?: true
-    Timestamp?: true
     PaymentMethod?: true
     TransactionStatus?: true
     Amount?: true
@@ -23616,7 +26363,6 @@ export namespace Prisma {
   export type PaymentMaxAggregateInputType = {
     PaymentID?: true
     PaymentDateTime?: true
-    Timestamp?: true
     PaymentMethod?: true
     TransactionStatus?: true
     Amount?: true
@@ -23625,7 +26371,6 @@ export namespace Prisma {
   export type PaymentCountAggregateInputType = {
     PaymentID?: true
     PaymentDateTime?: true
-    Timestamp?: true
     PaymentMethod?: true
     TransactionStatus?: true
     Amount?: true
@@ -23721,7 +26466,6 @@ export namespace Prisma {
   export type PaymentGroupByOutputType = {
     PaymentID: string
     PaymentDateTime: Date
-    Timestamp: Date
     PaymentMethod: string
     TransactionStatus: string
     Amount: number
@@ -23749,16 +26493,15 @@ export namespace Prisma {
   export type PaymentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     PaymentID?: boolean
     PaymentDateTime?: boolean
-    Timestamp?: boolean
     PaymentMethod?: boolean
     TransactionStatus?: boolean
     Amount?: boolean
+    purchase?: boolean | Payment$purchaseArgs<ExtArgs>
   }, ExtArgs["result"]["payment"]>
 
   export type PaymentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     PaymentID?: boolean
     PaymentDateTime?: boolean
-    Timestamp?: boolean
     PaymentMethod?: boolean
     TransactionStatus?: boolean
     Amount?: boolean
@@ -23767,7 +26510,6 @@ export namespace Prisma {
   export type PaymentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     PaymentID?: boolean
     PaymentDateTime?: boolean
-    Timestamp?: boolean
     PaymentMethod?: boolean
     TransactionStatus?: boolean
     Amount?: boolean
@@ -23776,21 +26518,26 @@ export namespace Prisma {
   export type PaymentSelectScalar = {
     PaymentID?: boolean
     PaymentDateTime?: boolean
-    Timestamp?: boolean
     PaymentMethod?: boolean
     TransactionStatus?: boolean
     Amount?: boolean
   }
 
-  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"PaymentID" | "PaymentDateTime" | "Timestamp" | "PaymentMethod" | "TransactionStatus" | "Amount", ExtArgs["result"]["payment"]>
+  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"PaymentID" | "PaymentDateTime" | "PaymentMethod" | "TransactionStatus" | "Amount", ExtArgs["result"]["payment"]>
+  export type PaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purchase?: boolean | Payment$purchaseArgs<ExtArgs>
+  }
+  export type PaymentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PaymentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $PaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Payment"
-    objects: {}
+    objects: {
+      purchase: Prisma.$PurchasePayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       PaymentID: string
       PaymentDateTime: Date
-      Timestamp: Date
       PaymentMethod: string
       TransactionStatus: string
       Amount: number
@@ -24188,6 +26935,7 @@ export namespace Prisma {
    */
   export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    purchase<T extends Payment$purchaseArgs<ExtArgs> = {}>(args?: Subset<T, Payment$purchaseArgs<ExtArgs>>): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -24219,7 +26967,6 @@ export namespace Prisma {
   interface PaymentFieldRefs {
     readonly PaymentID: FieldRef<"Payment", 'String'>
     readonly PaymentDateTime: FieldRef<"Payment", 'DateTime'>
-    readonly Timestamp: FieldRef<"Payment", 'DateTime'>
     readonly PaymentMethod: FieldRef<"Payment", 'String'>
     readonly TransactionStatus: FieldRef<"Payment", 'String'>
     readonly Amount: FieldRef<"Payment", 'Float'>
@@ -24240,6 +26987,10 @@ export namespace Prisma {
      */
     omit?: PaymentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
      * Filter, which Payment to fetch.
      */
     where: PaymentWhereUniqueInput
@@ -24258,6 +27009,10 @@ export namespace Prisma {
      */
     omit?: PaymentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
      * Filter, which Payment to fetch.
      */
     where: PaymentWhereUniqueInput
@@ -24275,6 +27030,10 @@ export namespace Prisma {
      * Omit specific fields from the Payment
      */
     omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
     /**
      * Filter, which Payment to fetch.
      */
@@ -24324,6 +27083,10 @@ export namespace Prisma {
      */
     omit?: PaymentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
      * Filter, which Payment to fetch.
      */
     where?: PaymentWhereInput
@@ -24372,6 +27135,10 @@ export namespace Prisma {
      */
     omit?: PaymentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
      * Filter, which Payments to fetch.
      */
     where?: PaymentWhereInput
@@ -24414,6 +27181,10 @@ export namespace Prisma {
      * Omit specific fields from the Payment
      */
     omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
     /**
      * The data needed to create a Payment.
      */
@@ -24462,6 +27233,10 @@ export namespace Prisma {
      * Omit specific fields from the Payment
      */
     omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
     /**
      * The data needed to update a Payment.
      */
@@ -24529,6 +27304,10 @@ export namespace Prisma {
      */
     omit?: PaymentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
      * The filter to search for the Payment to update in case it exists.
      */
     where: PaymentWhereUniqueInput
@@ -24555,6 +27334,10 @@ export namespace Prisma {
      */
     omit?: PaymentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
+    /**
      * Filter which Payment to delete.
      */
     where: PaymentWhereUniqueInput
@@ -24575,6 +27358,25 @@ export namespace Prisma {
   }
 
   /**
+   * Payment.purchase
+   */
+  export type Payment$purchaseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Purchase
+     */
+    omit?: PurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PurchaseInclude<ExtArgs> | null
+    where?: PurchaseWhereInput
+  }
+
+  /**
    * Payment without action
    */
   export type PaymentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -24586,6 +27388,10 @@ export namespace Prisma {
      * Omit specific fields from the Payment
      */
     omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PaymentInclude<ExtArgs> | null
   }
 
 
@@ -24729,16 +27535,19 @@ export namespace Prisma {
   export type Airline_Tel_NoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     TelNo?: boolean
     AirlineName?: boolean
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["airline_Tel_No"]>
 
   export type Airline_Tel_NoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     TelNo?: boolean
     AirlineName?: boolean
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["airline_Tel_No"]>
 
   export type Airline_Tel_NoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     TelNo?: boolean
     AirlineName?: boolean
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["airline_Tel_No"]>
 
   export type Airline_Tel_NoSelectScalar = {
@@ -24747,10 +27556,21 @@ export namespace Prisma {
   }
 
   export type Airline_Tel_NoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"TelNo" | "AirlineName", ExtArgs["result"]["airline_Tel_No"]>
+  export type Airline_Tel_NoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
+  export type Airline_Tel_NoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
+  export type Airline_Tel_NoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    airline?: boolean | AirlineDefaultArgs<ExtArgs>
+  }
 
   export type $Airline_Tel_NoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Airline_Tel_No"
-    objects: {}
+    objects: {
+      airline: Prisma.$AirlinePayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       TelNo: string
       AirlineName: string
@@ -25148,6 +27968,7 @@ export namespace Prisma {
    */
   export interface Prisma__Airline_Tel_NoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    airline<T extends AirlineDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AirlineDefaultArgs<ExtArgs>>): Prisma__AirlineClient<$Result.GetResult<Prisma.$AirlinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -25196,6 +28017,10 @@ export namespace Prisma {
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
+    /**
      * Filter, which Airline_Tel_No to fetch.
      */
     where: Airline_Tel_NoWhereUniqueInput
@@ -25214,6 +28039,10 @@ export namespace Prisma {
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
+    /**
      * Filter, which Airline_Tel_No to fetch.
      */
     where: Airline_Tel_NoWhereUniqueInput
@@ -25231,6 +28060,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Tel_No
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
     /**
      * Filter, which Airline_Tel_No to fetch.
      */
@@ -25280,6 +28113,10 @@ export namespace Prisma {
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
+    /**
      * Filter, which Airline_Tel_No to fetch.
      */
     where?: Airline_Tel_NoWhereInput
@@ -25328,6 +28165,10 @@ export namespace Prisma {
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
+    /**
      * Filter, which Airline_Tel_Nos to fetch.
      */
     where?: Airline_Tel_NoWhereInput
@@ -25371,6 +28212,10 @@ export namespace Prisma {
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
+    /**
      * The data needed to create a Airline_Tel_No.
      */
     data: XOR<Airline_Tel_NoCreateInput, Airline_Tel_NoUncheckedCreateInput>
@@ -25404,6 +28249,10 @@ export namespace Prisma {
      */
     data: Airline_Tel_NoCreateManyInput | Airline_Tel_NoCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -25418,6 +28267,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Tel_No
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
     /**
      * The data needed to update a Airline_Tel_No.
      */
@@ -25470,6 +28323,10 @@ export namespace Prisma {
      * Limit how many Airline_Tel_Nos to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -25484,6 +28341,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Tel_No
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
     /**
      * The filter to search for the Airline_Tel_No to update in case it exists.
      */
@@ -25510,6 +28371,10 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Tel_No
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
     /**
      * Filter which Airline_Tel_No to delete.
      */
@@ -25542,6 +28407,1120 @@ export namespace Prisma {
      * Omit specific fields from the Airline_Tel_No
      */
     omit?: Airline_Tel_NoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Airline_Tel_NoInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Session
+   */
+
+  export type AggregateSession = {
+    _count: SessionCountAggregateOutputType | null
+    _min: SessionMinAggregateOutputType | null
+    _max: SessionMaxAggregateOutputType | null
+  }
+
+  export type SessionMinAggregateOutputType = {
+    SessionID: string | null
+    UserAccountID: string | null
+    TokenHash: string | null
+    CreatedAt: Date | null
+    LastSeenAt: Date | null
+    IdleExpiresAt: Date | null
+    AbsoluteExpiresAt: Date | null
+    RevokedAt: Date | null
+    RevokeReason: string | null
+  }
+
+  export type SessionMaxAggregateOutputType = {
+    SessionID: string | null
+    UserAccountID: string | null
+    TokenHash: string | null
+    CreatedAt: Date | null
+    LastSeenAt: Date | null
+    IdleExpiresAt: Date | null
+    AbsoluteExpiresAt: Date | null
+    RevokedAt: Date | null
+    RevokeReason: string | null
+  }
+
+  export type SessionCountAggregateOutputType = {
+    SessionID: number
+    UserAccountID: number
+    TokenHash: number
+    CreatedAt: number
+    LastSeenAt: number
+    IdleExpiresAt: number
+    AbsoluteExpiresAt: number
+    RevokedAt: number
+    RevokeReason: number
+    _all: number
+  }
+
+
+  export type SessionMinAggregateInputType = {
+    SessionID?: true
+    UserAccountID?: true
+    TokenHash?: true
+    CreatedAt?: true
+    LastSeenAt?: true
+    IdleExpiresAt?: true
+    AbsoluteExpiresAt?: true
+    RevokedAt?: true
+    RevokeReason?: true
+  }
+
+  export type SessionMaxAggregateInputType = {
+    SessionID?: true
+    UserAccountID?: true
+    TokenHash?: true
+    CreatedAt?: true
+    LastSeenAt?: true
+    IdleExpiresAt?: true
+    AbsoluteExpiresAt?: true
+    RevokedAt?: true
+    RevokeReason?: true
+  }
+
+  export type SessionCountAggregateInputType = {
+    SessionID?: true
+    UserAccountID?: true
+    TokenHash?: true
+    CreatedAt?: true
+    LastSeenAt?: true
+    IdleExpiresAt?: true
+    AbsoluteExpiresAt?: true
+    RevokedAt?: true
+    RevokeReason?: true
+    _all?: true
+  }
+
+  export type SessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Session to aggregate.
+     */
+    where?: SessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sessions to fetch.
+     */
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Sessions
+    **/
+    _count?: true | SessionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SessionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SessionMaxAggregateInputType
+  }
+
+  export type GetSessionAggregateType<T extends SessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSession]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSession[P]>
+      : GetScalarType<T[P], AggregateSession[P]>
+  }
+
+
+
+
+  export type SessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SessionWhereInput
+    orderBy?: SessionOrderByWithAggregationInput | SessionOrderByWithAggregationInput[]
+    by: SessionScalarFieldEnum[] | SessionScalarFieldEnum
+    having?: SessionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SessionCountAggregateInputType | true
+    _min?: SessionMinAggregateInputType
+    _max?: SessionMaxAggregateInputType
+  }
+
+  export type SessionGroupByOutputType = {
+    SessionID: string
+    UserAccountID: string
+    TokenHash: string
+    CreatedAt: Date
+    LastSeenAt: Date
+    IdleExpiresAt: Date
+    AbsoluteExpiresAt: Date
+    RevokedAt: Date | null
+    RevokeReason: string | null
+    _count: SessionCountAggregateOutputType | null
+    _min: SessionMinAggregateOutputType | null
+    _max: SessionMaxAggregateOutputType | null
+  }
+
+  type GetSessionGroupByPayload<T extends SessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SessionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SessionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SessionGroupByOutputType[P]>
+            : GetScalarType<T[P], SessionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    SessionID?: boolean
+    UserAccountID?: boolean
+    TokenHash?: boolean
+    CreatedAt?: boolean
+    LastSeenAt?: boolean
+    IdleExpiresAt?: boolean
+    AbsoluteExpiresAt?: boolean
+    RevokedAt?: boolean
+    RevokeReason?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["session"]>
+
+  export type SessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    SessionID?: boolean
+    UserAccountID?: boolean
+    TokenHash?: boolean
+    CreatedAt?: boolean
+    LastSeenAt?: boolean
+    IdleExpiresAt?: boolean
+    AbsoluteExpiresAt?: boolean
+    RevokedAt?: boolean
+    RevokeReason?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["session"]>
+
+  export type SessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    SessionID?: boolean
+    UserAccountID?: boolean
+    TokenHash?: boolean
+    CreatedAt?: boolean
+    LastSeenAt?: boolean
+    IdleExpiresAt?: boolean
+    AbsoluteExpiresAt?: boolean
+    RevokedAt?: boolean
+    RevokeReason?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["session"]>
+
+  export type SessionSelectScalar = {
+    SessionID?: boolean
+    UserAccountID?: boolean
+    TokenHash?: boolean
+    CreatedAt?: boolean
+    LastSeenAt?: boolean
+    IdleExpiresAt?: boolean
+    AbsoluteExpiresAt?: boolean
+    RevokedAt?: boolean
+    RevokeReason?: boolean
+  }
+
+  export type SessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"SessionID" | "UserAccountID" | "TokenHash" | "CreatedAt" | "LastSeenAt" | "IdleExpiresAt" | "AbsoluteExpiresAt" | "RevokedAt" | "RevokeReason", ExtArgs["result"]["session"]>
+  export type SessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type SessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Session"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      SessionID: string
+      UserAccountID: string
+      TokenHash: string
+      CreatedAt: Date
+      LastSeenAt: Date
+      IdleExpiresAt: Date
+      AbsoluteExpiresAt: Date
+      RevokedAt: Date | null
+      RevokeReason: string | null
+    }, ExtArgs["result"]["session"]>
+    composites: {}
+  }
+
+  type SessionGetPayload<S extends boolean | null | undefined | SessionDefaultArgs> = $Result.GetResult<Prisma.$SessionPayload, S>
+
+  type SessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SessionCountAggregateInputType | true
+    }
+
+  export interface SessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Session'], meta: { name: 'Session' } }
+    /**
+     * Find zero or one Session that matches the filter.
+     * @param {SessionFindUniqueArgs} args - Arguments to find a Session
+     * @example
+     * // Get one Session
+     * const session = await prisma.session.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SessionFindUniqueArgs>(args: SelectSubset<T, SessionFindUniqueArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Session that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SessionFindUniqueOrThrowArgs} args - Arguments to find a Session
+     * @example
+     * // Get one Session
+     * const session = await prisma.session.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SessionFindUniqueOrThrowArgs>(args: SelectSubset<T, SessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Session that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionFindFirstArgs} args - Arguments to find a Session
+     * @example
+     * // Get one Session
+     * const session = await prisma.session.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SessionFindFirstArgs>(args?: SelectSubset<T, SessionFindFirstArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Session that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionFindFirstOrThrowArgs} args - Arguments to find a Session
+     * @example
+     * // Get one Session
+     * const session = await prisma.session.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SessionFindFirstOrThrowArgs>(args?: SelectSubset<T, SessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Sessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Sessions
+     * const sessions = await prisma.session.findMany()
+     * 
+     * // Get first 10 Sessions
+     * const sessions = await prisma.session.findMany({ take: 10 })
+     * 
+     * // Only select the `SessionID`
+     * const sessionWithSessionIDOnly = await prisma.session.findMany({ select: { SessionID: true } })
+     * 
+     */
+    findMany<T extends SessionFindManyArgs>(args?: SelectSubset<T, SessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Session.
+     * @param {SessionCreateArgs} args - Arguments to create a Session.
+     * @example
+     * // Create one Session
+     * const Session = await prisma.session.create({
+     *   data: {
+     *     // ... data to create a Session
+     *   }
+     * })
+     * 
+     */
+    create<T extends SessionCreateArgs>(args: SelectSubset<T, SessionCreateArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Sessions.
+     * @param {SessionCreateManyArgs} args - Arguments to create many Sessions.
+     * @example
+     * // Create many Sessions
+     * const session = await prisma.session.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SessionCreateManyArgs>(args?: SelectSubset<T, SessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Sessions and returns the data saved in the database.
+     * @param {SessionCreateManyAndReturnArgs} args - Arguments to create many Sessions.
+     * @example
+     * // Create many Sessions
+     * const session = await prisma.session.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Sessions and only return the `SessionID`
+     * const sessionWithSessionIDOnly = await prisma.session.createManyAndReturn({
+     *   select: { SessionID: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SessionCreateManyAndReturnArgs>(args?: SelectSubset<T, SessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Session.
+     * @param {SessionDeleteArgs} args - Arguments to delete one Session.
+     * @example
+     * // Delete one Session
+     * const Session = await prisma.session.delete({
+     *   where: {
+     *     // ... filter to delete one Session
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SessionDeleteArgs>(args: SelectSubset<T, SessionDeleteArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Session.
+     * @param {SessionUpdateArgs} args - Arguments to update one Session.
+     * @example
+     * // Update one Session
+     * const session = await prisma.session.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SessionUpdateArgs>(args: SelectSubset<T, SessionUpdateArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Sessions.
+     * @param {SessionDeleteManyArgs} args - Arguments to filter Sessions to delete.
+     * @example
+     * // Delete a few Sessions
+     * const { count } = await prisma.session.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SessionDeleteManyArgs>(args?: SelectSubset<T, SessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Sessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Sessions
+     * const session = await prisma.session.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SessionUpdateManyArgs>(args: SelectSubset<T, SessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Sessions and returns the data updated in the database.
+     * @param {SessionUpdateManyAndReturnArgs} args - Arguments to update many Sessions.
+     * @example
+     * // Update many Sessions
+     * const session = await prisma.session.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Sessions and only return the `SessionID`
+     * const sessionWithSessionIDOnly = await prisma.session.updateManyAndReturn({
+     *   select: { SessionID: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SessionUpdateManyAndReturnArgs>(args: SelectSubset<T, SessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Session.
+     * @param {SessionUpsertArgs} args - Arguments to update or create a Session.
+     * @example
+     * // Update or create a Session
+     * const session = await prisma.session.upsert({
+     *   create: {
+     *     // ... data to create a Session
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Session we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SessionUpsertArgs>(args: SelectSubset<T, SessionUpsertArgs<ExtArgs>>): Prisma__SessionClient<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Sessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionCountArgs} args - Arguments to filter Sessions to count.
+     * @example
+     * // Count the number of Sessions
+     * const count = await prisma.session.count({
+     *   where: {
+     *     // ... the filter for the Sessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends SessionCountArgs>(
+      args?: Subset<T, SessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SessionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Session.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SessionAggregateArgs>(args: Subset<T, SessionAggregateArgs>): Prisma.PrismaPromise<GetSessionAggregateType<T>>
+
+    /**
+     * Group by Session.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SessionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SessionGroupByArgs['orderBy'] }
+        : { orderBy?: SessionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Session model
+   */
+  readonly fields: SessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Session.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Session model
+   */
+  interface SessionFieldRefs {
+    readonly SessionID: FieldRef<"Session", 'String'>
+    readonly UserAccountID: FieldRef<"Session", 'String'>
+    readonly TokenHash: FieldRef<"Session", 'String'>
+    readonly CreatedAt: FieldRef<"Session", 'DateTime'>
+    readonly LastSeenAt: FieldRef<"Session", 'DateTime'>
+    readonly IdleExpiresAt: FieldRef<"Session", 'DateTime'>
+    readonly AbsoluteExpiresAt: FieldRef<"Session", 'DateTime'>
+    readonly RevokedAt: FieldRef<"Session", 'DateTime'>
+    readonly RevokeReason: FieldRef<"Session", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Session findUnique
+   */
+  export type SessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    /**
+     * Filter, which Session to fetch.
+     */
+    where: SessionWhereUniqueInput
+  }
+
+  /**
+   * Session findUniqueOrThrow
+   */
+  export type SessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    /**
+     * Filter, which Session to fetch.
+     */
+    where: SessionWhereUniqueInput
+  }
+
+  /**
+   * Session findFirst
+   */
+  export type SessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    /**
+     * Filter, which Session to fetch.
+     */
+    where?: SessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sessions to fetch.
+     */
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Sessions.
+     */
+    cursor?: SessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sessions.
+     */
+    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * Session findFirstOrThrow
+   */
+  export type SessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    /**
+     * Filter, which Session to fetch.
+     */
+    where?: SessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sessions to fetch.
+     */
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Sessions.
+     */
+    cursor?: SessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sessions.
+     */
+    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * Session findMany
+   */
+  export type SessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    /**
+     * Filter, which Sessions to fetch.
+     */
+    where?: SessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sessions to fetch.
+     */
+    orderBy?: SessionOrderByWithRelationInput | SessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Sessions.
+     */
+    cursor?: SessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sessions.
+     */
+    skip?: number
+    distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * Session create
+   */
+  export type SessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Session.
+     */
+    data: XOR<SessionCreateInput, SessionUncheckedCreateInput>
+  }
+
+  /**
+   * Session createMany
+   */
+  export type SessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Sessions.
+     */
+    data: SessionCreateManyInput | SessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Session createManyAndReturn
+   */
+  export type SessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Sessions.
+     */
+    data: SessionCreateManyInput | SessionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Session update
+   */
+  export type SessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Session.
+     */
+    data: XOR<SessionUpdateInput, SessionUncheckedUpdateInput>
+    /**
+     * Choose, which Session to update.
+     */
+    where: SessionWhereUniqueInput
+  }
+
+  /**
+   * Session updateMany
+   */
+  export type SessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Sessions.
+     */
+    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyInput>
+    /**
+     * Filter which Sessions to update
+     */
+    where?: SessionWhereInput
+    /**
+     * Limit how many Sessions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Session updateManyAndReturn
+   */
+  export type SessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * The data used to update Sessions.
+     */
+    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyInput>
+    /**
+     * Filter which Sessions to update
+     */
+    where?: SessionWhereInput
+    /**
+     * Limit how many Sessions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Session upsert
+   */
+  export type SessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Session to update in case it exists.
+     */
+    where: SessionWhereUniqueInput
+    /**
+     * In case the Session found by the `where` argument doesn't exist, create a new Session with this data.
+     */
+    create: XOR<SessionCreateInput, SessionUncheckedCreateInput>
+    /**
+     * In case the Session was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SessionUpdateInput, SessionUncheckedUpdateInput>
+  }
+
+  /**
+   * Session delete
+   */
+  export type SessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
+    /**
+     * Filter which Session to delete.
+     */
+    where: SessionWhereUniqueInput
+  }
+
+  /**
+   * Session deleteMany
+   */
+  export type SessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Sessions to delete
+     */
+    where?: SessionWhereInput
+    /**
+     * Limit how many Sessions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Session without action
+   */
+  export type SessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Session
+     */
+    select?: SessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Session
+     */
+    omit?: SessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SessionInclude<ExtArgs> | null
   }
 
 
@@ -25571,6 +29550,7 @@ export namespace Prisma {
 
   export const AirlineScalarFieldEnum: {
     AirlineName: 'AirlineName',
+    AirlineCaption: 'AirlineCaption',
     Website: 'Website',
     AmountOfAircraft: 'AmountOfAircraft',
     Logo: 'Logo'
@@ -25611,7 +29591,7 @@ export namespace Prisma {
     DateOfBirth: 'DateOfBirth',
     Nationality: 'Nationality',
     BaggageChecked: 'BaggageChecked',
-    BaggageClaimNo: 'BaggageClaimNo',
+    BaggageCabin: 'BaggageCabin',
     SeatNo: 'SeatNo',
     AircraftRegNo: 'AircraftRegNo',
     FlightNo: 'FlightNo',
@@ -25631,6 +29611,7 @@ export namespace Prisma {
 
   export const Assigned_ToScalarFieldEnum: {
     FlightNo: 'FlightNo',
+    Schedule: 'Schedule',
     UserAccountID: 'UserAccountID'
   };
 
@@ -25639,7 +29620,7 @@ export namespace Prisma {
 
   export const ContactScalarFieldEnum: {
     AdminAccountID: 'AdminAccountID',
-    AirlineMessageID: 'AirlineMessageID',
+    AirlineName: 'AirlineName',
     ContactStatus: 'ContactStatus'
   };
 
@@ -25648,39 +29629,41 @@ export namespace Prisma {
 
   export const Report_ToScalarFieldEnum: {
     UserAccountID: 'UserAccountID',
-    ReportID: 'ReportID'
+    AdminAccountID: 'AdminAccountID',
+    ReportStatus: 'ReportStatus'
   };
 
   export type Report_ToScalarFieldEnum = (typeof Report_ToScalarFieldEnum)[keyof typeof Report_ToScalarFieldEnum]
 
 
   export const CabinClassScalarFieldEnum: {
-    Class: 'Class'
+    AircraftRegNo: 'AircraftRegNo',
+    Class: 'Class',
+    StandardPrice: 'StandardPrice'
   };
 
   export type CabinClassScalarFieldEnum = (typeof CabinClassScalarFieldEnum)[keyof typeof CabinClassScalarFieldEnum]
 
 
   export const SeatScalarFieldEnum: {
+    AircraftRegNo: 'AircraftRegNo',
     SeatNo: 'SeatNo',
-    SeatType: 'SeatType',
-    AircraftRegNo: 'AircraftRegNo'
+    SeatType: 'SeatType'
   };
 
   export type SeatScalarFieldEnum = (typeof SeatScalarFieldEnum)[keyof typeof SeatScalarFieldEnum]
 
 
   export const AdminScalarFieldEnum: {
-    UserAccountID: 'UserAccountID',
-    AdminID: 'AdminID',
-    AdminMessage: 'AdminMessage'
+    AdminAccountID: 'AdminAccountID',
+    IPAddress: 'IPAddress'
   };
 
   export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
 
 
   export const Airline_MessageScalarFieldEnum: {
-    AirlineMessageID: 'AirlineMessageID',
+    AirlineName: 'AirlineName',
     AdminAccountID: 'AdminAccountID',
     MessageText: 'MessageText'
   };
@@ -25700,16 +29683,15 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     UserAccountID: 'UserAccountID',
-    Email: 'Email',
-    IPAddress: 'IPAddress'
+    Email: 'Email'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
   export const User_Tel_NoScalarFieldEnum: {
-    TelNo: 'TelNo',
-    UserAccountID: 'UserAccountID'
+    UserAccountID: 'UserAccountID',
+    TelNo: 'TelNo'
   };
 
   export type User_Tel_NoScalarFieldEnum = (typeof User_Tel_NoScalarFieldEnum)[keyof typeof User_Tel_NoScalarFieldEnum]
@@ -25722,7 +29704,6 @@ export namespace Prisma {
     Attachment: 'Attachment',
     UserAccountID: 'UserAccountID',
     AdminAccountID: 'AdminAccountID',
-    ReportStatus: 'ReportStatus',
     Email: 'Email',
     TelNo: 'TelNo',
     PassengerName: 'PassengerName'
@@ -25757,7 +29738,6 @@ export namespace Prisma {
 
 
   export const PurchaseScalarFieldEnum: {
-    PurchaseID: 'PurchaseID',
     TicketID: 'TicketID',
     PaymentID: 'PaymentID',
     UserAccountID: 'UserAccountID'
@@ -25769,7 +29749,6 @@ export namespace Prisma {
   export const PaymentScalarFieldEnum: {
     PaymentID: 'PaymentID',
     PaymentDateTime: 'PaymentDateTime',
-    Timestamp: 'Timestamp',
     PaymentMethod: 'PaymentMethod',
     TransactionStatus: 'TransactionStatus',
     Amount: 'Amount'
@@ -25784,6 +29763,21 @@ export namespace Prisma {
   };
 
   export type Airline_Tel_NoScalarFieldEnum = (typeof Airline_Tel_NoScalarFieldEnum)[keyof typeof Airline_Tel_NoScalarFieldEnum]
+
+
+  export const SessionScalarFieldEnum: {
+    SessionID: 'SessionID',
+    UserAccountID: 'UserAccountID',
+    TokenHash: 'TokenHash',
+    CreatedAt: 'CreatedAt',
+    LastSeenAt: 'LastSeenAt',
+    IdleExpiresAt: 'IdleExpiresAt',
+    AbsoluteExpiresAt: 'AbsoluteExpiresAt',
+    RevokedAt: 'RevokedAt',
+    RevokeReason: 'RevokeReason'
+  };
+
+  export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -25869,13 +29863,6 @@ export namespace Prisma {
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
   /**
    * Deep Input Types
    */
@@ -25889,6 +29876,9 @@ export namespace Prisma {
     AirportName?: StringFilter<"Airport"> | string
     City?: StringFilter<"Airport"> | string
     Country?: StringFilter<"Airport"> | string
+    operates?: OperateListRelationFilter
+    departureFlights?: FlightListRelationFilter
+    arrivalFlights?: FlightListRelationFilter
   }
 
   export type AirportOrderByWithRelationInput = {
@@ -25896,6 +29886,9 @@ export namespace Prisma {
     AirportName?: SortOrder
     City?: SortOrder
     Country?: SortOrder
+    operates?: OperateOrderByRelationAggregateInput
+    departureFlights?: FlightOrderByRelationAggregateInput
+    arrivalFlights?: FlightOrderByRelationAggregateInput
   }
 
   export type AirportWhereUniqueInput = Prisma.AtLeast<{
@@ -25906,6 +29899,9 @@ export namespace Prisma {
     AirportName?: StringFilter<"Airport"> | string
     City?: StringFilter<"Airport"> | string
     Country?: StringFilter<"Airport"> | string
+    operates?: OperateListRelationFilter
+    departureFlights?: FlightListRelationFilter
+    arrivalFlights?: FlightListRelationFilter
   }, "AirportID">
 
   export type AirportOrderByWithAggregationInput = {
@@ -25933,16 +29929,30 @@ export namespace Prisma {
     OR?: AirlineWhereInput[]
     NOT?: AirlineWhereInput | AirlineWhereInput[]
     AirlineName?: StringFilter<"Airline"> | string
+    AirlineCaption?: StringFilter<"Airline"> | string
     Website?: StringNullableFilter<"Airline"> | string | null
     AmountOfAircraft?: IntFilter<"Airline"> | number
     Logo?: StringNullableFilter<"Airline"> | string | null
+    operates?: OperateListRelationFilter
+    aircrafts?: AircraftListRelationFilter
+    flights?: FlightListRelationFilter
+    telNos?: Airline_Tel_NoListRelationFilter
+    messages?: Airline_MessageListRelationFilter
+    contacts?: ContactListRelationFilter
   }
 
   export type AirlineOrderByWithRelationInput = {
     AirlineName?: SortOrder
+    AirlineCaption?: SortOrder
     Website?: SortOrderInput | SortOrder
     AmountOfAircraft?: SortOrder
     Logo?: SortOrderInput | SortOrder
+    operates?: OperateOrderByRelationAggregateInput
+    aircrafts?: AircraftOrderByRelationAggregateInput
+    flights?: FlightOrderByRelationAggregateInput
+    telNos?: Airline_Tel_NoOrderByRelationAggregateInput
+    messages?: Airline_MessageOrderByRelationAggregateInput
+    contacts?: ContactOrderByRelationAggregateInput
   }
 
   export type AirlineWhereUniqueInput = Prisma.AtLeast<{
@@ -25950,13 +29960,21 @@ export namespace Prisma {
     AND?: AirlineWhereInput | AirlineWhereInput[]
     OR?: AirlineWhereInput[]
     NOT?: AirlineWhereInput | AirlineWhereInput[]
+    AirlineCaption?: StringFilter<"Airline"> | string
     Website?: StringNullableFilter<"Airline"> | string | null
     AmountOfAircraft?: IntFilter<"Airline"> | number
     Logo?: StringNullableFilter<"Airline"> | string | null
+    operates?: OperateListRelationFilter
+    aircrafts?: AircraftListRelationFilter
+    flights?: FlightListRelationFilter
+    telNos?: Airline_Tel_NoListRelationFilter
+    messages?: Airline_MessageListRelationFilter
+    contacts?: ContactListRelationFilter
   }, "AirlineName">
 
   export type AirlineOrderByWithAggregationInput = {
     AirlineName?: SortOrder
+    AirlineCaption?: SortOrder
     Website?: SortOrderInput | SortOrder
     AmountOfAircraft?: SortOrder
     Logo?: SortOrderInput | SortOrder
@@ -25972,6 +29990,7 @@ export namespace Prisma {
     OR?: AirlineScalarWhereWithAggregatesInput[]
     NOT?: AirlineScalarWhereWithAggregatesInput | AirlineScalarWhereWithAggregatesInput[]
     AirlineName?: StringWithAggregatesFilter<"Airline"> | string
+    AirlineCaption?: StringWithAggregatesFilter<"Airline"> | string
     Website?: StringNullableWithAggregatesFilter<"Airline"> | string | null
     AmountOfAircraft?: IntWithAggregatesFilter<"Airline"> | number
     Logo?: StringNullableWithAggregatesFilter<"Airline"> | string | null
@@ -25985,6 +30004,10 @@ export namespace Prisma {
     AirlineName?: StringFilter<"Aircraft"> | string
     SeatCapacity?: IntFilter<"Aircraft"> | number
     ModelName?: StringFilter<"Aircraft"> | string
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
+    seats?: SeatListRelationFilter
+    flights?: FlightListRelationFilter
+    cabins?: CabinClassListRelationFilter
   }
 
   export type AircraftOrderByWithRelationInput = {
@@ -25992,6 +30015,10 @@ export namespace Prisma {
     AirlineName?: SortOrder
     SeatCapacity?: SortOrder
     ModelName?: SortOrder
+    airline?: AirlineOrderByWithRelationInput
+    seats?: SeatOrderByRelationAggregateInput
+    flights?: FlightOrderByRelationAggregateInput
+    cabins?: CabinClassOrderByRelationAggregateInput
   }
 
   export type AircraftWhereUniqueInput = Prisma.AtLeast<{
@@ -26002,6 +30029,10 @@ export namespace Prisma {
     AirlineName?: StringFilter<"Aircraft"> | string
     SeatCapacity?: IntFilter<"Aircraft"> | number
     ModelName?: StringFilter<"Aircraft"> | string
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
+    seats?: SeatListRelationFilter
+    flights?: FlightListRelationFilter
+    cabins?: CabinClassListRelationFilter
   }, "AircraftRegNo">
 
   export type AircraftOrderByWithAggregationInput = {
@@ -26036,6 +30067,12 @@ export namespace Prisma {
     DepartureAirportID?: StringFilter<"Flight"> | string
     AirlineName?: StringFilter<"Flight"> | string
     AircraftRegNo?: StringFilter<"Flight"> | string
+    arrivalAirport?: XOR<AirportScalarRelationFilter, AirportWhereInput>
+    departureAirport?: XOR<AirportScalarRelationFilter, AirportWhereInput>
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
+    aircraft?: XOR<AircraftScalarRelationFilter, AircraftWhereInput>
+    passengers?: Assigned_ToListRelationFilter
+    tickets?: TicketListRelationFilter
   }
 
   export type FlightOrderByWithRelationInput = {
@@ -26045,10 +30082,17 @@ export namespace Prisma {
     DepartureAirportID?: SortOrder
     AirlineName?: SortOrder
     AircraftRegNo?: SortOrder
+    arrivalAirport?: AirportOrderByWithRelationInput
+    departureAirport?: AirportOrderByWithRelationInput
+    airline?: AirlineOrderByWithRelationInput
+    aircraft?: AircraftOrderByWithRelationInput
+    passengers?: Assigned_ToOrderByRelationAggregateInput
+    tickets?: TicketOrderByRelationAggregateInput
   }
 
   export type FlightWhereUniqueInput = Prisma.AtLeast<{
     FlightNo?: string
+    FlightNo_Schedule?: FlightFlightNoScheduleCompoundUniqueInput
     AND?: FlightWhereInput | FlightWhereInput[]
     OR?: FlightWhereInput[]
     NOT?: FlightWhereInput | FlightWhereInput[]
@@ -26057,7 +30101,13 @@ export namespace Prisma {
     DepartureAirportID?: StringFilter<"Flight"> | string
     AirlineName?: StringFilter<"Flight"> | string
     AircraftRegNo?: StringFilter<"Flight"> | string
-  }, "FlightNo">
+    arrivalAirport?: XOR<AirportScalarRelationFilter, AirportWhereInput>
+    departureAirport?: XOR<AirportScalarRelationFilter, AirportWhereInput>
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
+    aircraft?: XOR<AircraftScalarRelationFilter, AircraftWhereInput>
+    passengers?: Assigned_ToListRelationFilter
+    tickets?: TicketListRelationFilter
+  }, "FlightNo_Schedule" | "FlightNo">
 
   export type FlightOrderByWithAggregationInput = {
     FlightNo?: SortOrder
@@ -26095,12 +30145,19 @@ export namespace Prisma {
     Gender?: StringFilter<"Ticket"> | string
     DateOfBirth?: DateTimeFilter<"Ticket"> | Date | string
     Nationality?: StringFilter<"Ticket"> | string
-    BaggageChecked?: BoolFilter<"Ticket"> | boolean
-    BaggageClaimNo?: StringNullableFilter<"Ticket"> | string | null
+    BaggageChecked?: FloatFilter<"Ticket"> | number
+    BaggageCabin?: FloatFilter<"Ticket"> | number
     SeatNo?: StringFilter<"Ticket"> | string
     AircraftRegNo?: StringFilter<"Ticket"> | string
     FlightNo?: StringFilter<"Ticket"> | string
     Schedule?: DateTimeFilter<"Ticket"> | Date | string
+    flight?: XOR<FlightScalarRelationFilter, FlightWhereInput>
+    seat?: XOR<SeatScalarRelationFilter, SeatWhereInput>
+    purchase?: XOR<PurchaseNullableScalarRelationFilter, PurchaseWhereInput> | null
+    domesticTicket?: XOR<Domestic_TicketNullableScalarRelationFilter, Domestic_TicketWhereInput> | null
+    internationalTicket?: XOR<International_TicketNullableScalarRelationFilter, International_TicketWhereInput> | null
+    roundTripTicketPart1?: XOR<Round_Trip_TicketNullableScalarRelationFilter, Round_Trip_TicketWhereInput> | null
+    roundTripTicketPart2?: XOR<Round_Trip_TicketNullableScalarRelationFilter, Round_Trip_TicketWhereInput> | null
   }
 
   export type TicketOrderByWithRelationInput = {
@@ -26113,11 +30170,18 @@ export namespace Prisma {
     DateOfBirth?: SortOrder
     Nationality?: SortOrder
     BaggageChecked?: SortOrder
-    BaggageClaimNo?: SortOrderInput | SortOrder
+    BaggageCabin?: SortOrder
     SeatNo?: SortOrder
     AircraftRegNo?: SortOrder
     FlightNo?: SortOrder
     Schedule?: SortOrder
+    flight?: FlightOrderByWithRelationInput
+    seat?: SeatOrderByWithRelationInput
+    purchase?: PurchaseOrderByWithRelationInput
+    domesticTicket?: Domestic_TicketOrderByWithRelationInput
+    internationalTicket?: International_TicketOrderByWithRelationInput
+    roundTripTicketPart1?: Round_Trip_TicketOrderByWithRelationInput
+    roundTripTicketPart2?: Round_Trip_TicketOrderByWithRelationInput
   }
 
   export type TicketWhereUniqueInput = Prisma.AtLeast<{
@@ -26132,12 +30196,19 @@ export namespace Prisma {
     Gender?: StringFilter<"Ticket"> | string
     DateOfBirth?: DateTimeFilter<"Ticket"> | Date | string
     Nationality?: StringFilter<"Ticket"> | string
-    BaggageChecked?: BoolFilter<"Ticket"> | boolean
-    BaggageClaimNo?: StringNullableFilter<"Ticket"> | string | null
+    BaggageChecked?: FloatFilter<"Ticket"> | number
+    BaggageCabin?: FloatFilter<"Ticket"> | number
     SeatNo?: StringFilter<"Ticket"> | string
     AircraftRegNo?: StringFilter<"Ticket"> | string
     FlightNo?: StringFilter<"Ticket"> | string
     Schedule?: DateTimeFilter<"Ticket"> | Date | string
+    flight?: XOR<FlightScalarRelationFilter, FlightWhereInput>
+    seat?: XOR<SeatScalarRelationFilter, SeatWhereInput>
+    purchase?: XOR<PurchaseNullableScalarRelationFilter, PurchaseWhereInput> | null
+    domesticTicket?: XOR<Domestic_TicketNullableScalarRelationFilter, Domestic_TicketWhereInput> | null
+    internationalTicket?: XOR<International_TicketNullableScalarRelationFilter, International_TicketWhereInput> | null
+    roundTripTicketPart1?: XOR<Round_Trip_TicketNullableScalarRelationFilter, Round_Trip_TicketWhereInput> | null
+    roundTripTicketPart2?: XOR<Round_Trip_TicketNullableScalarRelationFilter, Round_Trip_TicketWhereInput> | null
   }, "TicketID">
 
   export type TicketOrderByWithAggregationInput = {
@@ -26150,7 +30221,7 @@ export namespace Prisma {
     DateOfBirth?: SortOrder
     Nationality?: SortOrder
     BaggageChecked?: SortOrder
-    BaggageClaimNo?: SortOrderInput | SortOrder
+    BaggageCabin?: SortOrder
     SeatNo?: SortOrder
     AircraftRegNo?: SortOrder
     FlightNo?: SortOrder
@@ -26174,8 +30245,8 @@ export namespace Prisma {
     Gender?: StringWithAggregatesFilter<"Ticket"> | string
     DateOfBirth?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
     Nationality?: StringWithAggregatesFilter<"Ticket"> | string
-    BaggageChecked?: BoolWithAggregatesFilter<"Ticket"> | boolean
-    BaggageClaimNo?: StringNullableWithAggregatesFilter<"Ticket"> | string | null
+    BaggageChecked?: FloatWithAggregatesFilter<"Ticket"> | number
+    BaggageCabin?: FloatWithAggregatesFilter<"Ticket"> | number
     SeatNo?: StringWithAggregatesFilter<"Ticket"> | string
     AircraftRegNo?: StringWithAggregatesFilter<"Ticket"> | string
     FlightNo?: StringWithAggregatesFilter<"Ticket"> | string
@@ -26188,11 +30259,15 @@ export namespace Prisma {
     NOT?: OperateWhereInput | OperateWhereInput[]
     AirportID?: StringFilter<"Operate"> | string
     AirlineName?: StringFilter<"Operate"> | string
+    airport?: XOR<AirportScalarRelationFilter, AirportWhereInput>
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
   }
 
   export type OperateOrderByWithRelationInput = {
     AirportID?: SortOrder
     AirlineName?: SortOrder
+    airport?: AirportOrderByWithRelationInput
+    airline?: AirlineOrderByWithRelationInput
   }
 
   export type OperateWhereUniqueInput = Prisma.AtLeast<{
@@ -26202,6 +30277,8 @@ export namespace Prisma {
     NOT?: OperateWhereInput | OperateWhereInput[]
     AirportID?: StringFilter<"Operate"> | string
     AirlineName?: StringFilter<"Operate"> | string
+    airport?: XOR<AirportScalarRelationFilter, AirportWhereInput>
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
   }, "AirportID_AirlineName">
 
   export type OperateOrderByWithAggregationInput = {
@@ -26225,25 +30302,35 @@ export namespace Prisma {
     OR?: Assigned_ToWhereInput[]
     NOT?: Assigned_ToWhereInput | Assigned_ToWhereInput[]
     FlightNo?: StringFilter<"Assigned_To"> | string
+    Schedule?: DateTimeFilter<"Assigned_To"> | Date | string
     UserAccountID?: StringFilter<"Assigned_To"> | string
+    flight?: XOR<FlightScalarRelationFilter, FlightWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type Assigned_ToOrderByWithRelationInput = {
     FlightNo?: SortOrder
+    Schedule?: SortOrder
     UserAccountID?: SortOrder
+    flight?: FlightOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type Assigned_ToWhereUniqueInput = Prisma.AtLeast<{
-    FlightNo_UserAccountID?: Assigned_ToFlightNoUserAccountIDCompoundUniqueInput
+    FlightNo_Schedule_UserAccountID?: Assigned_ToFlightNoScheduleUserAccountIDCompoundUniqueInput
     AND?: Assigned_ToWhereInput | Assigned_ToWhereInput[]
     OR?: Assigned_ToWhereInput[]
     NOT?: Assigned_ToWhereInput | Assigned_ToWhereInput[]
     FlightNo?: StringFilter<"Assigned_To"> | string
+    Schedule?: DateTimeFilter<"Assigned_To"> | Date | string
     UserAccountID?: StringFilter<"Assigned_To"> | string
-  }, "FlightNo_UserAccountID">
+    flight?: XOR<FlightScalarRelationFilter, FlightWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "FlightNo_Schedule_UserAccountID">
 
   export type Assigned_ToOrderByWithAggregationInput = {
     FlightNo?: SortOrder
+    Schedule?: SortOrder
     UserAccountID?: SortOrder
     _count?: Assigned_ToCountOrderByAggregateInput
     _max?: Assigned_ToMaxOrderByAggregateInput
@@ -26255,6 +30342,7 @@ export namespace Prisma {
     OR?: Assigned_ToScalarWhereWithAggregatesInput[]
     NOT?: Assigned_ToScalarWhereWithAggregatesInput | Assigned_ToScalarWhereWithAggregatesInput[]
     FlightNo?: StringWithAggregatesFilter<"Assigned_To"> | string
+    Schedule?: DateTimeWithAggregatesFilter<"Assigned_To"> | Date | string
     UserAccountID?: StringWithAggregatesFilter<"Assigned_To"> | string
   }
 
@@ -26263,29 +30351,35 @@ export namespace Prisma {
     OR?: ContactWhereInput[]
     NOT?: ContactWhereInput | ContactWhereInput[]
     AdminAccountID?: StringFilter<"Contact"> | string
-    AirlineMessageID?: StringFilter<"Contact"> | string
+    AirlineName?: StringFilter<"Contact"> | string
     ContactStatus?: StringFilter<"Contact"> | string
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
   }
 
   export type ContactOrderByWithRelationInput = {
     AdminAccountID?: SortOrder
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     ContactStatus?: SortOrder
+    admin?: AdminOrderByWithRelationInput
+    airline?: AirlineOrderByWithRelationInput
   }
 
   export type ContactWhereUniqueInput = Prisma.AtLeast<{
-    AdminAccountID_AirlineMessageID?: ContactAdminAccountIDAirlineMessageIDCompoundUniqueInput
+    AdminAccountID_AirlineName?: ContactAdminAccountIDAirlineNameCompoundUniqueInput
     AND?: ContactWhereInput | ContactWhereInput[]
     OR?: ContactWhereInput[]
     NOT?: ContactWhereInput | ContactWhereInput[]
     AdminAccountID?: StringFilter<"Contact"> | string
-    AirlineMessageID?: StringFilter<"Contact"> | string
+    AirlineName?: StringFilter<"Contact"> | string
     ContactStatus?: StringFilter<"Contact"> | string
-  }, "AdminAccountID_AirlineMessageID">
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
+  }, "AdminAccountID_AirlineName">
 
   export type ContactOrderByWithAggregationInput = {
     AdminAccountID?: SortOrder
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     ContactStatus?: SortOrder
     _count?: ContactCountOrderByAggregateInput
     _max?: ContactMaxOrderByAggregateInput
@@ -26297,7 +30391,7 @@ export namespace Prisma {
     OR?: ContactScalarWhereWithAggregatesInput[]
     NOT?: ContactScalarWhereWithAggregatesInput | ContactScalarWhereWithAggregatesInput[]
     AdminAccountID?: StringWithAggregatesFilter<"Contact"> | string
-    AirlineMessageID?: StringWithAggregatesFilter<"Contact"> | string
+    AirlineName?: StringWithAggregatesFilter<"Contact"> | string
     ContactStatus?: StringWithAggregatesFilter<"Contact"> | string
   }
 
@@ -26306,26 +30400,39 @@ export namespace Prisma {
     OR?: Report_ToWhereInput[]
     NOT?: Report_ToWhereInput | Report_ToWhereInput[]
     UserAccountID?: StringFilter<"Report_To"> | string
-    ReportID?: StringFilter<"Report_To"> | string
+    AdminAccountID?: StringFilter<"Report_To"> | string
+    ReportStatus?: StringFilter<"Report_To"> | string
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    Reports?: ReportListRelationFilter
   }
 
   export type Report_ToOrderByWithRelationInput = {
     UserAccountID?: SortOrder
-    ReportID?: SortOrder
+    AdminAccountID?: SortOrder
+    ReportStatus?: SortOrder
+    admin?: AdminOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+    Reports?: ReportOrderByRelationAggregateInput
   }
 
   export type Report_ToWhereUniqueInput = Prisma.AtLeast<{
-    UserAccountID_ReportID?: Report_ToUserAccountIDReportIDCompoundUniqueInput
+    UserAccountID_AdminAccountID?: Report_ToUserAccountIDAdminAccountIDCompoundUniqueInput
     AND?: Report_ToWhereInput | Report_ToWhereInput[]
     OR?: Report_ToWhereInput[]
     NOT?: Report_ToWhereInput | Report_ToWhereInput[]
     UserAccountID?: StringFilter<"Report_To"> | string
-    ReportID?: StringFilter<"Report_To"> | string
-  }, "UserAccountID_ReportID">
+    AdminAccountID?: StringFilter<"Report_To"> | string
+    ReportStatus?: StringFilter<"Report_To"> | string
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    Reports?: ReportListRelationFilter
+  }, "UserAccountID_AdminAccountID">
 
   export type Report_ToOrderByWithAggregationInput = {
     UserAccountID?: SortOrder
-    ReportID?: SortOrder
+    AdminAccountID?: SortOrder
+    ReportStatus?: SortOrder
     _count?: Report_ToCountOrderByAggregateInput
     _max?: Report_ToMaxOrderByAggregateInput
     _min?: Report_ToMinOrderByAggregateInput
@@ -26336,69 +30443,93 @@ export namespace Prisma {
     OR?: Report_ToScalarWhereWithAggregatesInput[]
     NOT?: Report_ToScalarWhereWithAggregatesInput | Report_ToScalarWhereWithAggregatesInput[]
     UserAccountID?: StringWithAggregatesFilter<"Report_To"> | string
-    ReportID?: StringWithAggregatesFilter<"Report_To"> | string
+    AdminAccountID?: StringWithAggregatesFilter<"Report_To"> | string
+    ReportStatus?: StringWithAggregatesFilter<"Report_To"> | string
   }
 
   export type CabinClassWhereInput = {
     AND?: CabinClassWhereInput | CabinClassWhereInput[]
     OR?: CabinClassWhereInput[]
     NOT?: CabinClassWhereInput | CabinClassWhereInput[]
+    AircraftRegNo?: StringFilter<"CabinClass"> | string
     Class?: StringFilter<"CabinClass"> | string
+    StandardPrice?: FloatFilter<"CabinClass"> | number
+    aircraft?: XOR<AircraftScalarRelationFilter, AircraftWhereInput>
   }
 
   export type CabinClassOrderByWithRelationInput = {
+    AircraftRegNo?: SortOrder
     Class?: SortOrder
+    StandardPrice?: SortOrder
+    aircraft?: AircraftOrderByWithRelationInput
   }
 
   export type CabinClassWhereUniqueInput = Prisma.AtLeast<{
-    Class?: string
+    AircraftRegNo_Class?: CabinClassAircraftRegNoClassCompoundUniqueInput
     AND?: CabinClassWhereInput | CabinClassWhereInput[]
     OR?: CabinClassWhereInput[]
     NOT?: CabinClassWhereInput | CabinClassWhereInput[]
-  }, "Class">
+    AircraftRegNo?: StringFilter<"CabinClass"> | string
+    Class?: StringFilter<"CabinClass"> | string
+    StandardPrice?: FloatFilter<"CabinClass"> | number
+    aircraft?: XOR<AircraftScalarRelationFilter, AircraftWhereInput>
+  }, "AircraftRegNo_Class">
 
   export type CabinClassOrderByWithAggregationInput = {
+    AircraftRegNo?: SortOrder
     Class?: SortOrder
+    StandardPrice?: SortOrder
     _count?: CabinClassCountOrderByAggregateInput
+    _avg?: CabinClassAvgOrderByAggregateInput
     _max?: CabinClassMaxOrderByAggregateInput
     _min?: CabinClassMinOrderByAggregateInput
+    _sum?: CabinClassSumOrderByAggregateInput
   }
 
   export type CabinClassScalarWhereWithAggregatesInput = {
     AND?: CabinClassScalarWhereWithAggregatesInput | CabinClassScalarWhereWithAggregatesInput[]
     OR?: CabinClassScalarWhereWithAggregatesInput[]
     NOT?: CabinClassScalarWhereWithAggregatesInput | CabinClassScalarWhereWithAggregatesInput[]
+    AircraftRegNo?: StringWithAggregatesFilter<"CabinClass"> | string
     Class?: StringWithAggregatesFilter<"CabinClass"> | string
+    StandardPrice?: FloatWithAggregatesFilter<"CabinClass"> | number
   }
 
   export type SeatWhereInput = {
     AND?: SeatWhereInput | SeatWhereInput[]
     OR?: SeatWhereInput[]
     NOT?: SeatWhereInput | SeatWhereInput[]
+    AircraftRegNo?: StringFilter<"Seat"> | string
     SeatNo?: StringFilter<"Seat"> | string
     SeatType?: StringFilter<"Seat"> | string
-    AircraftRegNo?: StringFilter<"Seat"> | string
+    aircraft?: XOR<AircraftScalarRelationFilter, AircraftWhereInput>
+    tickets?: TicketListRelationFilter
   }
 
   export type SeatOrderByWithRelationInput = {
+    AircraftRegNo?: SortOrder
     SeatNo?: SortOrder
     SeatType?: SortOrder
-    AircraftRegNo?: SortOrder
+    aircraft?: AircraftOrderByWithRelationInput
+    tickets?: TicketOrderByRelationAggregateInput
   }
 
   export type SeatWhereUniqueInput = Prisma.AtLeast<{
-    SeatNo?: string
+    AircraftRegNo_SeatNo?: SeatAircraftRegNoSeatNoCompoundUniqueInput
     AND?: SeatWhereInput | SeatWhereInput[]
     OR?: SeatWhereInput[]
     NOT?: SeatWhereInput | SeatWhereInput[]
-    SeatType?: StringFilter<"Seat"> | string
     AircraftRegNo?: StringFilter<"Seat"> | string
-  }, "SeatNo">
+    SeatNo?: StringFilter<"Seat"> | string
+    SeatType?: StringFilter<"Seat"> | string
+    aircraft?: XOR<AircraftScalarRelationFilter, AircraftWhereInput>
+    tickets?: TicketListRelationFilter
+  }, "AircraftRegNo_SeatNo">
 
   export type SeatOrderByWithAggregationInput = {
+    AircraftRegNo?: SortOrder
     SeatNo?: SortOrder
     SeatType?: SortOrder
-    AircraftRegNo?: SortOrder
     _count?: SeatCountOrderByAggregateInput
     _max?: SeatMaxOrderByAggregateInput
     _min?: SeatMinOrderByAggregateInput
@@ -26408,39 +30539,47 @@ export namespace Prisma {
     AND?: SeatScalarWhereWithAggregatesInput | SeatScalarWhereWithAggregatesInput[]
     OR?: SeatScalarWhereWithAggregatesInput[]
     NOT?: SeatScalarWhereWithAggregatesInput | SeatScalarWhereWithAggregatesInput[]
+    AircraftRegNo?: StringWithAggregatesFilter<"Seat"> | string
     SeatNo?: StringWithAggregatesFilter<"Seat"> | string
     SeatType?: StringWithAggregatesFilter<"Seat"> | string
-    AircraftRegNo?: StringWithAggregatesFilter<"Seat"> | string
   }
 
   export type AdminWhereInput = {
     AND?: AdminWhereInput | AdminWhereInput[]
     OR?: AdminWhereInput[]
     NOT?: AdminWhereInput | AdminWhereInput[]
-    UserAccountID?: StringFilter<"Admin"> | string
-    AdminID?: StringFilter<"Admin"> | string
-    AdminMessage?: StringFilter<"Admin"> | string
+    AdminAccountID?: StringFilter<"Admin"> | string
+    IPAddress?: StringNullableFilter<"Admin"> | string | null
+    account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
+    sentAirlineMessages?: Airline_MessageListRelationFilter
+    contacts?: ContactListRelationFilter
+    involvedInReports?: Report_ToListRelationFilter
   }
 
   export type AdminOrderByWithRelationInput = {
-    UserAccountID?: SortOrder
-    AdminID?: SortOrder
-    AdminMessage?: SortOrder
+    AdminAccountID?: SortOrder
+    IPAddress?: SortOrderInput | SortOrder
+    account?: AccountOrderByWithRelationInput
+    sentAirlineMessages?: Airline_MessageOrderByRelationAggregateInput
+    contacts?: ContactOrderByRelationAggregateInput
+    involvedInReports?: Report_ToOrderByRelationAggregateInput
   }
 
   export type AdminWhereUniqueInput = Prisma.AtLeast<{
-    UserAccountID?: string
-    AdminID?: string
+    AdminAccountID?: string
     AND?: AdminWhereInput | AdminWhereInput[]
     OR?: AdminWhereInput[]
     NOT?: AdminWhereInput | AdminWhereInput[]
-    AdminMessage?: StringFilter<"Admin"> | string
-  }, "UserAccountID" | "AdminID">
+    IPAddress?: StringNullableFilter<"Admin"> | string | null
+    account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
+    sentAirlineMessages?: Airline_MessageListRelationFilter
+    contacts?: ContactListRelationFilter
+    involvedInReports?: Report_ToListRelationFilter
+  }, "AdminAccountID">
 
   export type AdminOrderByWithAggregationInput = {
-    UserAccountID?: SortOrder
-    AdminID?: SortOrder
-    AdminMessage?: SortOrder
+    AdminAccountID?: SortOrder
+    IPAddress?: SortOrderInput | SortOrder
     _count?: AdminCountOrderByAggregateInput
     _max?: AdminMaxOrderByAggregateInput
     _min?: AdminMinOrderByAggregateInput
@@ -26450,37 +30589,43 @@ export namespace Prisma {
     AND?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
     OR?: AdminScalarWhereWithAggregatesInput[]
     NOT?: AdminScalarWhereWithAggregatesInput | AdminScalarWhereWithAggregatesInput[]
-    UserAccountID?: StringWithAggregatesFilter<"Admin"> | string
-    AdminID?: StringWithAggregatesFilter<"Admin"> | string
-    AdminMessage?: StringWithAggregatesFilter<"Admin"> | string
+    AdminAccountID?: StringWithAggregatesFilter<"Admin"> | string
+    IPAddress?: StringNullableWithAggregatesFilter<"Admin"> | string | null
   }
 
   export type Airline_MessageWhereInput = {
     AND?: Airline_MessageWhereInput | Airline_MessageWhereInput[]
     OR?: Airline_MessageWhereInput[]
     NOT?: Airline_MessageWhereInput | Airline_MessageWhereInput[]
-    AirlineMessageID?: StringFilter<"Airline_Message"> | string
+    AirlineName?: StringFilter<"Airline_Message"> | string
     AdminAccountID?: StringFilter<"Airline_Message"> | string
     MessageText?: StringFilter<"Airline_Message"> | string
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
   }
 
   export type Airline_MessageOrderByWithRelationInput = {
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     AdminAccountID?: SortOrder
     MessageText?: SortOrder
+    admin?: AdminOrderByWithRelationInput
+    airline?: AirlineOrderByWithRelationInput
   }
 
   export type Airline_MessageWhereUniqueInput = Prisma.AtLeast<{
-    AirlineMessageID?: string
+    AirlineName_AdminAccountID_MessageText?: Airline_MessageAirlineNameAdminAccountIDMessageTextCompoundUniqueInput
     AND?: Airline_MessageWhereInput | Airline_MessageWhereInput[]
     OR?: Airline_MessageWhereInput[]
     NOT?: Airline_MessageWhereInput | Airline_MessageWhereInput[]
+    AirlineName?: StringFilter<"Airline_Message"> | string
     AdminAccountID?: StringFilter<"Airline_Message"> | string
     MessageText?: StringFilter<"Airline_Message"> | string
-  }, "AirlineMessageID">
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
+  }, "AirlineName_AdminAccountID_MessageText">
 
   export type Airline_MessageOrderByWithAggregationInput = {
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     AdminAccountID?: SortOrder
     MessageText?: SortOrder
     _count?: Airline_MessageCountOrderByAggregateInput
@@ -26492,7 +30637,7 @@ export namespace Prisma {
     AND?: Airline_MessageScalarWhereWithAggregatesInput | Airline_MessageScalarWhereWithAggregatesInput[]
     OR?: Airline_MessageScalarWhereWithAggregatesInput[]
     NOT?: Airline_MessageScalarWhereWithAggregatesInput | Airline_MessageScalarWhereWithAggregatesInput[]
-    AirlineMessageID?: StringWithAggregatesFilter<"Airline_Message"> | string
+    AirlineName?: StringWithAggregatesFilter<"Airline_Message"> | string
     AdminAccountID?: StringWithAggregatesFilter<"Airline_Message"> | string
     MessageText?: StringWithAggregatesFilter<"Airline_Message"> | string
   }
@@ -26505,6 +30650,8 @@ export namespace Prisma {
     Password?: StringFilter<"Account"> | string
     FirstName?: StringFilter<"Account"> | string
     LastName?: StringFilter<"Account"> | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    admin?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
   }
 
   export type AccountOrderByWithRelationInput = {
@@ -26512,6 +30659,8 @@ export namespace Prisma {
     Password?: SortOrder
     FirstName?: SortOrder
     LastName?: SortOrder
+    user?: UserOrderByWithRelationInput
+    admin?: AdminOrderByWithRelationInput
   }
 
   export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -26522,6 +30671,8 @@ export namespace Prisma {
     Password?: StringFilter<"Account"> | string
     FirstName?: StringFilter<"Account"> | string
     LastName?: StringFilter<"Account"> | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    admin?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
   }, "AccountID">
 
   export type AccountOrderByWithAggregationInput = {
@@ -26550,13 +30701,23 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     UserAccountID?: StringFilter<"User"> | string
     Email?: StringFilter<"User"> | string
-    IPAddress?: StringNullableFilter<"User"> | string | null
+    account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
+    telNos?: User_Tel_NoListRelationFilter
+    assignedFlights?: Assigned_ToListRelationFilter
+    purchases?: PurchaseListRelationFilter
+    involvedInReports?: Report_ToListRelationFilter
+    sessions?: SessionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     UserAccountID?: SortOrder
     Email?: SortOrder
-    IPAddress?: SortOrderInput | SortOrder
+    account?: AccountOrderByWithRelationInput
+    telNos?: User_Tel_NoOrderByRelationAggregateInput
+    assignedFlights?: Assigned_ToOrderByRelationAggregateInput
+    purchases?: PurchaseOrderByRelationAggregateInput
+    involvedInReports?: Report_ToOrderByRelationAggregateInput
+    sessions?: SessionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -26565,13 +30726,17 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    IPAddress?: StringNullableFilter<"User"> | string | null
+    account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
+    telNos?: User_Tel_NoListRelationFilter
+    assignedFlights?: Assigned_ToListRelationFilter
+    purchases?: PurchaseListRelationFilter
+    involvedInReports?: Report_ToListRelationFilter
+    sessions?: SessionListRelationFilter
   }, "UserAccountID" | "Email">
 
   export type UserOrderByWithAggregationInput = {
     UserAccountID?: SortOrder
     Email?: SortOrder
-    IPAddress?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -26583,33 +30748,35 @@ export namespace Prisma {
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     UserAccountID?: StringWithAggregatesFilter<"User"> | string
     Email?: StringWithAggregatesFilter<"User"> | string
-    IPAddress?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type User_Tel_NoWhereInput = {
     AND?: User_Tel_NoWhereInput | User_Tel_NoWhereInput[]
     OR?: User_Tel_NoWhereInput[]
     NOT?: User_Tel_NoWhereInput | User_Tel_NoWhereInput[]
-    TelNo?: StringFilter<"User_Tel_No"> | string
     UserAccountID?: StringFilter<"User_Tel_No"> | string
+    TelNo?: StringFilter<"User_Tel_No"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type User_Tel_NoOrderByWithRelationInput = {
-    TelNo?: SortOrder
     UserAccountID?: SortOrder
+    TelNo?: SortOrder
+    user?: UserOrderByWithRelationInput
   }
 
   export type User_Tel_NoWhereUniqueInput = Prisma.AtLeast<{
-    TelNo?: string
+    UserAccountID?: string
     AND?: User_Tel_NoWhereInput | User_Tel_NoWhereInput[]
     OR?: User_Tel_NoWhereInput[]
     NOT?: User_Tel_NoWhereInput | User_Tel_NoWhereInput[]
-    UserAccountID?: StringFilter<"User_Tel_No"> | string
-  }, "TelNo">
+    TelNo?: StringFilter<"User_Tel_No"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "UserAccountID">
 
   export type User_Tel_NoOrderByWithAggregationInput = {
-    TelNo?: SortOrder
     UserAccountID?: SortOrder
+    TelNo?: SortOrder
     _count?: User_Tel_NoCountOrderByAggregateInput
     _max?: User_Tel_NoMaxOrderByAggregateInput
     _min?: User_Tel_NoMinOrderByAggregateInput
@@ -26619,8 +30786,8 @@ export namespace Prisma {
     AND?: User_Tel_NoScalarWhereWithAggregatesInput | User_Tel_NoScalarWhereWithAggregatesInput[]
     OR?: User_Tel_NoScalarWhereWithAggregatesInput[]
     NOT?: User_Tel_NoScalarWhereWithAggregatesInput | User_Tel_NoScalarWhereWithAggregatesInput[]
-    TelNo?: StringWithAggregatesFilter<"User_Tel_No"> | string
     UserAccountID?: StringWithAggregatesFilter<"User_Tel_No"> | string
+    TelNo?: StringWithAggregatesFilter<"User_Tel_No"> | string
   }
 
   export type ReportWhereInput = {
@@ -26633,10 +30800,10 @@ export namespace Prisma {
     Attachment?: StringNullableFilter<"Report"> | string | null
     UserAccountID?: StringFilter<"Report"> | string
     AdminAccountID?: StringFilter<"Report"> | string
-    ReportStatus?: StringFilter<"Report"> | string
     Email?: StringFilter<"Report"> | string
     TelNo?: StringFilter<"Report"> | string
     PassengerName?: StringFilter<"Report"> | string
+    creator?: XOR<Report_ToScalarRelationFilter, Report_ToWhereInput>
   }
 
   export type ReportOrderByWithRelationInput = {
@@ -26646,10 +30813,10 @@ export namespace Prisma {
     Attachment?: SortOrderInput | SortOrder
     UserAccountID?: SortOrder
     AdminAccountID?: SortOrder
-    ReportStatus?: SortOrder
     Email?: SortOrder
     TelNo?: SortOrder
     PassengerName?: SortOrder
+    creator?: Report_ToOrderByWithRelationInput
   }
 
   export type ReportWhereUniqueInput = Prisma.AtLeast<{
@@ -26662,10 +30829,10 @@ export namespace Prisma {
     Attachment?: StringNullableFilter<"Report"> | string | null
     UserAccountID?: StringFilter<"Report"> | string
     AdminAccountID?: StringFilter<"Report"> | string
-    ReportStatus?: StringFilter<"Report"> | string
     Email?: StringFilter<"Report"> | string
     TelNo?: StringFilter<"Report"> | string
     PassengerName?: StringFilter<"Report"> | string
+    creator?: XOR<Report_ToScalarRelationFilter, Report_ToWhereInput>
   }, "ReportID">
 
   export type ReportOrderByWithAggregationInput = {
@@ -26675,7 +30842,6 @@ export namespace Prisma {
     Attachment?: SortOrderInput | SortOrder
     UserAccountID?: SortOrder
     AdminAccountID?: SortOrder
-    ReportStatus?: SortOrder
     Email?: SortOrder
     TelNo?: SortOrder
     PassengerName?: SortOrder
@@ -26694,7 +30860,6 @@ export namespace Prisma {
     Attachment?: StringNullableWithAggregatesFilter<"Report"> | string | null
     UserAccountID?: StringWithAggregatesFilter<"Report"> | string
     AdminAccountID?: StringWithAggregatesFilter<"Report"> | string
-    ReportStatus?: StringWithAggregatesFilter<"Report"> | string
     Email?: StringWithAggregatesFilter<"Report"> | string
     TelNo?: StringWithAggregatesFilter<"Report"> | string
     PassengerName?: StringWithAggregatesFilter<"Report"> | string
@@ -26705,10 +30870,12 @@ export namespace Prisma {
     OR?: Domestic_TicketWhereInput[]
     NOT?: Domestic_TicketWhereInput | Domestic_TicketWhereInput[]
     TicketID?: StringFilter<"Domestic_Ticket"> | string
+    ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>
   }
 
   export type Domestic_TicketOrderByWithRelationInput = {
     TicketID?: SortOrder
+    ticket?: TicketOrderByWithRelationInput
   }
 
   export type Domestic_TicketWhereUniqueInput = Prisma.AtLeast<{
@@ -26716,6 +30883,7 @@ export namespace Prisma {
     AND?: Domestic_TicketWhereInput | Domestic_TicketWhereInput[]
     OR?: Domestic_TicketWhereInput[]
     NOT?: Domestic_TicketWhereInput | Domestic_TicketWhereInput[]
+    ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>
   }, "TicketID">
 
   export type Domestic_TicketOrderByWithAggregationInput = {
@@ -26740,6 +30908,7 @@ export namespace Prisma {
     PassportNo?: StringFilter<"International_Ticket"> | string
     IssuedCountry?: StringFilter<"International_Ticket"> | string
     PassportExpiry?: DateTimeFilter<"International_Ticket"> | Date | string
+    ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>
   }
 
   export type International_TicketOrderByWithRelationInput = {
@@ -26747,6 +30916,7 @@ export namespace Prisma {
     PassportNo?: SortOrder
     IssuedCountry?: SortOrder
     PassportExpiry?: SortOrder
+    ticket?: TicketOrderByWithRelationInput
   }
 
   export type International_TicketWhereUniqueInput = Prisma.AtLeast<{
@@ -26757,6 +30927,7 @@ export namespace Prisma {
     PassportNo?: StringFilter<"International_Ticket"> | string
     IssuedCountry?: StringFilter<"International_Ticket"> | string
     PassportExpiry?: DateTimeFilter<"International_Ticket"> | Date | string
+    ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>
   }, "TicketID">
 
   export type International_TicketOrderByWithAggregationInput = {
@@ -26785,20 +30956,26 @@ export namespace Prisma {
     NOT?: Round_Trip_TicketWhereInput | Round_Trip_TicketWhereInput[]
     TicketID?: StringFilter<"Round_Trip_Ticket"> | string
     TicketID2?: StringFilter<"Round_Trip_Ticket"> | string
+    ticket1?: XOR<TicketScalarRelationFilter, TicketWhereInput>
+    ticket2?: XOR<TicketScalarRelationFilter, TicketWhereInput>
   }
 
   export type Round_Trip_TicketOrderByWithRelationInput = {
     TicketID?: SortOrder
     TicketID2?: SortOrder
+    ticket1?: TicketOrderByWithRelationInput
+    ticket2?: TicketOrderByWithRelationInput
   }
 
   export type Round_Trip_TicketWhereUniqueInput = Prisma.AtLeast<{
     TicketID?: string
+    TicketID2?: string
     AND?: Round_Trip_TicketWhereInput | Round_Trip_TicketWhereInput[]
     OR?: Round_Trip_TicketWhereInput[]
     NOT?: Round_Trip_TicketWhereInput | Round_Trip_TicketWhereInput[]
-    TicketID2?: StringFilter<"Round_Trip_Ticket"> | string
-  }, "TicketID">
+    ticket1?: XOR<TicketScalarRelationFilter, TicketWhereInput>
+    ticket2?: XOR<TicketScalarRelationFilter, TicketWhereInput>
+  }, "TicketID" | "TicketID2">
 
   export type Round_Trip_TicketOrderByWithAggregationInput = {
     TicketID?: SortOrder
@@ -26820,31 +30997,37 @@ export namespace Prisma {
     AND?: PurchaseWhereInput | PurchaseWhereInput[]
     OR?: PurchaseWhereInput[]
     NOT?: PurchaseWhereInput | PurchaseWhereInput[]
-    PurchaseID?: StringFilter<"Purchase"> | string
     TicketID?: StringFilter<"Purchase"> | string
     PaymentID?: StringFilter<"Purchase"> | string
     UserAccountID?: StringFilter<"Purchase"> | string
+    ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>
+    payment?: XOR<PaymentScalarRelationFilter, PaymentWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type PurchaseOrderByWithRelationInput = {
-    PurchaseID?: SortOrder
     TicketID?: SortOrder
     PaymentID?: SortOrder
     UserAccountID?: SortOrder
+    ticket?: TicketOrderByWithRelationInput
+    payment?: PaymentOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type PurchaseWhereUniqueInput = Prisma.AtLeast<{
-    PurchaseID?: string
+    TicketID?: string
+    PaymentID?: string
+    TicketID_PaymentID?: PurchaseTicketIDPaymentIDCompoundUniqueInput
     AND?: PurchaseWhereInput | PurchaseWhereInput[]
     OR?: PurchaseWhereInput[]
     NOT?: PurchaseWhereInput | PurchaseWhereInput[]
-    TicketID?: StringFilter<"Purchase"> | string
-    PaymentID?: StringFilter<"Purchase"> | string
     UserAccountID?: StringFilter<"Purchase"> | string
-  }, "PurchaseID">
+    ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>
+    payment?: XOR<PaymentScalarRelationFilter, PaymentWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "TicketID_PaymentID" | "TicketID" | "PaymentID">
 
   export type PurchaseOrderByWithAggregationInput = {
-    PurchaseID?: SortOrder
     TicketID?: SortOrder
     PaymentID?: SortOrder
     UserAccountID?: SortOrder
@@ -26857,7 +31040,6 @@ export namespace Prisma {
     AND?: PurchaseScalarWhereWithAggregatesInput | PurchaseScalarWhereWithAggregatesInput[]
     OR?: PurchaseScalarWhereWithAggregatesInput[]
     NOT?: PurchaseScalarWhereWithAggregatesInput | PurchaseScalarWhereWithAggregatesInput[]
-    PurchaseID?: StringWithAggregatesFilter<"Purchase"> | string
     TicketID?: StringWithAggregatesFilter<"Purchase"> | string
     PaymentID?: StringWithAggregatesFilter<"Purchase"> | string
     UserAccountID?: StringWithAggregatesFilter<"Purchase"> | string
@@ -26869,19 +31051,19 @@ export namespace Prisma {
     NOT?: PaymentWhereInput | PaymentWhereInput[]
     PaymentID?: StringFilter<"Payment"> | string
     PaymentDateTime?: DateTimeFilter<"Payment"> | Date | string
-    Timestamp?: DateTimeFilter<"Payment"> | Date | string
     PaymentMethod?: StringFilter<"Payment"> | string
     TransactionStatus?: StringFilter<"Payment"> | string
     Amount?: FloatFilter<"Payment"> | number
+    purchase?: XOR<PurchaseNullableScalarRelationFilter, PurchaseWhereInput> | null
   }
 
   export type PaymentOrderByWithRelationInput = {
     PaymentID?: SortOrder
     PaymentDateTime?: SortOrder
-    Timestamp?: SortOrder
     PaymentMethod?: SortOrder
     TransactionStatus?: SortOrder
     Amount?: SortOrder
+    purchase?: PurchaseOrderByWithRelationInput
   }
 
   export type PaymentWhereUniqueInput = Prisma.AtLeast<{
@@ -26890,16 +31072,15 @@ export namespace Prisma {
     OR?: PaymentWhereInput[]
     NOT?: PaymentWhereInput | PaymentWhereInput[]
     PaymentDateTime?: DateTimeFilter<"Payment"> | Date | string
-    Timestamp?: DateTimeFilter<"Payment"> | Date | string
     PaymentMethod?: StringFilter<"Payment"> | string
     TransactionStatus?: StringFilter<"Payment"> | string
     Amount?: FloatFilter<"Payment"> | number
+    purchase?: XOR<PurchaseNullableScalarRelationFilter, PurchaseWhereInput> | null
   }, "PaymentID">
 
   export type PaymentOrderByWithAggregationInput = {
     PaymentID?: SortOrder
     PaymentDateTime?: SortOrder
-    Timestamp?: SortOrder
     PaymentMethod?: SortOrder
     TransactionStatus?: SortOrder
     Amount?: SortOrder
@@ -26916,7 +31097,6 @@ export namespace Prisma {
     NOT?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
     PaymentID?: StringWithAggregatesFilter<"Payment"> | string
     PaymentDateTime?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
-    Timestamp?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
     PaymentMethod?: StringWithAggregatesFilter<"Payment"> | string
     TransactionStatus?: StringWithAggregatesFilter<"Payment"> | string
     Amount?: FloatWithAggregatesFilter<"Payment"> | number
@@ -26928,20 +31108,24 @@ export namespace Prisma {
     NOT?: Airline_Tel_NoWhereInput | Airline_Tel_NoWhereInput[]
     TelNo?: StringFilter<"Airline_Tel_No"> | string
     AirlineName?: StringFilter<"Airline_Tel_No"> | string
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
   }
 
   export type Airline_Tel_NoOrderByWithRelationInput = {
     TelNo?: SortOrder
     AirlineName?: SortOrder
+    airline?: AirlineOrderByWithRelationInput
   }
 
   export type Airline_Tel_NoWhereUniqueInput = Prisma.AtLeast<{
-    TelNo?: string
+    TelNo_AirlineName?: Airline_Tel_NoTelNoAirlineNameCompoundUniqueInput
     AND?: Airline_Tel_NoWhereInput | Airline_Tel_NoWhereInput[]
     OR?: Airline_Tel_NoWhereInput[]
     NOT?: Airline_Tel_NoWhereInput | Airline_Tel_NoWhereInput[]
+    TelNo?: StringFilter<"Airline_Tel_No"> | string
     AirlineName?: StringFilter<"Airline_Tel_No"> | string
-  }, "TelNo">
+    airline?: XOR<AirlineScalarRelationFilter, AirlineWhereInput>
+  }, "TelNo_AirlineName">
 
   export type Airline_Tel_NoOrderByWithAggregationInput = {
     TelNo?: SortOrder
@@ -26959,11 +31143,89 @@ export namespace Prisma {
     AirlineName?: StringWithAggregatesFilter<"Airline_Tel_No"> | string
   }
 
+  export type SessionWhereInput = {
+    AND?: SessionWhereInput | SessionWhereInput[]
+    OR?: SessionWhereInput[]
+    NOT?: SessionWhereInput | SessionWhereInput[]
+    SessionID?: StringFilter<"Session"> | string
+    UserAccountID?: StringFilter<"Session"> | string
+    TokenHash?: StringFilter<"Session"> | string
+    CreatedAt?: DateTimeFilter<"Session"> | Date | string
+    LastSeenAt?: DateTimeFilter<"Session"> | Date | string
+    IdleExpiresAt?: DateTimeFilter<"Session"> | Date | string
+    AbsoluteExpiresAt?: DateTimeFilter<"Session"> | Date | string
+    RevokedAt?: DateTimeNullableFilter<"Session"> | Date | string | null
+    RevokeReason?: StringNullableFilter<"Session"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SessionOrderByWithRelationInput = {
+    SessionID?: SortOrder
+    UserAccountID?: SortOrder
+    TokenHash?: SortOrder
+    CreatedAt?: SortOrder
+    LastSeenAt?: SortOrder
+    IdleExpiresAt?: SortOrder
+    AbsoluteExpiresAt?: SortOrder
+    RevokedAt?: SortOrderInput | SortOrder
+    RevokeReason?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type SessionWhereUniqueInput = Prisma.AtLeast<{
+    SessionID?: string
+    AND?: SessionWhereInput | SessionWhereInput[]
+    OR?: SessionWhereInput[]
+    NOT?: SessionWhereInput | SessionWhereInput[]
+    UserAccountID?: StringFilter<"Session"> | string
+    TokenHash?: StringFilter<"Session"> | string
+    CreatedAt?: DateTimeFilter<"Session"> | Date | string
+    LastSeenAt?: DateTimeFilter<"Session"> | Date | string
+    IdleExpiresAt?: DateTimeFilter<"Session"> | Date | string
+    AbsoluteExpiresAt?: DateTimeFilter<"Session"> | Date | string
+    RevokedAt?: DateTimeNullableFilter<"Session"> | Date | string | null
+    RevokeReason?: StringNullableFilter<"Session"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "SessionID">
+
+  export type SessionOrderByWithAggregationInput = {
+    SessionID?: SortOrder
+    UserAccountID?: SortOrder
+    TokenHash?: SortOrder
+    CreatedAt?: SortOrder
+    LastSeenAt?: SortOrder
+    IdleExpiresAt?: SortOrder
+    AbsoluteExpiresAt?: SortOrder
+    RevokedAt?: SortOrderInput | SortOrder
+    RevokeReason?: SortOrderInput | SortOrder
+    _count?: SessionCountOrderByAggregateInput
+    _max?: SessionMaxOrderByAggregateInput
+    _min?: SessionMinOrderByAggregateInput
+  }
+
+  export type SessionScalarWhereWithAggregatesInput = {
+    AND?: SessionScalarWhereWithAggregatesInput | SessionScalarWhereWithAggregatesInput[]
+    OR?: SessionScalarWhereWithAggregatesInput[]
+    NOT?: SessionScalarWhereWithAggregatesInput | SessionScalarWhereWithAggregatesInput[]
+    SessionID?: StringWithAggregatesFilter<"Session"> | string
+    UserAccountID?: StringWithAggregatesFilter<"Session"> | string
+    TokenHash?: StringWithAggregatesFilter<"Session"> | string
+    CreatedAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    LastSeenAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    IdleExpiresAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    AbsoluteExpiresAt?: DateTimeWithAggregatesFilter<"Session"> | Date | string
+    RevokedAt?: DateTimeNullableWithAggregatesFilter<"Session"> | Date | string | null
+    RevokeReason?: StringNullableWithAggregatesFilter<"Session"> | string | null
+  }
+
   export type AirportCreateInput = {
     AirportID: string
     AirportName: string
     City: string
     Country: string
+    operates?: OperateCreateNestedManyWithoutAirportInput
+    departureFlights?: FlightCreateNestedManyWithoutDepartureAirportInput
+    arrivalFlights?: FlightCreateNestedManyWithoutArrivalAirportInput
   }
 
   export type AirportUncheckedCreateInput = {
@@ -26971,6 +31233,9 @@ export namespace Prisma {
     AirportName: string
     City: string
     Country: string
+    operates?: OperateUncheckedCreateNestedManyWithoutAirportInput
+    departureFlights?: FlightUncheckedCreateNestedManyWithoutDepartureAirportInput
+    arrivalFlights?: FlightUncheckedCreateNestedManyWithoutArrivalAirportInput
   }
 
   export type AirportUpdateInput = {
@@ -26978,6 +31243,9 @@ export namespace Prisma {
     AirportName?: StringFieldUpdateOperationsInput | string
     City?: StringFieldUpdateOperationsInput | string
     Country?: StringFieldUpdateOperationsInput | string
+    operates?: OperateUpdateManyWithoutAirportNestedInput
+    departureFlights?: FlightUpdateManyWithoutDepartureAirportNestedInput
+    arrivalFlights?: FlightUpdateManyWithoutArrivalAirportNestedInput
   }
 
   export type AirportUncheckedUpdateInput = {
@@ -26985,6 +31253,9 @@ export namespace Prisma {
     AirportName?: StringFieldUpdateOperationsInput | string
     City?: StringFieldUpdateOperationsInput | string
     Country?: StringFieldUpdateOperationsInput | string
+    operates?: OperateUncheckedUpdateManyWithoutAirportNestedInput
+    departureFlights?: FlightUncheckedUpdateManyWithoutDepartureAirportNestedInput
+    arrivalFlights?: FlightUncheckedUpdateManyWithoutArrivalAirportNestedInput
   }
 
   export type AirportCreateManyInput = {
@@ -27010,34 +31281,63 @@ export namespace Prisma {
 
   export type AirlineCreateInput = {
     AirlineName: string
+    AirlineCaption: string
     Website?: string | null
     AmountOfAircraft: number
     Logo?: string | null
+    operates?: OperateCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftCreateNestedManyWithoutAirlineInput
+    flights?: FlightCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageCreateNestedManyWithoutAirlineInput
+    contacts?: ContactCreateNestedManyWithoutAirlineInput
   }
 
   export type AirlineUncheckedCreateInput = {
     AirlineName: string
+    AirlineCaption: string
     Website?: string | null
     AmountOfAircraft: number
     Logo?: string | null
+    operates?: OperateUncheckedCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftUncheckedCreateNestedManyWithoutAirlineInput
+    flights?: FlightUncheckedCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoUncheckedCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageUncheckedCreateNestedManyWithoutAirlineInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutAirlineInput
   }
 
   export type AirlineUpdateInput = {
     AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
     Website?: NullableStringFieldUpdateOperationsInput | string | null
     AmountOfAircraft?: IntFieldUpdateOperationsInput | number
     Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUpdateManyWithoutAirlineNestedInput
   }
 
   export type AirlineUncheckedUpdateInput = {
     AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
     Website?: NullableStringFieldUpdateOperationsInput | string | null
     AmountOfAircraft?: IntFieldUpdateOperationsInput | number
     Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUncheckedUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUncheckedUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUncheckedUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUncheckedUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUncheckedUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutAirlineNestedInput
   }
 
   export type AirlineCreateManyInput = {
     AirlineName: string
+    AirlineCaption: string
     Website?: string | null
     AmountOfAircraft: number
     Logo?: string | null
@@ -27045,6 +31345,7 @@ export namespace Prisma {
 
   export type AirlineUpdateManyMutationInput = {
     AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
     Website?: NullableStringFieldUpdateOperationsInput | string | null
     AmountOfAircraft?: IntFieldUpdateOperationsInput | number
     Logo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27052,6 +31353,7 @@ export namespace Prisma {
 
   export type AirlineUncheckedUpdateManyInput = {
     AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
     Website?: NullableStringFieldUpdateOperationsInput | string | null
     AmountOfAircraft?: IntFieldUpdateOperationsInput | number
     Logo?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27059,9 +31361,12 @@ export namespace Prisma {
 
   export type AircraftCreateInput = {
     AircraftRegNo: string
-    AirlineName: string
     SeatCapacity: number
     ModelName: string
+    airline: AirlineCreateNestedOneWithoutAircraftsInput
+    seats?: SeatCreateNestedManyWithoutAircraftInput
+    flights?: FlightCreateNestedManyWithoutAircraftInput
+    cabins?: CabinClassCreateNestedManyWithoutAircraftInput
   }
 
   export type AircraftUncheckedCreateInput = {
@@ -27069,13 +31374,19 @@ export namespace Prisma {
     AirlineName: string
     SeatCapacity: number
     ModelName: string
+    seats?: SeatUncheckedCreateNestedManyWithoutAircraftInput
+    flights?: FlightUncheckedCreateNestedManyWithoutAircraftInput
+    cabins?: CabinClassUncheckedCreateNestedManyWithoutAircraftInput
   }
 
   export type AircraftUpdateInput = {
     AircraftRegNo?: StringFieldUpdateOperationsInput | string
-    AirlineName?: StringFieldUpdateOperationsInput | string
     SeatCapacity?: IntFieldUpdateOperationsInput | number
     ModelName?: StringFieldUpdateOperationsInput | string
+    airline?: AirlineUpdateOneRequiredWithoutAircraftsNestedInput
+    seats?: SeatUpdateManyWithoutAircraftNestedInput
+    flights?: FlightUpdateManyWithoutAircraftNestedInput
+    cabins?: CabinClassUpdateManyWithoutAircraftNestedInput
   }
 
   export type AircraftUncheckedUpdateInput = {
@@ -27083,6 +31394,9 @@ export namespace Prisma {
     AirlineName?: StringFieldUpdateOperationsInput | string
     SeatCapacity?: IntFieldUpdateOperationsInput | number
     ModelName?: StringFieldUpdateOperationsInput | string
+    seats?: SeatUncheckedUpdateManyWithoutAircraftNestedInput
+    flights?: FlightUncheckedUpdateManyWithoutAircraftNestedInput
+    cabins?: CabinClassUncheckedUpdateManyWithoutAircraftNestedInput
   }
 
   export type AircraftCreateManyInput = {
@@ -27094,7 +31408,6 @@ export namespace Prisma {
 
   export type AircraftUpdateManyMutationInput = {
     AircraftRegNo?: StringFieldUpdateOperationsInput | string
-    AirlineName?: StringFieldUpdateOperationsInput | string
     SeatCapacity?: IntFieldUpdateOperationsInput | number
     ModelName?: StringFieldUpdateOperationsInput | string
   }
@@ -27109,10 +31422,12 @@ export namespace Prisma {
   export type FlightCreateInput = {
     FlightNo: string
     Schedule: Date | string
-    ArrivalAirportID: string
-    DepartureAirportID: string
-    AirlineName: string
-    AircraftRegNo: string
+    arrivalAirport: AirportCreateNestedOneWithoutArrivalFlightsInput
+    departureAirport: AirportCreateNestedOneWithoutDepartureFlightsInput
+    airline: AirlineCreateNestedOneWithoutFlightsInput
+    aircraft: AircraftCreateNestedOneWithoutFlightsInput
+    passengers?: Assigned_ToCreateNestedManyWithoutFlightInput
+    tickets?: TicketCreateNestedManyWithoutFlightInput
   }
 
   export type FlightUncheckedCreateInput = {
@@ -27122,15 +31437,19 @@ export namespace Prisma {
     DepartureAirportID: string
     AirlineName: string
     AircraftRegNo: string
+    passengers?: Assigned_ToUncheckedCreateNestedManyWithoutFlightInput
+    tickets?: TicketUncheckedCreateNestedManyWithoutFlightInput
   }
 
   export type FlightUpdateInput = {
     FlightNo?: StringFieldUpdateOperationsInput | string
     Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
-    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
-    DepartureAirportID?: StringFieldUpdateOperationsInput | string
-    AirlineName?: StringFieldUpdateOperationsInput | string
-    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: AirportUpdateOneRequiredWithoutArrivalFlightsNestedInput
+    departureAirport?: AirportUpdateOneRequiredWithoutDepartureFlightsNestedInput
+    airline?: AirlineUpdateOneRequiredWithoutFlightsNestedInput
+    aircraft?: AircraftUpdateOneRequiredWithoutFlightsNestedInput
+    passengers?: Assigned_ToUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUpdateManyWithoutFlightNestedInput
   }
 
   export type FlightUncheckedUpdateInput = {
@@ -27140,6 +31459,8 @@ export namespace Prisma {
     DepartureAirportID?: StringFieldUpdateOperationsInput | string
     AirlineName?: StringFieldUpdateOperationsInput | string
     AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    passengers?: Assigned_ToUncheckedUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUncheckedUpdateManyWithoutFlightNestedInput
   }
 
   export type FlightCreateManyInput = {
@@ -27154,10 +31475,6 @@ export namespace Prisma {
   export type FlightUpdateManyMutationInput = {
     FlightNo?: StringFieldUpdateOperationsInput | string
     Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
-    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
-    DepartureAirportID?: StringFieldUpdateOperationsInput | string
-    AirlineName?: StringFieldUpdateOperationsInput | string
-    AircraftRegNo?: StringFieldUpdateOperationsInput | string
   }
 
   export type FlightUncheckedUpdateManyInput = {
@@ -27178,12 +31495,15 @@ export namespace Prisma {
     Gender: string
     DateOfBirth: Date | string
     Nationality: string
-    BaggageChecked: boolean
-    BaggageClaimNo?: string | null
-    SeatNo: string
-    AircraftRegNo: string
-    FlightNo: string
-    Schedule: Date | string
+    BaggageChecked: number
+    BaggageCabin: number
+    flight: FlightCreateNestedOneWithoutTicketsInput
+    seat: SeatCreateNestedOneWithoutTicketsInput
+    purchase?: PurchaseCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketCreateNestedOneWithoutTicket2Input
   }
 
   export type TicketUncheckedCreateInput = {
@@ -27195,12 +31515,17 @@ export namespace Prisma {
     Gender: string
     DateOfBirth: Date | string
     Nationality: string
-    BaggageChecked: boolean
-    BaggageClaimNo?: string | null
+    BaggageChecked: number
+    BaggageCabin: number
     SeatNo: string
     AircraftRegNo: string
     FlightNo: string
     Schedule: Date | string
+    purchase?: PurchaseUncheckedCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketUncheckedCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketUncheckedCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket2Input
   }
 
   export type TicketUpdateInput = {
@@ -27212,12 +31537,15 @@ export namespace Prisma {
     Gender?: StringFieldUpdateOperationsInput | string
     DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     Nationality?: StringFieldUpdateOperationsInput | string
-    BaggageChecked?: BoolFieldUpdateOperationsInput | boolean
-    BaggageClaimNo?: NullableStringFieldUpdateOperationsInput | string | null
-    SeatNo?: StringFieldUpdateOperationsInput | string
-    AircraftRegNo?: StringFieldUpdateOperationsInput | string
-    FlightNo?: StringFieldUpdateOperationsInput | string
-    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    flight?: FlightUpdateOneRequiredWithoutTicketsNestedInput
+    seat?: SeatUpdateOneRequiredWithoutTicketsNestedInput
+    purchase?: PurchaseUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUpdateOneWithoutTicket2NestedInput
   }
 
   export type TicketUncheckedUpdateInput = {
@@ -27229,12 +31557,17 @@ export namespace Prisma {
     Gender?: StringFieldUpdateOperationsInput | string
     DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     Nationality?: StringFieldUpdateOperationsInput | string
-    BaggageChecked?: BoolFieldUpdateOperationsInput | boolean
-    BaggageClaimNo?: NullableStringFieldUpdateOperationsInput | string | null
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
     SeatNo?: StringFieldUpdateOperationsInput | string
     AircraftRegNo?: StringFieldUpdateOperationsInput | string
     FlightNo?: StringFieldUpdateOperationsInput | string
     Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchase?: PurchaseUncheckedUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket2NestedInput
   }
 
   export type TicketCreateManyInput = {
@@ -27246,8 +31579,8 @@ export namespace Prisma {
     Gender: string
     DateOfBirth: Date | string
     Nationality: string
-    BaggageChecked: boolean
-    BaggageClaimNo?: string | null
+    BaggageChecked: number
+    BaggageCabin: number
     SeatNo: string
     AircraftRegNo: string
     FlightNo: string
@@ -27263,12 +31596,8 @@ export namespace Prisma {
     Gender?: StringFieldUpdateOperationsInput | string
     DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     Nationality?: StringFieldUpdateOperationsInput | string
-    BaggageChecked?: BoolFieldUpdateOperationsInput | boolean
-    BaggageClaimNo?: NullableStringFieldUpdateOperationsInput | string | null
-    SeatNo?: StringFieldUpdateOperationsInput | string
-    AircraftRegNo?: StringFieldUpdateOperationsInput | string
-    FlightNo?: StringFieldUpdateOperationsInput | string
-    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
   }
 
   export type TicketUncheckedUpdateManyInput = {
@@ -27280,8 +31609,8 @@ export namespace Prisma {
     Gender?: StringFieldUpdateOperationsInput | string
     DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
     Nationality?: StringFieldUpdateOperationsInput | string
-    BaggageChecked?: BoolFieldUpdateOperationsInput | boolean
-    BaggageClaimNo?: NullableStringFieldUpdateOperationsInput | string | null
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
     SeatNo?: StringFieldUpdateOperationsInput | string
     AircraftRegNo?: StringFieldUpdateOperationsInput | string
     FlightNo?: StringFieldUpdateOperationsInput | string
@@ -27289,8 +31618,8 @@ export namespace Prisma {
   }
 
   export type OperateCreateInput = {
-    AirportID: string
-    AirlineName: string
+    airport: AirportCreateNestedOneWithoutOperatesInput
+    airline: AirlineCreateNestedOneWithoutOperatesInput
   }
 
   export type OperateUncheckedCreateInput = {
@@ -27299,8 +31628,8 @@ export namespace Prisma {
   }
 
   export type OperateUpdateInput = {
-    AirportID?: StringFieldUpdateOperationsInput | string
-    AirlineName?: StringFieldUpdateOperationsInput | string
+    airport?: AirportUpdateOneRequiredWithoutOperatesNestedInput
+    airline?: AirlineUpdateOneRequiredWithoutOperatesNestedInput
   }
 
   export type OperateUncheckedUpdateInput = {
@@ -27314,8 +31643,7 @@ export namespace Prisma {
   }
 
   export type OperateUpdateManyMutationInput = {
-    AirportID?: StringFieldUpdateOperationsInput | string
-    AirlineName?: StringFieldUpdateOperationsInput | string
+
   }
 
   export type OperateUncheckedUpdateManyInput = {
@@ -27324,267 +31652,295 @@ export namespace Prisma {
   }
 
   export type Assigned_ToCreateInput = {
-    FlightNo: string
-    UserAccountID: string
+    flight: FlightCreateNestedOneWithoutPassengersInput
+    user: UserCreateNestedOneWithoutAssignedFlightsInput
   }
 
   export type Assigned_ToUncheckedCreateInput = {
     FlightNo: string
+    Schedule: Date | string
     UserAccountID: string
   }
 
   export type Assigned_ToUpdateInput = {
-    FlightNo?: StringFieldUpdateOperationsInput | string
-    UserAccountID?: StringFieldUpdateOperationsInput | string
+    flight?: FlightUpdateOneRequiredWithoutPassengersNestedInput
+    user?: UserUpdateOneRequiredWithoutAssignedFlightsNestedInput
   }
 
   export type Assigned_ToUncheckedUpdateInput = {
     FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     UserAccountID?: StringFieldUpdateOperationsInput | string
   }
 
   export type Assigned_ToCreateManyInput = {
     FlightNo: string
+    Schedule: Date | string
     UserAccountID: string
   }
 
   export type Assigned_ToUpdateManyMutationInput = {
-    FlightNo?: StringFieldUpdateOperationsInput | string
-    UserAccountID?: StringFieldUpdateOperationsInput | string
+
   }
 
   export type Assigned_ToUncheckedUpdateManyInput = {
     FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
     UserAccountID?: StringFieldUpdateOperationsInput | string
   }
 
   export type ContactCreateInput = {
-    AdminAccountID: string
-    AirlineMessageID: string
     ContactStatus: string
+    admin: AdminCreateNestedOneWithoutContactsInput
+    airline: AirlineCreateNestedOneWithoutContactsInput
   }
 
   export type ContactUncheckedCreateInput = {
     AdminAccountID: string
-    AirlineMessageID: string
+    AirlineName: string
     ContactStatus: string
   }
 
   export type ContactUpdateInput = {
-    AdminAccountID?: StringFieldUpdateOperationsInput | string
-    AirlineMessageID?: StringFieldUpdateOperationsInput | string
     ContactStatus?: StringFieldUpdateOperationsInput | string
+    admin?: AdminUpdateOneRequiredWithoutContactsNestedInput
+    airline?: AirlineUpdateOneRequiredWithoutContactsNestedInput
   }
 
   export type ContactUncheckedUpdateInput = {
     AdminAccountID?: StringFieldUpdateOperationsInput | string
-    AirlineMessageID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
     ContactStatus?: StringFieldUpdateOperationsInput | string
   }
 
   export type ContactCreateManyInput = {
     AdminAccountID: string
-    AirlineMessageID: string
+    AirlineName: string
     ContactStatus: string
   }
 
   export type ContactUpdateManyMutationInput = {
-    AdminAccountID?: StringFieldUpdateOperationsInput | string
-    AirlineMessageID?: StringFieldUpdateOperationsInput | string
     ContactStatus?: StringFieldUpdateOperationsInput | string
   }
 
   export type ContactUncheckedUpdateManyInput = {
     AdminAccountID?: StringFieldUpdateOperationsInput | string
-    AirlineMessageID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
     ContactStatus?: StringFieldUpdateOperationsInput | string
   }
 
   export type Report_ToCreateInput = {
-    UserAccountID: string
-    ReportID: string
+    ReportStatus: string
+    admin: AdminCreateNestedOneWithoutInvolvedInReportsInput
+    user: UserCreateNestedOneWithoutInvolvedInReportsInput
+    Reports?: ReportCreateNestedManyWithoutCreatorInput
   }
 
   export type Report_ToUncheckedCreateInput = {
     UserAccountID: string
-    ReportID: string
+    AdminAccountID: string
+    ReportStatus: string
+    Reports?: ReportUncheckedCreateNestedManyWithoutCreatorInput
   }
 
   export type Report_ToUpdateInput = {
-    UserAccountID?: StringFieldUpdateOperationsInput | string
-    ReportID?: StringFieldUpdateOperationsInput | string
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+    admin?: AdminUpdateOneRequiredWithoutInvolvedInReportsNestedInput
+    user?: UserUpdateOneRequiredWithoutInvolvedInReportsNestedInput
+    Reports?: ReportUpdateManyWithoutCreatorNestedInput
   }
 
   export type Report_ToUncheckedUpdateInput = {
     UserAccountID?: StringFieldUpdateOperationsInput | string
-    ReportID?: StringFieldUpdateOperationsInput | string
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+    Reports?: ReportUncheckedUpdateManyWithoutCreatorNestedInput
   }
 
   export type Report_ToCreateManyInput = {
     UserAccountID: string
-    ReportID: string
+    AdminAccountID: string
+    ReportStatus: string
   }
 
   export type Report_ToUpdateManyMutationInput = {
-    UserAccountID?: StringFieldUpdateOperationsInput | string
-    ReportID?: StringFieldUpdateOperationsInput | string
+    ReportStatus?: StringFieldUpdateOperationsInput | string
   }
 
   export type Report_ToUncheckedUpdateManyInput = {
     UserAccountID?: StringFieldUpdateOperationsInput | string
-    ReportID?: StringFieldUpdateOperationsInput | string
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    ReportStatus?: StringFieldUpdateOperationsInput | string
   }
 
   export type CabinClassCreateInput = {
     Class: string
+    StandardPrice: number
+    aircraft: AircraftCreateNestedOneWithoutCabinsInput
   }
 
   export type CabinClassUncheckedCreateInput = {
+    AircraftRegNo: string
     Class: string
+    StandardPrice: number
   }
 
   export type CabinClassUpdateInput = {
     Class?: StringFieldUpdateOperationsInput | string
+    StandardPrice?: FloatFieldUpdateOperationsInput | number
+    aircraft?: AircraftUpdateOneRequiredWithoutCabinsNestedInput
   }
 
   export type CabinClassUncheckedUpdateInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
     Class?: StringFieldUpdateOperationsInput | string
+    StandardPrice?: FloatFieldUpdateOperationsInput | number
   }
 
   export type CabinClassCreateManyInput = {
+    AircraftRegNo: string
     Class: string
+    StandardPrice: number
   }
 
   export type CabinClassUpdateManyMutationInput = {
     Class?: StringFieldUpdateOperationsInput | string
+    StandardPrice?: FloatFieldUpdateOperationsInput | number
   }
 
   export type CabinClassUncheckedUpdateManyInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
     Class?: StringFieldUpdateOperationsInput | string
+    StandardPrice?: FloatFieldUpdateOperationsInput | number
   }
 
   export type SeatCreateInput = {
     SeatNo: string
     SeatType: string
-    AircraftRegNo: string
+    aircraft: AircraftCreateNestedOneWithoutSeatsInput
+    tickets?: TicketCreateNestedManyWithoutSeatInput
   }
 
   export type SeatUncheckedCreateInput = {
+    AircraftRegNo: string
     SeatNo: string
     SeatType: string
-    AircraftRegNo: string
+    tickets?: TicketUncheckedCreateNestedManyWithoutSeatInput
   }
 
   export type SeatUpdateInput = {
     SeatNo?: StringFieldUpdateOperationsInput | string
     SeatType?: StringFieldUpdateOperationsInput | string
-    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    aircraft?: AircraftUpdateOneRequiredWithoutSeatsNestedInput
+    tickets?: TicketUpdateManyWithoutSeatNestedInput
   }
 
   export type SeatUncheckedUpdateInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
     SeatNo?: StringFieldUpdateOperationsInput | string
     SeatType?: StringFieldUpdateOperationsInput | string
-    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    tickets?: TicketUncheckedUpdateManyWithoutSeatNestedInput
   }
 
   export type SeatCreateManyInput = {
+    AircraftRegNo: string
     SeatNo: string
     SeatType: string
-    AircraftRegNo: string
   }
 
   export type SeatUpdateManyMutationInput = {
     SeatNo?: StringFieldUpdateOperationsInput | string
     SeatType?: StringFieldUpdateOperationsInput | string
-    AircraftRegNo?: StringFieldUpdateOperationsInput | string
   }
 
   export type SeatUncheckedUpdateManyInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
     SeatNo?: StringFieldUpdateOperationsInput | string
     SeatType?: StringFieldUpdateOperationsInput | string
-    AircraftRegNo?: StringFieldUpdateOperationsInput | string
   }
 
   export type AdminCreateInput = {
-    UserAccountID: string
-    AdminID: string
-    AdminMessage: string
+    IPAddress?: string | null
+    account: AccountCreateNestedOneWithoutAdminInput
+    sentAirlineMessages?: Airline_MessageCreateNestedManyWithoutAdminInput
+    contacts?: ContactCreateNestedManyWithoutAdminInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUncheckedCreateInput = {
-    UserAccountID: string
-    AdminID: string
-    AdminMessage: string
+    AdminAccountID: string
+    IPAddress?: string | null
+    sentAirlineMessages?: Airline_MessageUncheckedCreateNestedManyWithoutAdminInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutAdminInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUpdateInput = {
-    UserAccountID?: StringFieldUpdateOperationsInput | string
-    AdminID?: StringFieldUpdateOperationsInput | string
-    AdminMessage?: StringFieldUpdateOperationsInput | string
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    account?: AccountUpdateOneRequiredWithoutAdminNestedInput
+    sentAirlineMessages?: Airline_MessageUpdateManyWithoutAdminNestedInput
+    contacts?: ContactUpdateManyWithoutAdminNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutAdminNestedInput
   }
 
   export type AdminUncheckedUpdateInput = {
-    UserAccountID?: StringFieldUpdateOperationsInput | string
-    AdminID?: StringFieldUpdateOperationsInput | string
-    AdminMessage?: StringFieldUpdateOperationsInput | string
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAirlineMessages?: Airline_MessageUncheckedUpdateManyWithoutAdminNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutAdminNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type AdminCreateManyInput = {
-    UserAccountID: string
-    AdminID: string
-    AdminMessage: string
+    AdminAccountID: string
+    IPAddress?: string | null
   }
 
   export type AdminUpdateManyMutationInput = {
-    UserAccountID?: StringFieldUpdateOperationsInput | string
-    AdminID?: StringFieldUpdateOperationsInput | string
-    AdminMessage?: StringFieldUpdateOperationsInput | string
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AdminUncheckedUpdateManyInput = {
-    UserAccountID?: StringFieldUpdateOperationsInput | string
-    AdminID?: StringFieldUpdateOperationsInput | string
-    AdminMessage?: StringFieldUpdateOperationsInput | string
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type Airline_MessageCreateInput = {
-    AirlineMessageID: string
-    AdminAccountID: string
     MessageText: string
+    admin: AdminCreateNestedOneWithoutSentAirlineMessagesInput
+    airline: AirlineCreateNestedOneWithoutMessagesInput
   }
 
   export type Airline_MessageUncheckedCreateInput = {
-    AirlineMessageID: string
+    AirlineName: string
     AdminAccountID: string
     MessageText: string
   }
 
   export type Airline_MessageUpdateInput = {
-    AirlineMessageID?: StringFieldUpdateOperationsInput | string
-    AdminAccountID?: StringFieldUpdateOperationsInput | string
     MessageText?: StringFieldUpdateOperationsInput | string
+    admin?: AdminUpdateOneRequiredWithoutSentAirlineMessagesNestedInput
+    airline?: AirlineUpdateOneRequiredWithoutMessagesNestedInput
   }
 
   export type Airline_MessageUncheckedUpdateInput = {
-    AirlineMessageID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
     AdminAccountID?: StringFieldUpdateOperationsInput | string
     MessageText?: StringFieldUpdateOperationsInput | string
   }
 
   export type Airline_MessageCreateManyInput = {
-    AirlineMessageID: string
+    AirlineName: string
     AdminAccountID: string
     MessageText: string
   }
 
   export type Airline_MessageUpdateManyMutationInput = {
-    AirlineMessageID?: StringFieldUpdateOperationsInput | string
-    AdminAccountID?: StringFieldUpdateOperationsInput | string
     MessageText?: StringFieldUpdateOperationsInput | string
   }
 
   export type Airline_MessageUncheckedUpdateManyInput = {
-    AirlineMessageID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
     AdminAccountID?: StringFieldUpdateOperationsInput | string
     MessageText?: StringFieldUpdateOperationsInput | string
   }
@@ -27594,6 +31950,8 @@ export namespace Prisma {
     Password: string
     FirstName: string
     LastName: string
+    user?: UserCreateNestedOneWithoutAccountInput
+    admin?: AdminCreateNestedOneWithoutAccountInput
   }
 
   export type AccountUncheckedCreateInput = {
@@ -27601,6 +31959,8 @@ export namespace Prisma {
     Password: string
     FirstName: string
     LastName: string
+    user?: UserUncheckedCreateNestedOneWithoutAccountInput
+    admin?: AdminUncheckedCreateNestedOneWithoutAccountInput
   }
 
   export type AccountUpdateInput = {
@@ -27608,6 +31968,8 @@ export namespace Prisma {
     Password?: StringFieldUpdateOperationsInput | string
     FirstName?: StringFieldUpdateOperationsInput | string
     LastName?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneWithoutAccountNestedInput
+    admin?: AdminUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateInput = {
@@ -27615,6 +31977,8 @@ export namespace Prisma {
     Password?: StringFieldUpdateOperationsInput | string
     FirstName?: StringFieldUpdateOperationsInput | string
     LastName?: StringFieldUpdateOperationsInput | string
+    user?: UserUncheckedUpdateOneWithoutAccountNestedInput
+    admin?: AdminUncheckedUpdateOneWithoutAccountNestedInput
   }
 
   export type AccountCreateManyInput = {
@@ -27639,80 +32003,91 @@ export namespace Prisma {
   }
 
   export type UserCreateInput = {
-    UserAccountID: string
     Email: string
-    IPAddress?: string | null
+    account: AccountCreateNestedOneWithoutUserInput
+    telNos?: User_Tel_NoCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToCreateNestedManyWithoutUserInput
+    purchases?: PurchaseCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
     UserAccountID: string
     Email: string
-    IPAddress?: string | null
+    telNos?: User_Tel_NoUncheckedCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PurchaseUncheckedCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
-    UserAccountID?: StringFieldUpdateOperationsInput | string
     Email?: StringFieldUpdateOperationsInput | string
-    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    account?: AccountUpdateOneRequiredWithoutUserNestedInput
+    telNos?: User_Tel_NoUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     UserAccountID?: StringFieldUpdateOperationsInput | string
     Email?: StringFieldUpdateOperationsInput | string
-    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    telNos?: User_Tel_NoUncheckedUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUncheckedUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
     UserAccountID: string
     Email: string
-    IPAddress?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
-    UserAccountID?: StringFieldUpdateOperationsInput | string
     Email?: StringFieldUpdateOperationsInput | string
-    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
     UserAccountID?: StringFieldUpdateOperationsInput | string
     Email?: StringFieldUpdateOperationsInput | string
-    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type User_Tel_NoCreateInput = {
     TelNo: string
-    UserAccountID: string
+    user: UserCreateNestedOneWithoutTelNosInput
   }
 
   export type User_Tel_NoUncheckedCreateInput = {
-    TelNo: string
     UserAccountID: string
+    TelNo: string
   }
 
   export type User_Tel_NoUpdateInput = {
     TelNo?: StringFieldUpdateOperationsInput | string
-    UserAccountID?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutTelNosNestedInput
   }
 
   export type User_Tel_NoUncheckedUpdateInput = {
-    TelNo?: StringFieldUpdateOperationsInput | string
     UserAccountID?: StringFieldUpdateOperationsInput | string
+    TelNo?: StringFieldUpdateOperationsInput | string
   }
 
   export type User_Tel_NoCreateManyInput = {
-    TelNo: string
     UserAccountID: string
+    TelNo: string
   }
 
   export type User_Tel_NoUpdateManyMutationInput = {
     TelNo?: StringFieldUpdateOperationsInput | string
-    UserAccountID?: StringFieldUpdateOperationsInput | string
   }
 
   export type User_Tel_NoUncheckedUpdateManyInput = {
-    TelNo?: StringFieldUpdateOperationsInput | string
     UserAccountID?: StringFieldUpdateOperationsInput | string
+    TelNo?: StringFieldUpdateOperationsInput | string
   }
 
   export type ReportCreateInput = {
@@ -27720,12 +32095,10 @@ export namespace Prisma {
     ReportDescription: string
     BookingID: string
     Attachment?: string | null
-    UserAccountID: string
-    AdminAccountID: string
-    ReportStatus: string
     Email: string
     TelNo: string
     PassengerName: string
+    creator: Report_ToCreateNestedOneWithoutReportsInput
   }
 
   export type ReportUncheckedCreateInput = {
@@ -27735,7 +32108,6 @@ export namespace Prisma {
     Attachment?: string | null
     UserAccountID: string
     AdminAccountID: string
-    ReportStatus: string
     Email: string
     TelNo: string
     PassengerName: string
@@ -27746,12 +32118,10 @@ export namespace Prisma {
     ReportDescription?: StringFieldUpdateOperationsInput | string
     BookingID?: StringFieldUpdateOperationsInput | string
     Attachment?: NullableStringFieldUpdateOperationsInput | string | null
-    UserAccountID?: StringFieldUpdateOperationsInput | string
-    AdminAccountID?: StringFieldUpdateOperationsInput | string
-    ReportStatus?: StringFieldUpdateOperationsInput | string
     Email?: StringFieldUpdateOperationsInput | string
     TelNo?: StringFieldUpdateOperationsInput | string
     PassengerName?: StringFieldUpdateOperationsInput | string
+    creator?: Report_ToUpdateOneRequiredWithoutReportsNestedInput
   }
 
   export type ReportUncheckedUpdateInput = {
@@ -27761,7 +32131,6 @@ export namespace Prisma {
     Attachment?: NullableStringFieldUpdateOperationsInput | string | null
     UserAccountID?: StringFieldUpdateOperationsInput | string
     AdminAccountID?: StringFieldUpdateOperationsInput | string
-    ReportStatus?: StringFieldUpdateOperationsInput | string
     Email?: StringFieldUpdateOperationsInput | string
     TelNo?: StringFieldUpdateOperationsInput | string
     PassengerName?: StringFieldUpdateOperationsInput | string
@@ -27774,7 +32143,6 @@ export namespace Prisma {
     Attachment?: string | null
     UserAccountID: string
     AdminAccountID: string
-    ReportStatus: string
     Email: string
     TelNo: string
     PassengerName: string
@@ -27785,9 +32153,6 @@ export namespace Prisma {
     ReportDescription?: StringFieldUpdateOperationsInput | string
     BookingID?: StringFieldUpdateOperationsInput | string
     Attachment?: NullableStringFieldUpdateOperationsInput | string | null
-    UserAccountID?: StringFieldUpdateOperationsInput | string
-    AdminAccountID?: StringFieldUpdateOperationsInput | string
-    ReportStatus?: StringFieldUpdateOperationsInput | string
     Email?: StringFieldUpdateOperationsInput | string
     TelNo?: StringFieldUpdateOperationsInput | string
     PassengerName?: StringFieldUpdateOperationsInput | string
@@ -27800,14 +32165,13 @@ export namespace Prisma {
     Attachment?: NullableStringFieldUpdateOperationsInput | string | null
     UserAccountID?: StringFieldUpdateOperationsInput | string
     AdminAccountID?: StringFieldUpdateOperationsInput | string
-    ReportStatus?: StringFieldUpdateOperationsInput | string
     Email?: StringFieldUpdateOperationsInput | string
     TelNo?: StringFieldUpdateOperationsInput | string
     PassengerName?: StringFieldUpdateOperationsInput | string
   }
 
   export type Domestic_TicketCreateInput = {
-    TicketID: string
+    ticket: TicketCreateNestedOneWithoutDomesticTicketInput
   }
 
   export type Domestic_TicketUncheckedCreateInput = {
@@ -27815,7 +32179,7 @@ export namespace Prisma {
   }
 
   export type Domestic_TicketUpdateInput = {
-    TicketID?: StringFieldUpdateOperationsInput | string
+    ticket?: TicketUpdateOneRequiredWithoutDomesticTicketNestedInput
   }
 
   export type Domestic_TicketUncheckedUpdateInput = {
@@ -27827,7 +32191,7 @@ export namespace Prisma {
   }
 
   export type Domestic_TicketUpdateManyMutationInput = {
-    TicketID?: StringFieldUpdateOperationsInput | string
+
   }
 
   export type Domestic_TicketUncheckedUpdateManyInput = {
@@ -27835,10 +32199,10 @@ export namespace Prisma {
   }
 
   export type International_TicketCreateInput = {
-    TicketID: string
     PassportNo: string
     IssuedCountry: string
     PassportExpiry: Date | string
+    ticket: TicketCreateNestedOneWithoutInternationalTicketInput
   }
 
   export type International_TicketUncheckedCreateInput = {
@@ -27849,10 +32213,10 @@ export namespace Prisma {
   }
 
   export type International_TicketUpdateInput = {
-    TicketID?: StringFieldUpdateOperationsInput | string
     PassportNo?: StringFieldUpdateOperationsInput | string
     IssuedCountry?: StringFieldUpdateOperationsInput | string
     PassportExpiry?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticket?: TicketUpdateOneRequiredWithoutInternationalTicketNestedInput
   }
 
   export type International_TicketUncheckedUpdateInput = {
@@ -27870,7 +32234,6 @@ export namespace Prisma {
   }
 
   export type International_TicketUpdateManyMutationInput = {
-    TicketID?: StringFieldUpdateOperationsInput | string
     PassportNo?: StringFieldUpdateOperationsInput | string
     IssuedCountry?: StringFieldUpdateOperationsInput | string
     PassportExpiry?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27884,8 +32247,8 @@ export namespace Prisma {
   }
 
   export type Round_Trip_TicketCreateInput = {
-    TicketID: string
-    TicketID2: string
+    ticket1: TicketCreateNestedOneWithoutRoundTripTicketPart1Input
+    ticket2: TicketCreateNestedOneWithoutRoundTripTicketPart2Input
   }
 
   export type Round_Trip_TicketUncheckedCreateInput = {
@@ -27894,8 +32257,8 @@ export namespace Prisma {
   }
 
   export type Round_Trip_TicketUpdateInput = {
-    TicketID?: StringFieldUpdateOperationsInput | string
-    TicketID2?: StringFieldUpdateOperationsInput | string
+    ticket1?: TicketUpdateOneRequiredWithoutRoundTripTicketPart1NestedInput
+    ticket2?: TicketUpdateOneRequiredWithoutRoundTripTicketPart2NestedInput
   }
 
   export type Round_Trip_TicketUncheckedUpdateInput = {
@@ -27909,8 +32272,7 @@ export namespace Prisma {
   }
 
   export type Round_Trip_TicketUpdateManyMutationInput = {
-    TicketID?: StringFieldUpdateOperationsInput | string
-    TicketID2?: StringFieldUpdateOperationsInput | string
+
   }
 
   export type Round_Trip_TicketUncheckedUpdateManyInput = {
@@ -27919,49 +32281,40 @@ export namespace Prisma {
   }
 
   export type PurchaseCreateInput = {
-    PurchaseID: string
-    TicketID: string
-    PaymentID: string
-    UserAccountID: string
+    ticket: TicketCreateNestedOneWithoutPurchaseInput
+    payment: PaymentCreateNestedOneWithoutPurchaseInput
+    user: UserCreateNestedOneWithoutPurchasesInput
   }
 
   export type PurchaseUncheckedCreateInput = {
-    PurchaseID: string
     TicketID: string
     PaymentID: string
     UserAccountID: string
   }
 
   export type PurchaseUpdateInput = {
-    PurchaseID?: StringFieldUpdateOperationsInput | string
-    TicketID?: StringFieldUpdateOperationsInput | string
-    PaymentID?: StringFieldUpdateOperationsInput | string
-    UserAccountID?: StringFieldUpdateOperationsInput | string
+    ticket?: TicketUpdateOneRequiredWithoutPurchaseNestedInput
+    payment?: PaymentUpdateOneRequiredWithoutPurchaseNestedInput
+    user?: UserUpdateOneRequiredWithoutPurchasesNestedInput
   }
 
   export type PurchaseUncheckedUpdateInput = {
-    PurchaseID?: StringFieldUpdateOperationsInput | string
     TicketID?: StringFieldUpdateOperationsInput | string
     PaymentID?: StringFieldUpdateOperationsInput | string
     UserAccountID?: StringFieldUpdateOperationsInput | string
   }
 
   export type PurchaseCreateManyInput = {
-    PurchaseID: string
     TicketID: string
     PaymentID: string
     UserAccountID: string
   }
 
   export type PurchaseUpdateManyMutationInput = {
-    PurchaseID?: StringFieldUpdateOperationsInput | string
-    TicketID?: StringFieldUpdateOperationsInput | string
-    PaymentID?: StringFieldUpdateOperationsInput | string
-    UserAccountID?: StringFieldUpdateOperationsInput | string
+
   }
 
   export type PurchaseUncheckedUpdateManyInput = {
-    PurchaseID?: StringFieldUpdateOperationsInput | string
     TicketID?: StringFieldUpdateOperationsInput | string
     PaymentID?: StringFieldUpdateOperationsInput | string
     UserAccountID?: StringFieldUpdateOperationsInput | string
@@ -27970,43 +32323,42 @@ export namespace Prisma {
   export type PaymentCreateInput = {
     PaymentID: string
     PaymentDateTime: Date | string
-    Timestamp: Date | string
     PaymentMethod: string
     TransactionStatus: string
     Amount: number
+    purchase?: PurchaseCreateNestedOneWithoutPaymentInput
   }
 
   export type PaymentUncheckedCreateInput = {
     PaymentID: string
     PaymentDateTime: Date | string
-    Timestamp: Date | string
     PaymentMethod: string
     TransactionStatus: string
     Amount: number
+    purchase?: PurchaseUncheckedCreateNestedOneWithoutPaymentInput
   }
 
   export type PaymentUpdateInput = {
     PaymentID?: StringFieldUpdateOperationsInput | string
     PaymentDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    Timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     PaymentMethod?: StringFieldUpdateOperationsInput | string
     TransactionStatus?: StringFieldUpdateOperationsInput | string
     Amount?: FloatFieldUpdateOperationsInput | number
+    purchase?: PurchaseUpdateOneWithoutPaymentNestedInput
   }
 
   export type PaymentUncheckedUpdateInput = {
     PaymentID?: StringFieldUpdateOperationsInput | string
     PaymentDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    Timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     PaymentMethod?: StringFieldUpdateOperationsInput | string
     TransactionStatus?: StringFieldUpdateOperationsInput | string
     Amount?: FloatFieldUpdateOperationsInput | number
+    purchase?: PurchaseUncheckedUpdateOneWithoutPaymentNestedInput
   }
 
   export type PaymentCreateManyInput = {
     PaymentID: string
     PaymentDateTime: Date | string
-    Timestamp: Date | string
     PaymentMethod: string
     TransactionStatus: string
     Amount: number
@@ -28015,7 +32367,6 @@ export namespace Prisma {
   export type PaymentUpdateManyMutationInput = {
     PaymentID?: StringFieldUpdateOperationsInput | string
     PaymentDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    Timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     PaymentMethod?: StringFieldUpdateOperationsInput | string
     TransactionStatus?: StringFieldUpdateOperationsInput | string
     Amount?: FloatFieldUpdateOperationsInput | number
@@ -28024,7 +32375,6 @@ export namespace Prisma {
   export type PaymentUncheckedUpdateManyInput = {
     PaymentID?: StringFieldUpdateOperationsInput | string
     PaymentDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    Timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     PaymentMethod?: StringFieldUpdateOperationsInput | string
     TransactionStatus?: StringFieldUpdateOperationsInput | string
     Amount?: FloatFieldUpdateOperationsInput | number
@@ -28032,7 +32382,7 @@ export namespace Prisma {
 
   export type Airline_Tel_NoCreateInput = {
     TelNo: string
-    AirlineName: string
+    airline: AirlineCreateNestedOneWithoutTelNosInput
   }
 
   export type Airline_Tel_NoUncheckedCreateInput = {
@@ -28042,7 +32392,7 @@ export namespace Prisma {
 
   export type Airline_Tel_NoUpdateInput = {
     TelNo?: StringFieldUpdateOperationsInput | string
-    AirlineName?: StringFieldUpdateOperationsInput | string
+    airline?: AirlineUpdateOneRequiredWithoutTelNosNestedInput
   }
 
   export type Airline_Tel_NoUncheckedUpdateInput = {
@@ -28057,12 +32407,94 @@ export namespace Prisma {
 
   export type Airline_Tel_NoUpdateManyMutationInput = {
     TelNo?: StringFieldUpdateOperationsInput | string
-    AirlineName?: StringFieldUpdateOperationsInput | string
   }
 
   export type Airline_Tel_NoUncheckedUpdateManyInput = {
     TelNo?: StringFieldUpdateOperationsInput | string
     AirlineName?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SessionCreateInput = {
+    SessionID: string
+    TokenHash: string
+    CreatedAt?: Date | string
+    LastSeenAt: Date | string
+    IdleExpiresAt: Date | string
+    AbsoluteExpiresAt: Date | string
+    RevokedAt?: Date | string | null
+    RevokeReason?: string | null
+    user: UserCreateNestedOneWithoutSessionsInput
+  }
+
+  export type SessionUncheckedCreateInput = {
+    SessionID: string
+    UserAccountID: string
+    TokenHash: string
+    CreatedAt?: Date | string
+    LastSeenAt: Date | string
+    IdleExpiresAt: Date | string
+    AbsoluteExpiresAt: Date | string
+    RevokedAt?: Date | string | null
+    RevokeReason?: string | null
+  }
+
+  export type SessionUpdateInput = {
+    SessionID?: StringFieldUpdateOperationsInput | string
+    TokenHash?: StringFieldUpdateOperationsInput | string
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    IdleExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AbsoluteExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    RevokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    RevokeReason?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneRequiredWithoutSessionsNestedInput
+  }
+
+  export type SessionUncheckedUpdateInput = {
+    SessionID?: StringFieldUpdateOperationsInput | string
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    TokenHash?: StringFieldUpdateOperationsInput | string
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    IdleExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AbsoluteExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    RevokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    RevokeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SessionCreateManyInput = {
+    SessionID: string
+    UserAccountID: string
+    TokenHash: string
+    CreatedAt?: Date | string
+    LastSeenAt: Date | string
+    IdleExpiresAt: Date | string
+    AbsoluteExpiresAt: Date | string
+    RevokedAt?: Date | string | null
+    RevokeReason?: string | null
+  }
+
+  export type SessionUpdateManyMutationInput = {
+    SessionID?: StringFieldUpdateOperationsInput | string
+    TokenHash?: StringFieldUpdateOperationsInput | string
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    IdleExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AbsoluteExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    RevokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    RevokeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SessionUncheckedUpdateManyInput = {
+    SessionID?: StringFieldUpdateOperationsInput | string
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    TokenHash?: StringFieldUpdateOperationsInput | string
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    IdleExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AbsoluteExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    RevokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    RevokeReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -28078,6 +32510,26 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type OperateListRelationFilter = {
+    every?: OperateWhereInput
+    some?: OperateWhereInput
+    none?: OperateWhereInput
+  }
+
+  export type FlightListRelationFilter = {
+    every?: FlightWhereInput
+    some?: FlightWhereInput
+    none?: FlightWhereInput
+  }
+
+  export type OperateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FlightOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AirportCountOrderByAggregateInput = {
@@ -28145,13 +32597,54 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type AircraftListRelationFilter = {
+    every?: AircraftWhereInput
+    some?: AircraftWhereInput
+    none?: AircraftWhereInput
+  }
+
+  export type Airline_Tel_NoListRelationFilter = {
+    every?: Airline_Tel_NoWhereInput
+    some?: Airline_Tel_NoWhereInput
+    none?: Airline_Tel_NoWhereInput
+  }
+
+  export type Airline_MessageListRelationFilter = {
+    every?: Airline_MessageWhereInput
+    some?: Airline_MessageWhereInput
+    none?: Airline_MessageWhereInput
+  }
+
+  export type ContactListRelationFilter = {
+    every?: ContactWhereInput
+    some?: ContactWhereInput
+    none?: ContactWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
+  export type AircraftOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type Airline_Tel_NoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type Airline_MessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ContactOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type AirlineCountOrderByAggregateInput = {
     AirlineName?: SortOrder
+    AirlineCaption?: SortOrder
     Website?: SortOrder
     AmountOfAircraft?: SortOrder
     Logo?: SortOrder
@@ -28163,6 +32656,7 @@ export namespace Prisma {
 
   export type AirlineMaxOrderByAggregateInput = {
     AirlineName?: SortOrder
+    AirlineCaption?: SortOrder
     Website?: SortOrder
     AmountOfAircraft?: SortOrder
     Logo?: SortOrder
@@ -28170,6 +32664,7 @@ export namespace Prisma {
 
   export type AirlineMinOrderByAggregateInput = {
     AirlineName?: SortOrder
+    AirlineCaption?: SortOrder
     Website?: SortOrder
     AmountOfAircraft?: SortOrder
     Logo?: SortOrder
@@ -28213,6 +32708,31 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type AirlineScalarRelationFilter = {
+    is?: AirlineWhereInput
+    isNot?: AirlineWhereInput
+  }
+
+  export type SeatListRelationFilter = {
+    every?: SeatWhereInput
+    some?: SeatWhereInput
+    none?: SeatWhereInput
+  }
+
+  export type CabinClassListRelationFilter = {
+    every?: CabinClassWhereInput
+    some?: CabinClassWhereInput
+    none?: CabinClassWhereInput
+  }
+
+  export type SeatOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CabinClassOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type AircraftCountOrderByAggregateInput = {
     AircraftRegNo?: SortOrder
     AirlineName?: SortOrder
@@ -28251,6 +32771,41 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type AirportScalarRelationFilter = {
+    is?: AirportWhereInput
+    isNot?: AirportWhereInput
+  }
+
+  export type AircraftScalarRelationFilter = {
+    is?: AircraftWhereInput
+    isNot?: AircraftWhereInput
+  }
+
+  export type Assigned_ToListRelationFilter = {
+    every?: Assigned_ToWhereInput
+    some?: Assigned_ToWhereInput
+    none?: Assigned_ToWhereInput
+  }
+
+  export type TicketListRelationFilter = {
+    every?: TicketWhereInput
+    some?: TicketWhereInput
+    none?: TicketWhereInput
+  }
+
+  export type Assigned_ToOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TicketOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FlightFlightNoScheduleCompoundUniqueInput = {
+    FlightNo: string
+    Schedule: Date | string
   }
 
   export type FlightCountOrderByAggregateInput = {
@@ -28305,9 +32860,34 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type FlightScalarRelationFilter = {
+    is?: FlightWhereInput
+    isNot?: FlightWhereInput
+  }
+
+  export type SeatScalarRelationFilter = {
+    is?: SeatWhereInput
+    isNot?: SeatWhereInput
+  }
+
+  export type PurchaseNullableScalarRelationFilter = {
+    is?: PurchaseWhereInput | null
+    isNot?: PurchaseWhereInput | null
+  }
+
+  export type Domestic_TicketNullableScalarRelationFilter = {
+    is?: Domestic_TicketWhereInput | null
+    isNot?: Domestic_TicketWhereInput | null
+  }
+
+  export type International_TicketNullableScalarRelationFilter = {
+    is?: International_TicketWhereInput | null
+    isNot?: International_TicketWhereInput | null
+  }
+
+  export type Round_Trip_TicketNullableScalarRelationFilter = {
+    is?: Round_Trip_TicketWhereInput | null
+    isNot?: Round_Trip_TicketWhereInput | null
   }
 
   export type TicketCountOrderByAggregateInput = {
@@ -28320,7 +32900,7 @@ export namespace Prisma {
     DateOfBirth?: SortOrder
     Nationality?: SortOrder
     BaggageChecked?: SortOrder
-    BaggageClaimNo?: SortOrder
+    BaggageCabin?: SortOrder
     SeatNo?: SortOrder
     AircraftRegNo?: SortOrder
     FlightNo?: SortOrder
@@ -28329,6 +32909,8 @@ export namespace Prisma {
 
   export type TicketAvgOrderByAggregateInput = {
     Price?: SortOrder
+    BaggageChecked?: SortOrder
+    BaggageCabin?: SortOrder
   }
 
   export type TicketMaxOrderByAggregateInput = {
@@ -28341,7 +32923,7 @@ export namespace Prisma {
     DateOfBirth?: SortOrder
     Nationality?: SortOrder
     BaggageChecked?: SortOrder
-    BaggageClaimNo?: SortOrder
+    BaggageCabin?: SortOrder
     SeatNo?: SortOrder
     AircraftRegNo?: SortOrder
     FlightNo?: SortOrder
@@ -28358,7 +32940,7 @@ export namespace Prisma {
     DateOfBirth?: SortOrder
     Nationality?: SortOrder
     BaggageChecked?: SortOrder
-    BaggageClaimNo?: SortOrder
+    BaggageCabin?: SortOrder
     SeatNo?: SortOrder
     AircraftRegNo?: SortOrder
     FlightNo?: SortOrder
@@ -28367,6 +32949,8 @@ export namespace Prisma {
 
   export type TicketSumOrderByAggregateInput = {
     Price?: SortOrder
+    BaggageChecked?: SortOrder
+    BaggageCabin?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -28383,14 +32967,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type OperateAirportIDAirlineNameCompoundUniqueInput = {
@@ -28413,133 +32989,212 @@ export namespace Prisma {
     AirlineName?: SortOrder
   }
 
-  export type Assigned_ToFlightNoUserAccountIDCompoundUniqueInput = {
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type Assigned_ToFlightNoScheduleUserAccountIDCompoundUniqueInput = {
     FlightNo: string
+    Schedule: Date | string
     UserAccountID: string
   }
 
   export type Assigned_ToCountOrderByAggregateInput = {
     FlightNo?: SortOrder
+    Schedule?: SortOrder
     UserAccountID?: SortOrder
   }
 
   export type Assigned_ToMaxOrderByAggregateInput = {
     FlightNo?: SortOrder
+    Schedule?: SortOrder
     UserAccountID?: SortOrder
   }
 
   export type Assigned_ToMinOrderByAggregateInput = {
     FlightNo?: SortOrder
+    Schedule?: SortOrder
     UserAccountID?: SortOrder
   }
 
-  export type ContactAdminAccountIDAirlineMessageIDCompoundUniqueInput = {
+  export type AdminScalarRelationFilter = {
+    is?: AdminWhereInput
+    isNot?: AdminWhereInput
+  }
+
+  export type ContactAdminAccountIDAirlineNameCompoundUniqueInput = {
     AdminAccountID: string
-    AirlineMessageID: string
+    AirlineName: string
   }
 
   export type ContactCountOrderByAggregateInput = {
     AdminAccountID?: SortOrder
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     ContactStatus?: SortOrder
   }
 
   export type ContactMaxOrderByAggregateInput = {
     AdminAccountID?: SortOrder
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     ContactStatus?: SortOrder
   }
 
   export type ContactMinOrderByAggregateInput = {
     AdminAccountID?: SortOrder
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     ContactStatus?: SortOrder
   }
 
-  export type Report_ToUserAccountIDReportIDCompoundUniqueInput = {
+  export type ReportListRelationFilter = {
+    every?: ReportWhereInput
+    some?: ReportWhereInput
+    none?: ReportWhereInput
+  }
+
+  export type ReportOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type Report_ToUserAccountIDAdminAccountIDCompoundUniqueInput = {
     UserAccountID: string
-    ReportID: string
+    AdminAccountID: string
   }
 
   export type Report_ToCountOrderByAggregateInput = {
     UserAccountID?: SortOrder
-    ReportID?: SortOrder
+    AdminAccountID?: SortOrder
+    ReportStatus?: SortOrder
   }
 
   export type Report_ToMaxOrderByAggregateInput = {
     UserAccountID?: SortOrder
-    ReportID?: SortOrder
+    AdminAccountID?: SortOrder
+    ReportStatus?: SortOrder
   }
 
   export type Report_ToMinOrderByAggregateInput = {
     UserAccountID?: SortOrder
-    ReportID?: SortOrder
+    AdminAccountID?: SortOrder
+    ReportStatus?: SortOrder
+  }
+
+  export type CabinClassAircraftRegNoClassCompoundUniqueInput = {
+    AircraftRegNo: string
+    Class: string
   }
 
   export type CabinClassCountOrderByAggregateInput = {
+    AircraftRegNo?: SortOrder
     Class?: SortOrder
+    StandardPrice?: SortOrder
+  }
+
+  export type CabinClassAvgOrderByAggregateInput = {
+    StandardPrice?: SortOrder
   }
 
   export type CabinClassMaxOrderByAggregateInput = {
+    AircraftRegNo?: SortOrder
     Class?: SortOrder
+    StandardPrice?: SortOrder
   }
 
   export type CabinClassMinOrderByAggregateInput = {
+    AircraftRegNo?: SortOrder
     Class?: SortOrder
+    StandardPrice?: SortOrder
+  }
+
+  export type CabinClassSumOrderByAggregateInput = {
+    StandardPrice?: SortOrder
+  }
+
+  export type SeatAircraftRegNoSeatNoCompoundUniqueInput = {
+    AircraftRegNo: string
+    SeatNo: string
   }
 
   export type SeatCountOrderByAggregateInput = {
+    AircraftRegNo?: SortOrder
     SeatNo?: SortOrder
     SeatType?: SortOrder
-    AircraftRegNo?: SortOrder
   }
 
   export type SeatMaxOrderByAggregateInput = {
+    AircraftRegNo?: SortOrder
     SeatNo?: SortOrder
     SeatType?: SortOrder
-    AircraftRegNo?: SortOrder
   }
 
   export type SeatMinOrderByAggregateInput = {
+    AircraftRegNo?: SortOrder
     SeatNo?: SortOrder
     SeatType?: SortOrder
-    AircraftRegNo?: SortOrder
+  }
+
+  export type AccountScalarRelationFilter = {
+    is?: AccountWhereInput
+    isNot?: AccountWhereInput
+  }
+
+  export type Report_ToListRelationFilter = {
+    every?: Report_ToWhereInput
+    some?: Report_ToWhereInput
+    none?: Report_ToWhereInput
+  }
+
+  export type Report_ToOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AdminCountOrderByAggregateInput = {
-    UserAccountID?: SortOrder
-    AdminID?: SortOrder
-    AdminMessage?: SortOrder
+    AdminAccountID?: SortOrder
+    IPAddress?: SortOrder
   }
 
   export type AdminMaxOrderByAggregateInput = {
-    UserAccountID?: SortOrder
-    AdminID?: SortOrder
-    AdminMessage?: SortOrder
+    AdminAccountID?: SortOrder
+    IPAddress?: SortOrder
   }
 
   export type AdminMinOrderByAggregateInput = {
-    UserAccountID?: SortOrder
-    AdminID?: SortOrder
-    AdminMessage?: SortOrder
+    AdminAccountID?: SortOrder
+    IPAddress?: SortOrder
+  }
+
+  export type Airline_MessageAirlineNameAdminAccountIDMessageTextCompoundUniqueInput = {
+    AirlineName: string
+    AdminAccountID: string
+    MessageText: string
   }
 
   export type Airline_MessageCountOrderByAggregateInput = {
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     AdminAccountID?: SortOrder
     MessageText?: SortOrder
   }
 
   export type Airline_MessageMaxOrderByAggregateInput = {
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     AdminAccountID?: SortOrder
     MessageText?: SortOrder
   }
 
   export type Airline_MessageMinOrderByAggregateInput = {
-    AirlineMessageID?: SortOrder
+    AirlineName?: SortOrder
     AdminAccountID?: SortOrder
     MessageText?: SortOrder
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type AdminNullableScalarRelationFilter = {
+    is?: AdminWhereInput | null
+    isNot?: AdminWhereInput | null
   }
 
   export type AccountCountOrderByAggregateInput = {
@@ -28563,37 +33218,69 @@ export namespace Prisma {
     LastName?: SortOrder
   }
 
+  export type User_Tel_NoListRelationFilter = {
+    every?: User_Tel_NoWhereInput
+    some?: User_Tel_NoWhereInput
+    none?: User_Tel_NoWhereInput
+  }
+
+  export type PurchaseListRelationFilter = {
+    every?: PurchaseWhereInput
+    some?: PurchaseWhereInput
+    none?: PurchaseWhereInput
+  }
+
+  export type SessionListRelationFilter = {
+    every?: SessionWhereInput
+    some?: SessionWhereInput
+    none?: SessionWhereInput
+  }
+
+  export type User_Tel_NoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PurchaseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     UserAccountID?: SortOrder
     Email?: SortOrder
-    IPAddress?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
     UserAccountID?: SortOrder
     Email?: SortOrder
-    IPAddress?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     UserAccountID?: SortOrder
     Email?: SortOrder
-    IPAddress?: SortOrder
   }
 
   export type User_Tel_NoCountOrderByAggregateInput = {
-    TelNo?: SortOrder
     UserAccountID?: SortOrder
+    TelNo?: SortOrder
   }
 
   export type User_Tel_NoMaxOrderByAggregateInput = {
-    TelNo?: SortOrder
     UserAccountID?: SortOrder
+    TelNo?: SortOrder
   }
 
   export type User_Tel_NoMinOrderByAggregateInput = {
-    TelNo?: SortOrder
     UserAccountID?: SortOrder
+    TelNo?: SortOrder
+  }
+
+  export type Report_ToScalarRelationFilter = {
+    is?: Report_ToWhereInput
+    isNot?: Report_ToWhereInput
   }
 
   export type ReportCountOrderByAggregateInput = {
@@ -28603,7 +33290,6 @@ export namespace Prisma {
     Attachment?: SortOrder
     UserAccountID?: SortOrder
     AdminAccountID?: SortOrder
-    ReportStatus?: SortOrder
     Email?: SortOrder
     TelNo?: SortOrder
     PassengerName?: SortOrder
@@ -28616,7 +33302,6 @@ export namespace Prisma {
     Attachment?: SortOrder
     UserAccountID?: SortOrder
     AdminAccountID?: SortOrder
-    ReportStatus?: SortOrder
     Email?: SortOrder
     TelNo?: SortOrder
     PassengerName?: SortOrder
@@ -28629,10 +33314,14 @@ export namespace Prisma {
     Attachment?: SortOrder
     UserAccountID?: SortOrder
     AdminAccountID?: SortOrder
-    ReportStatus?: SortOrder
     Email?: SortOrder
     TelNo?: SortOrder
     PassengerName?: SortOrder
+  }
+
+  export type TicketScalarRelationFilter = {
+    is?: TicketWhereInput
+    isNot?: TicketWhereInput
   }
 
   export type Domestic_TicketCountOrderByAggregateInput = {
@@ -28683,22 +33372,29 @@ export namespace Prisma {
     TicketID2?: SortOrder
   }
 
+  export type PaymentScalarRelationFilter = {
+    is?: PaymentWhereInput
+    isNot?: PaymentWhereInput
+  }
+
+  export type PurchaseTicketIDPaymentIDCompoundUniqueInput = {
+    TicketID: string
+    PaymentID: string
+  }
+
   export type PurchaseCountOrderByAggregateInput = {
-    PurchaseID?: SortOrder
     TicketID?: SortOrder
     PaymentID?: SortOrder
     UserAccountID?: SortOrder
   }
 
   export type PurchaseMaxOrderByAggregateInput = {
-    PurchaseID?: SortOrder
     TicketID?: SortOrder
     PaymentID?: SortOrder
     UserAccountID?: SortOrder
   }
 
   export type PurchaseMinOrderByAggregateInput = {
-    PurchaseID?: SortOrder
     TicketID?: SortOrder
     PaymentID?: SortOrder
     UserAccountID?: SortOrder
@@ -28707,7 +33403,6 @@ export namespace Prisma {
   export type PaymentCountOrderByAggregateInput = {
     PaymentID?: SortOrder
     PaymentDateTime?: SortOrder
-    Timestamp?: SortOrder
     PaymentMethod?: SortOrder
     TransactionStatus?: SortOrder
     Amount?: SortOrder
@@ -28720,7 +33415,6 @@ export namespace Prisma {
   export type PaymentMaxOrderByAggregateInput = {
     PaymentID?: SortOrder
     PaymentDateTime?: SortOrder
-    Timestamp?: SortOrder
     PaymentMethod?: SortOrder
     TransactionStatus?: SortOrder
     Amount?: SortOrder
@@ -28729,7 +33423,6 @@ export namespace Prisma {
   export type PaymentMinOrderByAggregateInput = {
     PaymentID?: SortOrder
     PaymentDateTime?: SortOrder
-    Timestamp?: SortOrder
     PaymentMethod?: SortOrder
     TransactionStatus?: SortOrder
     Amount?: SortOrder
@@ -28737,6 +33430,11 @@ export namespace Prisma {
 
   export type PaymentSumOrderByAggregateInput = {
     Amount?: SortOrder
+  }
+
+  export type Airline_Tel_NoTelNoAirlineNameCompoundUniqueInput = {
+    TelNo: string
+    AirlineName: string
   }
 
   export type Airline_Tel_NoCountOrderByAggregateInput = {
@@ -28754,8 +33452,279 @@ export namespace Prisma {
     AirlineName?: SortOrder
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type SessionCountOrderByAggregateInput = {
+    SessionID?: SortOrder
+    UserAccountID?: SortOrder
+    TokenHash?: SortOrder
+    CreatedAt?: SortOrder
+    LastSeenAt?: SortOrder
+    IdleExpiresAt?: SortOrder
+    AbsoluteExpiresAt?: SortOrder
+    RevokedAt?: SortOrder
+    RevokeReason?: SortOrder
+  }
+
+  export type SessionMaxOrderByAggregateInput = {
+    SessionID?: SortOrder
+    UserAccountID?: SortOrder
+    TokenHash?: SortOrder
+    CreatedAt?: SortOrder
+    LastSeenAt?: SortOrder
+    IdleExpiresAt?: SortOrder
+    AbsoluteExpiresAt?: SortOrder
+    RevokedAt?: SortOrder
+    RevokeReason?: SortOrder
+  }
+
+  export type SessionMinOrderByAggregateInput = {
+    SessionID?: SortOrder
+    UserAccountID?: SortOrder
+    TokenHash?: SortOrder
+    CreatedAt?: SortOrder
+    LastSeenAt?: SortOrder
+    IdleExpiresAt?: SortOrder
+    AbsoluteExpiresAt?: SortOrder
+    RevokedAt?: SortOrder
+    RevokeReason?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type OperateCreateNestedManyWithoutAirportInput = {
+    create?: XOR<OperateCreateWithoutAirportInput, OperateUncheckedCreateWithoutAirportInput> | OperateCreateWithoutAirportInput[] | OperateUncheckedCreateWithoutAirportInput[]
+    connectOrCreate?: OperateCreateOrConnectWithoutAirportInput | OperateCreateOrConnectWithoutAirportInput[]
+    createMany?: OperateCreateManyAirportInputEnvelope
+    connect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+  }
+
+  export type FlightCreateNestedManyWithoutDepartureAirportInput = {
+    create?: XOR<FlightCreateWithoutDepartureAirportInput, FlightUncheckedCreateWithoutDepartureAirportInput> | FlightCreateWithoutDepartureAirportInput[] | FlightUncheckedCreateWithoutDepartureAirportInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutDepartureAirportInput | FlightCreateOrConnectWithoutDepartureAirportInput[]
+    createMany?: FlightCreateManyDepartureAirportInputEnvelope
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+  }
+
+  export type FlightCreateNestedManyWithoutArrivalAirportInput = {
+    create?: XOR<FlightCreateWithoutArrivalAirportInput, FlightUncheckedCreateWithoutArrivalAirportInput> | FlightCreateWithoutArrivalAirportInput[] | FlightUncheckedCreateWithoutArrivalAirportInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutArrivalAirportInput | FlightCreateOrConnectWithoutArrivalAirportInput[]
+    createMany?: FlightCreateManyArrivalAirportInputEnvelope
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+  }
+
+  export type OperateUncheckedCreateNestedManyWithoutAirportInput = {
+    create?: XOR<OperateCreateWithoutAirportInput, OperateUncheckedCreateWithoutAirportInput> | OperateCreateWithoutAirportInput[] | OperateUncheckedCreateWithoutAirportInput[]
+    connectOrCreate?: OperateCreateOrConnectWithoutAirportInput | OperateCreateOrConnectWithoutAirportInput[]
+    createMany?: OperateCreateManyAirportInputEnvelope
+    connect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+  }
+
+  export type FlightUncheckedCreateNestedManyWithoutDepartureAirportInput = {
+    create?: XOR<FlightCreateWithoutDepartureAirportInput, FlightUncheckedCreateWithoutDepartureAirportInput> | FlightCreateWithoutDepartureAirportInput[] | FlightUncheckedCreateWithoutDepartureAirportInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutDepartureAirportInput | FlightCreateOrConnectWithoutDepartureAirportInput[]
+    createMany?: FlightCreateManyDepartureAirportInputEnvelope
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+  }
+
+  export type FlightUncheckedCreateNestedManyWithoutArrivalAirportInput = {
+    create?: XOR<FlightCreateWithoutArrivalAirportInput, FlightUncheckedCreateWithoutArrivalAirportInput> | FlightCreateWithoutArrivalAirportInput[] | FlightUncheckedCreateWithoutArrivalAirportInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutArrivalAirportInput | FlightCreateOrConnectWithoutArrivalAirportInput[]
+    createMany?: FlightCreateManyArrivalAirportInputEnvelope
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type OperateUpdateManyWithoutAirportNestedInput = {
+    create?: XOR<OperateCreateWithoutAirportInput, OperateUncheckedCreateWithoutAirportInput> | OperateCreateWithoutAirportInput[] | OperateUncheckedCreateWithoutAirportInput[]
+    connectOrCreate?: OperateCreateOrConnectWithoutAirportInput | OperateCreateOrConnectWithoutAirportInput[]
+    upsert?: OperateUpsertWithWhereUniqueWithoutAirportInput | OperateUpsertWithWhereUniqueWithoutAirportInput[]
+    createMany?: OperateCreateManyAirportInputEnvelope
+    set?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    disconnect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    delete?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    connect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    update?: OperateUpdateWithWhereUniqueWithoutAirportInput | OperateUpdateWithWhereUniqueWithoutAirportInput[]
+    updateMany?: OperateUpdateManyWithWhereWithoutAirportInput | OperateUpdateManyWithWhereWithoutAirportInput[]
+    deleteMany?: OperateScalarWhereInput | OperateScalarWhereInput[]
+  }
+
+  export type FlightUpdateManyWithoutDepartureAirportNestedInput = {
+    create?: XOR<FlightCreateWithoutDepartureAirportInput, FlightUncheckedCreateWithoutDepartureAirportInput> | FlightCreateWithoutDepartureAirportInput[] | FlightUncheckedCreateWithoutDepartureAirportInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutDepartureAirportInput | FlightCreateOrConnectWithoutDepartureAirportInput[]
+    upsert?: FlightUpsertWithWhereUniqueWithoutDepartureAirportInput | FlightUpsertWithWhereUniqueWithoutDepartureAirportInput[]
+    createMany?: FlightCreateManyDepartureAirportInputEnvelope
+    set?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    disconnect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    delete?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    update?: FlightUpdateWithWhereUniqueWithoutDepartureAirportInput | FlightUpdateWithWhereUniqueWithoutDepartureAirportInput[]
+    updateMany?: FlightUpdateManyWithWhereWithoutDepartureAirportInput | FlightUpdateManyWithWhereWithoutDepartureAirportInput[]
+    deleteMany?: FlightScalarWhereInput | FlightScalarWhereInput[]
+  }
+
+  export type FlightUpdateManyWithoutArrivalAirportNestedInput = {
+    create?: XOR<FlightCreateWithoutArrivalAirportInput, FlightUncheckedCreateWithoutArrivalAirportInput> | FlightCreateWithoutArrivalAirportInput[] | FlightUncheckedCreateWithoutArrivalAirportInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutArrivalAirportInput | FlightCreateOrConnectWithoutArrivalAirportInput[]
+    upsert?: FlightUpsertWithWhereUniqueWithoutArrivalAirportInput | FlightUpsertWithWhereUniqueWithoutArrivalAirportInput[]
+    createMany?: FlightCreateManyArrivalAirportInputEnvelope
+    set?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    disconnect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    delete?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    update?: FlightUpdateWithWhereUniqueWithoutArrivalAirportInput | FlightUpdateWithWhereUniqueWithoutArrivalAirportInput[]
+    updateMany?: FlightUpdateManyWithWhereWithoutArrivalAirportInput | FlightUpdateManyWithWhereWithoutArrivalAirportInput[]
+    deleteMany?: FlightScalarWhereInput | FlightScalarWhereInput[]
+  }
+
+  export type OperateUncheckedUpdateManyWithoutAirportNestedInput = {
+    create?: XOR<OperateCreateWithoutAirportInput, OperateUncheckedCreateWithoutAirportInput> | OperateCreateWithoutAirportInput[] | OperateUncheckedCreateWithoutAirportInput[]
+    connectOrCreate?: OperateCreateOrConnectWithoutAirportInput | OperateCreateOrConnectWithoutAirportInput[]
+    upsert?: OperateUpsertWithWhereUniqueWithoutAirportInput | OperateUpsertWithWhereUniqueWithoutAirportInput[]
+    createMany?: OperateCreateManyAirportInputEnvelope
+    set?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    disconnect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    delete?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    connect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    update?: OperateUpdateWithWhereUniqueWithoutAirportInput | OperateUpdateWithWhereUniqueWithoutAirportInput[]
+    updateMany?: OperateUpdateManyWithWhereWithoutAirportInput | OperateUpdateManyWithWhereWithoutAirportInput[]
+    deleteMany?: OperateScalarWhereInput | OperateScalarWhereInput[]
+  }
+
+  export type FlightUncheckedUpdateManyWithoutDepartureAirportNestedInput = {
+    create?: XOR<FlightCreateWithoutDepartureAirportInput, FlightUncheckedCreateWithoutDepartureAirportInput> | FlightCreateWithoutDepartureAirportInput[] | FlightUncheckedCreateWithoutDepartureAirportInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutDepartureAirportInput | FlightCreateOrConnectWithoutDepartureAirportInput[]
+    upsert?: FlightUpsertWithWhereUniqueWithoutDepartureAirportInput | FlightUpsertWithWhereUniqueWithoutDepartureAirportInput[]
+    createMany?: FlightCreateManyDepartureAirportInputEnvelope
+    set?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    disconnect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    delete?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    update?: FlightUpdateWithWhereUniqueWithoutDepartureAirportInput | FlightUpdateWithWhereUniqueWithoutDepartureAirportInput[]
+    updateMany?: FlightUpdateManyWithWhereWithoutDepartureAirportInput | FlightUpdateManyWithWhereWithoutDepartureAirportInput[]
+    deleteMany?: FlightScalarWhereInput | FlightScalarWhereInput[]
+  }
+
+  export type FlightUncheckedUpdateManyWithoutArrivalAirportNestedInput = {
+    create?: XOR<FlightCreateWithoutArrivalAirportInput, FlightUncheckedCreateWithoutArrivalAirportInput> | FlightCreateWithoutArrivalAirportInput[] | FlightUncheckedCreateWithoutArrivalAirportInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutArrivalAirportInput | FlightCreateOrConnectWithoutArrivalAirportInput[]
+    upsert?: FlightUpsertWithWhereUniqueWithoutArrivalAirportInput | FlightUpsertWithWhereUniqueWithoutArrivalAirportInput[]
+    createMany?: FlightCreateManyArrivalAirportInputEnvelope
+    set?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    disconnect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    delete?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    update?: FlightUpdateWithWhereUniqueWithoutArrivalAirportInput | FlightUpdateWithWhereUniqueWithoutArrivalAirportInput[]
+    updateMany?: FlightUpdateManyWithWhereWithoutArrivalAirportInput | FlightUpdateManyWithWhereWithoutArrivalAirportInput[]
+    deleteMany?: FlightScalarWhereInput | FlightScalarWhereInput[]
+  }
+
+  export type OperateCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<OperateCreateWithoutAirlineInput, OperateUncheckedCreateWithoutAirlineInput> | OperateCreateWithoutAirlineInput[] | OperateUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: OperateCreateOrConnectWithoutAirlineInput | OperateCreateOrConnectWithoutAirlineInput[]
+    createMany?: OperateCreateManyAirlineInputEnvelope
+    connect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+  }
+
+  export type AircraftCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<AircraftCreateWithoutAirlineInput, AircraftUncheckedCreateWithoutAirlineInput> | AircraftCreateWithoutAirlineInput[] | AircraftUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: AircraftCreateOrConnectWithoutAirlineInput | AircraftCreateOrConnectWithoutAirlineInput[]
+    createMany?: AircraftCreateManyAirlineInputEnvelope
+    connect?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+  }
+
+  export type FlightCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<FlightCreateWithoutAirlineInput, FlightUncheckedCreateWithoutAirlineInput> | FlightCreateWithoutAirlineInput[] | FlightUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutAirlineInput | FlightCreateOrConnectWithoutAirlineInput[]
+    createMany?: FlightCreateManyAirlineInputEnvelope
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+  }
+
+  export type Airline_Tel_NoCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<Airline_Tel_NoCreateWithoutAirlineInput, Airline_Tel_NoUncheckedCreateWithoutAirlineInput> | Airline_Tel_NoCreateWithoutAirlineInput[] | Airline_Tel_NoUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: Airline_Tel_NoCreateOrConnectWithoutAirlineInput | Airline_Tel_NoCreateOrConnectWithoutAirlineInput[]
+    createMany?: Airline_Tel_NoCreateManyAirlineInputEnvelope
+    connect?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+  }
+
+  export type Airline_MessageCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<Airline_MessageCreateWithoutAirlineInput, Airline_MessageUncheckedCreateWithoutAirlineInput> | Airline_MessageCreateWithoutAirlineInput[] | Airline_MessageUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: Airline_MessageCreateOrConnectWithoutAirlineInput | Airline_MessageCreateOrConnectWithoutAirlineInput[]
+    createMany?: Airline_MessageCreateManyAirlineInputEnvelope
+    connect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+  }
+
+  export type ContactCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<ContactCreateWithoutAirlineInput, ContactUncheckedCreateWithoutAirlineInput> | ContactCreateWithoutAirlineInput[] | ContactUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: ContactCreateOrConnectWithoutAirlineInput | ContactCreateOrConnectWithoutAirlineInput[]
+    createMany?: ContactCreateManyAirlineInputEnvelope
+    connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+  }
+
+  export type OperateUncheckedCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<OperateCreateWithoutAirlineInput, OperateUncheckedCreateWithoutAirlineInput> | OperateCreateWithoutAirlineInput[] | OperateUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: OperateCreateOrConnectWithoutAirlineInput | OperateCreateOrConnectWithoutAirlineInput[]
+    createMany?: OperateCreateManyAirlineInputEnvelope
+    connect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+  }
+
+  export type AircraftUncheckedCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<AircraftCreateWithoutAirlineInput, AircraftUncheckedCreateWithoutAirlineInput> | AircraftCreateWithoutAirlineInput[] | AircraftUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: AircraftCreateOrConnectWithoutAirlineInput | AircraftCreateOrConnectWithoutAirlineInput[]
+    createMany?: AircraftCreateManyAirlineInputEnvelope
+    connect?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+  }
+
+  export type FlightUncheckedCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<FlightCreateWithoutAirlineInput, FlightUncheckedCreateWithoutAirlineInput> | FlightCreateWithoutAirlineInput[] | FlightUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutAirlineInput | FlightCreateOrConnectWithoutAirlineInput[]
+    createMany?: FlightCreateManyAirlineInputEnvelope
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+  }
+
+  export type Airline_Tel_NoUncheckedCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<Airline_Tel_NoCreateWithoutAirlineInput, Airline_Tel_NoUncheckedCreateWithoutAirlineInput> | Airline_Tel_NoCreateWithoutAirlineInput[] | Airline_Tel_NoUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: Airline_Tel_NoCreateOrConnectWithoutAirlineInput | Airline_Tel_NoCreateOrConnectWithoutAirlineInput[]
+    createMany?: Airline_Tel_NoCreateManyAirlineInputEnvelope
+    connect?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+  }
+
+  export type Airline_MessageUncheckedCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<Airline_MessageCreateWithoutAirlineInput, Airline_MessageUncheckedCreateWithoutAirlineInput> | Airline_MessageCreateWithoutAirlineInput[] | Airline_MessageUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: Airline_MessageCreateOrConnectWithoutAirlineInput | Airline_MessageCreateOrConnectWithoutAirlineInput[]
+    createMany?: Airline_MessageCreateManyAirlineInputEnvelope
+    connect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+  }
+
+  export type ContactUncheckedCreateNestedManyWithoutAirlineInput = {
+    create?: XOR<ContactCreateWithoutAirlineInput, ContactUncheckedCreateWithoutAirlineInput> | ContactCreateWithoutAirlineInput[] | ContactUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: ContactCreateOrConnectWithoutAirlineInput | ContactCreateOrConnectWithoutAirlineInput[]
+    createMany?: ContactCreateManyAirlineInputEnvelope
+    connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -28770,8 +33739,528 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type OperateUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<OperateCreateWithoutAirlineInput, OperateUncheckedCreateWithoutAirlineInput> | OperateCreateWithoutAirlineInput[] | OperateUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: OperateCreateOrConnectWithoutAirlineInput | OperateCreateOrConnectWithoutAirlineInput[]
+    upsert?: OperateUpsertWithWhereUniqueWithoutAirlineInput | OperateUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: OperateCreateManyAirlineInputEnvelope
+    set?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    disconnect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    delete?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    connect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    update?: OperateUpdateWithWhereUniqueWithoutAirlineInput | OperateUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: OperateUpdateManyWithWhereWithoutAirlineInput | OperateUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: OperateScalarWhereInput | OperateScalarWhereInput[]
+  }
+
+  export type AircraftUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<AircraftCreateWithoutAirlineInput, AircraftUncheckedCreateWithoutAirlineInput> | AircraftCreateWithoutAirlineInput[] | AircraftUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: AircraftCreateOrConnectWithoutAirlineInput | AircraftCreateOrConnectWithoutAirlineInput[]
+    upsert?: AircraftUpsertWithWhereUniqueWithoutAirlineInput | AircraftUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: AircraftCreateManyAirlineInputEnvelope
+    set?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+    disconnect?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+    delete?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+    connect?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+    update?: AircraftUpdateWithWhereUniqueWithoutAirlineInput | AircraftUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: AircraftUpdateManyWithWhereWithoutAirlineInput | AircraftUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: AircraftScalarWhereInput | AircraftScalarWhereInput[]
+  }
+
+  export type FlightUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<FlightCreateWithoutAirlineInput, FlightUncheckedCreateWithoutAirlineInput> | FlightCreateWithoutAirlineInput[] | FlightUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutAirlineInput | FlightCreateOrConnectWithoutAirlineInput[]
+    upsert?: FlightUpsertWithWhereUniqueWithoutAirlineInput | FlightUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: FlightCreateManyAirlineInputEnvelope
+    set?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    disconnect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    delete?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    update?: FlightUpdateWithWhereUniqueWithoutAirlineInput | FlightUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: FlightUpdateManyWithWhereWithoutAirlineInput | FlightUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: FlightScalarWhereInput | FlightScalarWhereInput[]
+  }
+
+  export type Airline_Tel_NoUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<Airline_Tel_NoCreateWithoutAirlineInput, Airline_Tel_NoUncheckedCreateWithoutAirlineInput> | Airline_Tel_NoCreateWithoutAirlineInput[] | Airline_Tel_NoUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: Airline_Tel_NoCreateOrConnectWithoutAirlineInput | Airline_Tel_NoCreateOrConnectWithoutAirlineInput[]
+    upsert?: Airline_Tel_NoUpsertWithWhereUniqueWithoutAirlineInput | Airline_Tel_NoUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: Airline_Tel_NoCreateManyAirlineInputEnvelope
+    set?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+    disconnect?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+    delete?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+    connect?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+    update?: Airline_Tel_NoUpdateWithWhereUniqueWithoutAirlineInput | Airline_Tel_NoUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: Airline_Tel_NoUpdateManyWithWhereWithoutAirlineInput | Airline_Tel_NoUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: Airline_Tel_NoScalarWhereInput | Airline_Tel_NoScalarWhereInput[]
+  }
+
+  export type Airline_MessageUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<Airline_MessageCreateWithoutAirlineInput, Airline_MessageUncheckedCreateWithoutAirlineInput> | Airline_MessageCreateWithoutAirlineInput[] | Airline_MessageUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: Airline_MessageCreateOrConnectWithoutAirlineInput | Airline_MessageCreateOrConnectWithoutAirlineInput[]
+    upsert?: Airline_MessageUpsertWithWhereUniqueWithoutAirlineInput | Airline_MessageUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: Airline_MessageCreateManyAirlineInputEnvelope
+    set?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    disconnect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    delete?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    connect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    update?: Airline_MessageUpdateWithWhereUniqueWithoutAirlineInput | Airline_MessageUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: Airline_MessageUpdateManyWithWhereWithoutAirlineInput | Airline_MessageUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: Airline_MessageScalarWhereInput | Airline_MessageScalarWhereInput[]
+  }
+
+  export type ContactUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<ContactCreateWithoutAirlineInput, ContactUncheckedCreateWithoutAirlineInput> | ContactCreateWithoutAirlineInput[] | ContactUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: ContactCreateOrConnectWithoutAirlineInput | ContactCreateOrConnectWithoutAirlineInput[]
+    upsert?: ContactUpsertWithWhereUniqueWithoutAirlineInput | ContactUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: ContactCreateManyAirlineInputEnvelope
+    set?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    disconnect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    delete?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    update?: ContactUpdateWithWhereUniqueWithoutAirlineInput | ContactUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: ContactUpdateManyWithWhereWithoutAirlineInput | ContactUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: ContactScalarWhereInput | ContactScalarWhereInput[]
+  }
+
+  export type OperateUncheckedUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<OperateCreateWithoutAirlineInput, OperateUncheckedCreateWithoutAirlineInput> | OperateCreateWithoutAirlineInput[] | OperateUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: OperateCreateOrConnectWithoutAirlineInput | OperateCreateOrConnectWithoutAirlineInput[]
+    upsert?: OperateUpsertWithWhereUniqueWithoutAirlineInput | OperateUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: OperateCreateManyAirlineInputEnvelope
+    set?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    disconnect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    delete?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    connect?: OperateWhereUniqueInput | OperateWhereUniqueInput[]
+    update?: OperateUpdateWithWhereUniqueWithoutAirlineInput | OperateUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: OperateUpdateManyWithWhereWithoutAirlineInput | OperateUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: OperateScalarWhereInput | OperateScalarWhereInput[]
+  }
+
+  export type AircraftUncheckedUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<AircraftCreateWithoutAirlineInput, AircraftUncheckedCreateWithoutAirlineInput> | AircraftCreateWithoutAirlineInput[] | AircraftUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: AircraftCreateOrConnectWithoutAirlineInput | AircraftCreateOrConnectWithoutAirlineInput[]
+    upsert?: AircraftUpsertWithWhereUniqueWithoutAirlineInput | AircraftUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: AircraftCreateManyAirlineInputEnvelope
+    set?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+    disconnect?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+    delete?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+    connect?: AircraftWhereUniqueInput | AircraftWhereUniqueInput[]
+    update?: AircraftUpdateWithWhereUniqueWithoutAirlineInput | AircraftUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: AircraftUpdateManyWithWhereWithoutAirlineInput | AircraftUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: AircraftScalarWhereInput | AircraftScalarWhereInput[]
+  }
+
+  export type FlightUncheckedUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<FlightCreateWithoutAirlineInput, FlightUncheckedCreateWithoutAirlineInput> | FlightCreateWithoutAirlineInput[] | FlightUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutAirlineInput | FlightCreateOrConnectWithoutAirlineInput[]
+    upsert?: FlightUpsertWithWhereUniqueWithoutAirlineInput | FlightUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: FlightCreateManyAirlineInputEnvelope
+    set?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    disconnect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    delete?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    update?: FlightUpdateWithWhereUniqueWithoutAirlineInput | FlightUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: FlightUpdateManyWithWhereWithoutAirlineInput | FlightUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: FlightScalarWhereInput | FlightScalarWhereInput[]
+  }
+
+  export type Airline_Tel_NoUncheckedUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<Airline_Tel_NoCreateWithoutAirlineInput, Airline_Tel_NoUncheckedCreateWithoutAirlineInput> | Airline_Tel_NoCreateWithoutAirlineInput[] | Airline_Tel_NoUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: Airline_Tel_NoCreateOrConnectWithoutAirlineInput | Airline_Tel_NoCreateOrConnectWithoutAirlineInput[]
+    upsert?: Airline_Tel_NoUpsertWithWhereUniqueWithoutAirlineInput | Airline_Tel_NoUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: Airline_Tel_NoCreateManyAirlineInputEnvelope
+    set?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+    disconnect?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+    delete?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+    connect?: Airline_Tel_NoWhereUniqueInput | Airline_Tel_NoWhereUniqueInput[]
+    update?: Airline_Tel_NoUpdateWithWhereUniqueWithoutAirlineInput | Airline_Tel_NoUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: Airline_Tel_NoUpdateManyWithWhereWithoutAirlineInput | Airline_Tel_NoUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: Airline_Tel_NoScalarWhereInput | Airline_Tel_NoScalarWhereInput[]
+  }
+
+  export type Airline_MessageUncheckedUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<Airline_MessageCreateWithoutAirlineInput, Airline_MessageUncheckedCreateWithoutAirlineInput> | Airline_MessageCreateWithoutAirlineInput[] | Airline_MessageUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: Airline_MessageCreateOrConnectWithoutAirlineInput | Airline_MessageCreateOrConnectWithoutAirlineInput[]
+    upsert?: Airline_MessageUpsertWithWhereUniqueWithoutAirlineInput | Airline_MessageUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: Airline_MessageCreateManyAirlineInputEnvelope
+    set?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    disconnect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    delete?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    connect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    update?: Airline_MessageUpdateWithWhereUniqueWithoutAirlineInput | Airline_MessageUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: Airline_MessageUpdateManyWithWhereWithoutAirlineInput | Airline_MessageUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: Airline_MessageScalarWhereInput | Airline_MessageScalarWhereInput[]
+  }
+
+  export type ContactUncheckedUpdateManyWithoutAirlineNestedInput = {
+    create?: XOR<ContactCreateWithoutAirlineInput, ContactUncheckedCreateWithoutAirlineInput> | ContactCreateWithoutAirlineInput[] | ContactUncheckedCreateWithoutAirlineInput[]
+    connectOrCreate?: ContactCreateOrConnectWithoutAirlineInput | ContactCreateOrConnectWithoutAirlineInput[]
+    upsert?: ContactUpsertWithWhereUniqueWithoutAirlineInput | ContactUpsertWithWhereUniqueWithoutAirlineInput[]
+    createMany?: ContactCreateManyAirlineInputEnvelope
+    set?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    disconnect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    delete?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    update?: ContactUpdateWithWhereUniqueWithoutAirlineInput | ContactUpdateWithWhereUniqueWithoutAirlineInput[]
+    updateMany?: ContactUpdateManyWithWhereWithoutAirlineInput | ContactUpdateManyWithWhereWithoutAirlineInput[]
+    deleteMany?: ContactScalarWhereInput | ContactScalarWhereInput[]
+  }
+
+  export type AirlineCreateNestedOneWithoutAircraftsInput = {
+    create?: XOR<AirlineCreateWithoutAircraftsInput, AirlineUncheckedCreateWithoutAircraftsInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutAircraftsInput
+    connect?: AirlineWhereUniqueInput
+  }
+
+  export type SeatCreateNestedManyWithoutAircraftInput = {
+    create?: XOR<SeatCreateWithoutAircraftInput, SeatUncheckedCreateWithoutAircraftInput> | SeatCreateWithoutAircraftInput[] | SeatUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: SeatCreateOrConnectWithoutAircraftInput | SeatCreateOrConnectWithoutAircraftInput[]
+    createMany?: SeatCreateManyAircraftInputEnvelope
+    connect?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+  }
+
+  export type FlightCreateNestedManyWithoutAircraftInput = {
+    create?: XOR<FlightCreateWithoutAircraftInput, FlightUncheckedCreateWithoutAircraftInput> | FlightCreateWithoutAircraftInput[] | FlightUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutAircraftInput | FlightCreateOrConnectWithoutAircraftInput[]
+    createMany?: FlightCreateManyAircraftInputEnvelope
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+  }
+
+  export type CabinClassCreateNestedManyWithoutAircraftInput = {
+    create?: XOR<CabinClassCreateWithoutAircraftInput, CabinClassUncheckedCreateWithoutAircraftInput> | CabinClassCreateWithoutAircraftInput[] | CabinClassUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: CabinClassCreateOrConnectWithoutAircraftInput | CabinClassCreateOrConnectWithoutAircraftInput[]
+    createMany?: CabinClassCreateManyAircraftInputEnvelope
+    connect?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+  }
+
+  export type SeatUncheckedCreateNestedManyWithoutAircraftInput = {
+    create?: XOR<SeatCreateWithoutAircraftInput, SeatUncheckedCreateWithoutAircraftInput> | SeatCreateWithoutAircraftInput[] | SeatUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: SeatCreateOrConnectWithoutAircraftInput | SeatCreateOrConnectWithoutAircraftInput[]
+    createMany?: SeatCreateManyAircraftInputEnvelope
+    connect?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+  }
+
+  export type FlightUncheckedCreateNestedManyWithoutAircraftInput = {
+    create?: XOR<FlightCreateWithoutAircraftInput, FlightUncheckedCreateWithoutAircraftInput> | FlightCreateWithoutAircraftInput[] | FlightUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutAircraftInput | FlightCreateOrConnectWithoutAircraftInput[]
+    createMany?: FlightCreateManyAircraftInputEnvelope
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+  }
+
+  export type CabinClassUncheckedCreateNestedManyWithoutAircraftInput = {
+    create?: XOR<CabinClassCreateWithoutAircraftInput, CabinClassUncheckedCreateWithoutAircraftInput> | CabinClassCreateWithoutAircraftInput[] | CabinClassUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: CabinClassCreateOrConnectWithoutAircraftInput | CabinClassCreateOrConnectWithoutAircraftInput[]
+    createMany?: CabinClassCreateManyAircraftInputEnvelope
+    connect?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+  }
+
+  export type AirlineUpdateOneRequiredWithoutAircraftsNestedInput = {
+    create?: XOR<AirlineCreateWithoutAircraftsInput, AirlineUncheckedCreateWithoutAircraftsInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutAircraftsInput
+    upsert?: AirlineUpsertWithoutAircraftsInput
+    connect?: AirlineWhereUniqueInput
+    update?: XOR<XOR<AirlineUpdateToOneWithWhereWithoutAircraftsInput, AirlineUpdateWithoutAircraftsInput>, AirlineUncheckedUpdateWithoutAircraftsInput>
+  }
+
+  export type SeatUpdateManyWithoutAircraftNestedInput = {
+    create?: XOR<SeatCreateWithoutAircraftInput, SeatUncheckedCreateWithoutAircraftInput> | SeatCreateWithoutAircraftInput[] | SeatUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: SeatCreateOrConnectWithoutAircraftInput | SeatCreateOrConnectWithoutAircraftInput[]
+    upsert?: SeatUpsertWithWhereUniqueWithoutAircraftInput | SeatUpsertWithWhereUniqueWithoutAircraftInput[]
+    createMany?: SeatCreateManyAircraftInputEnvelope
+    set?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+    disconnect?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+    delete?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+    connect?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+    update?: SeatUpdateWithWhereUniqueWithoutAircraftInput | SeatUpdateWithWhereUniqueWithoutAircraftInput[]
+    updateMany?: SeatUpdateManyWithWhereWithoutAircraftInput | SeatUpdateManyWithWhereWithoutAircraftInput[]
+    deleteMany?: SeatScalarWhereInput | SeatScalarWhereInput[]
+  }
+
+  export type FlightUpdateManyWithoutAircraftNestedInput = {
+    create?: XOR<FlightCreateWithoutAircraftInput, FlightUncheckedCreateWithoutAircraftInput> | FlightCreateWithoutAircraftInput[] | FlightUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutAircraftInput | FlightCreateOrConnectWithoutAircraftInput[]
+    upsert?: FlightUpsertWithWhereUniqueWithoutAircraftInput | FlightUpsertWithWhereUniqueWithoutAircraftInput[]
+    createMany?: FlightCreateManyAircraftInputEnvelope
+    set?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    disconnect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    delete?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    update?: FlightUpdateWithWhereUniqueWithoutAircraftInput | FlightUpdateWithWhereUniqueWithoutAircraftInput[]
+    updateMany?: FlightUpdateManyWithWhereWithoutAircraftInput | FlightUpdateManyWithWhereWithoutAircraftInput[]
+    deleteMany?: FlightScalarWhereInput | FlightScalarWhereInput[]
+  }
+
+  export type CabinClassUpdateManyWithoutAircraftNestedInput = {
+    create?: XOR<CabinClassCreateWithoutAircraftInput, CabinClassUncheckedCreateWithoutAircraftInput> | CabinClassCreateWithoutAircraftInput[] | CabinClassUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: CabinClassCreateOrConnectWithoutAircraftInput | CabinClassCreateOrConnectWithoutAircraftInput[]
+    upsert?: CabinClassUpsertWithWhereUniqueWithoutAircraftInput | CabinClassUpsertWithWhereUniqueWithoutAircraftInput[]
+    createMany?: CabinClassCreateManyAircraftInputEnvelope
+    set?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+    disconnect?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+    delete?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+    connect?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+    update?: CabinClassUpdateWithWhereUniqueWithoutAircraftInput | CabinClassUpdateWithWhereUniqueWithoutAircraftInput[]
+    updateMany?: CabinClassUpdateManyWithWhereWithoutAircraftInput | CabinClassUpdateManyWithWhereWithoutAircraftInput[]
+    deleteMany?: CabinClassScalarWhereInput | CabinClassScalarWhereInput[]
+  }
+
+  export type SeatUncheckedUpdateManyWithoutAircraftNestedInput = {
+    create?: XOR<SeatCreateWithoutAircraftInput, SeatUncheckedCreateWithoutAircraftInput> | SeatCreateWithoutAircraftInput[] | SeatUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: SeatCreateOrConnectWithoutAircraftInput | SeatCreateOrConnectWithoutAircraftInput[]
+    upsert?: SeatUpsertWithWhereUniqueWithoutAircraftInput | SeatUpsertWithWhereUniqueWithoutAircraftInput[]
+    createMany?: SeatCreateManyAircraftInputEnvelope
+    set?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+    disconnect?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+    delete?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+    connect?: SeatWhereUniqueInput | SeatWhereUniqueInput[]
+    update?: SeatUpdateWithWhereUniqueWithoutAircraftInput | SeatUpdateWithWhereUniqueWithoutAircraftInput[]
+    updateMany?: SeatUpdateManyWithWhereWithoutAircraftInput | SeatUpdateManyWithWhereWithoutAircraftInput[]
+    deleteMany?: SeatScalarWhereInput | SeatScalarWhereInput[]
+  }
+
+  export type FlightUncheckedUpdateManyWithoutAircraftNestedInput = {
+    create?: XOR<FlightCreateWithoutAircraftInput, FlightUncheckedCreateWithoutAircraftInput> | FlightCreateWithoutAircraftInput[] | FlightUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: FlightCreateOrConnectWithoutAircraftInput | FlightCreateOrConnectWithoutAircraftInput[]
+    upsert?: FlightUpsertWithWhereUniqueWithoutAircraftInput | FlightUpsertWithWhereUniqueWithoutAircraftInput[]
+    createMany?: FlightCreateManyAircraftInputEnvelope
+    set?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    disconnect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    delete?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    connect?: FlightWhereUniqueInput | FlightWhereUniqueInput[]
+    update?: FlightUpdateWithWhereUniqueWithoutAircraftInput | FlightUpdateWithWhereUniqueWithoutAircraftInput[]
+    updateMany?: FlightUpdateManyWithWhereWithoutAircraftInput | FlightUpdateManyWithWhereWithoutAircraftInput[]
+    deleteMany?: FlightScalarWhereInput | FlightScalarWhereInput[]
+  }
+
+  export type CabinClassUncheckedUpdateManyWithoutAircraftNestedInput = {
+    create?: XOR<CabinClassCreateWithoutAircraftInput, CabinClassUncheckedCreateWithoutAircraftInput> | CabinClassCreateWithoutAircraftInput[] | CabinClassUncheckedCreateWithoutAircraftInput[]
+    connectOrCreate?: CabinClassCreateOrConnectWithoutAircraftInput | CabinClassCreateOrConnectWithoutAircraftInput[]
+    upsert?: CabinClassUpsertWithWhereUniqueWithoutAircraftInput | CabinClassUpsertWithWhereUniqueWithoutAircraftInput[]
+    createMany?: CabinClassCreateManyAircraftInputEnvelope
+    set?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+    disconnect?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+    delete?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+    connect?: CabinClassWhereUniqueInput | CabinClassWhereUniqueInput[]
+    update?: CabinClassUpdateWithWhereUniqueWithoutAircraftInput | CabinClassUpdateWithWhereUniqueWithoutAircraftInput[]
+    updateMany?: CabinClassUpdateManyWithWhereWithoutAircraftInput | CabinClassUpdateManyWithWhereWithoutAircraftInput[]
+    deleteMany?: CabinClassScalarWhereInput | CabinClassScalarWhereInput[]
+  }
+
+  export type AirportCreateNestedOneWithoutArrivalFlightsInput = {
+    create?: XOR<AirportCreateWithoutArrivalFlightsInput, AirportUncheckedCreateWithoutArrivalFlightsInput>
+    connectOrCreate?: AirportCreateOrConnectWithoutArrivalFlightsInput
+    connect?: AirportWhereUniqueInput
+  }
+
+  export type AirportCreateNestedOneWithoutDepartureFlightsInput = {
+    create?: XOR<AirportCreateWithoutDepartureFlightsInput, AirportUncheckedCreateWithoutDepartureFlightsInput>
+    connectOrCreate?: AirportCreateOrConnectWithoutDepartureFlightsInput
+    connect?: AirportWhereUniqueInput
+  }
+
+  export type AirlineCreateNestedOneWithoutFlightsInput = {
+    create?: XOR<AirlineCreateWithoutFlightsInput, AirlineUncheckedCreateWithoutFlightsInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutFlightsInput
+    connect?: AirlineWhereUniqueInput
+  }
+
+  export type AircraftCreateNestedOneWithoutFlightsInput = {
+    create?: XOR<AircraftCreateWithoutFlightsInput, AircraftUncheckedCreateWithoutFlightsInput>
+    connectOrCreate?: AircraftCreateOrConnectWithoutFlightsInput
+    connect?: AircraftWhereUniqueInput
+  }
+
+  export type Assigned_ToCreateNestedManyWithoutFlightInput = {
+    create?: XOR<Assigned_ToCreateWithoutFlightInput, Assigned_ToUncheckedCreateWithoutFlightInput> | Assigned_ToCreateWithoutFlightInput[] | Assigned_ToUncheckedCreateWithoutFlightInput[]
+    connectOrCreate?: Assigned_ToCreateOrConnectWithoutFlightInput | Assigned_ToCreateOrConnectWithoutFlightInput[]
+    createMany?: Assigned_ToCreateManyFlightInputEnvelope
+    connect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+  }
+
+  export type TicketCreateNestedManyWithoutFlightInput = {
+    create?: XOR<TicketCreateWithoutFlightInput, TicketUncheckedCreateWithoutFlightInput> | TicketCreateWithoutFlightInput[] | TicketUncheckedCreateWithoutFlightInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutFlightInput | TicketCreateOrConnectWithoutFlightInput[]
+    createMany?: TicketCreateManyFlightInputEnvelope
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type Assigned_ToUncheckedCreateNestedManyWithoutFlightInput = {
+    create?: XOR<Assigned_ToCreateWithoutFlightInput, Assigned_ToUncheckedCreateWithoutFlightInput> | Assigned_ToCreateWithoutFlightInput[] | Assigned_ToUncheckedCreateWithoutFlightInput[]
+    connectOrCreate?: Assigned_ToCreateOrConnectWithoutFlightInput | Assigned_ToCreateOrConnectWithoutFlightInput[]
+    createMany?: Assigned_ToCreateManyFlightInputEnvelope
+    connect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+  }
+
+  export type TicketUncheckedCreateNestedManyWithoutFlightInput = {
+    create?: XOR<TicketCreateWithoutFlightInput, TicketUncheckedCreateWithoutFlightInput> | TicketCreateWithoutFlightInput[] | TicketUncheckedCreateWithoutFlightInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutFlightInput | TicketCreateOrConnectWithoutFlightInput[]
+    createMany?: TicketCreateManyFlightInputEnvelope
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type AirportUpdateOneRequiredWithoutArrivalFlightsNestedInput = {
+    create?: XOR<AirportCreateWithoutArrivalFlightsInput, AirportUncheckedCreateWithoutArrivalFlightsInput>
+    connectOrCreate?: AirportCreateOrConnectWithoutArrivalFlightsInput
+    upsert?: AirportUpsertWithoutArrivalFlightsInput
+    connect?: AirportWhereUniqueInput
+    update?: XOR<XOR<AirportUpdateToOneWithWhereWithoutArrivalFlightsInput, AirportUpdateWithoutArrivalFlightsInput>, AirportUncheckedUpdateWithoutArrivalFlightsInput>
+  }
+
+  export type AirportUpdateOneRequiredWithoutDepartureFlightsNestedInput = {
+    create?: XOR<AirportCreateWithoutDepartureFlightsInput, AirportUncheckedCreateWithoutDepartureFlightsInput>
+    connectOrCreate?: AirportCreateOrConnectWithoutDepartureFlightsInput
+    upsert?: AirportUpsertWithoutDepartureFlightsInput
+    connect?: AirportWhereUniqueInput
+    update?: XOR<XOR<AirportUpdateToOneWithWhereWithoutDepartureFlightsInput, AirportUpdateWithoutDepartureFlightsInput>, AirportUncheckedUpdateWithoutDepartureFlightsInput>
+  }
+
+  export type AirlineUpdateOneRequiredWithoutFlightsNestedInput = {
+    create?: XOR<AirlineCreateWithoutFlightsInput, AirlineUncheckedCreateWithoutFlightsInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutFlightsInput
+    upsert?: AirlineUpsertWithoutFlightsInput
+    connect?: AirlineWhereUniqueInput
+    update?: XOR<XOR<AirlineUpdateToOneWithWhereWithoutFlightsInput, AirlineUpdateWithoutFlightsInput>, AirlineUncheckedUpdateWithoutFlightsInput>
+  }
+
+  export type AircraftUpdateOneRequiredWithoutFlightsNestedInput = {
+    create?: XOR<AircraftCreateWithoutFlightsInput, AircraftUncheckedCreateWithoutFlightsInput>
+    connectOrCreate?: AircraftCreateOrConnectWithoutFlightsInput
+    upsert?: AircraftUpsertWithoutFlightsInput
+    connect?: AircraftWhereUniqueInput
+    update?: XOR<XOR<AircraftUpdateToOneWithWhereWithoutFlightsInput, AircraftUpdateWithoutFlightsInput>, AircraftUncheckedUpdateWithoutFlightsInput>
+  }
+
+  export type Assigned_ToUpdateManyWithoutFlightNestedInput = {
+    create?: XOR<Assigned_ToCreateWithoutFlightInput, Assigned_ToUncheckedCreateWithoutFlightInput> | Assigned_ToCreateWithoutFlightInput[] | Assigned_ToUncheckedCreateWithoutFlightInput[]
+    connectOrCreate?: Assigned_ToCreateOrConnectWithoutFlightInput | Assigned_ToCreateOrConnectWithoutFlightInput[]
+    upsert?: Assigned_ToUpsertWithWhereUniqueWithoutFlightInput | Assigned_ToUpsertWithWhereUniqueWithoutFlightInput[]
+    createMany?: Assigned_ToCreateManyFlightInputEnvelope
+    set?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    disconnect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    delete?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    connect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    update?: Assigned_ToUpdateWithWhereUniqueWithoutFlightInput | Assigned_ToUpdateWithWhereUniqueWithoutFlightInput[]
+    updateMany?: Assigned_ToUpdateManyWithWhereWithoutFlightInput | Assigned_ToUpdateManyWithWhereWithoutFlightInput[]
+    deleteMany?: Assigned_ToScalarWhereInput | Assigned_ToScalarWhereInput[]
+  }
+
+  export type TicketUpdateManyWithoutFlightNestedInput = {
+    create?: XOR<TicketCreateWithoutFlightInput, TicketUncheckedCreateWithoutFlightInput> | TicketCreateWithoutFlightInput[] | TicketUncheckedCreateWithoutFlightInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutFlightInput | TicketCreateOrConnectWithoutFlightInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutFlightInput | TicketUpsertWithWhereUniqueWithoutFlightInput[]
+    createMany?: TicketCreateManyFlightInputEnvelope
+    set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutFlightInput | TicketUpdateWithWhereUniqueWithoutFlightInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutFlightInput | TicketUpdateManyWithWhereWithoutFlightInput[]
+    deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
+  }
+
+  export type Assigned_ToUncheckedUpdateManyWithoutFlightNestedInput = {
+    create?: XOR<Assigned_ToCreateWithoutFlightInput, Assigned_ToUncheckedCreateWithoutFlightInput> | Assigned_ToCreateWithoutFlightInput[] | Assigned_ToUncheckedCreateWithoutFlightInput[]
+    connectOrCreate?: Assigned_ToCreateOrConnectWithoutFlightInput | Assigned_ToCreateOrConnectWithoutFlightInput[]
+    upsert?: Assigned_ToUpsertWithWhereUniqueWithoutFlightInput | Assigned_ToUpsertWithWhereUniqueWithoutFlightInput[]
+    createMany?: Assigned_ToCreateManyFlightInputEnvelope
+    set?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    disconnect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    delete?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    connect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    update?: Assigned_ToUpdateWithWhereUniqueWithoutFlightInput | Assigned_ToUpdateWithWhereUniqueWithoutFlightInput[]
+    updateMany?: Assigned_ToUpdateManyWithWhereWithoutFlightInput | Assigned_ToUpdateManyWithWhereWithoutFlightInput[]
+    deleteMany?: Assigned_ToScalarWhereInput | Assigned_ToScalarWhereInput[]
+  }
+
+  export type TicketUncheckedUpdateManyWithoutFlightNestedInput = {
+    create?: XOR<TicketCreateWithoutFlightInput, TicketUncheckedCreateWithoutFlightInput> | TicketCreateWithoutFlightInput[] | TicketUncheckedCreateWithoutFlightInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutFlightInput | TicketCreateOrConnectWithoutFlightInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutFlightInput | TicketUpsertWithWhereUniqueWithoutFlightInput[]
+    createMany?: TicketCreateManyFlightInputEnvelope
+    set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutFlightInput | TicketUpdateWithWhereUniqueWithoutFlightInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutFlightInput | TicketUpdateManyWithWhereWithoutFlightInput[]
+    deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
+  }
+
+  export type FlightCreateNestedOneWithoutTicketsInput = {
+    create?: XOR<FlightCreateWithoutTicketsInput, FlightUncheckedCreateWithoutTicketsInput>
+    connectOrCreate?: FlightCreateOrConnectWithoutTicketsInput
+    connect?: FlightWhereUniqueInput
+  }
+
+  export type SeatCreateNestedOneWithoutTicketsInput = {
+    create?: XOR<SeatCreateWithoutTicketsInput, SeatUncheckedCreateWithoutTicketsInput>
+    connectOrCreate?: SeatCreateOrConnectWithoutTicketsInput
+    connect?: SeatWhereUniqueInput
+  }
+
+  export type PurchaseCreateNestedOneWithoutTicketInput = {
+    create?: XOR<PurchaseCreateWithoutTicketInput, PurchaseUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: PurchaseCreateOrConnectWithoutTicketInput
+    connect?: PurchaseWhereUniqueInput
+  }
+
+  export type Domestic_TicketCreateNestedOneWithoutTicketInput = {
+    create?: XOR<Domestic_TicketCreateWithoutTicketInput, Domestic_TicketUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: Domestic_TicketCreateOrConnectWithoutTicketInput
+    connect?: Domestic_TicketWhereUniqueInput
+  }
+
+  export type International_TicketCreateNestedOneWithoutTicketInput = {
+    create?: XOR<International_TicketCreateWithoutTicketInput, International_TicketUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: International_TicketCreateOrConnectWithoutTicketInput
+    connect?: International_TicketWhereUniqueInput
+  }
+
+  export type Round_Trip_TicketCreateNestedOneWithoutTicket1Input = {
+    create?: XOR<Round_Trip_TicketCreateWithoutTicket1Input, Round_Trip_TicketUncheckedCreateWithoutTicket1Input>
+    connectOrCreate?: Round_Trip_TicketCreateOrConnectWithoutTicket1Input
+    connect?: Round_Trip_TicketWhereUniqueInput
+  }
+
+  export type Round_Trip_TicketCreateNestedOneWithoutTicket2Input = {
+    create?: XOR<Round_Trip_TicketCreateWithoutTicket2Input, Round_Trip_TicketUncheckedCreateWithoutTicket2Input>
+    connectOrCreate?: Round_Trip_TicketCreateOrConnectWithoutTicket2Input
+    connect?: Round_Trip_TicketWhereUniqueInput
+  }
+
+  export type PurchaseUncheckedCreateNestedOneWithoutTicketInput = {
+    create?: XOR<PurchaseCreateWithoutTicketInput, PurchaseUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: PurchaseCreateOrConnectWithoutTicketInput
+    connect?: PurchaseWhereUniqueInput
+  }
+
+  export type Domestic_TicketUncheckedCreateNestedOneWithoutTicketInput = {
+    create?: XOR<Domestic_TicketCreateWithoutTicketInput, Domestic_TicketUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: Domestic_TicketCreateOrConnectWithoutTicketInput
+    connect?: Domestic_TicketWhereUniqueInput
+  }
+
+  export type International_TicketUncheckedCreateNestedOneWithoutTicketInput = {
+    create?: XOR<International_TicketCreateWithoutTicketInput, International_TicketUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: International_TicketCreateOrConnectWithoutTicketInput
+    connect?: International_TicketWhereUniqueInput
+  }
+
+  export type Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket1Input = {
+    create?: XOR<Round_Trip_TicketCreateWithoutTicket1Input, Round_Trip_TicketUncheckedCreateWithoutTicket1Input>
+    connectOrCreate?: Round_Trip_TicketCreateOrConnectWithoutTicket1Input
+    connect?: Round_Trip_TicketWhereUniqueInput
+  }
+
+  export type Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket2Input = {
+    create?: XOR<Round_Trip_TicketCreateWithoutTicket2Input, Round_Trip_TicketUncheckedCreateWithoutTicket2Input>
+    connectOrCreate?: Round_Trip_TicketCreateOrConnectWithoutTicket2Input
+    connect?: Round_Trip_TicketWhereUniqueInput
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -28782,8 +34271,990 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type FlightUpdateOneRequiredWithoutTicketsNestedInput = {
+    create?: XOR<FlightCreateWithoutTicketsInput, FlightUncheckedCreateWithoutTicketsInput>
+    connectOrCreate?: FlightCreateOrConnectWithoutTicketsInput
+    upsert?: FlightUpsertWithoutTicketsInput
+    connect?: FlightWhereUniqueInput
+    update?: XOR<XOR<FlightUpdateToOneWithWhereWithoutTicketsInput, FlightUpdateWithoutTicketsInput>, FlightUncheckedUpdateWithoutTicketsInput>
+  }
+
+  export type SeatUpdateOneRequiredWithoutTicketsNestedInput = {
+    create?: XOR<SeatCreateWithoutTicketsInput, SeatUncheckedCreateWithoutTicketsInput>
+    connectOrCreate?: SeatCreateOrConnectWithoutTicketsInput
+    upsert?: SeatUpsertWithoutTicketsInput
+    connect?: SeatWhereUniqueInput
+    update?: XOR<XOR<SeatUpdateToOneWithWhereWithoutTicketsInput, SeatUpdateWithoutTicketsInput>, SeatUncheckedUpdateWithoutTicketsInput>
+  }
+
+  export type PurchaseUpdateOneWithoutTicketNestedInput = {
+    create?: XOR<PurchaseCreateWithoutTicketInput, PurchaseUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: PurchaseCreateOrConnectWithoutTicketInput
+    upsert?: PurchaseUpsertWithoutTicketInput
+    disconnect?: PurchaseWhereInput | boolean
+    delete?: PurchaseWhereInput | boolean
+    connect?: PurchaseWhereUniqueInput
+    update?: XOR<XOR<PurchaseUpdateToOneWithWhereWithoutTicketInput, PurchaseUpdateWithoutTicketInput>, PurchaseUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type Domestic_TicketUpdateOneWithoutTicketNestedInput = {
+    create?: XOR<Domestic_TicketCreateWithoutTicketInput, Domestic_TicketUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: Domestic_TicketCreateOrConnectWithoutTicketInput
+    upsert?: Domestic_TicketUpsertWithoutTicketInput
+    disconnect?: Domestic_TicketWhereInput | boolean
+    delete?: Domestic_TicketWhereInput | boolean
+    connect?: Domestic_TicketWhereUniqueInput
+    update?: XOR<XOR<Domestic_TicketUpdateToOneWithWhereWithoutTicketInput, Domestic_TicketUpdateWithoutTicketInput>, Domestic_TicketUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type International_TicketUpdateOneWithoutTicketNestedInput = {
+    create?: XOR<International_TicketCreateWithoutTicketInput, International_TicketUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: International_TicketCreateOrConnectWithoutTicketInput
+    upsert?: International_TicketUpsertWithoutTicketInput
+    disconnect?: International_TicketWhereInput | boolean
+    delete?: International_TicketWhereInput | boolean
+    connect?: International_TicketWhereUniqueInput
+    update?: XOR<XOR<International_TicketUpdateToOneWithWhereWithoutTicketInput, International_TicketUpdateWithoutTicketInput>, International_TicketUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type Round_Trip_TicketUpdateOneWithoutTicket1NestedInput = {
+    create?: XOR<Round_Trip_TicketCreateWithoutTicket1Input, Round_Trip_TicketUncheckedCreateWithoutTicket1Input>
+    connectOrCreate?: Round_Trip_TicketCreateOrConnectWithoutTicket1Input
+    upsert?: Round_Trip_TicketUpsertWithoutTicket1Input
+    disconnect?: Round_Trip_TicketWhereInput | boolean
+    delete?: Round_Trip_TicketWhereInput | boolean
+    connect?: Round_Trip_TicketWhereUniqueInput
+    update?: XOR<XOR<Round_Trip_TicketUpdateToOneWithWhereWithoutTicket1Input, Round_Trip_TicketUpdateWithoutTicket1Input>, Round_Trip_TicketUncheckedUpdateWithoutTicket1Input>
+  }
+
+  export type Round_Trip_TicketUpdateOneWithoutTicket2NestedInput = {
+    create?: XOR<Round_Trip_TicketCreateWithoutTicket2Input, Round_Trip_TicketUncheckedCreateWithoutTicket2Input>
+    connectOrCreate?: Round_Trip_TicketCreateOrConnectWithoutTicket2Input
+    upsert?: Round_Trip_TicketUpsertWithoutTicket2Input
+    disconnect?: Round_Trip_TicketWhereInput | boolean
+    delete?: Round_Trip_TicketWhereInput | boolean
+    connect?: Round_Trip_TicketWhereUniqueInput
+    update?: XOR<XOR<Round_Trip_TicketUpdateToOneWithWhereWithoutTicket2Input, Round_Trip_TicketUpdateWithoutTicket2Input>, Round_Trip_TicketUncheckedUpdateWithoutTicket2Input>
+  }
+
+  export type PurchaseUncheckedUpdateOneWithoutTicketNestedInput = {
+    create?: XOR<PurchaseCreateWithoutTicketInput, PurchaseUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: PurchaseCreateOrConnectWithoutTicketInput
+    upsert?: PurchaseUpsertWithoutTicketInput
+    disconnect?: PurchaseWhereInput | boolean
+    delete?: PurchaseWhereInput | boolean
+    connect?: PurchaseWhereUniqueInput
+    update?: XOR<XOR<PurchaseUpdateToOneWithWhereWithoutTicketInput, PurchaseUpdateWithoutTicketInput>, PurchaseUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type Domestic_TicketUncheckedUpdateOneWithoutTicketNestedInput = {
+    create?: XOR<Domestic_TicketCreateWithoutTicketInput, Domestic_TicketUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: Domestic_TicketCreateOrConnectWithoutTicketInput
+    upsert?: Domestic_TicketUpsertWithoutTicketInput
+    disconnect?: Domestic_TicketWhereInput | boolean
+    delete?: Domestic_TicketWhereInput | boolean
+    connect?: Domestic_TicketWhereUniqueInput
+    update?: XOR<XOR<Domestic_TicketUpdateToOneWithWhereWithoutTicketInput, Domestic_TicketUpdateWithoutTicketInput>, Domestic_TicketUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type International_TicketUncheckedUpdateOneWithoutTicketNestedInput = {
+    create?: XOR<International_TicketCreateWithoutTicketInput, International_TicketUncheckedCreateWithoutTicketInput>
+    connectOrCreate?: International_TicketCreateOrConnectWithoutTicketInput
+    upsert?: International_TicketUpsertWithoutTicketInput
+    disconnect?: International_TicketWhereInput | boolean
+    delete?: International_TicketWhereInput | boolean
+    connect?: International_TicketWhereUniqueInput
+    update?: XOR<XOR<International_TicketUpdateToOneWithWhereWithoutTicketInput, International_TicketUpdateWithoutTicketInput>, International_TicketUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type Round_Trip_TicketUncheckedUpdateOneWithoutTicket1NestedInput = {
+    create?: XOR<Round_Trip_TicketCreateWithoutTicket1Input, Round_Trip_TicketUncheckedCreateWithoutTicket1Input>
+    connectOrCreate?: Round_Trip_TicketCreateOrConnectWithoutTicket1Input
+    upsert?: Round_Trip_TicketUpsertWithoutTicket1Input
+    disconnect?: Round_Trip_TicketWhereInput | boolean
+    delete?: Round_Trip_TicketWhereInput | boolean
+    connect?: Round_Trip_TicketWhereUniqueInput
+    update?: XOR<XOR<Round_Trip_TicketUpdateToOneWithWhereWithoutTicket1Input, Round_Trip_TicketUpdateWithoutTicket1Input>, Round_Trip_TicketUncheckedUpdateWithoutTicket1Input>
+  }
+
+  export type Round_Trip_TicketUncheckedUpdateOneWithoutTicket2NestedInput = {
+    create?: XOR<Round_Trip_TicketCreateWithoutTicket2Input, Round_Trip_TicketUncheckedCreateWithoutTicket2Input>
+    connectOrCreate?: Round_Trip_TicketCreateOrConnectWithoutTicket2Input
+    upsert?: Round_Trip_TicketUpsertWithoutTicket2Input
+    disconnect?: Round_Trip_TicketWhereInput | boolean
+    delete?: Round_Trip_TicketWhereInput | boolean
+    connect?: Round_Trip_TicketWhereUniqueInput
+    update?: XOR<XOR<Round_Trip_TicketUpdateToOneWithWhereWithoutTicket2Input, Round_Trip_TicketUpdateWithoutTicket2Input>, Round_Trip_TicketUncheckedUpdateWithoutTicket2Input>
+  }
+
+  export type AirportCreateNestedOneWithoutOperatesInput = {
+    create?: XOR<AirportCreateWithoutOperatesInput, AirportUncheckedCreateWithoutOperatesInput>
+    connectOrCreate?: AirportCreateOrConnectWithoutOperatesInput
+    connect?: AirportWhereUniqueInput
+  }
+
+  export type AirlineCreateNestedOneWithoutOperatesInput = {
+    create?: XOR<AirlineCreateWithoutOperatesInput, AirlineUncheckedCreateWithoutOperatesInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutOperatesInput
+    connect?: AirlineWhereUniqueInput
+  }
+
+  export type AirportUpdateOneRequiredWithoutOperatesNestedInput = {
+    create?: XOR<AirportCreateWithoutOperatesInput, AirportUncheckedCreateWithoutOperatesInput>
+    connectOrCreate?: AirportCreateOrConnectWithoutOperatesInput
+    upsert?: AirportUpsertWithoutOperatesInput
+    connect?: AirportWhereUniqueInput
+    update?: XOR<XOR<AirportUpdateToOneWithWhereWithoutOperatesInput, AirportUpdateWithoutOperatesInput>, AirportUncheckedUpdateWithoutOperatesInput>
+  }
+
+  export type AirlineUpdateOneRequiredWithoutOperatesNestedInput = {
+    create?: XOR<AirlineCreateWithoutOperatesInput, AirlineUncheckedCreateWithoutOperatesInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutOperatesInput
+    upsert?: AirlineUpsertWithoutOperatesInput
+    connect?: AirlineWhereUniqueInput
+    update?: XOR<XOR<AirlineUpdateToOneWithWhereWithoutOperatesInput, AirlineUpdateWithoutOperatesInput>, AirlineUncheckedUpdateWithoutOperatesInput>
+  }
+
+  export type FlightCreateNestedOneWithoutPassengersInput = {
+    create?: XOR<FlightCreateWithoutPassengersInput, FlightUncheckedCreateWithoutPassengersInput>
+    connectOrCreate?: FlightCreateOrConnectWithoutPassengersInput
+    connect?: FlightWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAssignedFlightsInput = {
+    create?: XOR<UserCreateWithoutAssignedFlightsInput, UserUncheckedCreateWithoutAssignedFlightsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedFlightsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type FlightUpdateOneRequiredWithoutPassengersNestedInput = {
+    create?: XOR<FlightCreateWithoutPassengersInput, FlightUncheckedCreateWithoutPassengersInput>
+    connectOrCreate?: FlightCreateOrConnectWithoutPassengersInput
+    upsert?: FlightUpsertWithoutPassengersInput
+    connect?: FlightWhereUniqueInput
+    update?: XOR<XOR<FlightUpdateToOneWithWhereWithoutPassengersInput, FlightUpdateWithoutPassengersInput>, FlightUncheckedUpdateWithoutPassengersInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutAssignedFlightsNestedInput = {
+    create?: XOR<UserCreateWithoutAssignedFlightsInput, UserUncheckedCreateWithoutAssignedFlightsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedFlightsInput
+    upsert?: UserUpsertWithoutAssignedFlightsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedFlightsInput, UserUpdateWithoutAssignedFlightsInput>, UserUncheckedUpdateWithoutAssignedFlightsInput>
+  }
+
+  export type AdminCreateNestedOneWithoutContactsInput = {
+    create?: XOR<AdminCreateWithoutContactsInput, AdminUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutContactsInput
+    connect?: AdminWhereUniqueInput
+  }
+
+  export type AirlineCreateNestedOneWithoutContactsInput = {
+    create?: XOR<AirlineCreateWithoutContactsInput, AirlineUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutContactsInput
+    connect?: AirlineWhereUniqueInput
+  }
+
+  export type AdminUpdateOneRequiredWithoutContactsNestedInput = {
+    create?: XOR<AdminCreateWithoutContactsInput, AdminUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutContactsInput
+    upsert?: AdminUpsertWithoutContactsInput
+    connect?: AdminWhereUniqueInput
+    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutContactsInput, AdminUpdateWithoutContactsInput>, AdminUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type AirlineUpdateOneRequiredWithoutContactsNestedInput = {
+    create?: XOR<AirlineCreateWithoutContactsInput, AirlineUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutContactsInput
+    upsert?: AirlineUpsertWithoutContactsInput
+    connect?: AirlineWhereUniqueInput
+    update?: XOR<XOR<AirlineUpdateToOneWithWhereWithoutContactsInput, AirlineUpdateWithoutContactsInput>, AirlineUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type AdminCreateNestedOneWithoutInvolvedInReportsInput = {
+    create?: XOR<AdminCreateWithoutInvolvedInReportsInput, AdminUncheckedCreateWithoutInvolvedInReportsInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutInvolvedInReportsInput
+    connect?: AdminWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutInvolvedInReportsInput = {
+    create?: XOR<UserCreateWithoutInvolvedInReportsInput, UserUncheckedCreateWithoutInvolvedInReportsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutInvolvedInReportsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ReportCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<ReportCreateWithoutCreatorInput, ReportUncheckedCreateWithoutCreatorInput> | ReportCreateWithoutCreatorInput[] | ReportUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ReportCreateOrConnectWithoutCreatorInput | ReportCreateOrConnectWithoutCreatorInput[]
+    createMany?: ReportCreateManyCreatorInputEnvelope
+    connect?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+  }
+
+  export type ReportUncheckedCreateNestedManyWithoutCreatorInput = {
+    create?: XOR<ReportCreateWithoutCreatorInput, ReportUncheckedCreateWithoutCreatorInput> | ReportCreateWithoutCreatorInput[] | ReportUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ReportCreateOrConnectWithoutCreatorInput | ReportCreateOrConnectWithoutCreatorInput[]
+    createMany?: ReportCreateManyCreatorInputEnvelope
+    connect?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+  }
+
+  export type AdminUpdateOneRequiredWithoutInvolvedInReportsNestedInput = {
+    create?: XOR<AdminCreateWithoutInvolvedInReportsInput, AdminUncheckedCreateWithoutInvolvedInReportsInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutInvolvedInReportsInput
+    upsert?: AdminUpsertWithoutInvolvedInReportsInput
+    connect?: AdminWhereUniqueInput
+    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutInvolvedInReportsInput, AdminUpdateWithoutInvolvedInReportsInput>, AdminUncheckedUpdateWithoutInvolvedInReportsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutInvolvedInReportsNestedInput = {
+    create?: XOR<UserCreateWithoutInvolvedInReportsInput, UserUncheckedCreateWithoutInvolvedInReportsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutInvolvedInReportsInput
+    upsert?: UserUpsertWithoutInvolvedInReportsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInvolvedInReportsInput, UserUpdateWithoutInvolvedInReportsInput>, UserUncheckedUpdateWithoutInvolvedInReportsInput>
+  }
+
+  export type ReportUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<ReportCreateWithoutCreatorInput, ReportUncheckedCreateWithoutCreatorInput> | ReportCreateWithoutCreatorInput[] | ReportUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ReportCreateOrConnectWithoutCreatorInput | ReportCreateOrConnectWithoutCreatorInput[]
+    upsert?: ReportUpsertWithWhereUniqueWithoutCreatorInput | ReportUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: ReportCreateManyCreatorInputEnvelope
+    set?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+    disconnect?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+    delete?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+    connect?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+    update?: ReportUpdateWithWhereUniqueWithoutCreatorInput | ReportUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: ReportUpdateManyWithWhereWithoutCreatorInput | ReportUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: ReportScalarWhereInput | ReportScalarWhereInput[]
+  }
+
+  export type ReportUncheckedUpdateManyWithoutCreatorNestedInput = {
+    create?: XOR<ReportCreateWithoutCreatorInput, ReportUncheckedCreateWithoutCreatorInput> | ReportCreateWithoutCreatorInput[] | ReportUncheckedCreateWithoutCreatorInput[]
+    connectOrCreate?: ReportCreateOrConnectWithoutCreatorInput | ReportCreateOrConnectWithoutCreatorInput[]
+    upsert?: ReportUpsertWithWhereUniqueWithoutCreatorInput | ReportUpsertWithWhereUniqueWithoutCreatorInput[]
+    createMany?: ReportCreateManyCreatorInputEnvelope
+    set?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+    disconnect?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+    delete?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+    connect?: ReportWhereUniqueInput | ReportWhereUniqueInput[]
+    update?: ReportUpdateWithWhereUniqueWithoutCreatorInput | ReportUpdateWithWhereUniqueWithoutCreatorInput[]
+    updateMany?: ReportUpdateManyWithWhereWithoutCreatorInput | ReportUpdateManyWithWhereWithoutCreatorInput[]
+    deleteMany?: ReportScalarWhereInput | ReportScalarWhereInput[]
+  }
+
+  export type AircraftCreateNestedOneWithoutCabinsInput = {
+    create?: XOR<AircraftCreateWithoutCabinsInput, AircraftUncheckedCreateWithoutCabinsInput>
+    connectOrCreate?: AircraftCreateOrConnectWithoutCabinsInput
+    connect?: AircraftWhereUniqueInput
+  }
+
+  export type AircraftUpdateOneRequiredWithoutCabinsNestedInput = {
+    create?: XOR<AircraftCreateWithoutCabinsInput, AircraftUncheckedCreateWithoutCabinsInput>
+    connectOrCreate?: AircraftCreateOrConnectWithoutCabinsInput
+    upsert?: AircraftUpsertWithoutCabinsInput
+    connect?: AircraftWhereUniqueInput
+    update?: XOR<XOR<AircraftUpdateToOneWithWhereWithoutCabinsInput, AircraftUpdateWithoutCabinsInput>, AircraftUncheckedUpdateWithoutCabinsInput>
+  }
+
+  export type AircraftCreateNestedOneWithoutSeatsInput = {
+    create?: XOR<AircraftCreateWithoutSeatsInput, AircraftUncheckedCreateWithoutSeatsInput>
+    connectOrCreate?: AircraftCreateOrConnectWithoutSeatsInput
+    connect?: AircraftWhereUniqueInput
+  }
+
+  export type TicketCreateNestedManyWithoutSeatInput = {
+    create?: XOR<TicketCreateWithoutSeatInput, TicketUncheckedCreateWithoutSeatInput> | TicketCreateWithoutSeatInput[] | TicketUncheckedCreateWithoutSeatInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutSeatInput | TicketCreateOrConnectWithoutSeatInput[]
+    createMany?: TicketCreateManySeatInputEnvelope
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type TicketUncheckedCreateNestedManyWithoutSeatInput = {
+    create?: XOR<TicketCreateWithoutSeatInput, TicketUncheckedCreateWithoutSeatInput> | TicketCreateWithoutSeatInput[] | TicketUncheckedCreateWithoutSeatInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutSeatInput | TicketCreateOrConnectWithoutSeatInput[]
+    createMany?: TicketCreateManySeatInputEnvelope
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type AircraftUpdateOneRequiredWithoutSeatsNestedInput = {
+    create?: XOR<AircraftCreateWithoutSeatsInput, AircraftUncheckedCreateWithoutSeatsInput>
+    connectOrCreate?: AircraftCreateOrConnectWithoutSeatsInput
+    upsert?: AircraftUpsertWithoutSeatsInput
+    connect?: AircraftWhereUniqueInput
+    update?: XOR<XOR<AircraftUpdateToOneWithWhereWithoutSeatsInput, AircraftUpdateWithoutSeatsInput>, AircraftUncheckedUpdateWithoutSeatsInput>
+  }
+
+  export type TicketUpdateManyWithoutSeatNestedInput = {
+    create?: XOR<TicketCreateWithoutSeatInput, TicketUncheckedCreateWithoutSeatInput> | TicketCreateWithoutSeatInput[] | TicketUncheckedCreateWithoutSeatInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutSeatInput | TicketCreateOrConnectWithoutSeatInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutSeatInput | TicketUpsertWithWhereUniqueWithoutSeatInput[]
+    createMany?: TicketCreateManySeatInputEnvelope
+    set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutSeatInput | TicketUpdateWithWhereUniqueWithoutSeatInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutSeatInput | TicketUpdateManyWithWhereWithoutSeatInput[]
+    deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
+  }
+
+  export type TicketUncheckedUpdateManyWithoutSeatNestedInput = {
+    create?: XOR<TicketCreateWithoutSeatInput, TicketUncheckedCreateWithoutSeatInput> | TicketCreateWithoutSeatInput[] | TicketUncheckedCreateWithoutSeatInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutSeatInput | TicketCreateOrConnectWithoutSeatInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutSeatInput | TicketUpsertWithWhereUniqueWithoutSeatInput[]
+    createMany?: TicketCreateManySeatInputEnvelope
+    set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutSeatInput | TicketUpdateWithWhereUniqueWithoutSeatInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutSeatInput | TicketUpdateManyWithWhereWithoutSeatInput[]
+    deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
+  }
+
+  export type AccountCreateNestedOneWithoutAdminInput = {
+    create?: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutAdminInput
+    connect?: AccountWhereUniqueInput
+  }
+
+  export type Airline_MessageCreateNestedManyWithoutAdminInput = {
+    create?: XOR<Airline_MessageCreateWithoutAdminInput, Airline_MessageUncheckedCreateWithoutAdminInput> | Airline_MessageCreateWithoutAdminInput[] | Airline_MessageUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: Airline_MessageCreateOrConnectWithoutAdminInput | Airline_MessageCreateOrConnectWithoutAdminInput[]
+    createMany?: Airline_MessageCreateManyAdminInputEnvelope
+    connect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+  }
+
+  export type ContactCreateNestedManyWithoutAdminInput = {
+    create?: XOR<ContactCreateWithoutAdminInput, ContactUncheckedCreateWithoutAdminInput> | ContactCreateWithoutAdminInput[] | ContactUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: ContactCreateOrConnectWithoutAdminInput | ContactCreateOrConnectWithoutAdminInput[]
+    createMany?: ContactCreateManyAdminInputEnvelope
+    connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+  }
+
+  export type Report_ToCreateNestedManyWithoutAdminInput = {
+    create?: XOR<Report_ToCreateWithoutAdminInput, Report_ToUncheckedCreateWithoutAdminInput> | Report_ToCreateWithoutAdminInput[] | Report_ToUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: Report_ToCreateOrConnectWithoutAdminInput | Report_ToCreateOrConnectWithoutAdminInput[]
+    createMany?: Report_ToCreateManyAdminInputEnvelope
+    connect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+  }
+
+  export type Airline_MessageUncheckedCreateNestedManyWithoutAdminInput = {
+    create?: XOR<Airline_MessageCreateWithoutAdminInput, Airline_MessageUncheckedCreateWithoutAdminInput> | Airline_MessageCreateWithoutAdminInput[] | Airline_MessageUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: Airline_MessageCreateOrConnectWithoutAdminInput | Airline_MessageCreateOrConnectWithoutAdminInput[]
+    createMany?: Airline_MessageCreateManyAdminInputEnvelope
+    connect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+  }
+
+  export type ContactUncheckedCreateNestedManyWithoutAdminInput = {
+    create?: XOR<ContactCreateWithoutAdminInput, ContactUncheckedCreateWithoutAdminInput> | ContactCreateWithoutAdminInput[] | ContactUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: ContactCreateOrConnectWithoutAdminInput | ContactCreateOrConnectWithoutAdminInput[]
+    createMany?: ContactCreateManyAdminInputEnvelope
+    connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+  }
+
+  export type Report_ToUncheckedCreateNestedManyWithoutAdminInput = {
+    create?: XOR<Report_ToCreateWithoutAdminInput, Report_ToUncheckedCreateWithoutAdminInput> | Report_ToCreateWithoutAdminInput[] | Report_ToUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: Report_ToCreateOrConnectWithoutAdminInput | Report_ToCreateOrConnectWithoutAdminInput[]
+    createMany?: Report_ToCreateManyAdminInputEnvelope
+    connect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+  }
+
+  export type AccountUpdateOneRequiredWithoutAdminNestedInput = {
+    create?: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutAdminInput
+    upsert?: AccountUpsertWithoutAdminInput
+    connect?: AccountWhereUniqueInput
+    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutAdminInput, AccountUpdateWithoutAdminInput>, AccountUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type Airline_MessageUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<Airline_MessageCreateWithoutAdminInput, Airline_MessageUncheckedCreateWithoutAdminInput> | Airline_MessageCreateWithoutAdminInput[] | Airline_MessageUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: Airline_MessageCreateOrConnectWithoutAdminInput | Airline_MessageCreateOrConnectWithoutAdminInput[]
+    upsert?: Airline_MessageUpsertWithWhereUniqueWithoutAdminInput | Airline_MessageUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: Airline_MessageCreateManyAdminInputEnvelope
+    set?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    disconnect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    delete?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    connect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    update?: Airline_MessageUpdateWithWhereUniqueWithoutAdminInput | Airline_MessageUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: Airline_MessageUpdateManyWithWhereWithoutAdminInput | Airline_MessageUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: Airline_MessageScalarWhereInput | Airline_MessageScalarWhereInput[]
+  }
+
+  export type ContactUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<ContactCreateWithoutAdminInput, ContactUncheckedCreateWithoutAdminInput> | ContactCreateWithoutAdminInput[] | ContactUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: ContactCreateOrConnectWithoutAdminInput | ContactCreateOrConnectWithoutAdminInput[]
+    upsert?: ContactUpsertWithWhereUniqueWithoutAdminInput | ContactUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: ContactCreateManyAdminInputEnvelope
+    set?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    disconnect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    delete?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    update?: ContactUpdateWithWhereUniqueWithoutAdminInput | ContactUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: ContactUpdateManyWithWhereWithoutAdminInput | ContactUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: ContactScalarWhereInput | ContactScalarWhereInput[]
+  }
+
+  export type Report_ToUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<Report_ToCreateWithoutAdminInput, Report_ToUncheckedCreateWithoutAdminInput> | Report_ToCreateWithoutAdminInput[] | Report_ToUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: Report_ToCreateOrConnectWithoutAdminInput | Report_ToCreateOrConnectWithoutAdminInput[]
+    upsert?: Report_ToUpsertWithWhereUniqueWithoutAdminInput | Report_ToUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: Report_ToCreateManyAdminInputEnvelope
+    set?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    disconnect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    delete?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    connect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    update?: Report_ToUpdateWithWhereUniqueWithoutAdminInput | Report_ToUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: Report_ToUpdateManyWithWhereWithoutAdminInput | Report_ToUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: Report_ToScalarWhereInput | Report_ToScalarWhereInput[]
+  }
+
+  export type Airline_MessageUncheckedUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<Airline_MessageCreateWithoutAdminInput, Airline_MessageUncheckedCreateWithoutAdminInput> | Airline_MessageCreateWithoutAdminInput[] | Airline_MessageUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: Airline_MessageCreateOrConnectWithoutAdminInput | Airline_MessageCreateOrConnectWithoutAdminInput[]
+    upsert?: Airline_MessageUpsertWithWhereUniqueWithoutAdminInput | Airline_MessageUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: Airline_MessageCreateManyAdminInputEnvelope
+    set?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    disconnect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    delete?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    connect?: Airline_MessageWhereUniqueInput | Airline_MessageWhereUniqueInput[]
+    update?: Airline_MessageUpdateWithWhereUniqueWithoutAdminInput | Airline_MessageUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: Airline_MessageUpdateManyWithWhereWithoutAdminInput | Airline_MessageUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: Airline_MessageScalarWhereInput | Airline_MessageScalarWhereInput[]
+  }
+
+  export type ContactUncheckedUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<ContactCreateWithoutAdminInput, ContactUncheckedCreateWithoutAdminInput> | ContactCreateWithoutAdminInput[] | ContactUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: ContactCreateOrConnectWithoutAdminInput | ContactCreateOrConnectWithoutAdminInput[]
+    upsert?: ContactUpsertWithWhereUniqueWithoutAdminInput | ContactUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: ContactCreateManyAdminInputEnvelope
+    set?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    disconnect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    delete?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+    update?: ContactUpdateWithWhereUniqueWithoutAdminInput | ContactUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: ContactUpdateManyWithWhereWithoutAdminInput | ContactUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: ContactScalarWhereInput | ContactScalarWhereInput[]
+  }
+
+  export type Report_ToUncheckedUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<Report_ToCreateWithoutAdminInput, Report_ToUncheckedCreateWithoutAdminInput> | Report_ToCreateWithoutAdminInput[] | Report_ToUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: Report_ToCreateOrConnectWithoutAdminInput | Report_ToCreateOrConnectWithoutAdminInput[]
+    upsert?: Report_ToUpsertWithWhereUniqueWithoutAdminInput | Report_ToUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: Report_ToCreateManyAdminInputEnvelope
+    set?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    disconnect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    delete?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    connect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    update?: Report_ToUpdateWithWhereUniqueWithoutAdminInput | Report_ToUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: Report_ToUpdateManyWithWhereWithoutAdminInput | Report_ToUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: Report_ToScalarWhereInput | Report_ToScalarWhereInput[]
+  }
+
+  export type AdminCreateNestedOneWithoutSentAirlineMessagesInput = {
+    create?: XOR<AdminCreateWithoutSentAirlineMessagesInput, AdminUncheckedCreateWithoutSentAirlineMessagesInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutSentAirlineMessagesInput
+    connect?: AdminWhereUniqueInput
+  }
+
+  export type AirlineCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<AirlineCreateWithoutMessagesInput, AirlineUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutMessagesInput
+    connect?: AirlineWhereUniqueInput
+  }
+
+  export type AdminUpdateOneRequiredWithoutSentAirlineMessagesNestedInput = {
+    create?: XOR<AdminCreateWithoutSentAirlineMessagesInput, AdminUncheckedCreateWithoutSentAirlineMessagesInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutSentAirlineMessagesInput
+    upsert?: AdminUpsertWithoutSentAirlineMessagesInput
+    connect?: AdminWhereUniqueInput
+    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutSentAirlineMessagesInput, AdminUpdateWithoutSentAirlineMessagesInput>, AdminUncheckedUpdateWithoutSentAirlineMessagesInput>
+  }
+
+  export type AirlineUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<AirlineCreateWithoutMessagesInput, AirlineUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutMessagesInput
+    upsert?: AirlineUpsertWithoutMessagesInput
+    connect?: AirlineWhereUniqueInput
+    update?: XOR<XOR<AirlineUpdateToOneWithWhereWithoutMessagesInput, AirlineUpdateWithoutMessagesInput>, AirlineUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type UserCreateNestedOneWithoutAccountInput = {
+    create?: XOR<UserCreateWithoutAccountInput, UserUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAccountInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type AdminCreateNestedOneWithoutAccountInput = {
+    create?: XOR<AdminCreateWithoutAccountInput, AdminUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutAccountInput
+    connect?: AdminWhereUniqueInput
+  }
+
+  export type UserUncheckedCreateNestedOneWithoutAccountInput = {
+    create?: XOR<UserCreateWithoutAccountInput, UserUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAccountInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type AdminUncheckedCreateNestedOneWithoutAccountInput = {
+    create?: XOR<AdminCreateWithoutAccountInput, AdminUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutAccountInput
+    connect?: AdminWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutAccountNestedInput = {
+    create?: XOR<UserCreateWithoutAccountInput, UserUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAccountInput
+    upsert?: UserUpsertWithoutAccountInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountInput, UserUpdateWithoutAccountInput>, UserUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type AdminUpdateOneWithoutAccountNestedInput = {
+    create?: XOR<AdminCreateWithoutAccountInput, AdminUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutAccountInput
+    upsert?: AdminUpsertWithoutAccountInput
+    disconnect?: AdminWhereInput | boolean
+    delete?: AdminWhereInput | boolean
+    connect?: AdminWhereUniqueInput
+    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutAccountInput, AdminUpdateWithoutAccountInput>, AdminUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type UserUncheckedUpdateOneWithoutAccountNestedInput = {
+    create?: XOR<UserCreateWithoutAccountInput, UserUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAccountInput
+    upsert?: UserUpsertWithoutAccountInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountInput, UserUpdateWithoutAccountInput>, UserUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type AdminUncheckedUpdateOneWithoutAccountNestedInput = {
+    create?: XOR<AdminCreateWithoutAccountInput, AdminUncheckedCreateWithoutAccountInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutAccountInput
+    upsert?: AdminUpsertWithoutAccountInput
+    disconnect?: AdminWhereInput | boolean
+    delete?: AdminWhereInput | boolean
+    connect?: AdminWhereUniqueInput
+    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutAccountInput, AdminUpdateWithoutAccountInput>, AdminUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type AccountCreateNestedOneWithoutUserInput = {
+    create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutUserInput
+    connect?: AccountWhereUniqueInput
+  }
+
+  export type User_Tel_NoCreateNestedManyWithoutUserInput = {
+    create?: XOR<User_Tel_NoCreateWithoutUserInput, User_Tel_NoUncheckedCreateWithoutUserInput> | User_Tel_NoCreateWithoutUserInput[] | User_Tel_NoUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: User_Tel_NoCreateOrConnectWithoutUserInput | User_Tel_NoCreateOrConnectWithoutUserInput[]
+    createMany?: User_Tel_NoCreateManyUserInputEnvelope
+    connect?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+  }
+
+  export type Assigned_ToCreateNestedManyWithoutUserInput = {
+    create?: XOR<Assigned_ToCreateWithoutUserInput, Assigned_ToUncheckedCreateWithoutUserInput> | Assigned_ToCreateWithoutUserInput[] | Assigned_ToUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: Assigned_ToCreateOrConnectWithoutUserInput | Assigned_ToCreateOrConnectWithoutUserInput[]
+    createMany?: Assigned_ToCreateManyUserInputEnvelope
+    connect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+  }
+
+  export type PurchaseCreateNestedManyWithoutUserInput = {
+    create?: XOR<PurchaseCreateWithoutUserInput, PurchaseUncheckedCreateWithoutUserInput> | PurchaseCreateWithoutUserInput[] | PurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PurchaseCreateOrConnectWithoutUserInput | PurchaseCreateOrConnectWithoutUserInput[]
+    createMany?: PurchaseCreateManyUserInputEnvelope
+    connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+  }
+
+  export type Report_ToCreateNestedManyWithoutUserInput = {
+    create?: XOR<Report_ToCreateWithoutUserInput, Report_ToUncheckedCreateWithoutUserInput> | Report_ToCreateWithoutUserInput[] | Report_ToUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: Report_ToCreateOrConnectWithoutUserInput | Report_ToCreateOrConnectWithoutUserInput[]
+    createMany?: Report_ToCreateManyUserInputEnvelope
+    connect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+  }
+
+  export type SessionCreateNestedManyWithoutUserInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
+  export type User_Tel_NoUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<User_Tel_NoCreateWithoutUserInput, User_Tel_NoUncheckedCreateWithoutUserInput> | User_Tel_NoCreateWithoutUserInput[] | User_Tel_NoUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: User_Tel_NoCreateOrConnectWithoutUserInput | User_Tel_NoCreateOrConnectWithoutUserInput[]
+    createMany?: User_Tel_NoCreateManyUserInputEnvelope
+    connect?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+  }
+
+  export type Assigned_ToUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<Assigned_ToCreateWithoutUserInput, Assigned_ToUncheckedCreateWithoutUserInput> | Assigned_ToCreateWithoutUserInput[] | Assigned_ToUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: Assigned_ToCreateOrConnectWithoutUserInput | Assigned_ToCreateOrConnectWithoutUserInput[]
+    createMany?: Assigned_ToCreateManyUserInputEnvelope
+    connect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+  }
+
+  export type PurchaseUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PurchaseCreateWithoutUserInput, PurchaseUncheckedCreateWithoutUserInput> | PurchaseCreateWithoutUserInput[] | PurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PurchaseCreateOrConnectWithoutUserInput | PurchaseCreateOrConnectWithoutUserInput[]
+    createMany?: PurchaseCreateManyUserInputEnvelope
+    connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+  }
+
+  export type Report_ToUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<Report_ToCreateWithoutUserInput, Report_ToUncheckedCreateWithoutUserInput> | Report_ToCreateWithoutUserInput[] | Report_ToUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: Report_ToCreateOrConnectWithoutUserInput | Report_ToCreateOrConnectWithoutUserInput[]
+    createMany?: Report_ToCreateManyUserInputEnvelope
+    connect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+  }
+
+  export type SessionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
+  export type AccountUpdateOneRequiredWithoutUserNestedInput = {
+    create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutUserInput
+    upsert?: AccountUpsertWithoutUserInput
+    connect?: AccountWhereUniqueInput
+    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutUserInput, AccountUpdateWithoutUserInput>, AccountUncheckedUpdateWithoutUserInput>
+  }
+
+  export type User_Tel_NoUpdateManyWithoutUserNestedInput = {
+    create?: XOR<User_Tel_NoCreateWithoutUserInput, User_Tel_NoUncheckedCreateWithoutUserInput> | User_Tel_NoCreateWithoutUserInput[] | User_Tel_NoUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: User_Tel_NoCreateOrConnectWithoutUserInput | User_Tel_NoCreateOrConnectWithoutUserInput[]
+    upsert?: User_Tel_NoUpsertWithWhereUniqueWithoutUserInput | User_Tel_NoUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: User_Tel_NoCreateManyUserInputEnvelope
+    set?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+    disconnect?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+    delete?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+    connect?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+    update?: User_Tel_NoUpdateWithWhereUniqueWithoutUserInput | User_Tel_NoUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: User_Tel_NoUpdateManyWithWhereWithoutUserInput | User_Tel_NoUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: User_Tel_NoScalarWhereInput | User_Tel_NoScalarWhereInput[]
+  }
+
+  export type Assigned_ToUpdateManyWithoutUserNestedInput = {
+    create?: XOR<Assigned_ToCreateWithoutUserInput, Assigned_ToUncheckedCreateWithoutUserInput> | Assigned_ToCreateWithoutUserInput[] | Assigned_ToUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: Assigned_ToCreateOrConnectWithoutUserInput | Assigned_ToCreateOrConnectWithoutUserInput[]
+    upsert?: Assigned_ToUpsertWithWhereUniqueWithoutUserInput | Assigned_ToUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: Assigned_ToCreateManyUserInputEnvelope
+    set?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    disconnect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    delete?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    connect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    update?: Assigned_ToUpdateWithWhereUniqueWithoutUserInput | Assigned_ToUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: Assigned_ToUpdateManyWithWhereWithoutUserInput | Assigned_ToUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: Assigned_ToScalarWhereInput | Assigned_ToScalarWhereInput[]
+  }
+
+  export type PurchaseUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PurchaseCreateWithoutUserInput, PurchaseUncheckedCreateWithoutUserInput> | PurchaseCreateWithoutUserInput[] | PurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PurchaseCreateOrConnectWithoutUserInput | PurchaseCreateOrConnectWithoutUserInput[]
+    upsert?: PurchaseUpsertWithWhereUniqueWithoutUserInput | PurchaseUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PurchaseCreateManyUserInputEnvelope
+    set?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+    disconnect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+    delete?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+    connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+    update?: PurchaseUpdateWithWhereUniqueWithoutUserInput | PurchaseUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PurchaseUpdateManyWithWhereWithoutUserInput | PurchaseUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
+  }
+
+  export type Report_ToUpdateManyWithoutUserNestedInput = {
+    create?: XOR<Report_ToCreateWithoutUserInput, Report_ToUncheckedCreateWithoutUserInput> | Report_ToCreateWithoutUserInput[] | Report_ToUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: Report_ToCreateOrConnectWithoutUserInput | Report_ToCreateOrConnectWithoutUserInput[]
+    upsert?: Report_ToUpsertWithWhereUniqueWithoutUserInput | Report_ToUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: Report_ToCreateManyUserInputEnvelope
+    set?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    disconnect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    delete?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    connect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    update?: Report_ToUpdateWithWhereUniqueWithoutUserInput | Report_ToUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: Report_ToUpdateManyWithWhereWithoutUserInput | Report_ToUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: Report_ToScalarWhereInput | Report_ToScalarWhereInput[]
+  }
+
+  export type SessionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    upsert?: SessionUpsertWithWhereUniqueWithoutUserInput | SessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    set?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    disconnect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    delete?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
+  export type User_Tel_NoUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<User_Tel_NoCreateWithoutUserInput, User_Tel_NoUncheckedCreateWithoutUserInput> | User_Tel_NoCreateWithoutUserInput[] | User_Tel_NoUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: User_Tel_NoCreateOrConnectWithoutUserInput | User_Tel_NoCreateOrConnectWithoutUserInput[]
+    upsert?: User_Tel_NoUpsertWithWhereUniqueWithoutUserInput | User_Tel_NoUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: User_Tel_NoCreateManyUserInputEnvelope
+    set?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+    disconnect?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+    delete?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+    connect?: User_Tel_NoWhereUniqueInput | User_Tel_NoWhereUniqueInput[]
+    update?: User_Tel_NoUpdateWithWhereUniqueWithoutUserInput | User_Tel_NoUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: User_Tel_NoUpdateManyWithWhereWithoutUserInput | User_Tel_NoUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: User_Tel_NoScalarWhereInput | User_Tel_NoScalarWhereInput[]
+  }
+
+  export type Assigned_ToUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<Assigned_ToCreateWithoutUserInput, Assigned_ToUncheckedCreateWithoutUserInput> | Assigned_ToCreateWithoutUserInput[] | Assigned_ToUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: Assigned_ToCreateOrConnectWithoutUserInput | Assigned_ToCreateOrConnectWithoutUserInput[]
+    upsert?: Assigned_ToUpsertWithWhereUniqueWithoutUserInput | Assigned_ToUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: Assigned_ToCreateManyUserInputEnvelope
+    set?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    disconnect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    delete?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    connect?: Assigned_ToWhereUniqueInput | Assigned_ToWhereUniqueInput[]
+    update?: Assigned_ToUpdateWithWhereUniqueWithoutUserInput | Assigned_ToUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: Assigned_ToUpdateManyWithWhereWithoutUserInput | Assigned_ToUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: Assigned_ToScalarWhereInput | Assigned_ToScalarWhereInput[]
+  }
+
+  export type PurchaseUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PurchaseCreateWithoutUserInput, PurchaseUncheckedCreateWithoutUserInput> | PurchaseCreateWithoutUserInput[] | PurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PurchaseCreateOrConnectWithoutUserInput | PurchaseCreateOrConnectWithoutUserInput[]
+    upsert?: PurchaseUpsertWithWhereUniqueWithoutUserInput | PurchaseUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PurchaseCreateManyUserInputEnvelope
+    set?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+    disconnect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+    delete?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+    connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+    update?: PurchaseUpdateWithWhereUniqueWithoutUserInput | PurchaseUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PurchaseUpdateManyWithWhereWithoutUserInput | PurchaseUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
+  }
+
+  export type Report_ToUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<Report_ToCreateWithoutUserInput, Report_ToUncheckedCreateWithoutUserInput> | Report_ToCreateWithoutUserInput[] | Report_ToUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: Report_ToCreateOrConnectWithoutUserInput | Report_ToCreateOrConnectWithoutUserInput[]
+    upsert?: Report_ToUpsertWithWhereUniqueWithoutUserInput | Report_ToUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: Report_ToCreateManyUserInputEnvelope
+    set?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    disconnect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    delete?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    connect?: Report_ToWhereUniqueInput | Report_ToWhereUniqueInput[]
+    update?: Report_ToUpdateWithWhereUniqueWithoutUserInput | Report_ToUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: Report_ToUpdateManyWithWhereWithoutUserInput | Report_ToUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: Report_ToScalarWhereInput | Report_ToScalarWhereInput[]
+  }
+
+  export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
+    upsert?: SessionUpsertWithWhereUniqueWithoutUserInput | SessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SessionCreateManyUserInputEnvelope
+    set?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    disconnect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    delete?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+    update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutTelNosInput = {
+    create?: XOR<UserCreateWithoutTelNosInput, UserUncheckedCreateWithoutTelNosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTelNosInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutTelNosNestedInput = {
+    create?: XOR<UserCreateWithoutTelNosInput, UserUncheckedCreateWithoutTelNosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTelNosInput
+    upsert?: UserUpsertWithoutTelNosInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTelNosInput, UserUpdateWithoutTelNosInput>, UserUncheckedUpdateWithoutTelNosInput>
+  }
+
+  export type Report_ToCreateNestedOneWithoutReportsInput = {
+    create?: XOR<Report_ToCreateWithoutReportsInput, Report_ToUncheckedCreateWithoutReportsInput>
+    connectOrCreate?: Report_ToCreateOrConnectWithoutReportsInput
+    connect?: Report_ToWhereUniqueInput
+  }
+
+  export type Report_ToUpdateOneRequiredWithoutReportsNestedInput = {
+    create?: XOR<Report_ToCreateWithoutReportsInput, Report_ToUncheckedCreateWithoutReportsInput>
+    connectOrCreate?: Report_ToCreateOrConnectWithoutReportsInput
+    upsert?: Report_ToUpsertWithoutReportsInput
+    connect?: Report_ToWhereUniqueInput
+    update?: XOR<XOR<Report_ToUpdateToOneWithWhereWithoutReportsInput, Report_ToUpdateWithoutReportsInput>, Report_ToUncheckedUpdateWithoutReportsInput>
+  }
+
+  export type TicketCreateNestedOneWithoutDomesticTicketInput = {
+    create?: XOR<TicketCreateWithoutDomesticTicketInput, TicketUncheckedCreateWithoutDomesticTicketInput>
+    connectOrCreate?: TicketCreateOrConnectWithoutDomesticTicketInput
+    connect?: TicketWhereUniqueInput
+  }
+
+  export type TicketUpdateOneRequiredWithoutDomesticTicketNestedInput = {
+    create?: XOR<TicketCreateWithoutDomesticTicketInput, TicketUncheckedCreateWithoutDomesticTicketInput>
+    connectOrCreate?: TicketCreateOrConnectWithoutDomesticTicketInput
+    upsert?: TicketUpsertWithoutDomesticTicketInput
+    connect?: TicketWhereUniqueInput
+    update?: XOR<XOR<TicketUpdateToOneWithWhereWithoutDomesticTicketInput, TicketUpdateWithoutDomesticTicketInput>, TicketUncheckedUpdateWithoutDomesticTicketInput>
+  }
+
+  export type TicketCreateNestedOneWithoutInternationalTicketInput = {
+    create?: XOR<TicketCreateWithoutInternationalTicketInput, TicketUncheckedCreateWithoutInternationalTicketInput>
+    connectOrCreate?: TicketCreateOrConnectWithoutInternationalTicketInput
+    connect?: TicketWhereUniqueInput
+  }
+
+  export type TicketUpdateOneRequiredWithoutInternationalTicketNestedInput = {
+    create?: XOR<TicketCreateWithoutInternationalTicketInput, TicketUncheckedCreateWithoutInternationalTicketInput>
+    connectOrCreate?: TicketCreateOrConnectWithoutInternationalTicketInput
+    upsert?: TicketUpsertWithoutInternationalTicketInput
+    connect?: TicketWhereUniqueInput
+    update?: XOR<XOR<TicketUpdateToOneWithWhereWithoutInternationalTicketInput, TicketUpdateWithoutInternationalTicketInput>, TicketUncheckedUpdateWithoutInternationalTicketInput>
+  }
+
+  export type TicketCreateNestedOneWithoutRoundTripTicketPart1Input = {
+    create?: XOR<TicketCreateWithoutRoundTripTicketPart1Input, TicketUncheckedCreateWithoutRoundTripTicketPart1Input>
+    connectOrCreate?: TicketCreateOrConnectWithoutRoundTripTicketPart1Input
+    connect?: TicketWhereUniqueInput
+  }
+
+  export type TicketCreateNestedOneWithoutRoundTripTicketPart2Input = {
+    create?: XOR<TicketCreateWithoutRoundTripTicketPart2Input, TicketUncheckedCreateWithoutRoundTripTicketPart2Input>
+    connectOrCreate?: TicketCreateOrConnectWithoutRoundTripTicketPart2Input
+    connect?: TicketWhereUniqueInput
+  }
+
+  export type TicketUpdateOneRequiredWithoutRoundTripTicketPart1NestedInput = {
+    create?: XOR<TicketCreateWithoutRoundTripTicketPart1Input, TicketUncheckedCreateWithoutRoundTripTicketPart1Input>
+    connectOrCreate?: TicketCreateOrConnectWithoutRoundTripTicketPart1Input
+    upsert?: TicketUpsertWithoutRoundTripTicketPart1Input
+    connect?: TicketWhereUniqueInput
+    update?: XOR<XOR<TicketUpdateToOneWithWhereWithoutRoundTripTicketPart1Input, TicketUpdateWithoutRoundTripTicketPart1Input>, TicketUncheckedUpdateWithoutRoundTripTicketPart1Input>
+  }
+
+  export type TicketUpdateOneRequiredWithoutRoundTripTicketPart2NestedInput = {
+    create?: XOR<TicketCreateWithoutRoundTripTicketPart2Input, TicketUncheckedCreateWithoutRoundTripTicketPart2Input>
+    connectOrCreate?: TicketCreateOrConnectWithoutRoundTripTicketPart2Input
+    upsert?: TicketUpsertWithoutRoundTripTicketPart2Input
+    connect?: TicketWhereUniqueInput
+    update?: XOR<XOR<TicketUpdateToOneWithWhereWithoutRoundTripTicketPart2Input, TicketUpdateWithoutRoundTripTicketPart2Input>, TicketUncheckedUpdateWithoutRoundTripTicketPart2Input>
+  }
+
+  export type TicketCreateNestedOneWithoutPurchaseInput = {
+    create?: XOR<TicketCreateWithoutPurchaseInput, TicketUncheckedCreateWithoutPurchaseInput>
+    connectOrCreate?: TicketCreateOrConnectWithoutPurchaseInput
+    connect?: TicketWhereUniqueInput
+  }
+
+  export type PaymentCreateNestedOneWithoutPurchaseInput = {
+    create?: XOR<PaymentCreateWithoutPurchaseInput, PaymentUncheckedCreateWithoutPurchaseInput>
+    connectOrCreate?: PaymentCreateOrConnectWithoutPurchaseInput
+    connect?: PaymentWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPurchasesInput = {
+    create?: XOR<UserCreateWithoutPurchasesInput, UserUncheckedCreateWithoutPurchasesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPurchasesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type TicketUpdateOneRequiredWithoutPurchaseNestedInput = {
+    create?: XOR<TicketCreateWithoutPurchaseInput, TicketUncheckedCreateWithoutPurchaseInput>
+    connectOrCreate?: TicketCreateOrConnectWithoutPurchaseInput
+    upsert?: TicketUpsertWithoutPurchaseInput
+    connect?: TicketWhereUniqueInput
+    update?: XOR<XOR<TicketUpdateToOneWithWhereWithoutPurchaseInput, TicketUpdateWithoutPurchaseInput>, TicketUncheckedUpdateWithoutPurchaseInput>
+  }
+
+  export type PaymentUpdateOneRequiredWithoutPurchaseNestedInput = {
+    create?: XOR<PaymentCreateWithoutPurchaseInput, PaymentUncheckedCreateWithoutPurchaseInput>
+    connectOrCreate?: PaymentCreateOrConnectWithoutPurchaseInput
+    upsert?: PaymentUpsertWithoutPurchaseInput
+    connect?: PaymentWhereUniqueInput
+    update?: XOR<XOR<PaymentUpdateToOneWithWhereWithoutPurchaseInput, PaymentUpdateWithoutPurchaseInput>, PaymentUncheckedUpdateWithoutPurchaseInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutPurchasesNestedInput = {
+    create?: XOR<UserCreateWithoutPurchasesInput, UserUncheckedCreateWithoutPurchasesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPurchasesInput
+    upsert?: UserUpsertWithoutPurchasesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPurchasesInput, UserUpdateWithoutPurchasesInput>, UserUncheckedUpdateWithoutPurchasesInput>
+  }
+
+  export type PurchaseCreateNestedOneWithoutPaymentInput = {
+    create?: XOR<PurchaseCreateWithoutPaymentInput, PurchaseUncheckedCreateWithoutPaymentInput>
+    connectOrCreate?: PurchaseCreateOrConnectWithoutPaymentInput
+    connect?: PurchaseWhereUniqueInput
+  }
+
+  export type PurchaseUncheckedCreateNestedOneWithoutPaymentInput = {
+    create?: XOR<PurchaseCreateWithoutPaymentInput, PurchaseUncheckedCreateWithoutPaymentInput>
+    connectOrCreate?: PurchaseCreateOrConnectWithoutPaymentInput
+    connect?: PurchaseWhereUniqueInput
+  }
+
+  export type PurchaseUpdateOneWithoutPaymentNestedInput = {
+    create?: XOR<PurchaseCreateWithoutPaymentInput, PurchaseUncheckedCreateWithoutPaymentInput>
+    connectOrCreate?: PurchaseCreateOrConnectWithoutPaymentInput
+    upsert?: PurchaseUpsertWithoutPaymentInput
+    disconnect?: PurchaseWhereInput | boolean
+    delete?: PurchaseWhereInput | boolean
+    connect?: PurchaseWhereUniqueInput
+    update?: XOR<XOR<PurchaseUpdateToOneWithWhereWithoutPaymentInput, PurchaseUpdateWithoutPaymentInput>, PurchaseUncheckedUpdateWithoutPaymentInput>
+  }
+
+  export type PurchaseUncheckedUpdateOneWithoutPaymentNestedInput = {
+    create?: XOR<PurchaseCreateWithoutPaymentInput, PurchaseUncheckedCreateWithoutPaymentInput>
+    connectOrCreate?: PurchaseCreateOrConnectWithoutPaymentInput
+    upsert?: PurchaseUpsertWithoutPaymentInput
+    disconnect?: PurchaseWhereInput | boolean
+    delete?: PurchaseWhereInput | boolean
+    connect?: PurchaseWhereUniqueInput
+    update?: XOR<XOR<PurchaseUpdateToOneWithWhereWithoutPaymentInput, PurchaseUpdateWithoutPaymentInput>, PurchaseUncheckedUpdateWithoutPaymentInput>
+  }
+
+  export type AirlineCreateNestedOneWithoutTelNosInput = {
+    create?: XOR<AirlineCreateWithoutTelNosInput, AirlineUncheckedCreateWithoutTelNosInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutTelNosInput
+    connect?: AirlineWhereUniqueInput
+  }
+
+  export type AirlineUpdateOneRequiredWithoutTelNosNestedInput = {
+    create?: XOR<AirlineCreateWithoutTelNosInput, AirlineUncheckedCreateWithoutTelNosInput>
+    connectOrCreate?: AirlineCreateOrConnectWithoutTelNosInput
+    upsert?: AirlineUpsertWithoutTelNosInput
+    connect?: AirlineWhereUniqueInput
+    update?: XOR<XOR<AirlineUpdateToOneWithWhereWithoutTelNosInput, AirlineUpdateWithoutTelNosInput>, AirlineUncheckedUpdateWithoutTelNosInput>
+  }
+
+  export type UserCreateNestedOneWithoutSessionsInput = {
+    create?: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSessionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
+    create?: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSessionsInput
+    upsert?: UserUpsertWithoutSessionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSessionsInput, UserUpdateWithoutSessionsInput>, UserUncheckedUpdateWithoutSessionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -28922,11 +35393,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -28943,12 +35409,4088 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type OperateCreateWithoutAirportInput = {
+    airline: AirlineCreateNestedOneWithoutOperatesInput
+  }
+
+  export type OperateUncheckedCreateWithoutAirportInput = {
+    AirlineName: string
+  }
+
+  export type OperateCreateOrConnectWithoutAirportInput = {
+    where: OperateWhereUniqueInput
+    create: XOR<OperateCreateWithoutAirportInput, OperateUncheckedCreateWithoutAirportInput>
+  }
+
+  export type OperateCreateManyAirportInputEnvelope = {
+    data: OperateCreateManyAirportInput | OperateCreateManyAirportInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlightCreateWithoutDepartureAirportInput = {
+    FlightNo: string
+    Schedule: Date | string
+    arrivalAirport: AirportCreateNestedOneWithoutArrivalFlightsInput
+    airline: AirlineCreateNestedOneWithoutFlightsInput
+    aircraft: AircraftCreateNestedOneWithoutFlightsInput
+    passengers?: Assigned_ToCreateNestedManyWithoutFlightInput
+    tickets?: TicketCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightUncheckedCreateWithoutDepartureAirportInput = {
+    FlightNo: string
+    Schedule: Date | string
+    ArrivalAirportID: string
+    AirlineName: string
+    AircraftRegNo: string
+    passengers?: Assigned_ToUncheckedCreateNestedManyWithoutFlightInput
+    tickets?: TicketUncheckedCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightCreateOrConnectWithoutDepartureAirportInput = {
+    where: FlightWhereUniqueInput
+    create: XOR<FlightCreateWithoutDepartureAirportInput, FlightUncheckedCreateWithoutDepartureAirportInput>
+  }
+
+  export type FlightCreateManyDepartureAirportInputEnvelope = {
+    data: FlightCreateManyDepartureAirportInput | FlightCreateManyDepartureAirportInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlightCreateWithoutArrivalAirportInput = {
+    FlightNo: string
+    Schedule: Date | string
+    departureAirport: AirportCreateNestedOneWithoutDepartureFlightsInput
+    airline: AirlineCreateNestedOneWithoutFlightsInput
+    aircraft: AircraftCreateNestedOneWithoutFlightsInput
+    passengers?: Assigned_ToCreateNestedManyWithoutFlightInput
+    tickets?: TicketCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightUncheckedCreateWithoutArrivalAirportInput = {
+    FlightNo: string
+    Schedule: Date | string
+    DepartureAirportID: string
+    AirlineName: string
+    AircraftRegNo: string
+    passengers?: Assigned_ToUncheckedCreateNestedManyWithoutFlightInput
+    tickets?: TicketUncheckedCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightCreateOrConnectWithoutArrivalAirportInput = {
+    where: FlightWhereUniqueInput
+    create: XOR<FlightCreateWithoutArrivalAirportInput, FlightUncheckedCreateWithoutArrivalAirportInput>
+  }
+
+  export type FlightCreateManyArrivalAirportInputEnvelope = {
+    data: FlightCreateManyArrivalAirportInput | FlightCreateManyArrivalAirportInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OperateUpsertWithWhereUniqueWithoutAirportInput = {
+    where: OperateWhereUniqueInput
+    update: XOR<OperateUpdateWithoutAirportInput, OperateUncheckedUpdateWithoutAirportInput>
+    create: XOR<OperateCreateWithoutAirportInput, OperateUncheckedCreateWithoutAirportInput>
+  }
+
+  export type OperateUpdateWithWhereUniqueWithoutAirportInput = {
+    where: OperateWhereUniqueInput
+    data: XOR<OperateUpdateWithoutAirportInput, OperateUncheckedUpdateWithoutAirportInput>
+  }
+
+  export type OperateUpdateManyWithWhereWithoutAirportInput = {
+    where: OperateScalarWhereInput
+    data: XOR<OperateUpdateManyMutationInput, OperateUncheckedUpdateManyWithoutAirportInput>
+  }
+
+  export type OperateScalarWhereInput = {
+    AND?: OperateScalarWhereInput | OperateScalarWhereInput[]
+    OR?: OperateScalarWhereInput[]
+    NOT?: OperateScalarWhereInput | OperateScalarWhereInput[]
+    AirportID?: StringFilter<"Operate"> | string
+    AirlineName?: StringFilter<"Operate"> | string
+  }
+
+  export type FlightUpsertWithWhereUniqueWithoutDepartureAirportInput = {
+    where: FlightWhereUniqueInput
+    update: XOR<FlightUpdateWithoutDepartureAirportInput, FlightUncheckedUpdateWithoutDepartureAirportInput>
+    create: XOR<FlightCreateWithoutDepartureAirportInput, FlightUncheckedCreateWithoutDepartureAirportInput>
+  }
+
+  export type FlightUpdateWithWhereUniqueWithoutDepartureAirportInput = {
+    where: FlightWhereUniqueInput
+    data: XOR<FlightUpdateWithoutDepartureAirportInput, FlightUncheckedUpdateWithoutDepartureAirportInput>
+  }
+
+  export type FlightUpdateManyWithWhereWithoutDepartureAirportInput = {
+    where: FlightScalarWhereInput
+    data: XOR<FlightUpdateManyMutationInput, FlightUncheckedUpdateManyWithoutDepartureAirportInput>
+  }
+
+  export type FlightScalarWhereInput = {
+    AND?: FlightScalarWhereInput | FlightScalarWhereInput[]
+    OR?: FlightScalarWhereInput[]
+    NOT?: FlightScalarWhereInput | FlightScalarWhereInput[]
+    FlightNo?: StringFilter<"Flight"> | string
+    Schedule?: DateTimeFilter<"Flight"> | Date | string
+    ArrivalAirportID?: StringFilter<"Flight"> | string
+    DepartureAirportID?: StringFilter<"Flight"> | string
+    AirlineName?: StringFilter<"Flight"> | string
+    AircraftRegNo?: StringFilter<"Flight"> | string
+  }
+
+  export type FlightUpsertWithWhereUniqueWithoutArrivalAirportInput = {
+    where: FlightWhereUniqueInput
+    update: XOR<FlightUpdateWithoutArrivalAirportInput, FlightUncheckedUpdateWithoutArrivalAirportInput>
+    create: XOR<FlightCreateWithoutArrivalAirportInput, FlightUncheckedCreateWithoutArrivalAirportInput>
+  }
+
+  export type FlightUpdateWithWhereUniqueWithoutArrivalAirportInput = {
+    where: FlightWhereUniqueInput
+    data: XOR<FlightUpdateWithoutArrivalAirportInput, FlightUncheckedUpdateWithoutArrivalAirportInput>
+  }
+
+  export type FlightUpdateManyWithWhereWithoutArrivalAirportInput = {
+    where: FlightScalarWhereInput
+    data: XOR<FlightUpdateManyMutationInput, FlightUncheckedUpdateManyWithoutArrivalAirportInput>
+  }
+
+  export type OperateCreateWithoutAirlineInput = {
+    airport: AirportCreateNestedOneWithoutOperatesInput
+  }
+
+  export type OperateUncheckedCreateWithoutAirlineInput = {
+    AirportID: string
+  }
+
+  export type OperateCreateOrConnectWithoutAirlineInput = {
+    where: OperateWhereUniqueInput
+    create: XOR<OperateCreateWithoutAirlineInput, OperateUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type OperateCreateManyAirlineInputEnvelope = {
+    data: OperateCreateManyAirlineInput | OperateCreateManyAirlineInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AircraftCreateWithoutAirlineInput = {
+    AircraftRegNo: string
+    SeatCapacity: number
+    ModelName: string
+    seats?: SeatCreateNestedManyWithoutAircraftInput
+    flights?: FlightCreateNestedManyWithoutAircraftInput
+    cabins?: CabinClassCreateNestedManyWithoutAircraftInput
+  }
+
+  export type AircraftUncheckedCreateWithoutAirlineInput = {
+    AircraftRegNo: string
+    SeatCapacity: number
+    ModelName: string
+    seats?: SeatUncheckedCreateNestedManyWithoutAircraftInput
+    flights?: FlightUncheckedCreateNestedManyWithoutAircraftInput
+    cabins?: CabinClassUncheckedCreateNestedManyWithoutAircraftInput
+  }
+
+  export type AircraftCreateOrConnectWithoutAirlineInput = {
+    where: AircraftWhereUniqueInput
+    create: XOR<AircraftCreateWithoutAirlineInput, AircraftUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type AircraftCreateManyAirlineInputEnvelope = {
+    data: AircraftCreateManyAirlineInput | AircraftCreateManyAirlineInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlightCreateWithoutAirlineInput = {
+    FlightNo: string
+    Schedule: Date | string
+    arrivalAirport: AirportCreateNestedOneWithoutArrivalFlightsInput
+    departureAirport: AirportCreateNestedOneWithoutDepartureFlightsInput
+    aircraft: AircraftCreateNestedOneWithoutFlightsInput
+    passengers?: Assigned_ToCreateNestedManyWithoutFlightInput
+    tickets?: TicketCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightUncheckedCreateWithoutAirlineInput = {
+    FlightNo: string
+    Schedule: Date | string
+    ArrivalAirportID: string
+    DepartureAirportID: string
+    AircraftRegNo: string
+    passengers?: Assigned_ToUncheckedCreateNestedManyWithoutFlightInput
+    tickets?: TicketUncheckedCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightCreateOrConnectWithoutAirlineInput = {
+    where: FlightWhereUniqueInput
+    create: XOR<FlightCreateWithoutAirlineInput, FlightUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type FlightCreateManyAirlineInputEnvelope = {
+    data: FlightCreateManyAirlineInput | FlightCreateManyAirlineInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Airline_Tel_NoCreateWithoutAirlineInput = {
+    TelNo: string
+  }
+
+  export type Airline_Tel_NoUncheckedCreateWithoutAirlineInput = {
+    TelNo: string
+  }
+
+  export type Airline_Tel_NoCreateOrConnectWithoutAirlineInput = {
+    where: Airline_Tel_NoWhereUniqueInput
+    create: XOR<Airline_Tel_NoCreateWithoutAirlineInput, Airline_Tel_NoUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type Airline_Tel_NoCreateManyAirlineInputEnvelope = {
+    data: Airline_Tel_NoCreateManyAirlineInput | Airline_Tel_NoCreateManyAirlineInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Airline_MessageCreateWithoutAirlineInput = {
+    MessageText: string
+    admin: AdminCreateNestedOneWithoutSentAirlineMessagesInput
+  }
+
+  export type Airline_MessageUncheckedCreateWithoutAirlineInput = {
+    AdminAccountID: string
+    MessageText: string
+  }
+
+  export type Airline_MessageCreateOrConnectWithoutAirlineInput = {
+    where: Airline_MessageWhereUniqueInput
+    create: XOR<Airline_MessageCreateWithoutAirlineInput, Airline_MessageUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type Airline_MessageCreateManyAirlineInputEnvelope = {
+    data: Airline_MessageCreateManyAirlineInput | Airline_MessageCreateManyAirlineInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ContactCreateWithoutAirlineInput = {
+    ContactStatus: string
+    admin: AdminCreateNestedOneWithoutContactsInput
+  }
+
+  export type ContactUncheckedCreateWithoutAirlineInput = {
+    AdminAccountID: string
+    ContactStatus: string
+  }
+
+  export type ContactCreateOrConnectWithoutAirlineInput = {
+    where: ContactWhereUniqueInput
+    create: XOR<ContactCreateWithoutAirlineInput, ContactUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type ContactCreateManyAirlineInputEnvelope = {
+    data: ContactCreateManyAirlineInput | ContactCreateManyAirlineInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OperateUpsertWithWhereUniqueWithoutAirlineInput = {
+    where: OperateWhereUniqueInput
+    update: XOR<OperateUpdateWithoutAirlineInput, OperateUncheckedUpdateWithoutAirlineInput>
+    create: XOR<OperateCreateWithoutAirlineInput, OperateUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type OperateUpdateWithWhereUniqueWithoutAirlineInput = {
+    where: OperateWhereUniqueInput
+    data: XOR<OperateUpdateWithoutAirlineInput, OperateUncheckedUpdateWithoutAirlineInput>
+  }
+
+  export type OperateUpdateManyWithWhereWithoutAirlineInput = {
+    where: OperateScalarWhereInput
+    data: XOR<OperateUpdateManyMutationInput, OperateUncheckedUpdateManyWithoutAirlineInput>
+  }
+
+  export type AircraftUpsertWithWhereUniqueWithoutAirlineInput = {
+    where: AircraftWhereUniqueInput
+    update: XOR<AircraftUpdateWithoutAirlineInput, AircraftUncheckedUpdateWithoutAirlineInput>
+    create: XOR<AircraftCreateWithoutAirlineInput, AircraftUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type AircraftUpdateWithWhereUniqueWithoutAirlineInput = {
+    where: AircraftWhereUniqueInput
+    data: XOR<AircraftUpdateWithoutAirlineInput, AircraftUncheckedUpdateWithoutAirlineInput>
+  }
+
+  export type AircraftUpdateManyWithWhereWithoutAirlineInput = {
+    where: AircraftScalarWhereInput
+    data: XOR<AircraftUpdateManyMutationInput, AircraftUncheckedUpdateManyWithoutAirlineInput>
+  }
+
+  export type AircraftScalarWhereInput = {
+    AND?: AircraftScalarWhereInput | AircraftScalarWhereInput[]
+    OR?: AircraftScalarWhereInput[]
+    NOT?: AircraftScalarWhereInput | AircraftScalarWhereInput[]
+    AircraftRegNo?: StringFilter<"Aircraft"> | string
+    AirlineName?: StringFilter<"Aircraft"> | string
+    SeatCapacity?: IntFilter<"Aircraft"> | number
+    ModelName?: StringFilter<"Aircraft"> | string
+  }
+
+  export type FlightUpsertWithWhereUniqueWithoutAirlineInput = {
+    where: FlightWhereUniqueInput
+    update: XOR<FlightUpdateWithoutAirlineInput, FlightUncheckedUpdateWithoutAirlineInput>
+    create: XOR<FlightCreateWithoutAirlineInput, FlightUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type FlightUpdateWithWhereUniqueWithoutAirlineInput = {
+    where: FlightWhereUniqueInput
+    data: XOR<FlightUpdateWithoutAirlineInput, FlightUncheckedUpdateWithoutAirlineInput>
+  }
+
+  export type FlightUpdateManyWithWhereWithoutAirlineInput = {
+    where: FlightScalarWhereInput
+    data: XOR<FlightUpdateManyMutationInput, FlightUncheckedUpdateManyWithoutAirlineInput>
+  }
+
+  export type Airline_Tel_NoUpsertWithWhereUniqueWithoutAirlineInput = {
+    where: Airline_Tel_NoWhereUniqueInput
+    update: XOR<Airline_Tel_NoUpdateWithoutAirlineInput, Airline_Tel_NoUncheckedUpdateWithoutAirlineInput>
+    create: XOR<Airline_Tel_NoCreateWithoutAirlineInput, Airline_Tel_NoUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type Airline_Tel_NoUpdateWithWhereUniqueWithoutAirlineInput = {
+    where: Airline_Tel_NoWhereUniqueInput
+    data: XOR<Airline_Tel_NoUpdateWithoutAirlineInput, Airline_Tel_NoUncheckedUpdateWithoutAirlineInput>
+  }
+
+  export type Airline_Tel_NoUpdateManyWithWhereWithoutAirlineInput = {
+    where: Airline_Tel_NoScalarWhereInput
+    data: XOR<Airline_Tel_NoUpdateManyMutationInput, Airline_Tel_NoUncheckedUpdateManyWithoutAirlineInput>
+  }
+
+  export type Airline_Tel_NoScalarWhereInput = {
+    AND?: Airline_Tel_NoScalarWhereInput | Airline_Tel_NoScalarWhereInput[]
+    OR?: Airline_Tel_NoScalarWhereInput[]
+    NOT?: Airline_Tel_NoScalarWhereInput | Airline_Tel_NoScalarWhereInput[]
+    TelNo?: StringFilter<"Airline_Tel_No"> | string
+    AirlineName?: StringFilter<"Airline_Tel_No"> | string
+  }
+
+  export type Airline_MessageUpsertWithWhereUniqueWithoutAirlineInput = {
+    where: Airline_MessageWhereUniqueInput
+    update: XOR<Airline_MessageUpdateWithoutAirlineInput, Airline_MessageUncheckedUpdateWithoutAirlineInput>
+    create: XOR<Airline_MessageCreateWithoutAirlineInput, Airline_MessageUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type Airline_MessageUpdateWithWhereUniqueWithoutAirlineInput = {
+    where: Airline_MessageWhereUniqueInput
+    data: XOR<Airline_MessageUpdateWithoutAirlineInput, Airline_MessageUncheckedUpdateWithoutAirlineInput>
+  }
+
+  export type Airline_MessageUpdateManyWithWhereWithoutAirlineInput = {
+    where: Airline_MessageScalarWhereInput
+    data: XOR<Airline_MessageUpdateManyMutationInput, Airline_MessageUncheckedUpdateManyWithoutAirlineInput>
+  }
+
+  export type Airline_MessageScalarWhereInput = {
+    AND?: Airline_MessageScalarWhereInput | Airline_MessageScalarWhereInput[]
+    OR?: Airline_MessageScalarWhereInput[]
+    NOT?: Airline_MessageScalarWhereInput | Airline_MessageScalarWhereInput[]
+    AirlineName?: StringFilter<"Airline_Message"> | string
+    AdminAccountID?: StringFilter<"Airline_Message"> | string
+    MessageText?: StringFilter<"Airline_Message"> | string
+  }
+
+  export type ContactUpsertWithWhereUniqueWithoutAirlineInput = {
+    where: ContactWhereUniqueInput
+    update: XOR<ContactUpdateWithoutAirlineInput, ContactUncheckedUpdateWithoutAirlineInput>
+    create: XOR<ContactCreateWithoutAirlineInput, ContactUncheckedCreateWithoutAirlineInput>
+  }
+
+  export type ContactUpdateWithWhereUniqueWithoutAirlineInput = {
+    where: ContactWhereUniqueInput
+    data: XOR<ContactUpdateWithoutAirlineInput, ContactUncheckedUpdateWithoutAirlineInput>
+  }
+
+  export type ContactUpdateManyWithWhereWithoutAirlineInput = {
+    where: ContactScalarWhereInput
+    data: XOR<ContactUpdateManyMutationInput, ContactUncheckedUpdateManyWithoutAirlineInput>
+  }
+
+  export type ContactScalarWhereInput = {
+    AND?: ContactScalarWhereInput | ContactScalarWhereInput[]
+    OR?: ContactScalarWhereInput[]
+    NOT?: ContactScalarWhereInput | ContactScalarWhereInput[]
+    AdminAccountID?: StringFilter<"Contact"> | string
+    AirlineName?: StringFilter<"Contact"> | string
+    ContactStatus?: StringFilter<"Contact"> | string
+  }
+
+  export type AirlineCreateWithoutAircraftsInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateCreateNestedManyWithoutAirlineInput
+    flights?: FlightCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageCreateNestedManyWithoutAirlineInput
+    contacts?: ContactCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineUncheckedCreateWithoutAircraftsInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateUncheckedCreateNestedManyWithoutAirlineInput
+    flights?: FlightUncheckedCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoUncheckedCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageUncheckedCreateNestedManyWithoutAirlineInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineCreateOrConnectWithoutAircraftsInput = {
+    where: AirlineWhereUniqueInput
+    create: XOR<AirlineCreateWithoutAircraftsInput, AirlineUncheckedCreateWithoutAircraftsInput>
+  }
+
+  export type SeatCreateWithoutAircraftInput = {
+    SeatNo: string
+    SeatType: string
+    tickets?: TicketCreateNestedManyWithoutSeatInput
+  }
+
+  export type SeatUncheckedCreateWithoutAircraftInput = {
+    SeatNo: string
+    SeatType: string
+    tickets?: TicketUncheckedCreateNestedManyWithoutSeatInput
+  }
+
+  export type SeatCreateOrConnectWithoutAircraftInput = {
+    where: SeatWhereUniqueInput
+    create: XOR<SeatCreateWithoutAircraftInput, SeatUncheckedCreateWithoutAircraftInput>
+  }
+
+  export type SeatCreateManyAircraftInputEnvelope = {
+    data: SeatCreateManyAircraftInput | SeatCreateManyAircraftInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlightCreateWithoutAircraftInput = {
+    FlightNo: string
+    Schedule: Date | string
+    arrivalAirport: AirportCreateNestedOneWithoutArrivalFlightsInput
+    departureAirport: AirportCreateNestedOneWithoutDepartureFlightsInput
+    airline: AirlineCreateNestedOneWithoutFlightsInput
+    passengers?: Assigned_ToCreateNestedManyWithoutFlightInput
+    tickets?: TicketCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightUncheckedCreateWithoutAircraftInput = {
+    FlightNo: string
+    Schedule: Date | string
+    ArrivalAirportID: string
+    DepartureAirportID: string
+    AirlineName: string
+    passengers?: Assigned_ToUncheckedCreateNestedManyWithoutFlightInput
+    tickets?: TicketUncheckedCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightCreateOrConnectWithoutAircraftInput = {
+    where: FlightWhereUniqueInput
+    create: XOR<FlightCreateWithoutAircraftInput, FlightUncheckedCreateWithoutAircraftInput>
+  }
+
+  export type FlightCreateManyAircraftInputEnvelope = {
+    data: FlightCreateManyAircraftInput | FlightCreateManyAircraftInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CabinClassCreateWithoutAircraftInput = {
+    Class: string
+    StandardPrice: number
+  }
+
+  export type CabinClassUncheckedCreateWithoutAircraftInput = {
+    Class: string
+    StandardPrice: number
+  }
+
+  export type CabinClassCreateOrConnectWithoutAircraftInput = {
+    where: CabinClassWhereUniqueInput
+    create: XOR<CabinClassCreateWithoutAircraftInput, CabinClassUncheckedCreateWithoutAircraftInput>
+  }
+
+  export type CabinClassCreateManyAircraftInputEnvelope = {
+    data: CabinClassCreateManyAircraftInput | CabinClassCreateManyAircraftInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AirlineUpsertWithoutAircraftsInput = {
+    update: XOR<AirlineUpdateWithoutAircraftsInput, AirlineUncheckedUpdateWithoutAircraftsInput>
+    create: XOR<AirlineCreateWithoutAircraftsInput, AirlineUncheckedCreateWithoutAircraftsInput>
+    where?: AirlineWhereInput
+  }
+
+  export type AirlineUpdateToOneWithWhereWithoutAircraftsInput = {
+    where?: AirlineWhereInput
+    data: XOR<AirlineUpdateWithoutAircraftsInput, AirlineUncheckedUpdateWithoutAircraftsInput>
+  }
+
+  export type AirlineUpdateWithoutAircraftsInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type AirlineUncheckedUpdateWithoutAircraftsInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUncheckedUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUncheckedUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUncheckedUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUncheckedUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type SeatUpsertWithWhereUniqueWithoutAircraftInput = {
+    where: SeatWhereUniqueInput
+    update: XOR<SeatUpdateWithoutAircraftInput, SeatUncheckedUpdateWithoutAircraftInput>
+    create: XOR<SeatCreateWithoutAircraftInput, SeatUncheckedCreateWithoutAircraftInput>
+  }
+
+  export type SeatUpdateWithWhereUniqueWithoutAircraftInput = {
+    where: SeatWhereUniqueInput
+    data: XOR<SeatUpdateWithoutAircraftInput, SeatUncheckedUpdateWithoutAircraftInput>
+  }
+
+  export type SeatUpdateManyWithWhereWithoutAircraftInput = {
+    where: SeatScalarWhereInput
+    data: XOR<SeatUpdateManyMutationInput, SeatUncheckedUpdateManyWithoutAircraftInput>
+  }
+
+  export type SeatScalarWhereInput = {
+    AND?: SeatScalarWhereInput | SeatScalarWhereInput[]
+    OR?: SeatScalarWhereInput[]
+    NOT?: SeatScalarWhereInput | SeatScalarWhereInput[]
+    AircraftRegNo?: StringFilter<"Seat"> | string
+    SeatNo?: StringFilter<"Seat"> | string
+    SeatType?: StringFilter<"Seat"> | string
+  }
+
+  export type FlightUpsertWithWhereUniqueWithoutAircraftInput = {
+    where: FlightWhereUniqueInput
+    update: XOR<FlightUpdateWithoutAircraftInput, FlightUncheckedUpdateWithoutAircraftInput>
+    create: XOR<FlightCreateWithoutAircraftInput, FlightUncheckedCreateWithoutAircraftInput>
+  }
+
+  export type FlightUpdateWithWhereUniqueWithoutAircraftInput = {
+    where: FlightWhereUniqueInput
+    data: XOR<FlightUpdateWithoutAircraftInput, FlightUncheckedUpdateWithoutAircraftInput>
+  }
+
+  export type FlightUpdateManyWithWhereWithoutAircraftInput = {
+    where: FlightScalarWhereInput
+    data: XOR<FlightUpdateManyMutationInput, FlightUncheckedUpdateManyWithoutAircraftInput>
+  }
+
+  export type CabinClassUpsertWithWhereUniqueWithoutAircraftInput = {
+    where: CabinClassWhereUniqueInput
+    update: XOR<CabinClassUpdateWithoutAircraftInput, CabinClassUncheckedUpdateWithoutAircraftInput>
+    create: XOR<CabinClassCreateWithoutAircraftInput, CabinClassUncheckedCreateWithoutAircraftInput>
+  }
+
+  export type CabinClassUpdateWithWhereUniqueWithoutAircraftInput = {
+    where: CabinClassWhereUniqueInput
+    data: XOR<CabinClassUpdateWithoutAircraftInput, CabinClassUncheckedUpdateWithoutAircraftInput>
+  }
+
+  export type CabinClassUpdateManyWithWhereWithoutAircraftInput = {
+    where: CabinClassScalarWhereInput
+    data: XOR<CabinClassUpdateManyMutationInput, CabinClassUncheckedUpdateManyWithoutAircraftInput>
+  }
+
+  export type CabinClassScalarWhereInput = {
+    AND?: CabinClassScalarWhereInput | CabinClassScalarWhereInput[]
+    OR?: CabinClassScalarWhereInput[]
+    NOT?: CabinClassScalarWhereInput | CabinClassScalarWhereInput[]
+    AircraftRegNo?: StringFilter<"CabinClass"> | string
+    Class?: StringFilter<"CabinClass"> | string
+    StandardPrice?: FloatFilter<"CabinClass"> | number
+  }
+
+  export type AirportCreateWithoutArrivalFlightsInput = {
+    AirportID: string
+    AirportName: string
+    City: string
+    Country: string
+    operates?: OperateCreateNestedManyWithoutAirportInput
+    departureFlights?: FlightCreateNestedManyWithoutDepartureAirportInput
+  }
+
+  export type AirportUncheckedCreateWithoutArrivalFlightsInput = {
+    AirportID: string
+    AirportName: string
+    City: string
+    Country: string
+    operates?: OperateUncheckedCreateNestedManyWithoutAirportInput
+    departureFlights?: FlightUncheckedCreateNestedManyWithoutDepartureAirportInput
+  }
+
+  export type AirportCreateOrConnectWithoutArrivalFlightsInput = {
+    where: AirportWhereUniqueInput
+    create: XOR<AirportCreateWithoutArrivalFlightsInput, AirportUncheckedCreateWithoutArrivalFlightsInput>
+  }
+
+  export type AirportCreateWithoutDepartureFlightsInput = {
+    AirportID: string
+    AirportName: string
+    City: string
+    Country: string
+    operates?: OperateCreateNestedManyWithoutAirportInput
+    arrivalFlights?: FlightCreateNestedManyWithoutArrivalAirportInput
+  }
+
+  export type AirportUncheckedCreateWithoutDepartureFlightsInput = {
+    AirportID: string
+    AirportName: string
+    City: string
+    Country: string
+    operates?: OperateUncheckedCreateNestedManyWithoutAirportInput
+    arrivalFlights?: FlightUncheckedCreateNestedManyWithoutArrivalAirportInput
+  }
+
+  export type AirportCreateOrConnectWithoutDepartureFlightsInput = {
+    where: AirportWhereUniqueInput
+    create: XOR<AirportCreateWithoutDepartureFlightsInput, AirportUncheckedCreateWithoutDepartureFlightsInput>
+  }
+
+  export type AirlineCreateWithoutFlightsInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageCreateNestedManyWithoutAirlineInput
+    contacts?: ContactCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineUncheckedCreateWithoutFlightsInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateUncheckedCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftUncheckedCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoUncheckedCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageUncheckedCreateNestedManyWithoutAirlineInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineCreateOrConnectWithoutFlightsInput = {
+    where: AirlineWhereUniqueInput
+    create: XOR<AirlineCreateWithoutFlightsInput, AirlineUncheckedCreateWithoutFlightsInput>
+  }
+
+  export type AircraftCreateWithoutFlightsInput = {
+    AircraftRegNo: string
+    SeatCapacity: number
+    ModelName: string
+    airline: AirlineCreateNestedOneWithoutAircraftsInput
+    seats?: SeatCreateNestedManyWithoutAircraftInput
+    cabins?: CabinClassCreateNestedManyWithoutAircraftInput
+  }
+
+  export type AircraftUncheckedCreateWithoutFlightsInput = {
+    AircraftRegNo: string
+    AirlineName: string
+    SeatCapacity: number
+    ModelName: string
+    seats?: SeatUncheckedCreateNestedManyWithoutAircraftInput
+    cabins?: CabinClassUncheckedCreateNestedManyWithoutAircraftInput
+  }
+
+  export type AircraftCreateOrConnectWithoutFlightsInput = {
+    where: AircraftWhereUniqueInput
+    create: XOR<AircraftCreateWithoutFlightsInput, AircraftUncheckedCreateWithoutFlightsInput>
+  }
+
+  export type Assigned_ToCreateWithoutFlightInput = {
+    user: UserCreateNestedOneWithoutAssignedFlightsInput
+  }
+
+  export type Assigned_ToUncheckedCreateWithoutFlightInput = {
+    UserAccountID: string
+  }
+
+  export type Assigned_ToCreateOrConnectWithoutFlightInput = {
+    where: Assigned_ToWhereUniqueInput
+    create: XOR<Assigned_ToCreateWithoutFlightInput, Assigned_ToUncheckedCreateWithoutFlightInput>
+  }
+
+  export type Assigned_ToCreateManyFlightInputEnvelope = {
+    data: Assigned_ToCreateManyFlightInput | Assigned_ToCreateManyFlightInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TicketCreateWithoutFlightInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    seat: SeatCreateNestedOneWithoutTicketsInput
+    purchase?: PurchaseCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketUncheckedCreateWithoutFlightInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    SeatNo: string
+    AircraftRegNo: string
+    purchase?: PurchaseUncheckedCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketUncheckedCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketUncheckedCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketCreateOrConnectWithoutFlightInput = {
+    where: TicketWhereUniqueInput
+    create: XOR<TicketCreateWithoutFlightInput, TicketUncheckedCreateWithoutFlightInput>
+  }
+
+  export type TicketCreateManyFlightInputEnvelope = {
+    data: TicketCreateManyFlightInput | TicketCreateManyFlightInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AirportUpsertWithoutArrivalFlightsInput = {
+    update: XOR<AirportUpdateWithoutArrivalFlightsInput, AirportUncheckedUpdateWithoutArrivalFlightsInput>
+    create: XOR<AirportCreateWithoutArrivalFlightsInput, AirportUncheckedCreateWithoutArrivalFlightsInput>
+    where?: AirportWhereInput
+  }
+
+  export type AirportUpdateToOneWithWhereWithoutArrivalFlightsInput = {
+    where?: AirportWhereInput
+    data: XOR<AirportUpdateWithoutArrivalFlightsInput, AirportUncheckedUpdateWithoutArrivalFlightsInput>
+  }
+
+  export type AirportUpdateWithoutArrivalFlightsInput = {
+    AirportID?: StringFieldUpdateOperationsInput | string
+    AirportName?: StringFieldUpdateOperationsInput | string
+    City?: StringFieldUpdateOperationsInput | string
+    Country?: StringFieldUpdateOperationsInput | string
+    operates?: OperateUpdateManyWithoutAirportNestedInput
+    departureFlights?: FlightUpdateManyWithoutDepartureAirportNestedInput
+  }
+
+  export type AirportUncheckedUpdateWithoutArrivalFlightsInput = {
+    AirportID?: StringFieldUpdateOperationsInput | string
+    AirportName?: StringFieldUpdateOperationsInput | string
+    City?: StringFieldUpdateOperationsInput | string
+    Country?: StringFieldUpdateOperationsInput | string
+    operates?: OperateUncheckedUpdateManyWithoutAirportNestedInput
+    departureFlights?: FlightUncheckedUpdateManyWithoutDepartureAirportNestedInput
+  }
+
+  export type AirportUpsertWithoutDepartureFlightsInput = {
+    update: XOR<AirportUpdateWithoutDepartureFlightsInput, AirportUncheckedUpdateWithoutDepartureFlightsInput>
+    create: XOR<AirportCreateWithoutDepartureFlightsInput, AirportUncheckedCreateWithoutDepartureFlightsInput>
+    where?: AirportWhereInput
+  }
+
+  export type AirportUpdateToOneWithWhereWithoutDepartureFlightsInput = {
+    where?: AirportWhereInput
+    data: XOR<AirportUpdateWithoutDepartureFlightsInput, AirportUncheckedUpdateWithoutDepartureFlightsInput>
+  }
+
+  export type AirportUpdateWithoutDepartureFlightsInput = {
+    AirportID?: StringFieldUpdateOperationsInput | string
+    AirportName?: StringFieldUpdateOperationsInput | string
+    City?: StringFieldUpdateOperationsInput | string
+    Country?: StringFieldUpdateOperationsInput | string
+    operates?: OperateUpdateManyWithoutAirportNestedInput
+    arrivalFlights?: FlightUpdateManyWithoutArrivalAirportNestedInput
+  }
+
+  export type AirportUncheckedUpdateWithoutDepartureFlightsInput = {
+    AirportID?: StringFieldUpdateOperationsInput | string
+    AirportName?: StringFieldUpdateOperationsInput | string
+    City?: StringFieldUpdateOperationsInput | string
+    Country?: StringFieldUpdateOperationsInput | string
+    operates?: OperateUncheckedUpdateManyWithoutAirportNestedInput
+    arrivalFlights?: FlightUncheckedUpdateManyWithoutArrivalAirportNestedInput
+  }
+
+  export type AirlineUpsertWithoutFlightsInput = {
+    update: XOR<AirlineUpdateWithoutFlightsInput, AirlineUncheckedUpdateWithoutFlightsInput>
+    create: XOR<AirlineCreateWithoutFlightsInput, AirlineUncheckedCreateWithoutFlightsInput>
+    where?: AirlineWhereInput
+  }
+
+  export type AirlineUpdateToOneWithWhereWithoutFlightsInput = {
+    where?: AirlineWhereInput
+    data: XOR<AirlineUpdateWithoutFlightsInput, AirlineUncheckedUpdateWithoutFlightsInput>
+  }
+
+  export type AirlineUpdateWithoutFlightsInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type AirlineUncheckedUpdateWithoutFlightsInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUncheckedUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUncheckedUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUncheckedUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUncheckedUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type AircraftUpsertWithoutFlightsInput = {
+    update: XOR<AircraftUpdateWithoutFlightsInput, AircraftUncheckedUpdateWithoutFlightsInput>
+    create: XOR<AircraftCreateWithoutFlightsInput, AircraftUncheckedCreateWithoutFlightsInput>
+    where?: AircraftWhereInput
+  }
+
+  export type AircraftUpdateToOneWithWhereWithoutFlightsInput = {
+    where?: AircraftWhereInput
+    data: XOR<AircraftUpdateWithoutFlightsInput, AircraftUncheckedUpdateWithoutFlightsInput>
+  }
+
+  export type AircraftUpdateWithoutFlightsInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    SeatCapacity?: IntFieldUpdateOperationsInput | number
+    ModelName?: StringFieldUpdateOperationsInput | string
+    airline?: AirlineUpdateOneRequiredWithoutAircraftsNestedInput
+    seats?: SeatUpdateManyWithoutAircraftNestedInput
+    cabins?: CabinClassUpdateManyWithoutAircraftNestedInput
+  }
+
+  export type AircraftUncheckedUpdateWithoutFlightsInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    SeatCapacity?: IntFieldUpdateOperationsInput | number
+    ModelName?: StringFieldUpdateOperationsInput | string
+    seats?: SeatUncheckedUpdateManyWithoutAircraftNestedInput
+    cabins?: CabinClassUncheckedUpdateManyWithoutAircraftNestedInput
+  }
+
+  export type Assigned_ToUpsertWithWhereUniqueWithoutFlightInput = {
+    where: Assigned_ToWhereUniqueInput
+    update: XOR<Assigned_ToUpdateWithoutFlightInput, Assigned_ToUncheckedUpdateWithoutFlightInput>
+    create: XOR<Assigned_ToCreateWithoutFlightInput, Assigned_ToUncheckedCreateWithoutFlightInput>
+  }
+
+  export type Assigned_ToUpdateWithWhereUniqueWithoutFlightInput = {
+    where: Assigned_ToWhereUniqueInput
+    data: XOR<Assigned_ToUpdateWithoutFlightInput, Assigned_ToUncheckedUpdateWithoutFlightInput>
+  }
+
+  export type Assigned_ToUpdateManyWithWhereWithoutFlightInput = {
+    where: Assigned_ToScalarWhereInput
+    data: XOR<Assigned_ToUpdateManyMutationInput, Assigned_ToUncheckedUpdateManyWithoutFlightInput>
+  }
+
+  export type Assigned_ToScalarWhereInput = {
+    AND?: Assigned_ToScalarWhereInput | Assigned_ToScalarWhereInput[]
+    OR?: Assigned_ToScalarWhereInput[]
+    NOT?: Assigned_ToScalarWhereInput | Assigned_ToScalarWhereInput[]
+    FlightNo?: StringFilter<"Assigned_To"> | string
+    Schedule?: DateTimeFilter<"Assigned_To"> | Date | string
+    UserAccountID?: StringFilter<"Assigned_To"> | string
+  }
+
+  export type TicketUpsertWithWhereUniqueWithoutFlightInput = {
+    where: TicketWhereUniqueInput
+    update: XOR<TicketUpdateWithoutFlightInput, TicketUncheckedUpdateWithoutFlightInput>
+    create: XOR<TicketCreateWithoutFlightInput, TicketUncheckedCreateWithoutFlightInput>
+  }
+
+  export type TicketUpdateWithWhereUniqueWithoutFlightInput = {
+    where: TicketWhereUniqueInput
+    data: XOR<TicketUpdateWithoutFlightInput, TicketUncheckedUpdateWithoutFlightInput>
+  }
+
+  export type TicketUpdateManyWithWhereWithoutFlightInput = {
+    where: TicketScalarWhereInput
+    data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutFlightInput>
+  }
+
+  export type TicketScalarWhereInput = {
+    AND?: TicketScalarWhereInput | TicketScalarWhereInput[]
+    OR?: TicketScalarWhereInput[]
+    NOT?: TicketScalarWhereInput | TicketScalarWhereInput[]
+    TicketID?: StringFilter<"Ticket"> | string
+    Price?: FloatFilter<"Ticket"> | number
+    TicketStatus?: StringFilter<"Ticket"> | string
+    PassengerName?: StringFilter<"Ticket"> | string
+    PassengerLastName?: StringFilter<"Ticket"> | string
+    Gender?: StringFilter<"Ticket"> | string
+    DateOfBirth?: DateTimeFilter<"Ticket"> | Date | string
+    Nationality?: StringFilter<"Ticket"> | string
+    BaggageChecked?: FloatFilter<"Ticket"> | number
+    BaggageCabin?: FloatFilter<"Ticket"> | number
+    SeatNo?: StringFilter<"Ticket"> | string
+    AircraftRegNo?: StringFilter<"Ticket"> | string
+    FlightNo?: StringFilter<"Ticket"> | string
+    Schedule?: DateTimeFilter<"Ticket"> | Date | string
+  }
+
+  export type FlightCreateWithoutTicketsInput = {
+    FlightNo: string
+    Schedule: Date | string
+    arrivalAirport: AirportCreateNestedOneWithoutArrivalFlightsInput
+    departureAirport: AirportCreateNestedOneWithoutDepartureFlightsInput
+    airline: AirlineCreateNestedOneWithoutFlightsInput
+    aircraft: AircraftCreateNestedOneWithoutFlightsInput
+    passengers?: Assigned_ToCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightUncheckedCreateWithoutTicketsInput = {
+    FlightNo: string
+    Schedule: Date | string
+    ArrivalAirportID: string
+    DepartureAirportID: string
+    AirlineName: string
+    AircraftRegNo: string
+    passengers?: Assigned_ToUncheckedCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightCreateOrConnectWithoutTicketsInput = {
+    where: FlightWhereUniqueInput
+    create: XOR<FlightCreateWithoutTicketsInput, FlightUncheckedCreateWithoutTicketsInput>
+  }
+
+  export type SeatCreateWithoutTicketsInput = {
+    SeatNo: string
+    SeatType: string
+    aircraft: AircraftCreateNestedOneWithoutSeatsInput
+  }
+
+  export type SeatUncheckedCreateWithoutTicketsInput = {
+    AircraftRegNo: string
+    SeatNo: string
+    SeatType: string
+  }
+
+  export type SeatCreateOrConnectWithoutTicketsInput = {
+    where: SeatWhereUniqueInput
+    create: XOR<SeatCreateWithoutTicketsInput, SeatUncheckedCreateWithoutTicketsInput>
+  }
+
+  export type PurchaseCreateWithoutTicketInput = {
+    payment: PaymentCreateNestedOneWithoutPurchaseInput
+    user: UserCreateNestedOneWithoutPurchasesInput
+  }
+
+  export type PurchaseUncheckedCreateWithoutTicketInput = {
+    PaymentID: string
+    UserAccountID: string
+  }
+
+  export type PurchaseCreateOrConnectWithoutTicketInput = {
+    where: PurchaseWhereUniqueInput
+    create: XOR<PurchaseCreateWithoutTicketInput, PurchaseUncheckedCreateWithoutTicketInput>
+  }
+
+  export type Domestic_TicketCreateWithoutTicketInput = {
+
+  }
+
+  export type Domestic_TicketUncheckedCreateWithoutTicketInput = {
+
+  }
+
+  export type Domestic_TicketCreateOrConnectWithoutTicketInput = {
+    where: Domestic_TicketWhereUniqueInput
+    create: XOR<Domestic_TicketCreateWithoutTicketInput, Domestic_TicketUncheckedCreateWithoutTicketInput>
+  }
+
+  export type International_TicketCreateWithoutTicketInput = {
+    PassportNo: string
+    IssuedCountry: string
+    PassportExpiry: Date | string
+  }
+
+  export type International_TicketUncheckedCreateWithoutTicketInput = {
+    PassportNo: string
+    IssuedCountry: string
+    PassportExpiry: Date | string
+  }
+
+  export type International_TicketCreateOrConnectWithoutTicketInput = {
+    where: International_TicketWhereUniqueInput
+    create: XOR<International_TicketCreateWithoutTicketInput, International_TicketUncheckedCreateWithoutTicketInput>
+  }
+
+  export type Round_Trip_TicketCreateWithoutTicket1Input = {
+    ticket2: TicketCreateNestedOneWithoutRoundTripTicketPart2Input
+  }
+
+  export type Round_Trip_TicketUncheckedCreateWithoutTicket1Input = {
+    TicketID2: string
+  }
+
+  export type Round_Trip_TicketCreateOrConnectWithoutTicket1Input = {
+    where: Round_Trip_TicketWhereUniqueInput
+    create: XOR<Round_Trip_TicketCreateWithoutTicket1Input, Round_Trip_TicketUncheckedCreateWithoutTicket1Input>
+  }
+
+  export type Round_Trip_TicketCreateWithoutTicket2Input = {
+    ticket1: TicketCreateNestedOneWithoutRoundTripTicketPart1Input
+  }
+
+  export type Round_Trip_TicketUncheckedCreateWithoutTicket2Input = {
+    TicketID: string
+  }
+
+  export type Round_Trip_TicketCreateOrConnectWithoutTicket2Input = {
+    where: Round_Trip_TicketWhereUniqueInput
+    create: XOR<Round_Trip_TicketCreateWithoutTicket2Input, Round_Trip_TicketUncheckedCreateWithoutTicket2Input>
+  }
+
+  export type FlightUpsertWithoutTicketsInput = {
+    update: XOR<FlightUpdateWithoutTicketsInput, FlightUncheckedUpdateWithoutTicketsInput>
+    create: XOR<FlightCreateWithoutTicketsInput, FlightUncheckedCreateWithoutTicketsInput>
+    where?: FlightWhereInput
+  }
+
+  export type FlightUpdateToOneWithWhereWithoutTicketsInput = {
+    where?: FlightWhereInput
+    data: XOR<FlightUpdateWithoutTicketsInput, FlightUncheckedUpdateWithoutTicketsInput>
+  }
+
+  export type FlightUpdateWithoutTicketsInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    arrivalAirport?: AirportUpdateOneRequiredWithoutArrivalFlightsNestedInput
+    departureAirport?: AirportUpdateOneRequiredWithoutDepartureFlightsNestedInput
+    airline?: AirlineUpdateOneRequiredWithoutFlightsNestedInput
+    aircraft?: AircraftUpdateOneRequiredWithoutFlightsNestedInput
+    passengers?: Assigned_ToUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateWithoutTicketsInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
+    DepartureAirportID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    passengers?: Assigned_ToUncheckedUpdateManyWithoutFlightNestedInput
+  }
+
+  export type SeatUpsertWithoutTicketsInput = {
+    update: XOR<SeatUpdateWithoutTicketsInput, SeatUncheckedUpdateWithoutTicketsInput>
+    create: XOR<SeatCreateWithoutTicketsInput, SeatUncheckedCreateWithoutTicketsInput>
+    where?: SeatWhereInput
+  }
+
+  export type SeatUpdateToOneWithWhereWithoutTicketsInput = {
+    where?: SeatWhereInput
+    data: XOR<SeatUpdateWithoutTicketsInput, SeatUncheckedUpdateWithoutTicketsInput>
+  }
+
+  export type SeatUpdateWithoutTicketsInput = {
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    SeatType?: StringFieldUpdateOperationsInput | string
+    aircraft?: AircraftUpdateOneRequiredWithoutSeatsNestedInput
+  }
+
+  export type SeatUncheckedUpdateWithoutTicketsInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    SeatType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PurchaseUpsertWithoutTicketInput = {
+    update: XOR<PurchaseUpdateWithoutTicketInput, PurchaseUncheckedUpdateWithoutTicketInput>
+    create: XOR<PurchaseCreateWithoutTicketInput, PurchaseUncheckedCreateWithoutTicketInput>
+    where?: PurchaseWhereInput
+  }
+
+  export type PurchaseUpdateToOneWithWhereWithoutTicketInput = {
+    where?: PurchaseWhereInput
+    data: XOR<PurchaseUpdateWithoutTicketInput, PurchaseUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type PurchaseUpdateWithoutTicketInput = {
+    payment?: PaymentUpdateOneRequiredWithoutPurchaseNestedInput
+    user?: UserUpdateOneRequiredWithoutPurchasesNestedInput
+  }
+
+  export type PurchaseUncheckedUpdateWithoutTicketInput = {
+    PaymentID?: StringFieldUpdateOperationsInput | string
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Domestic_TicketUpsertWithoutTicketInput = {
+    update: XOR<Domestic_TicketUpdateWithoutTicketInput, Domestic_TicketUncheckedUpdateWithoutTicketInput>
+    create: XOR<Domestic_TicketCreateWithoutTicketInput, Domestic_TicketUncheckedCreateWithoutTicketInput>
+    where?: Domestic_TicketWhereInput
+  }
+
+  export type Domestic_TicketUpdateToOneWithWhereWithoutTicketInput = {
+    where?: Domestic_TicketWhereInput
+    data: XOR<Domestic_TicketUpdateWithoutTicketInput, Domestic_TicketUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type Domestic_TicketUpdateWithoutTicketInput = {
+
+  }
+
+  export type Domestic_TicketUncheckedUpdateWithoutTicketInput = {
+
+  }
+
+  export type International_TicketUpsertWithoutTicketInput = {
+    update: XOR<International_TicketUpdateWithoutTicketInput, International_TicketUncheckedUpdateWithoutTicketInput>
+    create: XOR<International_TicketCreateWithoutTicketInput, International_TicketUncheckedCreateWithoutTicketInput>
+    where?: International_TicketWhereInput
+  }
+
+  export type International_TicketUpdateToOneWithWhereWithoutTicketInput = {
+    where?: International_TicketWhereInput
+    data: XOR<International_TicketUpdateWithoutTicketInput, International_TicketUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type International_TicketUpdateWithoutTicketInput = {
+    PassportNo?: StringFieldUpdateOperationsInput | string
+    IssuedCountry?: StringFieldUpdateOperationsInput | string
+    PassportExpiry?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type International_TicketUncheckedUpdateWithoutTicketInput = {
+    PassportNo?: StringFieldUpdateOperationsInput | string
+    IssuedCountry?: StringFieldUpdateOperationsInput | string
+    PassportExpiry?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Round_Trip_TicketUpsertWithoutTicket1Input = {
+    update: XOR<Round_Trip_TicketUpdateWithoutTicket1Input, Round_Trip_TicketUncheckedUpdateWithoutTicket1Input>
+    create: XOR<Round_Trip_TicketCreateWithoutTicket1Input, Round_Trip_TicketUncheckedCreateWithoutTicket1Input>
+    where?: Round_Trip_TicketWhereInput
+  }
+
+  export type Round_Trip_TicketUpdateToOneWithWhereWithoutTicket1Input = {
+    where?: Round_Trip_TicketWhereInput
+    data: XOR<Round_Trip_TicketUpdateWithoutTicket1Input, Round_Trip_TicketUncheckedUpdateWithoutTicket1Input>
+  }
+
+  export type Round_Trip_TicketUpdateWithoutTicket1Input = {
+    ticket2?: TicketUpdateOneRequiredWithoutRoundTripTicketPart2NestedInput
+  }
+
+  export type Round_Trip_TicketUncheckedUpdateWithoutTicket1Input = {
+    TicketID2?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Round_Trip_TicketUpsertWithoutTicket2Input = {
+    update: XOR<Round_Trip_TicketUpdateWithoutTicket2Input, Round_Trip_TicketUncheckedUpdateWithoutTicket2Input>
+    create: XOR<Round_Trip_TicketCreateWithoutTicket2Input, Round_Trip_TicketUncheckedCreateWithoutTicket2Input>
+    where?: Round_Trip_TicketWhereInput
+  }
+
+  export type Round_Trip_TicketUpdateToOneWithWhereWithoutTicket2Input = {
+    where?: Round_Trip_TicketWhereInput
+    data: XOR<Round_Trip_TicketUpdateWithoutTicket2Input, Round_Trip_TicketUncheckedUpdateWithoutTicket2Input>
+  }
+
+  export type Round_Trip_TicketUpdateWithoutTicket2Input = {
+    ticket1?: TicketUpdateOneRequiredWithoutRoundTripTicketPart1NestedInput
+  }
+
+  export type Round_Trip_TicketUncheckedUpdateWithoutTicket2Input = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AirportCreateWithoutOperatesInput = {
+    AirportID: string
+    AirportName: string
+    City: string
+    Country: string
+    departureFlights?: FlightCreateNestedManyWithoutDepartureAirportInput
+    arrivalFlights?: FlightCreateNestedManyWithoutArrivalAirportInput
+  }
+
+  export type AirportUncheckedCreateWithoutOperatesInput = {
+    AirportID: string
+    AirportName: string
+    City: string
+    Country: string
+    departureFlights?: FlightUncheckedCreateNestedManyWithoutDepartureAirportInput
+    arrivalFlights?: FlightUncheckedCreateNestedManyWithoutArrivalAirportInput
+  }
+
+  export type AirportCreateOrConnectWithoutOperatesInput = {
+    where: AirportWhereUniqueInput
+    create: XOR<AirportCreateWithoutOperatesInput, AirportUncheckedCreateWithoutOperatesInput>
+  }
+
+  export type AirlineCreateWithoutOperatesInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    aircrafts?: AircraftCreateNestedManyWithoutAirlineInput
+    flights?: FlightCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageCreateNestedManyWithoutAirlineInput
+    contacts?: ContactCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineUncheckedCreateWithoutOperatesInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    aircrafts?: AircraftUncheckedCreateNestedManyWithoutAirlineInput
+    flights?: FlightUncheckedCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoUncheckedCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageUncheckedCreateNestedManyWithoutAirlineInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineCreateOrConnectWithoutOperatesInput = {
+    where: AirlineWhereUniqueInput
+    create: XOR<AirlineCreateWithoutOperatesInput, AirlineUncheckedCreateWithoutOperatesInput>
+  }
+
+  export type AirportUpsertWithoutOperatesInput = {
+    update: XOR<AirportUpdateWithoutOperatesInput, AirportUncheckedUpdateWithoutOperatesInput>
+    create: XOR<AirportCreateWithoutOperatesInput, AirportUncheckedCreateWithoutOperatesInput>
+    where?: AirportWhereInput
+  }
+
+  export type AirportUpdateToOneWithWhereWithoutOperatesInput = {
+    where?: AirportWhereInput
+    data: XOR<AirportUpdateWithoutOperatesInput, AirportUncheckedUpdateWithoutOperatesInput>
+  }
+
+  export type AirportUpdateWithoutOperatesInput = {
+    AirportID?: StringFieldUpdateOperationsInput | string
+    AirportName?: StringFieldUpdateOperationsInput | string
+    City?: StringFieldUpdateOperationsInput | string
+    Country?: StringFieldUpdateOperationsInput | string
+    departureFlights?: FlightUpdateManyWithoutDepartureAirportNestedInput
+    arrivalFlights?: FlightUpdateManyWithoutArrivalAirportNestedInput
+  }
+
+  export type AirportUncheckedUpdateWithoutOperatesInput = {
+    AirportID?: StringFieldUpdateOperationsInput | string
+    AirportName?: StringFieldUpdateOperationsInput | string
+    City?: StringFieldUpdateOperationsInput | string
+    Country?: StringFieldUpdateOperationsInput | string
+    departureFlights?: FlightUncheckedUpdateManyWithoutDepartureAirportNestedInput
+    arrivalFlights?: FlightUncheckedUpdateManyWithoutArrivalAirportNestedInput
+  }
+
+  export type AirlineUpsertWithoutOperatesInput = {
+    update: XOR<AirlineUpdateWithoutOperatesInput, AirlineUncheckedUpdateWithoutOperatesInput>
+    create: XOR<AirlineCreateWithoutOperatesInput, AirlineUncheckedCreateWithoutOperatesInput>
+    where?: AirlineWhereInput
+  }
+
+  export type AirlineUpdateToOneWithWhereWithoutOperatesInput = {
+    where?: AirlineWhereInput
+    data: XOR<AirlineUpdateWithoutOperatesInput, AirlineUncheckedUpdateWithoutOperatesInput>
+  }
+
+  export type AirlineUpdateWithoutOperatesInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    aircrafts?: AircraftUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type AirlineUncheckedUpdateWithoutOperatesInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    aircrafts?: AircraftUncheckedUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUncheckedUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUncheckedUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUncheckedUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type FlightCreateWithoutPassengersInput = {
+    FlightNo: string
+    Schedule: Date | string
+    arrivalAirport: AirportCreateNestedOneWithoutArrivalFlightsInput
+    departureAirport: AirportCreateNestedOneWithoutDepartureFlightsInput
+    airline: AirlineCreateNestedOneWithoutFlightsInput
+    aircraft: AircraftCreateNestedOneWithoutFlightsInput
+    tickets?: TicketCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightUncheckedCreateWithoutPassengersInput = {
+    FlightNo: string
+    Schedule: Date | string
+    ArrivalAirportID: string
+    DepartureAirportID: string
+    AirlineName: string
+    AircraftRegNo: string
+    tickets?: TicketUncheckedCreateNestedManyWithoutFlightInput
+  }
+
+  export type FlightCreateOrConnectWithoutPassengersInput = {
+    where: FlightWhereUniqueInput
+    create: XOR<FlightCreateWithoutPassengersInput, FlightUncheckedCreateWithoutPassengersInput>
+  }
+
+  export type UserCreateWithoutAssignedFlightsInput = {
+    Email: string
+    account: AccountCreateNestedOneWithoutUserInput
+    telNos?: User_Tel_NoCreateNestedManyWithoutUserInput
+    purchases?: PurchaseCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutAssignedFlightsInput = {
+    UserAccountID: string
+    Email: string
+    telNos?: User_Tel_NoUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PurchaseUncheckedCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutAssignedFlightsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssignedFlightsInput, UserUncheckedCreateWithoutAssignedFlightsInput>
+  }
+
+  export type FlightUpsertWithoutPassengersInput = {
+    update: XOR<FlightUpdateWithoutPassengersInput, FlightUncheckedUpdateWithoutPassengersInput>
+    create: XOR<FlightCreateWithoutPassengersInput, FlightUncheckedCreateWithoutPassengersInput>
+    where?: FlightWhereInput
+  }
+
+  export type FlightUpdateToOneWithWhereWithoutPassengersInput = {
+    where?: FlightWhereInput
+    data: XOR<FlightUpdateWithoutPassengersInput, FlightUncheckedUpdateWithoutPassengersInput>
+  }
+
+  export type FlightUpdateWithoutPassengersInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    arrivalAirport?: AirportUpdateOneRequiredWithoutArrivalFlightsNestedInput
+    departureAirport?: AirportUpdateOneRequiredWithoutDepartureFlightsNestedInput
+    airline?: AirlineUpdateOneRequiredWithoutFlightsNestedInput
+    aircraft?: AircraftUpdateOneRequiredWithoutFlightsNestedInput
+    tickets?: TicketUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateWithoutPassengersInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
+    DepartureAirportID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    tickets?: TicketUncheckedUpdateManyWithoutFlightNestedInput
+  }
+
+  export type UserUpsertWithoutAssignedFlightsInput = {
+    update: XOR<UserUpdateWithoutAssignedFlightsInput, UserUncheckedUpdateWithoutAssignedFlightsInput>
+    create: XOR<UserCreateWithoutAssignedFlightsInput, UserUncheckedCreateWithoutAssignedFlightsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssignedFlightsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssignedFlightsInput, UserUncheckedUpdateWithoutAssignedFlightsInput>
+  }
+
+  export type UserUpdateWithoutAssignedFlightsInput = {
+    Email?: StringFieldUpdateOperationsInput | string
+    account?: AccountUpdateOneRequiredWithoutUserNestedInput
+    telNos?: User_Tel_NoUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssignedFlightsInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    Email?: StringFieldUpdateOperationsInput | string
+    telNos?: User_Tel_NoUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUncheckedUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type AdminCreateWithoutContactsInput = {
+    IPAddress?: string | null
+    account: AccountCreateNestedOneWithoutAdminInput
+    sentAirlineMessages?: Airline_MessageCreateNestedManyWithoutAdminInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminUncheckedCreateWithoutContactsInput = {
+    AdminAccountID: string
+    IPAddress?: string | null
+    sentAirlineMessages?: Airline_MessageUncheckedCreateNestedManyWithoutAdminInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminCreateOrConnectWithoutContactsInput = {
+    where: AdminWhereUniqueInput
+    create: XOR<AdminCreateWithoutContactsInput, AdminUncheckedCreateWithoutContactsInput>
+  }
+
+  export type AirlineCreateWithoutContactsInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftCreateNestedManyWithoutAirlineInput
+    flights?: FlightCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineUncheckedCreateWithoutContactsInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateUncheckedCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftUncheckedCreateNestedManyWithoutAirlineInput
+    flights?: FlightUncheckedCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoUncheckedCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageUncheckedCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineCreateOrConnectWithoutContactsInput = {
+    where: AirlineWhereUniqueInput
+    create: XOR<AirlineCreateWithoutContactsInput, AirlineUncheckedCreateWithoutContactsInput>
+  }
+
+  export type AdminUpsertWithoutContactsInput = {
+    update: XOR<AdminUpdateWithoutContactsInput, AdminUncheckedUpdateWithoutContactsInput>
+    create: XOR<AdminCreateWithoutContactsInput, AdminUncheckedCreateWithoutContactsInput>
+    where?: AdminWhereInput
+  }
+
+  export type AdminUpdateToOneWithWhereWithoutContactsInput = {
+    where?: AdminWhereInput
+    data: XOR<AdminUpdateWithoutContactsInput, AdminUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type AdminUpdateWithoutContactsInput = {
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    account?: AccountUpdateOneRequiredWithoutAdminNestedInput
+    sentAirlineMessages?: Airline_MessageUpdateManyWithoutAdminNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutAdminNestedInput
+  }
+
+  export type AdminUncheckedUpdateWithoutContactsInput = {
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAirlineMessages?: Airline_MessageUncheckedUpdateManyWithoutAdminNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutAdminNestedInput
+  }
+
+  export type AirlineUpsertWithoutContactsInput = {
+    update: XOR<AirlineUpdateWithoutContactsInput, AirlineUncheckedUpdateWithoutContactsInput>
+    create: XOR<AirlineCreateWithoutContactsInput, AirlineUncheckedCreateWithoutContactsInput>
+    where?: AirlineWhereInput
+  }
+
+  export type AirlineUpdateToOneWithWhereWithoutContactsInput = {
+    where?: AirlineWhereInput
+    data: XOR<AirlineUpdateWithoutContactsInput, AirlineUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type AirlineUpdateWithoutContactsInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type AirlineUncheckedUpdateWithoutContactsInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUncheckedUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUncheckedUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUncheckedUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUncheckedUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUncheckedUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type AdminCreateWithoutInvolvedInReportsInput = {
+    IPAddress?: string | null
+    account: AccountCreateNestedOneWithoutAdminInput
+    sentAirlineMessages?: Airline_MessageCreateNestedManyWithoutAdminInput
+    contacts?: ContactCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminUncheckedCreateWithoutInvolvedInReportsInput = {
+    AdminAccountID: string
+    IPAddress?: string | null
+    sentAirlineMessages?: Airline_MessageUncheckedCreateNestedManyWithoutAdminInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminCreateOrConnectWithoutInvolvedInReportsInput = {
+    where: AdminWhereUniqueInput
+    create: XOR<AdminCreateWithoutInvolvedInReportsInput, AdminUncheckedCreateWithoutInvolvedInReportsInput>
+  }
+
+  export type UserCreateWithoutInvolvedInReportsInput = {
+    Email: string
+    account: AccountCreateNestedOneWithoutUserInput
+    telNos?: User_Tel_NoCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToCreateNestedManyWithoutUserInput
+    purchases?: PurchaseCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutInvolvedInReportsInput = {
+    UserAccountID: string
+    Email: string
+    telNos?: User_Tel_NoUncheckedCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PurchaseUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutInvolvedInReportsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutInvolvedInReportsInput, UserUncheckedCreateWithoutInvolvedInReportsInput>
+  }
+
+  export type ReportCreateWithoutCreatorInput = {
+    ReportID: string
+    ReportDescription: string
+    BookingID: string
+    Attachment?: string | null
+    Email: string
+    TelNo: string
+    PassengerName: string
+  }
+
+  export type ReportUncheckedCreateWithoutCreatorInput = {
+    ReportID: string
+    ReportDescription: string
+    BookingID: string
+    Attachment?: string | null
+    Email: string
+    TelNo: string
+    PassengerName: string
+  }
+
+  export type ReportCreateOrConnectWithoutCreatorInput = {
+    where: ReportWhereUniqueInput
+    create: XOR<ReportCreateWithoutCreatorInput, ReportUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type ReportCreateManyCreatorInputEnvelope = {
+    data: ReportCreateManyCreatorInput | ReportCreateManyCreatorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdminUpsertWithoutInvolvedInReportsInput = {
+    update: XOR<AdminUpdateWithoutInvolvedInReportsInput, AdminUncheckedUpdateWithoutInvolvedInReportsInput>
+    create: XOR<AdminCreateWithoutInvolvedInReportsInput, AdminUncheckedCreateWithoutInvolvedInReportsInput>
+    where?: AdminWhereInput
+  }
+
+  export type AdminUpdateToOneWithWhereWithoutInvolvedInReportsInput = {
+    where?: AdminWhereInput
+    data: XOR<AdminUpdateWithoutInvolvedInReportsInput, AdminUncheckedUpdateWithoutInvolvedInReportsInput>
+  }
+
+  export type AdminUpdateWithoutInvolvedInReportsInput = {
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    account?: AccountUpdateOneRequiredWithoutAdminNestedInput
+    sentAirlineMessages?: Airline_MessageUpdateManyWithoutAdminNestedInput
+    contacts?: ContactUpdateManyWithoutAdminNestedInput
+  }
+
+  export type AdminUncheckedUpdateWithoutInvolvedInReportsInput = {
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAirlineMessages?: Airline_MessageUncheckedUpdateManyWithoutAdminNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutAdminNestedInput
+  }
+
+  export type UserUpsertWithoutInvolvedInReportsInput = {
+    update: XOR<UserUpdateWithoutInvolvedInReportsInput, UserUncheckedUpdateWithoutInvolvedInReportsInput>
+    create: XOR<UserCreateWithoutInvolvedInReportsInput, UserUncheckedCreateWithoutInvolvedInReportsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutInvolvedInReportsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutInvolvedInReportsInput, UserUncheckedUpdateWithoutInvolvedInReportsInput>
+  }
+
+  export type UserUpdateWithoutInvolvedInReportsInput = {
+    Email?: StringFieldUpdateOperationsInput | string
+    account?: AccountUpdateOneRequiredWithoutUserNestedInput
+    telNos?: User_Tel_NoUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutInvolvedInReportsInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    Email?: StringFieldUpdateOperationsInput | string
+    telNos?: User_Tel_NoUncheckedUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ReportUpsertWithWhereUniqueWithoutCreatorInput = {
+    where: ReportWhereUniqueInput
+    update: XOR<ReportUpdateWithoutCreatorInput, ReportUncheckedUpdateWithoutCreatorInput>
+    create: XOR<ReportCreateWithoutCreatorInput, ReportUncheckedCreateWithoutCreatorInput>
+  }
+
+  export type ReportUpdateWithWhereUniqueWithoutCreatorInput = {
+    where: ReportWhereUniqueInput
+    data: XOR<ReportUpdateWithoutCreatorInput, ReportUncheckedUpdateWithoutCreatorInput>
+  }
+
+  export type ReportUpdateManyWithWhereWithoutCreatorInput = {
+    where: ReportScalarWhereInput
+    data: XOR<ReportUpdateManyMutationInput, ReportUncheckedUpdateManyWithoutCreatorInput>
+  }
+
+  export type ReportScalarWhereInput = {
+    AND?: ReportScalarWhereInput | ReportScalarWhereInput[]
+    OR?: ReportScalarWhereInput[]
+    NOT?: ReportScalarWhereInput | ReportScalarWhereInput[]
+    ReportID?: StringFilter<"Report"> | string
+    ReportDescription?: StringFilter<"Report"> | string
+    BookingID?: StringFilter<"Report"> | string
+    Attachment?: StringNullableFilter<"Report"> | string | null
+    UserAccountID?: StringFilter<"Report"> | string
+    AdminAccountID?: StringFilter<"Report"> | string
+    Email?: StringFilter<"Report"> | string
+    TelNo?: StringFilter<"Report"> | string
+    PassengerName?: StringFilter<"Report"> | string
+  }
+
+  export type AircraftCreateWithoutCabinsInput = {
+    AircraftRegNo: string
+    SeatCapacity: number
+    ModelName: string
+    airline: AirlineCreateNestedOneWithoutAircraftsInput
+    seats?: SeatCreateNestedManyWithoutAircraftInput
+    flights?: FlightCreateNestedManyWithoutAircraftInput
+  }
+
+  export type AircraftUncheckedCreateWithoutCabinsInput = {
+    AircraftRegNo: string
+    AirlineName: string
+    SeatCapacity: number
+    ModelName: string
+    seats?: SeatUncheckedCreateNestedManyWithoutAircraftInput
+    flights?: FlightUncheckedCreateNestedManyWithoutAircraftInput
+  }
+
+  export type AircraftCreateOrConnectWithoutCabinsInput = {
+    where: AircraftWhereUniqueInput
+    create: XOR<AircraftCreateWithoutCabinsInput, AircraftUncheckedCreateWithoutCabinsInput>
+  }
+
+  export type AircraftUpsertWithoutCabinsInput = {
+    update: XOR<AircraftUpdateWithoutCabinsInput, AircraftUncheckedUpdateWithoutCabinsInput>
+    create: XOR<AircraftCreateWithoutCabinsInput, AircraftUncheckedCreateWithoutCabinsInput>
+    where?: AircraftWhereInput
+  }
+
+  export type AircraftUpdateToOneWithWhereWithoutCabinsInput = {
+    where?: AircraftWhereInput
+    data: XOR<AircraftUpdateWithoutCabinsInput, AircraftUncheckedUpdateWithoutCabinsInput>
+  }
+
+  export type AircraftUpdateWithoutCabinsInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    SeatCapacity?: IntFieldUpdateOperationsInput | number
+    ModelName?: StringFieldUpdateOperationsInput | string
+    airline?: AirlineUpdateOneRequiredWithoutAircraftsNestedInput
+    seats?: SeatUpdateManyWithoutAircraftNestedInput
+    flights?: FlightUpdateManyWithoutAircraftNestedInput
+  }
+
+  export type AircraftUncheckedUpdateWithoutCabinsInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    SeatCapacity?: IntFieldUpdateOperationsInput | number
+    ModelName?: StringFieldUpdateOperationsInput | string
+    seats?: SeatUncheckedUpdateManyWithoutAircraftNestedInput
+    flights?: FlightUncheckedUpdateManyWithoutAircraftNestedInput
+  }
+
+  export type AircraftCreateWithoutSeatsInput = {
+    AircraftRegNo: string
+    SeatCapacity: number
+    ModelName: string
+    airline: AirlineCreateNestedOneWithoutAircraftsInput
+    flights?: FlightCreateNestedManyWithoutAircraftInput
+    cabins?: CabinClassCreateNestedManyWithoutAircraftInput
+  }
+
+  export type AircraftUncheckedCreateWithoutSeatsInput = {
+    AircraftRegNo: string
+    AirlineName: string
+    SeatCapacity: number
+    ModelName: string
+    flights?: FlightUncheckedCreateNestedManyWithoutAircraftInput
+    cabins?: CabinClassUncheckedCreateNestedManyWithoutAircraftInput
+  }
+
+  export type AircraftCreateOrConnectWithoutSeatsInput = {
+    where: AircraftWhereUniqueInput
+    create: XOR<AircraftCreateWithoutSeatsInput, AircraftUncheckedCreateWithoutSeatsInput>
+  }
+
+  export type TicketCreateWithoutSeatInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    flight: FlightCreateNestedOneWithoutTicketsInput
+    purchase?: PurchaseCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketUncheckedCreateWithoutSeatInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    FlightNo: string
+    Schedule: Date | string
+    purchase?: PurchaseUncheckedCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketUncheckedCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketUncheckedCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketCreateOrConnectWithoutSeatInput = {
+    where: TicketWhereUniqueInput
+    create: XOR<TicketCreateWithoutSeatInput, TicketUncheckedCreateWithoutSeatInput>
+  }
+
+  export type TicketCreateManySeatInputEnvelope = {
+    data: TicketCreateManySeatInput | TicketCreateManySeatInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AircraftUpsertWithoutSeatsInput = {
+    update: XOR<AircraftUpdateWithoutSeatsInput, AircraftUncheckedUpdateWithoutSeatsInput>
+    create: XOR<AircraftCreateWithoutSeatsInput, AircraftUncheckedCreateWithoutSeatsInput>
+    where?: AircraftWhereInput
+  }
+
+  export type AircraftUpdateToOneWithWhereWithoutSeatsInput = {
+    where?: AircraftWhereInput
+    data: XOR<AircraftUpdateWithoutSeatsInput, AircraftUncheckedUpdateWithoutSeatsInput>
+  }
+
+  export type AircraftUpdateWithoutSeatsInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    SeatCapacity?: IntFieldUpdateOperationsInput | number
+    ModelName?: StringFieldUpdateOperationsInput | string
+    airline?: AirlineUpdateOneRequiredWithoutAircraftsNestedInput
+    flights?: FlightUpdateManyWithoutAircraftNestedInput
+    cabins?: CabinClassUpdateManyWithoutAircraftNestedInput
+  }
+
+  export type AircraftUncheckedUpdateWithoutSeatsInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    SeatCapacity?: IntFieldUpdateOperationsInput | number
+    ModelName?: StringFieldUpdateOperationsInput | string
+    flights?: FlightUncheckedUpdateManyWithoutAircraftNestedInput
+    cabins?: CabinClassUncheckedUpdateManyWithoutAircraftNestedInput
+  }
+
+  export type TicketUpsertWithWhereUniqueWithoutSeatInput = {
+    where: TicketWhereUniqueInput
+    update: XOR<TicketUpdateWithoutSeatInput, TicketUncheckedUpdateWithoutSeatInput>
+    create: XOR<TicketCreateWithoutSeatInput, TicketUncheckedCreateWithoutSeatInput>
+  }
+
+  export type TicketUpdateWithWhereUniqueWithoutSeatInput = {
+    where: TicketWhereUniqueInput
+    data: XOR<TicketUpdateWithoutSeatInput, TicketUncheckedUpdateWithoutSeatInput>
+  }
+
+  export type TicketUpdateManyWithWhereWithoutSeatInput = {
+    where: TicketScalarWhereInput
+    data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutSeatInput>
+  }
+
+  export type AccountCreateWithoutAdminInput = {
+    AccountID: string
+    Password: string
+    FirstName: string
+    LastName: string
+    user?: UserCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountUncheckedCreateWithoutAdminInput = {
+    AccountID: string
+    Password: string
+    FirstName: string
+    LastName: string
+    user?: UserUncheckedCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountCreateOrConnectWithoutAdminInput = {
+    where: AccountWhereUniqueInput
+    create: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput>
+  }
+
+  export type Airline_MessageCreateWithoutAdminInput = {
+    MessageText: string
+    airline: AirlineCreateNestedOneWithoutMessagesInput
+  }
+
+  export type Airline_MessageUncheckedCreateWithoutAdminInput = {
+    AirlineName: string
+    MessageText: string
+  }
+
+  export type Airline_MessageCreateOrConnectWithoutAdminInput = {
+    where: Airline_MessageWhereUniqueInput
+    create: XOR<Airline_MessageCreateWithoutAdminInput, Airline_MessageUncheckedCreateWithoutAdminInput>
+  }
+
+  export type Airline_MessageCreateManyAdminInputEnvelope = {
+    data: Airline_MessageCreateManyAdminInput | Airline_MessageCreateManyAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ContactCreateWithoutAdminInput = {
+    ContactStatus: string
+    airline: AirlineCreateNestedOneWithoutContactsInput
+  }
+
+  export type ContactUncheckedCreateWithoutAdminInput = {
+    AirlineName: string
+    ContactStatus: string
+  }
+
+  export type ContactCreateOrConnectWithoutAdminInput = {
+    where: ContactWhereUniqueInput
+    create: XOR<ContactCreateWithoutAdminInput, ContactUncheckedCreateWithoutAdminInput>
+  }
+
+  export type ContactCreateManyAdminInputEnvelope = {
+    data: ContactCreateManyAdminInput | ContactCreateManyAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Report_ToCreateWithoutAdminInput = {
+    ReportStatus: string
+    user: UserCreateNestedOneWithoutInvolvedInReportsInput
+    Reports?: ReportCreateNestedManyWithoutCreatorInput
+  }
+
+  export type Report_ToUncheckedCreateWithoutAdminInput = {
+    UserAccountID: string
+    ReportStatus: string
+    Reports?: ReportUncheckedCreateNestedManyWithoutCreatorInput
+  }
+
+  export type Report_ToCreateOrConnectWithoutAdminInput = {
+    where: Report_ToWhereUniqueInput
+    create: XOR<Report_ToCreateWithoutAdminInput, Report_ToUncheckedCreateWithoutAdminInput>
+  }
+
+  export type Report_ToCreateManyAdminInputEnvelope = {
+    data: Report_ToCreateManyAdminInput | Report_ToCreateManyAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AccountUpsertWithoutAdminInput = {
+    update: XOR<AccountUpdateWithoutAdminInput, AccountUncheckedUpdateWithoutAdminInput>
+    create: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput>
+    where?: AccountWhereInput
+  }
+
+  export type AccountUpdateToOneWithWhereWithoutAdminInput = {
+    where?: AccountWhereInput
+    data: XOR<AccountUpdateWithoutAdminInput, AccountUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type AccountUpdateWithoutAdminInput = {
+    AccountID?: StringFieldUpdateOperationsInput | string
+    Password?: StringFieldUpdateOperationsInput | string
+    FirstName?: StringFieldUpdateOperationsInput | string
+    LastName?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneWithoutAccountNestedInput
+  }
+
+  export type AccountUncheckedUpdateWithoutAdminInput = {
+    AccountID?: StringFieldUpdateOperationsInput | string
+    Password?: StringFieldUpdateOperationsInput | string
+    FirstName?: StringFieldUpdateOperationsInput | string
+    LastName?: StringFieldUpdateOperationsInput | string
+    user?: UserUncheckedUpdateOneWithoutAccountNestedInput
+  }
+
+  export type Airline_MessageUpsertWithWhereUniqueWithoutAdminInput = {
+    where: Airline_MessageWhereUniqueInput
+    update: XOR<Airline_MessageUpdateWithoutAdminInput, Airline_MessageUncheckedUpdateWithoutAdminInput>
+    create: XOR<Airline_MessageCreateWithoutAdminInput, Airline_MessageUncheckedCreateWithoutAdminInput>
+  }
+
+  export type Airline_MessageUpdateWithWhereUniqueWithoutAdminInput = {
+    where: Airline_MessageWhereUniqueInput
+    data: XOR<Airline_MessageUpdateWithoutAdminInput, Airline_MessageUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type Airline_MessageUpdateManyWithWhereWithoutAdminInput = {
+    where: Airline_MessageScalarWhereInput
+    data: XOR<Airline_MessageUpdateManyMutationInput, Airline_MessageUncheckedUpdateManyWithoutAdminInput>
+  }
+
+  export type ContactUpsertWithWhereUniqueWithoutAdminInput = {
+    where: ContactWhereUniqueInput
+    update: XOR<ContactUpdateWithoutAdminInput, ContactUncheckedUpdateWithoutAdminInput>
+    create: XOR<ContactCreateWithoutAdminInput, ContactUncheckedCreateWithoutAdminInput>
+  }
+
+  export type ContactUpdateWithWhereUniqueWithoutAdminInput = {
+    where: ContactWhereUniqueInput
+    data: XOR<ContactUpdateWithoutAdminInput, ContactUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type ContactUpdateManyWithWhereWithoutAdminInput = {
+    where: ContactScalarWhereInput
+    data: XOR<ContactUpdateManyMutationInput, ContactUncheckedUpdateManyWithoutAdminInput>
+  }
+
+  export type Report_ToUpsertWithWhereUniqueWithoutAdminInput = {
+    where: Report_ToWhereUniqueInput
+    update: XOR<Report_ToUpdateWithoutAdminInput, Report_ToUncheckedUpdateWithoutAdminInput>
+    create: XOR<Report_ToCreateWithoutAdminInput, Report_ToUncheckedCreateWithoutAdminInput>
+  }
+
+  export type Report_ToUpdateWithWhereUniqueWithoutAdminInput = {
+    where: Report_ToWhereUniqueInput
+    data: XOR<Report_ToUpdateWithoutAdminInput, Report_ToUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type Report_ToUpdateManyWithWhereWithoutAdminInput = {
+    where: Report_ToScalarWhereInput
+    data: XOR<Report_ToUpdateManyMutationInput, Report_ToUncheckedUpdateManyWithoutAdminInput>
+  }
+
+  export type Report_ToScalarWhereInput = {
+    AND?: Report_ToScalarWhereInput | Report_ToScalarWhereInput[]
+    OR?: Report_ToScalarWhereInput[]
+    NOT?: Report_ToScalarWhereInput | Report_ToScalarWhereInput[]
+    UserAccountID?: StringFilter<"Report_To"> | string
+    AdminAccountID?: StringFilter<"Report_To"> | string
+    ReportStatus?: StringFilter<"Report_To"> | string
+  }
+
+  export type AdminCreateWithoutSentAirlineMessagesInput = {
+    IPAddress?: string | null
+    account: AccountCreateNestedOneWithoutAdminInput
+    contacts?: ContactCreateNestedManyWithoutAdminInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminUncheckedCreateWithoutSentAirlineMessagesInput = {
+    AdminAccountID: string
+    IPAddress?: string | null
+    contacts?: ContactUncheckedCreateNestedManyWithoutAdminInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminCreateOrConnectWithoutSentAirlineMessagesInput = {
+    where: AdminWhereUniqueInput
+    create: XOR<AdminCreateWithoutSentAirlineMessagesInput, AdminUncheckedCreateWithoutSentAirlineMessagesInput>
+  }
+
+  export type AirlineCreateWithoutMessagesInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftCreateNestedManyWithoutAirlineInput
+    flights?: FlightCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoCreateNestedManyWithoutAirlineInput
+    contacts?: ContactCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineUncheckedCreateWithoutMessagesInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateUncheckedCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftUncheckedCreateNestedManyWithoutAirlineInput
+    flights?: FlightUncheckedCreateNestedManyWithoutAirlineInput
+    telNos?: Airline_Tel_NoUncheckedCreateNestedManyWithoutAirlineInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineCreateOrConnectWithoutMessagesInput = {
+    where: AirlineWhereUniqueInput
+    create: XOR<AirlineCreateWithoutMessagesInput, AirlineUncheckedCreateWithoutMessagesInput>
+  }
+
+  export type AdminUpsertWithoutSentAirlineMessagesInput = {
+    update: XOR<AdminUpdateWithoutSentAirlineMessagesInput, AdminUncheckedUpdateWithoutSentAirlineMessagesInput>
+    create: XOR<AdminCreateWithoutSentAirlineMessagesInput, AdminUncheckedCreateWithoutSentAirlineMessagesInput>
+    where?: AdminWhereInput
+  }
+
+  export type AdminUpdateToOneWithWhereWithoutSentAirlineMessagesInput = {
+    where?: AdminWhereInput
+    data: XOR<AdminUpdateWithoutSentAirlineMessagesInput, AdminUncheckedUpdateWithoutSentAirlineMessagesInput>
+  }
+
+  export type AdminUpdateWithoutSentAirlineMessagesInput = {
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    account?: AccountUpdateOneRequiredWithoutAdminNestedInput
+    contacts?: ContactUpdateManyWithoutAdminNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutAdminNestedInput
+  }
+
+  export type AdminUncheckedUpdateWithoutSentAirlineMessagesInput = {
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contacts?: ContactUncheckedUpdateManyWithoutAdminNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutAdminNestedInput
+  }
+
+  export type AirlineUpsertWithoutMessagesInput = {
+    update: XOR<AirlineUpdateWithoutMessagesInput, AirlineUncheckedUpdateWithoutMessagesInput>
+    create: XOR<AirlineCreateWithoutMessagesInput, AirlineUncheckedCreateWithoutMessagesInput>
+    where?: AirlineWhereInput
+  }
+
+  export type AirlineUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: AirlineWhereInput
+    data: XOR<AirlineUpdateWithoutMessagesInput, AirlineUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type AirlineUpdateWithoutMessagesInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type AirlineUncheckedUpdateWithoutMessagesInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUncheckedUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUncheckedUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUncheckedUpdateManyWithoutAirlineNestedInput
+    telNos?: Airline_Tel_NoUncheckedUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type UserCreateWithoutAccountInput = {
+    Email: string
+    telNos?: User_Tel_NoCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToCreateNestedManyWithoutUserInput
+    purchases?: PurchaseCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutAccountInput = {
+    Email: string
+    telNos?: User_Tel_NoUncheckedCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PurchaseUncheckedCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutAccountInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAccountInput, UserUncheckedCreateWithoutAccountInput>
+  }
+
+  export type AdminCreateWithoutAccountInput = {
+    IPAddress?: string | null
+    sentAirlineMessages?: Airline_MessageCreateNestedManyWithoutAdminInput
+    contacts?: ContactCreateNestedManyWithoutAdminInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminUncheckedCreateWithoutAccountInput = {
+    IPAddress?: string | null
+    sentAirlineMessages?: Airline_MessageUncheckedCreateNestedManyWithoutAdminInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutAdminInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminCreateOrConnectWithoutAccountInput = {
+    where: AdminWhereUniqueInput
+    create: XOR<AdminCreateWithoutAccountInput, AdminUncheckedCreateWithoutAccountInput>
+  }
+
+  export type UserUpsertWithoutAccountInput = {
+    update: XOR<UserUpdateWithoutAccountInput, UserUncheckedUpdateWithoutAccountInput>
+    create: XOR<UserCreateWithoutAccountInput, UserUncheckedCreateWithoutAccountInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAccountInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAccountInput, UserUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type UserUpdateWithoutAccountInput = {
+    Email?: StringFieldUpdateOperationsInput | string
+    telNos?: User_Tel_NoUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAccountInput = {
+    Email?: StringFieldUpdateOperationsInput | string
+    telNos?: User_Tel_NoUncheckedUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUncheckedUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type AdminUpsertWithoutAccountInput = {
+    update: XOR<AdminUpdateWithoutAccountInput, AdminUncheckedUpdateWithoutAccountInput>
+    create: XOR<AdminCreateWithoutAccountInput, AdminUncheckedCreateWithoutAccountInput>
+    where?: AdminWhereInput
+  }
+
+  export type AdminUpdateToOneWithWhereWithoutAccountInput = {
+    where?: AdminWhereInput
+    data: XOR<AdminUpdateWithoutAccountInput, AdminUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type AdminUpdateWithoutAccountInput = {
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAirlineMessages?: Airline_MessageUpdateManyWithoutAdminNestedInput
+    contacts?: ContactUpdateManyWithoutAdminNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutAdminNestedInput
+  }
+
+  export type AdminUncheckedUpdateWithoutAccountInput = {
+    IPAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    sentAirlineMessages?: Airline_MessageUncheckedUpdateManyWithoutAdminNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutAdminNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutAdminNestedInput
+  }
+
+  export type AccountCreateWithoutUserInput = {
+    AccountID: string
+    Password: string
+    FirstName: string
+    LastName: string
+    admin?: AdminCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountUncheckedCreateWithoutUserInput = {
+    AccountID: string
+    Password: string
+    FirstName: string
+    LastName: string
+    admin?: AdminUncheckedCreateNestedOneWithoutAccountInput
+  }
+
+  export type AccountCreateOrConnectWithoutUserInput = {
+    where: AccountWhereUniqueInput
+    create: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput>
+  }
+
+  export type User_Tel_NoCreateWithoutUserInput = {
+    TelNo: string
+  }
+
+  export type User_Tel_NoUncheckedCreateWithoutUserInput = {
+    TelNo: string
+  }
+
+  export type User_Tel_NoCreateOrConnectWithoutUserInput = {
+    where: User_Tel_NoWhereUniqueInput
+    create: XOR<User_Tel_NoCreateWithoutUserInput, User_Tel_NoUncheckedCreateWithoutUserInput>
+  }
+
+  export type User_Tel_NoCreateManyUserInputEnvelope = {
+    data: User_Tel_NoCreateManyUserInput | User_Tel_NoCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Assigned_ToCreateWithoutUserInput = {
+    flight: FlightCreateNestedOneWithoutPassengersInput
+  }
+
+  export type Assigned_ToUncheckedCreateWithoutUserInput = {
+    FlightNo: string
+    Schedule: Date | string
+  }
+
+  export type Assigned_ToCreateOrConnectWithoutUserInput = {
+    where: Assigned_ToWhereUniqueInput
+    create: XOR<Assigned_ToCreateWithoutUserInput, Assigned_ToUncheckedCreateWithoutUserInput>
+  }
+
+  export type Assigned_ToCreateManyUserInputEnvelope = {
+    data: Assigned_ToCreateManyUserInput | Assigned_ToCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PurchaseCreateWithoutUserInput = {
+    ticket: TicketCreateNestedOneWithoutPurchaseInput
+    payment: PaymentCreateNestedOneWithoutPurchaseInput
+  }
+
+  export type PurchaseUncheckedCreateWithoutUserInput = {
+    TicketID: string
+    PaymentID: string
+  }
+
+  export type PurchaseCreateOrConnectWithoutUserInput = {
+    where: PurchaseWhereUniqueInput
+    create: XOR<PurchaseCreateWithoutUserInput, PurchaseUncheckedCreateWithoutUserInput>
+  }
+
+  export type PurchaseCreateManyUserInputEnvelope = {
+    data: PurchaseCreateManyUserInput | PurchaseCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Report_ToCreateWithoutUserInput = {
+    ReportStatus: string
+    admin: AdminCreateNestedOneWithoutInvolvedInReportsInput
+    Reports?: ReportCreateNestedManyWithoutCreatorInput
+  }
+
+  export type Report_ToUncheckedCreateWithoutUserInput = {
+    AdminAccountID: string
+    ReportStatus: string
+    Reports?: ReportUncheckedCreateNestedManyWithoutCreatorInput
+  }
+
+  export type Report_ToCreateOrConnectWithoutUserInput = {
+    where: Report_ToWhereUniqueInput
+    create: XOR<Report_ToCreateWithoutUserInput, Report_ToUncheckedCreateWithoutUserInput>
+  }
+
+  export type Report_ToCreateManyUserInputEnvelope = {
+    data: Report_ToCreateManyUserInput | Report_ToCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SessionCreateWithoutUserInput = {
+    SessionID: string
+    TokenHash: string
+    CreatedAt?: Date | string
+    LastSeenAt: Date | string
+    IdleExpiresAt: Date | string
+    AbsoluteExpiresAt: Date | string
+    RevokedAt?: Date | string | null
+    RevokeReason?: string | null
+  }
+
+  export type SessionUncheckedCreateWithoutUserInput = {
+    SessionID: string
+    TokenHash: string
+    CreatedAt?: Date | string
+    LastSeenAt: Date | string
+    IdleExpiresAt: Date | string
+    AbsoluteExpiresAt: Date | string
+    RevokedAt?: Date | string | null
+    RevokeReason?: string | null
+  }
+
+  export type SessionCreateOrConnectWithoutUserInput = {
+    where: SessionWhereUniqueInput
+    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type SessionCreateManyUserInputEnvelope = {
+    data: SessionCreateManyUserInput | SessionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AccountUpsertWithoutUserInput = {
+    update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
+    create: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput>
+    where?: AccountWhereInput
+  }
+
+  export type AccountUpdateToOneWithWhereWithoutUserInput = {
+    where?: AccountWhereInput
+    data: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AccountUpdateWithoutUserInput = {
+    AccountID?: StringFieldUpdateOperationsInput | string
+    Password?: StringFieldUpdateOperationsInput | string
+    FirstName?: StringFieldUpdateOperationsInput | string
+    LastName?: StringFieldUpdateOperationsInput | string
+    admin?: AdminUpdateOneWithoutAccountNestedInput
+  }
+
+  export type AccountUncheckedUpdateWithoutUserInput = {
+    AccountID?: StringFieldUpdateOperationsInput | string
+    Password?: StringFieldUpdateOperationsInput | string
+    FirstName?: StringFieldUpdateOperationsInput | string
+    LastName?: StringFieldUpdateOperationsInput | string
+    admin?: AdminUncheckedUpdateOneWithoutAccountNestedInput
+  }
+
+  export type User_Tel_NoUpsertWithWhereUniqueWithoutUserInput = {
+    where: User_Tel_NoWhereUniqueInput
+    update: XOR<User_Tel_NoUpdateWithoutUserInput, User_Tel_NoUncheckedUpdateWithoutUserInput>
+    create: XOR<User_Tel_NoCreateWithoutUserInput, User_Tel_NoUncheckedCreateWithoutUserInput>
+  }
+
+  export type User_Tel_NoUpdateWithWhereUniqueWithoutUserInput = {
+    where: User_Tel_NoWhereUniqueInput
+    data: XOR<User_Tel_NoUpdateWithoutUserInput, User_Tel_NoUncheckedUpdateWithoutUserInput>
+  }
+
+  export type User_Tel_NoUpdateManyWithWhereWithoutUserInput = {
+    where: User_Tel_NoScalarWhereInput
+    data: XOR<User_Tel_NoUpdateManyMutationInput, User_Tel_NoUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type User_Tel_NoScalarWhereInput = {
+    AND?: User_Tel_NoScalarWhereInput | User_Tel_NoScalarWhereInput[]
+    OR?: User_Tel_NoScalarWhereInput[]
+    NOT?: User_Tel_NoScalarWhereInput | User_Tel_NoScalarWhereInput[]
+    UserAccountID?: StringFilter<"User_Tel_No"> | string
+    TelNo?: StringFilter<"User_Tel_No"> | string
+  }
+
+  export type Assigned_ToUpsertWithWhereUniqueWithoutUserInput = {
+    where: Assigned_ToWhereUniqueInput
+    update: XOR<Assigned_ToUpdateWithoutUserInput, Assigned_ToUncheckedUpdateWithoutUserInput>
+    create: XOR<Assigned_ToCreateWithoutUserInput, Assigned_ToUncheckedCreateWithoutUserInput>
+  }
+
+  export type Assigned_ToUpdateWithWhereUniqueWithoutUserInput = {
+    where: Assigned_ToWhereUniqueInput
+    data: XOR<Assigned_ToUpdateWithoutUserInput, Assigned_ToUncheckedUpdateWithoutUserInput>
+  }
+
+  export type Assigned_ToUpdateManyWithWhereWithoutUserInput = {
+    where: Assigned_ToScalarWhereInput
+    data: XOR<Assigned_ToUpdateManyMutationInput, Assigned_ToUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PurchaseUpsertWithWhereUniqueWithoutUserInput = {
+    where: PurchaseWhereUniqueInput
+    update: XOR<PurchaseUpdateWithoutUserInput, PurchaseUncheckedUpdateWithoutUserInput>
+    create: XOR<PurchaseCreateWithoutUserInput, PurchaseUncheckedCreateWithoutUserInput>
+  }
+
+  export type PurchaseUpdateWithWhereUniqueWithoutUserInput = {
+    where: PurchaseWhereUniqueInput
+    data: XOR<PurchaseUpdateWithoutUserInput, PurchaseUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PurchaseUpdateManyWithWhereWithoutUserInput = {
+    where: PurchaseScalarWhereInput
+    data: XOR<PurchaseUpdateManyMutationInput, PurchaseUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PurchaseScalarWhereInput = {
+    AND?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
+    OR?: PurchaseScalarWhereInput[]
+    NOT?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
+    TicketID?: StringFilter<"Purchase"> | string
+    PaymentID?: StringFilter<"Purchase"> | string
+    UserAccountID?: StringFilter<"Purchase"> | string
+  }
+
+  export type Report_ToUpsertWithWhereUniqueWithoutUserInput = {
+    where: Report_ToWhereUniqueInput
+    update: XOR<Report_ToUpdateWithoutUserInput, Report_ToUncheckedUpdateWithoutUserInput>
+    create: XOR<Report_ToCreateWithoutUserInput, Report_ToUncheckedCreateWithoutUserInput>
+  }
+
+  export type Report_ToUpdateWithWhereUniqueWithoutUserInput = {
+    where: Report_ToWhereUniqueInput
+    data: XOR<Report_ToUpdateWithoutUserInput, Report_ToUncheckedUpdateWithoutUserInput>
+  }
+
+  export type Report_ToUpdateManyWithWhereWithoutUserInput = {
+    where: Report_ToScalarWhereInput
+    data: XOR<Report_ToUpdateManyMutationInput, Report_ToUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SessionUpsertWithWhereUniqueWithoutUserInput = {
+    where: SessionWhereUniqueInput
+    update: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
+    create: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type SessionUpdateWithWhereUniqueWithoutUserInput = {
+    where: SessionWhereUniqueInput
+    data: XOR<SessionUpdateWithoutUserInput, SessionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SessionUpdateManyWithWhereWithoutUserInput = {
+    where: SessionScalarWhereInput
+    data: XOR<SessionUpdateManyMutationInput, SessionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SessionScalarWhereInput = {
+    AND?: SessionScalarWhereInput | SessionScalarWhereInput[]
+    OR?: SessionScalarWhereInput[]
+    NOT?: SessionScalarWhereInput | SessionScalarWhereInput[]
+    SessionID?: StringFilter<"Session"> | string
+    UserAccountID?: StringFilter<"Session"> | string
+    TokenHash?: StringFilter<"Session"> | string
+    CreatedAt?: DateTimeFilter<"Session"> | Date | string
+    LastSeenAt?: DateTimeFilter<"Session"> | Date | string
+    IdleExpiresAt?: DateTimeFilter<"Session"> | Date | string
+    AbsoluteExpiresAt?: DateTimeFilter<"Session"> | Date | string
+    RevokedAt?: DateTimeNullableFilter<"Session"> | Date | string | null
+    RevokeReason?: StringNullableFilter<"Session"> | string | null
+  }
+
+  export type UserCreateWithoutTelNosInput = {
+    Email: string
+    account: AccountCreateNestedOneWithoutUserInput
+    assignedFlights?: Assigned_ToCreateNestedManyWithoutUserInput
+    purchases?: PurchaseCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutTelNosInput = {
+    UserAccountID: string
+    Email: string
+    assignedFlights?: Assigned_ToUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PurchaseUncheckedCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutTelNosInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTelNosInput, UserUncheckedCreateWithoutTelNosInput>
+  }
+
+  export type UserUpsertWithoutTelNosInput = {
+    update: XOR<UserUpdateWithoutTelNosInput, UserUncheckedUpdateWithoutTelNosInput>
+    create: XOR<UserCreateWithoutTelNosInput, UserUncheckedCreateWithoutTelNosInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTelNosInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTelNosInput, UserUncheckedUpdateWithoutTelNosInput>
+  }
+
+  export type UserUpdateWithoutTelNosInput = {
+    Email?: StringFieldUpdateOperationsInput | string
+    account?: AccountUpdateOneRequiredWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTelNosInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    Email?: StringFieldUpdateOperationsInput | string
+    assignedFlights?: Assigned_ToUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUncheckedUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type Report_ToCreateWithoutReportsInput = {
+    ReportStatus: string
+    admin: AdminCreateNestedOneWithoutInvolvedInReportsInput
+    user: UserCreateNestedOneWithoutInvolvedInReportsInput
+  }
+
+  export type Report_ToUncheckedCreateWithoutReportsInput = {
+    UserAccountID: string
+    AdminAccountID: string
+    ReportStatus: string
+  }
+
+  export type Report_ToCreateOrConnectWithoutReportsInput = {
+    where: Report_ToWhereUniqueInput
+    create: XOR<Report_ToCreateWithoutReportsInput, Report_ToUncheckedCreateWithoutReportsInput>
+  }
+
+  export type Report_ToUpsertWithoutReportsInput = {
+    update: XOR<Report_ToUpdateWithoutReportsInput, Report_ToUncheckedUpdateWithoutReportsInput>
+    create: XOR<Report_ToCreateWithoutReportsInput, Report_ToUncheckedCreateWithoutReportsInput>
+    where?: Report_ToWhereInput
+  }
+
+  export type Report_ToUpdateToOneWithWhereWithoutReportsInput = {
+    where?: Report_ToWhereInput
+    data: XOR<Report_ToUpdateWithoutReportsInput, Report_ToUncheckedUpdateWithoutReportsInput>
+  }
+
+  export type Report_ToUpdateWithoutReportsInput = {
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+    admin?: AdminUpdateOneRequiredWithoutInvolvedInReportsNestedInput
+    user?: UserUpdateOneRequiredWithoutInvolvedInReportsNestedInput
+  }
+
+  export type Report_ToUncheckedUpdateWithoutReportsInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TicketCreateWithoutDomesticTicketInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    flight: FlightCreateNestedOneWithoutTicketsInput
+    seat: SeatCreateNestedOneWithoutTicketsInput
+    purchase?: PurchaseCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketUncheckedCreateWithoutDomesticTicketInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    SeatNo: string
+    AircraftRegNo: string
+    FlightNo: string
+    Schedule: Date | string
+    purchase?: PurchaseUncheckedCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketUncheckedCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketCreateOrConnectWithoutDomesticTicketInput = {
+    where: TicketWhereUniqueInput
+    create: XOR<TicketCreateWithoutDomesticTicketInput, TicketUncheckedCreateWithoutDomesticTicketInput>
+  }
+
+  export type TicketUpsertWithoutDomesticTicketInput = {
+    update: XOR<TicketUpdateWithoutDomesticTicketInput, TicketUncheckedUpdateWithoutDomesticTicketInput>
+    create: XOR<TicketCreateWithoutDomesticTicketInput, TicketUncheckedCreateWithoutDomesticTicketInput>
+    where?: TicketWhereInput
+  }
+
+  export type TicketUpdateToOneWithWhereWithoutDomesticTicketInput = {
+    where?: TicketWhereInput
+    data: XOR<TicketUpdateWithoutDomesticTicketInput, TicketUncheckedUpdateWithoutDomesticTicketInput>
+  }
+
+  export type TicketUpdateWithoutDomesticTicketInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    flight?: FlightUpdateOneRequiredWithoutTicketsNestedInput
+    seat?: SeatUpdateOneRequiredWithoutTicketsNestedInput
+    purchase?: PurchaseUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketUncheckedUpdateWithoutDomesticTicketInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchase?: PurchaseUncheckedUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketCreateWithoutInternationalTicketInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    flight: FlightCreateNestedOneWithoutTicketsInput
+    seat: SeatCreateNestedOneWithoutTicketsInput
+    purchase?: PurchaseCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketUncheckedCreateWithoutInternationalTicketInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    SeatNo: string
+    AircraftRegNo: string
+    FlightNo: string
+    Schedule: Date | string
+    purchase?: PurchaseUncheckedCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketUncheckedCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketCreateOrConnectWithoutInternationalTicketInput = {
+    where: TicketWhereUniqueInput
+    create: XOR<TicketCreateWithoutInternationalTicketInput, TicketUncheckedCreateWithoutInternationalTicketInput>
+  }
+
+  export type TicketUpsertWithoutInternationalTicketInput = {
+    update: XOR<TicketUpdateWithoutInternationalTicketInput, TicketUncheckedUpdateWithoutInternationalTicketInput>
+    create: XOR<TicketCreateWithoutInternationalTicketInput, TicketUncheckedCreateWithoutInternationalTicketInput>
+    where?: TicketWhereInput
+  }
+
+  export type TicketUpdateToOneWithWhereWithoutInternationalTicketInput = {
+    where?: TicketWhereInput
+    data: XOR<TicketUpdateWithoutInternationalTicketInput, TicketUncheckedUpdateWithoutInternationalTicketInput>
+  }
+
+  export type TicketUpdateWithoutInternationalTicketInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    flight?: FlightUpdateOneRequiredWithoutTicketsNestedInput
+    seat?: SeatUpdateOneRequiredWithoutTicketsNestedInput
+    purchase?: PurchaseUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketUncheckedUpdateWithoutInternationalTicketInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchase?: PurchaseUncheckedUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketCreateWithoutRoundTripTicketPart1Input = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    flight: FlightCreateNestedOneWithoutTicketsInput
+    seat: SeatCreateNestedOneWithoutTicketsInput
+    purchase?: PurchaseCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketCreateNestedOneWithoutTicketInput
+    roundTripTicketPart2?: Round_Trip_TicketCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketUncheckedCreateWithoutRoundTripTicketPart1Input = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    SeatNo: string
+    AircraftRegNo: string
+    FlightNo: string
+    Schedule: Date | string
+    purchase?: PurchaseUncheckedCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketUncheckedCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketUncheckedCreateNestedOneWithoutTicketInput
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketCreateOrConnectWithoutRoundTripTicketPart1Input = {
+    where: TicketWhereUniqueInput
+    create: XOR<TicketCreateWithoutRoundTripTicketPart1Input, TicketUncheckedCreateWithoutRoundTripTicketPart1Input>
+  }
+
+  export type TicketCreateWithoutRoundTripTicketPart2Input = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    flight: FlightCreateNestedOneWithoutTicketsInput
+    seat: SeatCreateNestedOneWithoutTicketsInput
+    purchase?: PurchaseCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketCreateNestedOneWithoutTicket1Input
+  }
+
+  export type TicketUncheckedCreateWithoutRoundTripTicketPart2Input = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    SeatNo: string
+    AircraftRegNo: string
+    FlightNo: string
+    Schedule: Date | string
+    purchase?: PurchaseUncheckedCreateNestedOneWithoutTicketInput
+    domesticTicket?: Domestic_TicketUncheckedCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketUncheckedCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket1Input
+  }
+
+  export type TicketCreateOrConnectWithoutRoundTripTicketPart2Input = {
+    where: TicketWhereUniqueInput
+    create: XOR<TicketCreateWithoutRoundTripTicketPart2Input, TicketUncheckedCreateWithoutRoundTripTicketPart2Input>
+  }
+
+  export type TicketUpsertWithoutRoundTripTicketPart1Input = {
+    update: XOR<TicketUpdateWithoutRoundTripTicketPart1Input, TicketUncheckedUpdateWithoutRoundTripTicketPart1Input>
+    create: XOR<TicketCreateWithoutRoundTripTicketPart1Input, TicketUncheckedCreateWithoutRoundTripTicketPart1Input>
+    where?: TicketWhereInput
+  }
+
+  export type TicketUpdateToOneWithWhereWithoutRoundTripTicketPart1Input = {
+    where?: TicketWhereInput
+    data: XOR<TicketUpdateWithoutRoundTripTicketPart1Input, TicketUncheckedUpdateWithoutRoundTripTicketPart1Input>
+  }
+
+  export type TicketUpdateWithoutRoundTripTicketPart1Input = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    flight?: FlightUpdateOneRequiredWithoutTicketsNestedInput
+    seat?: SeatUpdateOneRequiredWithoutTicketsNestedInput
+    purchase?: PurchaseUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketUncheckedUpdateWithoutRoundTripTicketPart1Input = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchase?: PurchaseUncheckedUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketUpsertWithoutRoundTripTicketPart2Input = {
+    update: XOR<TicketUpdateWithoutRoundTripTicketPart2Input, TicketUncheckedUpdateWithoutRoundTripTicketPart2Input>
+    create: XOR<TicketCreateWithoutRoundTripTicketPart2Input, TicketUncheckedCreateWithoutRoundTripTicketPart2Input>
+    where?: TicketWhereInput
+  }
+
+  export type TicketUpdateToOneWithWhereWithoutRoundTripTicketPart2Input = {
+    where?: TicketWhereInput
+    data: XOR<TicketUpdateWithoutRoundTripTicketPart2Input, TicketUncheckedUpdateWithoutRoundTripTicketPart2Input>
+  }
+
+  export type TicketUpdateWithoutRoundTripTicketPart2Input = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    flight?: FlightUpdateOneRequiredWithoutTicketsNestedInput
+    seat?: SeatUpdateOneRequiredWithoutTicketsNestedInput
+    purchase?: PurchaseUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUpdateOneWithoutTicket1NestedInput
+  }
+
+  export type TicketUncheckedUpdateWithoutRoundTripTicketPart2Input = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchase?: PurchaseUncheckedUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket1NestedInput
+  }
+
+  export type TicketCreateWithoutPurchaseInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    flight: FlightCreateNestedOneWithoutTicketsInput
+    seat: SeatCreateNestedOneWithoutTicketsInput
+    domesticTicket?: Domestic_TicketCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketUncheckedCreateWithoutPurchaseInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    SeatNo: string
+    AircraftRegNo: string
+    FlightNo: string
+    Schedule: Date | string
+    domesticTicket?: Domestic_TicketUncheckedCreateNestedOneWithoutTicketInput
+    internationalTicket?: International_TicketUncheckedCreateNestedOneWithoutTicketInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket1Input
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedCreateNestedOneWithoutTicket2Input
+  }
+
+  export type TicketCreateOrConnectWithoutPurchaseInput = {
+    where: TicketWhereUniqueInput
+    create: XOR<TicketCreateWithoutPurchaseInput, TicketUncheckedCreateWithoutPurchaseInput>
+  }
+
+  export type PaymentCreateWithoutPurchaseInput = {
+    PaymentID: string
+    PaymentDateTime: Date | string
+    PaymentMethod: string
+    TransactionStatus: string
+    Amount: number
+  }
+
+  export type PaymentUncheckedCreateWithoutPurchaseInput = {
+    PaymentID: string
+    PaymentDateTime: Date | string
+    PaymentMethod: string
+    TransactionStatus: string
+    Amount: number
+  }
+
+  export type PaymentCreateOrConnectWithoutPurchaseInput = {
+    where: PaymentWhereUniqueInput
+    create: XOR<PaymentCreateWithoutPurchaseInput, PaymentUncheckedCreateWithoutPurchaseInput>
+  }
+
+  export type UserCreateWithoutPurchasesInput = {
+    Email: string
+    account: AccountCreateNestedOneWithoutUserInput
+    telNos?: User_Tel_NoCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPurchasesInput = {
+    UserAccountID: string
+    Email: string
+    telNos?: User_Tel_NoUncheckedCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToUncheckedCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPurchasesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPurchasesInput, UserUncheckedCreateWithoutPurchasesInput>
+  }
+
+  export type TicketUpsertWithoutPurchaseInput = {
+    update: XOR<TicketUpdateWithoutPurchaseInput, TicketUncheckedUpdateWithoutPurchaseInput>
+    create: XOR<TicketCreateWithoutPurchaseInput, TicketUncheckedCreateWithoutPurchaseInput>
+    where?: TicketWhereInput
+  }
+
+  export type TicketUpdateToOneWithWhereWithoutPurchaseInput = {
+    where?: TicketWhereInput
+    data: XOR<TicketUpdateWithoutPurchaseInput, TicketUncheckedUpdateWithoutPurchaseInput>
+  }
+
+  export type TicketUpdateWithoutPurchaseInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    flight?: FlightUpdateOneRequiredWithoutTicketsNestedInput
+    seat?: SeatUpdateOneRequiredWithoutTicketsNestedInput
+    domesticTicket?: Domestic_TicketUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketUncheckedUpdateWithoutPurchaseInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    domesticTicket?: Domestic_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type PaymentUpsertWithoutPurchaseInput = {
+    update: XOR<PaymentUpdateWithoutPurchaseInput, PaymentUncheckedUpdateWithoutPurchaseInput>
+    create: XOR<PaymentCreateWithoutPurchaseInput, PaymentUncheckedCreateWithoutPurchaseInput>
+    where?: PaymentWhereInput
+  }
+
+  export type PaymentUpdateToOneWithWhereWithoutPurchaseInput = {
+    where?: PaymentWhereInput
+    data: XOR<PaymentUpdateWithoutPurchaseInput, PaymentUncheckedUpdateWithoutPurchaseInput>
+  }
+
+  export type PaymentUpdateWithoutPurchaseInput = {
+    PaymentID?: StringFieldUpdateOperationsInput | string
+    PaymentDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    PaymentMethod?: StringFieldUpdateOperationsInput | string
+    TransactionStatus?: StringFieldUpdateOperationsInput | string
+    Amount?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type PaymentUncheckedUpdateWithoutPurchaseInput = {
+    PaymentID?: StringFieldUpdateOperationsInput | string
+    PaymentDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    PaymentMethod?: StringFieldUpdateOperationsInput | string
+    TransactionStatus?: StringFieldUpdateOperationsInput | string
+    Amount?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type UserUpsertWithoutPurchasesInput = {
+    update: XOR<UserUpdateWithoutPurchasesInput, UserUncheckedUpdateWithoutPurchasesInput>
+    create: XOR<UserCreateWithoutPurchasesInput, UserUncheckedCreateWithoutPurchasesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPurchasesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPurchasesInput, UserUncheckedUpdateWithoutPurchasesInput>
+  }
+
+  export type UserUpdateWithoutPurchasesInput = {
+    Email?: StringFieldUpdateOperationsInput | string
+    account?: AccountUpdateOneRequiredWithoutUserNestedInput
+    telNos?: User_Tel_NoUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPurchasesInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    Email?: StringFieldUpdateOperationsInput | string
+    telNos?: User_Tel_NoUncheckedUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUncheckedUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type PurchaseCreateWithoutPaymentInput = {
+    ticket: TicketCreateNestedOneWithoutPurchaseInput
+    user: UserCreateNestedOneWithoutPurchasesInput
+  }
+
+  export type PurchaseUncheckedCreateWithoutPaymentInput = {
+    TicketID: string
+    UserAccountID: string
+  }
+
+  export type PurchaseCreateOrConnectWithoutPaymentInput = {
+    where: PurchaseWhereUniqueInput
+    create: XOR<PurchaseCreateWithoutPaymentInput, PurchaseUncheckedCreateWithoutPaymentInput>
+  }
+
+  export type PurchaseUpsertWithoutPaymentInput = {
+    update: XOR<PurchaseUpdateWithoutPaymentInput, PurchaseUncheckedUpdateWithoutPaymentInput>
+    create: XOR<PurchaseCreateWithoutPaymentInput, PurchaseUncheckedCreateWithoutPaymentInput>
+    where?: PurchaseWhereInput
+  }
+
+  export type PurchaseUpdateToOneWithWhereWithoutPaymentInput = {
+    where?: PurchaseWhereInput
+    data: XOR<PurchaseUpdateWithoutPaymentInput, PurchaseUncheckedUpdateWithoutPaymentInput>
+  }
+
+  export type PurchaseUpdateWithoutPaymentInput = {
+    ticket?: TicketUpdateOneRequiredWithoutPurchaseNestedInput
+    user?: UserUpdateOneRequiredWithoutPurchasesNestedInput
+  }
+
+  export type PurchaseUncheckedUpdateWithoutPaymentInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AirlineCreateWithoutTelNosInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftCreateNestedManyWithoutAirlineInput
+    flights?: FlightCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageCreateNestedManyWithoutAirlineInput
+    contacts?: ContactCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineUncheckedCreateWithoutTelNosInput = {
+    AirlineName: string
+    AirlineCaption: string
+    Website?: string | null
+    AmountOfAircraft: number
+    Logo?: string | null
+    operates?: OperateUncheckedCreateNestedManyWithoutAirlineInput
+    aircrafts?: AircraftUncheckedCreateNestedManyWithoutAirlineInput
+    flights?: FlightUncheckedCreateNestedManyWithoutAirlineInput
+    messages?: Airline_MessageUncheckedCreateNestedManyWithoutAirlineInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutAirlineInput
+  }
+
+  export type AirlineCreateOrConnectWithoutTelNosInput = {
+    where: AirlineWhereUniqueInput
+    create: XOR<AirlineCreateWithoutTelNosInput, AirlineUncheckedCreateWithoutTelNosInput>
+  }
+
+  export type AirlineUpsertWithoutTelNosInput = {
+    update: XOR<AirlineUpdateWithoutTelNosInput, AirlineUncheckedUpdateWithoutTelNosInput>
+    create: XOR<AirlineCreateWithoutTelNosInput, AirlineUncheckedCreateWithoutTelNosInput>
+    where?: AirlineWhereInput
+  }
+
+  export type AirlineUpdateToOneWithWhereWithoutTelNosInput = {
+    where?: AirlineWhereInput
+    data: XOR<AirlineUpdateWithoutTelNosInput, AirlineUncheckedUpdateWithoutTelNosInput>
+  }
+
+  export type AirlineUpdateWithoutTelNosInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type AirlineUncheckedUpdateWithoutTelNosInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AirlineCaption?: StringFieldUpdateOperationsInput | string
+    Website?: NullableStringFieldUpdateOperationsInput | string | null
+    AmountOfAircraft?: IntFieldUpdateOperationsInput | number
+    Logo?: NullableStringFieldUpdateOperationsInput | string | null
+    operates?: OperateUncheckedUpdateManyWithoutAirlineNestedInput
+    aircrafts?: AircraftUncheckedUpdateManyWithoutAirlineNestedInput
+    flights?: FlightUncheckedUpdateManyWithoutAirlineNestedInput
+    messages?: Airline_MessageUncheckedUpdateManyWithoutAirlineNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutAirlineNestedInput
+  }
+
+  export type UserCreateWithoutSessionsInput = {
+    Email: string
+    account: AccountCreateNestedOneWithoutUserInput
+    telNos?: User_Tel_NoCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToCreateNestedManyWithoutUserInput
+    purchases?: PurchaseCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSessionsInput = {
+    UserAccountID: string
+    Email: string
+    telNos?: User_Tel_NoUncheckedCreateNestedManyWithoutUserInput
+    assignedFlights?: Assigned_ToUncheckedCreateNestedManyWithoutUserInput
+    purchases?: PurchaseUncheckedCreateNestedManyWithoutUserInput
+    involvedInReports?: Report_ToUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSessionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
+  }
+
+  export type UserUpsertWithoutSessionsInput = {
+    update: XOR<UserUpdateWithoutSessionsInput, UserUncheckedUpdateWithoutSessionsInput>
+    create: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSessionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSessionsInput, UserUncheckedUpdateWithoutSessionsInput>
+  }
+
+  export type UserUpdateWithoutSessionsInput = {
+    Email?: StringFieldUpdateOperationsInput | string
+    account?: AccountUpdateOneRequiredWithoutUserNestedInput
+    telNos?: User_Tel_NoUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSessionsInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    Email?: StringFieldUpdateOperationsInput | string
+    telNos?: User_Tel_NoUncheckedUpdateManyWithoutUserNestedInput
+    assignedFlights?: Assigned_ToUncheckedUpdateManyWithoutUserNestedInput
+    purchases?: PurchaseUncheckedUpdateManyWithoutUserNestedInput
+    involvedInReports?: Report_ToUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OperateCreateManyAirportInput = {
+    AirlineName: string
+  }
+
+  export type FlightCreateManyDepartureAirportInput = {
+    FlightNo: string
+    Schedule: Date | string
+    ArrivalAirportID: string
+    AirlineName: string
+    AircraftRegNo: string
+  }
+
+  export type FlightCreateManyArrivalAirportInput = {
+    FlightNo: string
+    Schedule: Date | string
+    DepartureAirportID: string
+    AirlineName: string
+    AircraftRegNo: string
+  }
+
+  export type OperateUpdateWithoutAirportInput = {
+    airline?: AirlineUpdateOneRequiredWithoutOperatesNestedInput
+  }
+
+  export type OperateUncheckedUpdateWithoutAirportInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type OperateUncheckedUpdateManyWithoutAirportInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FlightUpdateWithoutDepartureAirportInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    arrivalAirport?: AirportUpdateOneRequiredWithoutArrivalFlightsNestedInput
+    airline?: AirlineUpdateOneRequiredWithoutFlightsNestedInput
+    aircraft?: AircraftUpdateOneRequiredWithoutFlightsNestedInput
+    passengers?: Assigned_ToUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateWithoutDepartureAirportInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    passengers?: Assigned_ToUncheckedUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUncheckedUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateManyWithoutDepartureAirportInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FlightUpdateWithoutArrivalAirportInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    departureAirport?: AirportUpdateOneRequiredWithoutDepartureFlightsNestedInput
+    airline?: AirlineUpdateOneRequiredWithoutFlightsNestedInput
+    aircraft?: AircraftUpdateOneRequiredWithoutFlightsNestedInput
+    passengers?: Assigned_ToUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateWithoutArrivalAirportInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    DepartureAirportID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    passengers?: Assigned_ToUncheckedUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUncheckedUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateManyWithoutArrivalAirportInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    DepartureAirportID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type OperateCreateManyAirlineInput = {
+    AirportID: string
+  }
+
+  export type AircraftCreateManyAirlineInput = {
+    AircraftRegNo: string
+    SeatCapacity: number
+    ModelName: string
+  }
+
+  export type FlightCreateManyAirlineInput = {
+    FlightNo: string
+    Schedule: Date | string
+    ArrivalAirportID: string
+    DepartureAirportID: string
+    AircraftRegNo: string
+  }
+
+  export type Airline_Tel_NoCreateManyAirlineInput = {
+    TelNo: string
+  }
+
+  export type Airline_MessageCreateManyAirlineInput = {
+    AdminAccountID: string
+    MessageText: string
+  }
+
+  export type ContactCreateManyAirlineInput = {
+    AdminAccountID: string
+    ContactStatus: string
+  }
+
+  export type OperateUpdateWithoutAirlineInput = {
+    airport?: AirportUpdateOneRequiredWithoutOperatesNestedInput
+  }
+
+  export type OperateUncheckedUpdateWithoutAirlineInput = {
+    AirportID?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type OperateUncheckedUpdateManyWithoutAirlineInput = {
+    AirportID?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AircraftUpdateWithoutAirlineInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    SeatCapacity?: IntFieldUpdateOperationsInput | number
+    ModelName?: StringFieldUpdateOperationsInput | string
+    seats?: SeatUpdateManyWithoutAircraftNestedInput
+    flights?: FlightUpdateManyWithoutAircraftNestedInput
+    cabins?: CabinClassUpdateManyWithoutAircraftNestedInput
+  }
+
+  export type AircraftUncheckedUpdateWithoutAirlineInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    SeatCapacity?: IntFieldUpdateOperationsInput | number
+    ModelName?: StringFieldUpdateOperationsInput | string
+    seats?: SeatUncheckedUpdateManyWithoutAircraftNestedInput
+    flights?: FlightUncheckedUpdateManyWithoutAircraftNestedInput
+    cabins?: CabinClassUncheckedUpdateManyWithoutAircraftNestedInput
+  }
+
+  export type AircraftUncheckedUpdateManyWithoutAirlineInput = {
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    SeatCapacity?: IntFieldUpdateOperationsInput | number
+    ModelName?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FlightUpdateWithoutAirlineInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    arrivalAirport?: AirportUpdateOneRequiredWithoutArrivalFlightsNestedInput
+    departureAirport?: AirportUpdateOneRequiredWithoutDepartureFlightsNestedInput
+    aircraft?: AircraftUpdateOneRequiredWithoutFlightsNestedInput
+    passengers?: Assigned_ToUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateWithoutAirlineInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
+    DepartureAirportID?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    passengers?: Assigned_ToUncheckedUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUncheckedUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateManyWithoutAirlineInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
+    DepartureAirportID?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Airline_Tel_NoUpdateWithoutAirlineInput = {
+    TelNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Airline_Tel_NoUncheckedUpdateWithoutAirlineInput = {
+    TelNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Airline_Tel_NoUncheckedUpdateManyWithoutAirlineInput = {
+    TelNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Airline_MessageUpdateWithoutAirlineInput = {
+    MessageText?: StringFieldUpdateOperationsInput | string
+    admin?: AdminUpdateOneRequiredWithoutSentAirlineMessagesNestedInput
+  }
+
+  export type Airline_MessageUncheckedUpdateWithoutAirlineInput = {
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    MessageText?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Airline_MessageUncheckedUpdateManyWithoutAirlineInput = {
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    MessageText?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactUpdateWithoutAirlineInput = {
+    ContactStatus?: StringFieldUpdateOperationsInput | string
+    admin?: AdminUpdateOneRequiredWithoutContactsNestedInput
+  }
+
+  export type ContactUncheckedUpdateWithoutAirlineInput = {
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    ContactStatus?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactUncheckedUpdateManyWithoutAirlineInput = {
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    ContactStatus?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SeatCreateManyAircraftInput = {
+    SeatNo: string
+    SeatType: string
+  }
+
+  export type FlightCreateManyAircraftInput = {
+    FlightNo: string
+    Schedule: Date | string
+    ArrivalAirportID: string
+    DepartureAirportID: string
+    AirlineName: string
+  }
+
+  export type CabinClassCreateManyAircraftInput = {
+    Class: string
+    StandardPrice: number
+  }
+
+  export type SeatUpdateWithoutAircraftInput = {
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    SeatType?: StringFieldUpdateOperationsInput | string
+    tickets?: TicketUpdateManyWithoutSeatNestedInput
+  }
+
+  export type SeatUncheckedUpdateWithoutAircraftInput = {
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    SeatType?: StringFieldUpdateOperationsInput | string
+    tickets?: TicketUncheckedUpdateManyWithoutSeatNestedInput
+  }
+
+  export type SeatUncheckedUpdateManyWithoutAircraftInput = {
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    SeatType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FlightUpdateWithoutAircraftInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    arrivalAirport?: AirportUpdateOneRequiredWithoutArrivalFlightsNestedInput
+    departureAirport?: AirportUpdateOneRequiredWithoutDepartureFlightsNestedInput
+    airline?: AirlineUpdateOneRequiredWithoutFlightsNestedInput
+    passengers?: Assigned_ToUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateWithoutAircraftInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
+    DepartureAirportID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    passengers?: Assigned_ToUncheckedUpdateManyWithoutFlightNestedInput
+    tickets?: TicketUncheckedUpdateManyWithoutFlightNestedInput
+  }
+
+  export type FlightUncheckedUpdateManyWithoutAircraftInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    ArrivalAirportID?: StringFieldUpdateOperationsInput | string
+    DepartureAirportID?: StringFieldUpdateOperationsInput | string
+    AirlineName?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CabinClassUpdateWithoutAircraftInput = {
+    Class?: StringFieldUpdateOperationsInput | string
+    StandardPrice?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type CabinClassUncheckedUpdateWithoutAircraftInput = {
+    Class?: StringFieldUpdateOperationsInput | string
+    StandardPrice?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type CabinClassUncheckedUpdateManyWithoutAircraftInput = {
+    Class?: StringFieldUpdateOperationsInput | string
+    StandardPrice?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type Assigned_ToCreateManyFlightInput = {
+    UserAccountID: string
+  }
+
+  export type TicketCreateManyFlightInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    SeatNo: string
+    AircraftRegNo: string
+  }
+
+  export type Assigned_ToUpdateWithoutFlightInput = {
+    user?: UserUpdateOneRequiredWithoutAssignedFlightsNestedInput
+  }
+
+  export type Assigned_ToUncheckedUpdateWithoutFlightInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Assigned_ToUncheckedUpdateManyWithoutFlightInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TicketUpdateWithoutFlightInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    seat?: SeatUpdateOneRequiredWithoutTicketsNestedInput
+    purchase?: PurchaseUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketUncheckedUpdateWithoutFlightInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+    purchase?: PurchaseUncheckedUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketUncheckedUpdateManyWithoutFlightInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    SeatNo?: StringFieldUpdateOperationsInput | string
+    AircraftRegNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ReportCreateManyCreatorInput = {
+    ReportID: string
+    ReportDescription: string
+    BookingID: string
+    Attachment?: string | null
+    Email: string
+    TelNo: string
+    PassengerName: string
+  }
+
+  export type ReportUpdateWithoutCreatorInput = {
+    ReportID?: StringFieldUpdateOperationsInput | string
+    ReportDescription?: StringFieldUpdateOperationsInput | string
+    BookingID?: StringFieldUpdateOperationsInput | string
+    Attachment?: NullableStringFieldUpdateOperationsInput | string | null
+    Email?: StringFieldUpdateOperationsInput | string
+    TelNo?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ReportUncheckedUpdateWithoutCreatorInput = {
+    ReportID?: StringFieldUpdateOperationsInput | string
+    ReportDescription?: StringFieldUpdateOperationsInput | string
+    BookingID?: StringFieldUpdateOperationsInput | string
+    Attachment?: NullableStringFieldUpdateOperationsInput | string | null
+    Email?: StringFieldUpdateOperationsInput | string
+    TelNo?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ReportUncheckedUpdateManyWithoutCreatorInput = {
+    ReportID?: StringFieldUpdateOperationsInput | string
+    ReportDescription?: StringFieldUpdateOperationsInput | string
+    BookingID?: StringFieldUpdateOperationsInput | string
+    Attachment?: NullableStringFieldUpdateOperationsInput | string | null
+    Email?: StringFieldUpdateOperationsInput | string
+    TelNo?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TicketCreateManySeatInput = {
+    TicketID: string
+    Price: number
+    TicketStatus: string
+    PassengerName: string
+    PassengerLastName: string
+    Gender: string
+    DateOfBirth: Date | string
+    Nationality: string
+    BaggageChecked: number
+    BaggageCabin: number
+    FlightNo: string
+    Schedule: Date | string
+  }
+
+  export type TicketUpdateWithoutSeatInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    flight?: FlightUpdateOneRequiredWithoutTicketsNestedInput
+    purchase?: PurchaseUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketUncheckedUpdateWithoutSeatInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchase?: PurchaseUncheckedUpdateOneWithoutTicketNestedInput
+    domesticTicket?: Domestic_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    internationalTicket?: International_TicketUncheckedUpdateOneWithoutTicketNestedInput
+    roundTripTicketPart1?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket1NestedInput
+    roundTripTicketPart2?: Round_Trip_TicketUncheckedUpdateOneWithoutTicket2NestedInput
+  }
+
+  export type TicketUncheckedUpdateManyWithoutSeatInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    Price?: FloatFieldUpdateOperationsInput | number
+    TicketStatus?: StringFieldUpdateOperationsInput | string
+    PassengerName?: StringFieldUpdateOperationsInput | string
+    PassengerLastName?: StringFieldUpdateOperationsInput | string
+    Gender?: StringFieldUpdateOperationsInput | string
+    DateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+    Nationality?: StringFieldUpdateOperationsInput | string
+    BaggageChecked?: FloatFieldUpdateOperationsInput | number
+    BaggageCabin?: FloatFieldUpdateOperationsInput | number
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Airline_MessageCreateManyAdminInput = {
+    AirlineName: string
+    MessageText: string
+  }
+
+  export type ContactCreateManyAdminInput = {
+    AirlineName: string
+    ContactStatus: string
+  }
+
+  export type Report_ToCreateManyAdminInput = {
+    UserAccountID: string
+    ReportStatus: string
+  }
+
+  export type Airline_MessageUpdateWithoutAdminInput = {
+    MessageText?: StringFieldUpdateOperationsInput | string
+    airline?: AirlineUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type Airline_MessageUncheckedUpdateWithoutAdminInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    MessageText?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Airline_MessageUncheckedUpdateManyWithoutAdminInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    MessageText?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactUpdateWithoutAdminInput = {
+    ContactStatus?: StringFieldUpdateOperationsInput | string
+    airline?: AirlineUpdateOneRequiredWithoutContactsNestedInput
+  }
+
+  export type ContactUncheckedUpdateWithoutAdminInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    ContactStatus?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactUncheckedUpdateManyWithoutAdminInput = {
+    AirlineName?: StringFieldUpdateOperationsInput | string
+    ContactStatus?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Report_ToUpdateWithoutAdminInput = {
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutInvolvedInReportsNestedInput
+    Reports?: ReportUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type Report_ToUncheckedUpdateWithoutAdminInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+    Reports?: ReportUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type Report_ToUncheckedUpdateManyWithoutAdminInput = {
+    UserAccountID?: StringFieldUpdateOperationsInput | string
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type User_Tel_NoCreateManyUserInput = {
+    TelNo: string
+  }
+
+  export type Assigned_ToCreateManyUserInput = {
+    FlightNo: string
+    Schedule: Date | string
+  }
+
+  export type PurchaseCreateManyUserInput = {
+    TicketID: string
+    PaymentID: string
+  }
+
+  export type Report_ToCreateManyUserInput = {
+    AdminAccountID: string
+    ReportStatus: string
+  }
+
+  export type SessionCreateManyUserInput = {
+    SessionID: string
+    TokenHash: string
+    CreatedAt?: Date | string
+    LastSeenAt: Date | string
+    IdleExpiresAt: Date | string
+    AbsoluteExpiresAt: Date | string
+    RevokedAt?: Date | string | null
+    RevokeReason?: string | null
+  }
+
+  export type User_Tel_NoUpdateWithoutUserInput = {
+    TelNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type User_Tel_NoUncheckedUpdateWithoutUserInput = {
+    TelNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type User_Tel_NoUncheckedUpdateManyWithoutUserInput = {
+    TelNo?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Assigned_ToUpdateWithoutUserInput = {
+    flight?: FlightUpdateOneRequiredWithoutPassengersNestedInput
+  }
+
+  export type Assigned_ToUncheckedUpdateWithoutUserInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Assigned_ToUncheckedUpdateManyWithoutUserInput = {
+    FlightNo?: StringFieldUpdateOperationsInput | string
+    Schedule?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseUpdateWithoutUserInput = {
+    ticket?: TicketUpdateOneRequiredWithoutPurchaseNestedInput
+    payment?: PaymentUpdateOneRequiredWithoutPurchaseNestedInput
+  }
+
+  export type PurchaseUncheckedUpdateWithoutUserInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    PaymentID?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PurchaseUncheckedUpdateManyWithoutUserInput = {
+    TicketID?: StringFieldUpdateOperationsInput | string
+    PaymentID?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type Report_ToUpdateWithoutUserInput = {
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+    admin?: AdminUpdateOneRequiredWithoutInvolvedInReportsNestedInput
+    Reports?: ReportUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type Report_ToUncheckedUpdateWithoutUserInput = {
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+    Reports?: ReportUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type Report_ToUncheckedUpdateManyWithoutUserInput = {
+    AdminAccountID?: StringFieldUpdateOperationsInput | string
+    ReportStatus?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SessionUpdateWithoutUserInput = {
+    SessionID?: StringFieldUpdateOperationsInput | string
+    TokenHash?: StringFieldUpdateOperationsInput | string
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    IdleExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AbsoluteExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    RevokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    RevokeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SessionUncheckedUpdateWithoutUserInput = {
+    SessionID?: StringFieldUpdateOperationsInput | string
+    TokenHash?: StringFieldUpdateOperationsInput | string
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    IdleExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AbsoluteExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    RevokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    RevokeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SessionUncheckedUpdateManyWithoutUserInput = {
+    SessionID?: StringFieldUpdateOperationsInput | string
+    TokenHash?: StringFieldUpdateOperationsInput | string
+    CreatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    LastSeenAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    IdleExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    AbsoluteExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    RevokedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    RevokeReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 
