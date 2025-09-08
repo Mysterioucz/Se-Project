@@ -7,14 +7,14 @@ SETUP_FLAG=.setup_done
 setup: $(SETUP_FLAG)
 
 $(SETUP_FLAG):
-	npm install
+	pnpm install
 	npx prisma generate
 	npx prisma migrate deploy
 	touch $(SETUP_FLAG)
 
 # Run the app after setup
 start: setup
-	npm run dev
+	pnpm run dev
 
 # Clean up node modules and setup flag
 clean:
