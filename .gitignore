@@ -39,5 +39,6 @@
 # typescript
 **/*.tsbuildinfo
 **/next-env.d.ts
-
+# backend generated files
 **/src/generated/prisma
+**/.setup_done
