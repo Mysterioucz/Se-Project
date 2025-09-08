@@ -2,32 +2,40 @@ import type { Metadata } from "next";
 import { Sarabun } from "next/font/google";
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import SessionProvider from "@/lib/SessionProvider";
+import Navbar from "@/components/Navbar";
+import { getServerSession } from "next-auth";
 
 const sarabun = Sarabun({
-    variable: "--font-sarabun",
-    subsets: ["latin"],
-    weight: ["400", "700"]
+  variable: "--font-sarabun",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
-    title: "FlyWithSigma",
-    description: "FlyWithSigma - Your Ultimate Flight Companion",
+  title: "FlyWithSigma",
+  description: "FlyWithSigma - Your Ultimate Flight Companion",
 };
 
-export default function RootLayout({
-    children,
+export default async function RootLayout({
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en">
-            <body
-                className={`${sarabun.variable} antialiased`}
-            >
-                <AppRouterCacheProvider options={{enableCssLayer: true}}>
-                    {children}
-                </AppRouterCacheProvider>
-            </body>
-        </html>
-    );
+  const session = await getServerSession();
+
+  return (
+    <html lang="en">
+      <body className={`${sarabun.variable} antialiased`}>
+        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          <SessionProvider session={session}>
+            <div className="flex flex-col">
+              <Navbar></Navbar>
+              {children}
+            </div>
+          </SessionProvider>
+        </AppRouterCacheProvider>
+      </body>
+    </html>
+  );
 }

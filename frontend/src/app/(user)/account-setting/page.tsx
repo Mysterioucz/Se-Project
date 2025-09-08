@@ -1,15 +1,11 @@
 "use client";
 
 import ProfileCard from "@/components/account-setting/ProfileCard";
+import Navbar from "@/components/Navbar";
 
 export default function AccountSettingPage() {
     return (
         <div className="flex flex-col h-dvh">
-            {/* TODO: Replace with Navigation Bar */}
-            <div className="flex mb-[1.125rem] sticky top-0 z-99 bg-blue-950 text-common-white w-full h-20 items-center justify-center">
-                Nav Bar
-            </div>
-
             <div className="mx-[6.25rem] flex flex-col gap-[1rem]">
                 <h1 className="text-[3rem] text-[var(--color-primary-900)] font-bold">
                     Account Management
