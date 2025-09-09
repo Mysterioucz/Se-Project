@@ -10,7 +10,7 @@ export const updateUser = async (req: Request, res: Response) => {
     const { FirstName, LastName } = req.body;
 
     if (!FirstName && !LastName) {
-        return res.status(500).json({
+        return res.status(400).json({
             success: false,
             error: 'Please provide at least one field to update (FirstName or LastName).',
         });

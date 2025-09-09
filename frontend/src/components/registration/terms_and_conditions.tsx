@@ -44,4 +44,4 @@ All content on this Platform, including text, graphics, logos, and software, is 
 10. Governing Law and Dispute Resolution
 These Terms shall be governed by and construed in accordance with the laws of Thailand, without regard to its conflict of law principles. Any dispute arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts of Nonthaburi, Thailand.
 11. Amendments to These Terms
-We reserve the right to modify these Terms at any time. We will post the revised terms on the Platform and update the "Last Updated" date. Your continued use of the Platform after such changes constitutes your acceptance of the new Terms.`
+We reserve the right to modify these Terms at any time. We will post the revised terms on the Platform and update the "Last Updated" date. Your continued use of the Platform after such changes constitutes your acceptance of the new Terms.`;
