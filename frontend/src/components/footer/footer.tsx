@@ -32,14 +32,26 @@ export default function Footer() {
           </p>
           <div className="flex flex-col justify-center items-start gap-3 self-stretch">
             <div className="flex items-center gap-2">
-              <CallHistory className="w-4 h-4 flex-shrink-0" />
+              <Image
+                src="/footer-icon/fi-br-call-history.svg"
+                alt="Logo"
+                width={16}
+                height={16}
+                className="aspect-square"
+              />
               <span className="text-[#5F696C] font-sarabun text-[16px] font-normal leading-[120%]">
                 +1 (555) 123-4567
               </span>
             </div>
 
             <div className="flex items-center gap-2">
-              <EnvelopeIcon className="w-4 h-4 flex-shrink-0" />
+              <Image
+                src="/footer-icon/fi-br-envelope.svg"
+                alt="Logo"
+                width={16}
+                height={16}
+                className="aspect-square"
+              />
               <span className="text-[#5F696C] font-sarabun text-[16px] font-normal leading-[120%]">
                 support@flywithsigma.com
               </span>
