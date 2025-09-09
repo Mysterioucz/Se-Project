@@ -40,4 +40,20 @@ export const nextAuthOptions = {
             },
         }),
     ],
+	callbacks: {
+        session: ({ session, token }: { session: any; token: any }) => {
+            console.log("Session callback called", {session, token});
+            if (token) {
+                session.user = token.user as any;
+            }
+            return session;
+        },
+        jwt: ({ token, user }: { token: any; user?: any }) => {
+            console.log("JWT callback called", {token, user});
+            if (user) {
+                token.user = user;
+            }
+            return token;
+        }
+	}
 };
