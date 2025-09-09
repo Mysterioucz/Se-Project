@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import { TextField_Temp, DropdownSelector_Temp } from "./tempComponent";
 import Button from "../Button";
+import TextFieldComponent from "../text_field";
+import SelectComponent from "../select";
 
 export default function ProfileCard() {
     return (
