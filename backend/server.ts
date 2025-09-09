@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import airportRouter from './routes/airports.js'
 import authRouter from './routes/auth.js'
 import userData from './routes/user_data.js'
+import flightData from './routes/flight_data.js'
 
 
 const app = express();
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 6000;
 app.use('/api/v1/airports', airportRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userData);
+app.use('/api/v1/flights', flightData);
 
 // Start Server
 app.listen(PORT, () => {

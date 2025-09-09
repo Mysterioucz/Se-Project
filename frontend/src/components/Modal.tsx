@@ -12,11 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import Image from "next/image";
-import {
-    ModalVariant,
-    ModalProps,
-    themeColors
-} from './Helper'
+import { ModalVariant, ModalProps, themeColors } from "./Helper";
 
 export default function Modal({
   open,
@@ -39,7 +35,11 @@ export default function Modal({
     <Dialog
       open={open}
       onClose={(event, reason) => {
-        if (preventClose || reason === "backdropClick" || reason === "escapeKeyDown") {
+        if (
+          preventClose ||
+          reason === "backdropClick" ||
+          reason === "escapeKeyDown"
+        ) {
           return;
         }
         onClose?.();
@@ -50,6 +50,12 @@ export default function Modal({
         backdrop: {
           sx: {
             backgroundColor: "rgba(0,0,0,0.5)",
+          },
+        },
+        paper: {
+          sx: {
+            borderRadius: '1rem',
+            padding: '2rem',
           },
         },
       }}
@@ -83,6 +89,7 @@ export default function Modal({
           sx={{
             color: colors.button.left.color,
             borderColor: colors.button.left.border,
+            borderRadius: '0.5rem',
           }}
         >
           {leftButtonText}
@@ -106,6 +113,7 @@ export default function Modal({
                 ? "var(--color-gray-400)"
                 : colors.button.right.hoverBg,
             },
+            borderRadius: '0.5rem',
           }}
         >
           {rightButtonText}

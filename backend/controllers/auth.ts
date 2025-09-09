@@ -11,7 +11,7 @@ export const register = async (req: Request, res: Response) => {
     const {AccountID, Password, FirstName, LastName} = req.body || {};
     if (!AccountID || !Password || !FirstName || !LastName) {
         return res
-          .status(500)
+          .status(400)
           .json({error : "Please provide all require parameters"});
     }
     try {
