@@ -22,6 +22,9 @@ const nextConfig: NextConfig = {
             },
         },
     },
+    eslint: {
+        dirs: ["src/app", "src/components","src/lib"], // Only run ESLint on the 'apps' and 'utils' directories during production builds (next build)
+    },
 
     serverExternalPackages: ["@prisma/client", "bcrypt"],
 };
