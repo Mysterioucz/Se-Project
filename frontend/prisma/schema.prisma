@@ -118,39 +118,39 @@ model Operate {
 model Assigned_To {
   FlightNo      String   @db.VarChar(10)
   Schedule      DateTime
-  UserAccountID String   @db.VarChar(50)
+  UserEmail String   @db.VarChar(50)
 
   // Relations
   flight Flight @relation(fields: [FlightNo, Schedule], references: [FlightNo, Schedule])
-  user   User   @relation(fields: [UserAccountID], references: [UserAccountID])
+  user   User   @relation(fields: [UserEmail], references: [UserEmail])
 
-  @@id([FlightNo, Schedule, UserAccountID])
+  @@id([FlightNo, Schedule, UserEmail])
 }
 
 model Contact {
-  AdminAccountID String @db.VarChar(50)
+  AdminEmail String @db.VarChar(50)
   AirlineName    String @db.VarChar(50)
   ContactStatus  String
 
   // Relations
-  admin   Admin   @relation(fields: [AdminAccountID], references: [AdminAccountID])
+  admin   Admin   @relation(fields: [AdminEmail], references: [AdminEmail])
   airline Airline @relation(fields: [AirlineName], references: [AirlineName])
 
-  @@id([AdminAccountID, AirlineName])
+  @@id([AdminEmail, AirlineName])
 }
 
 model Report_To {
-  UserAccountID  String @db.VarChar(50)
-  AdminAccountID String @db.VarChar(50)
+  UserEmail  String @db.VarChar(50)
+  AdminEmail String @db.VarChar(50)
   ReportStatus   String
 
   // Relations
-  //user   User   @relation(fields: [UserAccountID], references: [UserAccountID])
-  admin   Admin    @relation(fields: [AdminAccountID], references: [AdminAccountID])
-  user    User     @relation(fields: [UserAccountID], references: [UserAccountID])
+  //user   User   @relation(fields: [UserEmail], references: [UserEmail])
+  admin   Admin    @relation(fields: [AdminEmail], references: [AdminEmail])
+  user    User     @relation(fields: [UserEmail], references: [UserEmail])
   Reports Report[] @relation("CreatedReports")
 
-  @@id([UserAccountID, AdminAccountID])
+  @@id([UserEmail, AdminEmail])
 }
 
 // --- Other Models ---
@@ -178,10 +178,10 @@ model Seat {
 }
 
 model Admin {
-  AdminAccountID      String            @id @db.VarChar(50)
+  AdminEmail      String            @id @db.VarChar(50)
   IPAddress           String?
   // Relations
-  account             Account           @relation(fields: [AdminAccountID], references: [AccountID])
+  account             Account           @relation(fields: [AdminEmail], references: [Email])
   sentAirlineMessages Airline_Message[]
   contacts            Contact[]
   involvedInReports   Report_To[]
@@ -189,18 +189,18 @@ model Admin {
 
 model Airline_Message {
   AirlineName    String @db.VarChar(100)
-  AdminAccountID String @db.VarChar(50)
+  AdminEmail String @db.VarChar(50)
   MessageText    String
 
   // Relations
-  admin   Admin   @relation(fields: [AdminAccountID], references: [AdminAccountID])
+  admin   Admin   @relation(fields: [AdminEmail], references: [AdminEmail])
   airline Airline @relation(fields: [AirlineName], references: [AirlineName])
 
-  @@id([AirlineName, AdminAccountID, MessageText])
+  @@id([AirlineName, AdminEmail, MessageText])
 }
 
 model Account {
-  AccountID String @id @db.VarChar(50)
+  Email String @id @db.VarChar(50)
   Password  String
   FirstName String
   LastName  String
@@ -211,11 +211,11 @@ model Account {
 }
 
 model User {
-  UserAccountID String @id @db.VarChar(50)
+  UserEmail String @id @db.VarChar(50)
   Email         String @unique
 
   // Relations
-  account           Account       @relation(fields: [UserAccountID], references: [AccountID])
+  account           Account       @relation(fields: [UserEmail], references: [Email])
   telNos            User_Tel_No[]
   assignedFlights   Assigned_To[]
   purchases         Purchase[]
@@ -223,11 +223,11 @@ model User {
 }
 
 model User_Tel_No {
-  UserAccountID String @id @db.VarChar(50)
+  UserEmail String @id @db.VarChar(50)
   TelNo         String @db.VarChar(20)
 
   // Relation
-  user User @relation(fields: [UserAccountID], references: [UserAccountID])
+  user User @relation(fields: [UserEmail], references: [UserEmail])
 }
 
 model Report {
@@ -235,14 +235,14 @@ model Report {
   ReportDescription String
   BookingID         String
   Attachment        String?
-  UserAccountID     String  @db.VarChar(50) // The user who created the report
-  AdminAccountID    String  @db.VarChar(50) // The admin handling the report
+  UserEmail     String  @db.VarChar(50) // The user who created the report
+  AdminEmail    String  @db.VarChar(50) // The admin handling the report
   Email             String
   TelNo             String
   PassengerName     String
 
   // Relations
-  creator Report_To @relation("CreatedReports", fields: [UserAccountID, AdminAccountID], references: [UserAccountID, AdminAccountID])
+  creator Report_To @relation("CreatedReports", fields: [UserEmail, AdminEmail], references: [UserEmail, AdminEmail])
 }
 
 // --- Ticket Specialization Models ---
@@ -278,12 +278,12 @@ model Round_Trip_Ticket {
 model Purchase {
   TicketID      String @unique @db.VarChar(50)
   PaymentID     String @unique @db.VarChar(50)
-  UserAccountID String @db.VarChar(50)
+  UserEmail String @db.VarChar(50)
 
   // Relations
   ticket  Ticket  @relation(fields: [TicketID], references: [TicketID])
   payment Payment @relation(fields: [PaymentID], references: [PaymentID])
-  user    User    @relation(fields: [UserAccountID], references: [UserAccountID])
+  user    User    @relation(fields: [UserEmail], references: [UserEmail])
 
   @@id([TicketID, PaymentID])
 }
