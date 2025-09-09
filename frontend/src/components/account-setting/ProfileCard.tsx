@@ -22,7 +22,7 @@ export default function ProfileCard() {
                         className="w-[3.125rem] h-[3.125rem]"
                     />
                     {/* TODO: Implement email to fetch data from Backend */}
-                    <p className="font-sarabun text-[18px] font-semibold leading-[120%] text-[var(--color-gray-900)]">
+                    <p className="font-sarabun text-[1.125rem] font-semibold leading-[120%] text-[var(--color-gray-900)]">
                         user@example.com
                     </p>
                 </div>
@@ -52,8 +52,8 @@ export default function ProfileCard() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-[0.75rem]">
-                        <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[35px]" onClick={() => console.log("Sign Out clicked")} />
-                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[35px]" onClick={() => console.log("Delete Account clicked")} />
+                        <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[2.1875rem]" onClick={() => console.log("Sign Out clicked")} />
+                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[2.1875rem]" onClick={() => console.log("Delete Account clicked")} />
                     </div>
                 </div>
             </div>
