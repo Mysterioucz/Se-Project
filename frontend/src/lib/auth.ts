@@ -1,5 +1,6 @@
 import authOptions from "@/auth.config";
 import prisma from "@/db";
+import { Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { email } from "zod";
 
@@ -41,14 +42,14 @@ export const nextAuthOptions = {
         }),
     ],
 	callbacks: {
-        session: ({ session, token }: { session: any; token: any }) => {
+        session: ({ session, token }) => {
             console.log("Session callback called", {session, token});
             if (token) {
-                session.user = token.user as any;
+                session.user = token.user;
             }
             return session;
         },
-        jwt: ({ token, user }: { token: any; user?: any }) => {
+        jwt: ({ token, user }) => {
             console.log("JWT callback called", {token, user});
             if (user) {
                 token.user = user;
