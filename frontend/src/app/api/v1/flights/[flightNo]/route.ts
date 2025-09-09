@@ -1,48 +1,41 @@
 import prisma from "@/db";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 
 // Next.js API route handler for flights
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
+export async function GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ flightNo: string }> }
 ) {
-    if (req.method === "GET") {
-        // If flightNo is provided as a query param, get flight by number
-        const flightNo = req.query.flightNo as string | undefined;
-        try {
-            const flight = await prisma.flight.findUnique({
-                where: { FlightNo: flightNo },
-            });
-            if (!flight) {
-                return new Response(
-                    JSON.stringify({
-                        success: false,
-                        error: `Flight not found with Flight Number ${flightNo}`,
-                    }),
-                    { status: 404 }
-                );
-            }
-            return new Response(
-                JSON.stringify({
-                    success: true,
-                    data: flight,
-                }),
-                { status: 200 }
-            );
-        } catch (error) {
-            console.error(error);
+    // If flightNo is provided as a query param, get flight by number
+    const { flightNo } = await params;
+    try {
+        const flight = await prisma.flight.findUnique({
+            where: { FlightNo: flightNo },
+        });
+        if (!flight) {
             return new Response(
                 JSON.stringify({
                     success: false,
-                    message: "Error",
+                    error: `Flight not found with Flight Number ${flightNo}`,
                 }),
-                { status: 500 }
+                { status: 404 }
             );
         }
-    } else {
         return new Response(
-            JSON.stringify({ success: false, error: "Method Not Allowed" }),
-            { status: 405 }
+            JSON.stringify({
+                success: true,
+                data: flight,
+            }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error(error);
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: "Error",
+            }),
+            { status: 500 }
         );
     }
 }

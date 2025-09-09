@@ -1,19 +1,12 @@
 import prisma from "@/db";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
+export async function PUT(
+    req: NextRequest,
+    { params }: { params: Promise<{ accountId: string }> }
 ) {
-    if (req.method !== "PUT") {
-        return new Response(
-            JSON.stringify({ success: false, error: "Method Not Allowed" }),
-            { status: 405 }
-        );
-    }
-
-    const accountId = req.query.accountId as string;
-    const { FirstName, LastName } = req.body;
+    const { accountId } = await params;
+    const { FirstName, LastName } = await req.json();
 
     if (!FirstName && !LastName) {
         return new Response(

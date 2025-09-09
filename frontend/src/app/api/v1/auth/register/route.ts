@@ -1,16 +1,17 @@
 import prisma from "@/db";
 import bcrypt from "bcrypt";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 
 //@desc     Register account
 //@route    POST /api/v1/auth/register
 //@access   Public
-export const register = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { AccountID, Password, FirstName, LastName } = req.body || {};
+export async function POST(req: NextRequest) {
+    const { AccountID, Password, FirstName, LastName } = await req.json();
     if (!AccountID || !Password || !FirstName || !LastName) {
-        return res
-            .status(400)
-            .json({ error: "Please provide all require parameters" });
+        return new Response(
+            JSON.stringify({ error: "Please provide all required parameters" }),
+            { status: 400 }
+        );
     }
     try {
         const salt = await bcrypt.genSalt(12);
@@ -41,4 +42,4 @@ export const register = async (req: NextApiRequest, res: NextApiResponse) => {
             { status: 500 }
         );
     }
-};
+}

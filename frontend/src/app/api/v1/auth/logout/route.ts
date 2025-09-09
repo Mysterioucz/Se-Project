@@ -1,11 +1,11 @@
 //@desc   Log user out / clear token
 //@route  POST /api/v1/auth/logout
 
-import { NextApiRequest, NextApiResponse } from "next";
 import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 
 //@access Private
-export const logout = async (req: NextApiRequest, res: NextApiResponse) => {
+export async function POST(req: NextRequest) {
     const cookieStore = await cookies();
     cookieStore.set("token", "none", {
         expires: new Date(Date.now() + 10 * 1000),
@@ -19,4 +19,4 @@ export const logout = async (req: NextApiRequest, res: NextApiResponse) => {
         }),
         { status: 200 }
     );
-};
+}

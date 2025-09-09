@@ -1,14 +1,14 @@
 import prisma from "@/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { NextApiRequest, NextApiResponse } from "next";
 import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 
 //@desc     Login
 //@route    POST /api/v1/auth/login
 //@access   Public
-export const login = async (req: NextApiRequest) => {
-    const { AccountID, Password } = req.body; // need to change to Email later
+export async function POST(req: NextRequest) {
+    const { AccountID, Password } = await req.json();
 
     if (!AccountID || !Password) {
         return new Response(
@@ -89,4 +89,4 @@ export const login = async (req: NextApiRequest) => {
             { status: 500 }
         );
     }
-};
+}

@@ -1,7 +1,10 @@
+import authOptions from "@/auth.config";
+import prisma from "@/db";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 
 export const nextAuthOptions = {
+	...authOptions,
     providers: [
         CredentialsProvider({
             // The name to display on the sign in form (e.g. "Sign in with...")
@@ -20,15 +23,18 @@ export const nextAuthOptions = {
             },
             async authorize(credentials, req) {
                 // Add logic here to look up the user from the credentials supplied
-                const user = {
-                    id: "1",
-                    name: "J Smith",
-                    email: "jsmith@example.com",
-                };
+                const user = await prisma.account.findUnique({
+                    where: { AccountID: credentials?.username },
+                });
 
                 if (user) {
-                    // Any object returned will be saved in `user` property of the JWT
-                    return user;
+                    // Map Prisma user to NextAuth user shape
+                    return {
+                        id: user.AccountID,
+                        name: `${user.FirstName} ${user.LastName}`,
+                        email: undefined,
+                        image: undefined,
+                    };
                 } else {
                     // If you return null then an error will be displayed advising the user to check their details.
                     return null;

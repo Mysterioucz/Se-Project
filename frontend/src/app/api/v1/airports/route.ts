@@ -1,5 +1,5 @@
 import prisma from "@/db";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 
 //@desc     Get airports
 //@route    GET /api/v1/airports
@@ -20,9 +20,9 @@ export const GET = async () => {
 //@desc     Create an airport
 //@route    POST /api/v1/airports
 //@access   Private
-export const POST = async (req: NextApiRequest) => {
-    const { AirportID, AirportName, City, Country } = req.body;
-
+export const POST = async (req: NextRequest) => {
+    const { AirportID, AirportName, City, Country } = await req.json();
+    console.log(req);
     if (!AirportID || !AirportName || !City || !Country) {
         return new Response(
             JSON.stringify({ message: `Something is missing` }),
