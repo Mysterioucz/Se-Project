@@ -1,5 +1,6 @@
 "use client";
 
+import { registrationData, saveRegistrationData } from "@components/registration/registration_data"; // Import shared registration data
 import { useForm } from "react-hook-form"; // Main form hook
 import { z } from "zod"; // Schema validation library
 import { zodResolver } from "@hookform/resolvers/zod"; // Connect Zod to React Hook Form
@@ -32,10 +33,16 @@ export default function RegistrationName() {
     formState: { errors }, // Stores validation errors
   } = useForm<FormData>({
     resolver: zodResolver(schema), // Connect Zod schema for validation
+    defaultValues: {
+      firstName: registrationData.firstName || "",
+      lastName: registrationData.lastName || "",
+    },
   });
 
   const onSubmit = (data: FormData) => {
     console.log("✅ Valid name:", data.firstName, data.lastName);
+    saveRegistrationData({ firstName: data.firstName, lastName: data.lastName });
+    console.log("Current registration data:", registrationData);
     router.push("/registration/password");
   };
 
