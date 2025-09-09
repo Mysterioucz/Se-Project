@@ -134,8 +134,7 @@ export const deleteAccount = async (req: Request, res: Response) => {
                     AdminAccountID: accountId,
                 },
             });
-            console.log('here')
-            // Finally, delete the account
+            // delete the account
             await prisma.account.delete({
                 where: {
                     AccountID: accountId,
