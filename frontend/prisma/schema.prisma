@@ -220,7 +220,6 @@ model User {
   assignedFlights   Assigned_To[]
   purchases         Purchase[]
   involvedInReports Report_To[]
-  sessions          Session[]
 }
 
 model User_Tel_No {
@@ -308,20 +307,4 @@ model Airline_Tel_No {
   airline Airline @relation(fields: [AirlineName], references: [AirlineName])
 
   @@id([TelNo, AirlineName])
-}
-
-// Added from ERD, but not present in initial schema
-model Session {
-  SessionID         String    @id
-  UserAccountID     String    @db.VarChar(50)
-  TokenHash         String
-  CreatedAt         DateTime  @default(now())
-  LastSeenAt        DateTime
-  IdleExpiresAt     DateTime
-  AbsoluteExpiresAt DateTime
-  RevokedAt         DateTime?
-  RevokeReason      String?
-
-  // Relation
-  user User @relation(fields: [UserAccountID], references: [UserAccountID])
 }
