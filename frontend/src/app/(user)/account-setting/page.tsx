@@ -15,7 +15,7 @@ export default function AccountSettingPage() {
 
             {/* Main Content */}
             <div className="mx-[6.25rem] flex flex-col gap-[1rem]">
-                <h1 className="font-sans text-[2.5rem] font-bold leading-[3rem] text-[var(--color-primary-900)]">
+                <h1 className="font-sans text-[2.5rem] font-bold leading-[3rem] text-[var(--color-Primary-900)]">
                     Account Management
                 </h1>
                 <div className="h-full border-dashed border-1 border-[var(--color-gray-300)]">

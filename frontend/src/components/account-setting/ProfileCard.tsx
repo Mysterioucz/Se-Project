@@ -6,7 +6,7 @@ import Button from "../Button";
 export default function ProfileCard() {
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
-            <h2 className="font-sans text-[2.5rem] font-bold leading-[3rem] text-[var(--color-primary-900)]">
+            <h2 className="text-[2.5rem] font-bold leading-[3rem] text-[var(--color-Primary-900)]">
                 Account Settings
             </h2>
             <div className="flex flex-col pb-[1.0rem] gap-[1.5rem]">
@@ -30,19 +30,19 @@ export default function ProfileCard() {
                             {/* TODO: Replace here with Chat's Text Fill Box that can be edit by click Pencil Icon.
                             In Edit mode >> If user done to edit user has to pressed 'Enter' to save data in Database via backend, then return back to Display mode */}
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <p className="text-[1.125rem] text-[var(--color-primary-900)] font-semibold">First Name</p>
+                                <p className="text-[1.125rem] text-[var(--color-Primary-900)] font-semibold">First Name</p>
                                 <TextField_Temp />
                             </div>
                             {/* TODO: Replace here with Chat's Text Fill Box as same as detail with above!*/}
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <p className="text-[1.125rem] text-[var(--color-primary-900)] font-semibold">Last Name</p>
+                                <p className="text-[1.125rem] text-[var(--color-Primary-900)] font-semibold">Last Name</p>
                                 <TextField_Temp />
                             </div>
                         </div>
                         <div className="flex flex-row gap-[3.5rem]">
                             {/* TODO: Replace here with Chat's Dropdown Selector that has Language choices which fetch from Backend*/}
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <p className="text-[1.125rem] text-[var(--color-primary-900)] font-semibold">Language</p>
+                                <p className="text-[1.125rem] text-[var(--color-Primary-900)] font-semibold">Language</p>
                                 <DropdownSelector_Temp />
                             </div>
                             {/* Donot delete this! Just empty space for pretty style */}
@@ -51,7 +51,7 @@ export default function ProfileCard() {
                     </div>
                     <div className="flex flex-col gap-[0.75rem]">
                         <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[35px]" onClick={() => console.log("Sign Out clicked")} />
-                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[35px]" onClick={() => console.log("Sign Out clicked")} />
+                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[35px]" onClick={() => console.log("Delete Account clicked")} />
                     </div>
                 </div>
             </div>
