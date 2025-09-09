@@ -11,7 +11,9 @@ export default function Footer() {
                         <Image
                             src="/icons/Logo_png.png"
                             alt="Logo"
-                            className="w-[55px] h-[55px] aspect-square"
+                            className="aspect-square"
+                            width={55}
+                            height={55}
                         />
                         <p className="text-[#044359] font-sarabun text-[32px] font-bold leading-[120%]">
                             FlyWithSigma
@@ -34,6 +36,8 @@ export default function Footer() {
                                 src="/icons/icon_stroke/fi-br-call-history.svg"
                                 alt="telephone"
                                 className="flex w-[16px] h-[16px] justify-center items-center aspect-square"
+                                width={55}
+                                height={55}
                             />
                             <span className="text-[#5F696C] font-sarabun text-[16px] font-normal leading-[120%]">
                                 +1 (555) 123-4567
@@ -45,6 +49,8 @@ export default function Footer() {
                                 src="/icons/icon_stroke/fi-br-envelope.svg"
                                 alt="email"
                                 className="flex w-[16px] h-[16px] justify-center items-center aspect-square"
+                                width={55}
+                                height={55}
                             />
                             <span className="text-[#5F696C] font-sarabun text-[16px] font-normal leading-[120%]">
                                 support@flywithsigma.com

@@ -1,57 +1,37 @@
+import {
+    FiBrBookmark,
+    FiBrPlane,
+    FiBrSettings,
+    FiBrUser,
+} from "@components/icons/module";
 import Footer from "@components/footer/footer";
 import Sidebar, { SidebarItem } from "@components/sidebar/sidebar";
-import Image from "next/image";
 
 // test
 export default function Page() {
     return (
         <div>
-            <div>Flight Search</div>
             {/* Example Sidebar Component */}
             <Sidebar>
                 <SidebarItem
                     label="Book Flight"
                     href="/flights/search"
-                    logo={
-                        <Image
-                            src="/icons/icon_stroke/fi-br-plane.svg"
-                            alt="plane"
-                            className="w-5 h-5 aspect-square"
-                        />
-                    }
+                    logo={<FiBrPlane className="w-5 h-5 aspect-square" />}
                 />
                 <SidebarItem
                     label="My Bookings"
                     href="/bookings"
-                    logo={
-                        <Image
-                            src="/icons/icon_stroke/fi-br-bookmark.svg"
-                            alt="bookmark"
-                            className="w-5 h-5 aspect-square"
-                        />
-                    }
+                    logo={<FiBrBookmark className="w-5 h-5 aspect-square" />}
                 />
                 <SidebarItem
                     label="Profile"
                     href="/profile"
-                    logo={
-                        <Image
-                            src="/icons/icon_stroke/fi-br-user.svg"
-                            alt="user"
-                            className="w-5 h-5 aspect-square"
-                        />
-                    }
+                    logo={<FiBrUser className="w-5 h-5 aspect-square" />}
                 />
                 <SidebarItem
                     label="Settings"
                     href="/settings"
-                    logo={
-                        <Image
-                            src="/icons/icon_stroke/fi-br-settings.svg"
-                            alt="settings"
-                            className="w-5 h-5 aspect-square"
-                        />
-                    }
+                    logo={<FiBrSettings className="w-5 h-5 aspect-square" />}
                 />
             </Sidebar>
             <Footer />
