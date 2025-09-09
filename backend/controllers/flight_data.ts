@@ -41,7 +41,7 @@ export const getFlightByNo = async (req: Request, res: Response) => {
     });
 
     if (!flight) {
-        return res.status(500).json({
+        return res.status(404).json({
             success: false,
             error: `Flight not found with Flight Number ${flightNo}`,
         });
