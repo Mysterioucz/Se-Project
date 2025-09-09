@@ -1,6 +1,6 @@
 "use client";
 
-import SvgArrowLeft from "@/components/icons/arrowLeft.svg";
+import SvgArrowLeft from "@components/icons/arrowLeft.svg";
 import { useRouter } from "next/navigation";
 
 export default function RegistrationSuccess() {
