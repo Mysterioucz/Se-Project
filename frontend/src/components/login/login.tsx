@@ -1,8 +1,8 @@
 "use client";
 
-import SvgOpenEye from "@/components/icons/openEye.svg";
-import SvgCloseEye from "@/components/icons/closeEye.svg";
-import Button from "@/components/Button";
+import SvgOpenEye from "@components/icons/openEye.svg";
+import SvgCloseEye from "@components/icons/closeEye.svg";
+import Button from "@components/Button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
