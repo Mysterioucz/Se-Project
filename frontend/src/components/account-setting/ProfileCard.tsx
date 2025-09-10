@@ -38,13 +38,23 @@ export default function ProfileCard() {
                             {/* TODO: Replace here with Chat's Text Fill Box that can be edit by click Pencil Icon.
                             In Edit mode >> If user done to edit user has to pressed 'Enter' to save data in Database via backend, then return back to Display mode */}
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <p className="text-[1.125rem] text-[var(--color-Primary-900)] font-semibold">First Name</p>
-                                <TextField_Temp />
+                                <TextFieldComponent
+                                    label="First Name"
+                                    textValue=""
+                                    placeHolder="John"
+                                    disabled={true}
+                                    icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
+                                />
                             </div>
                             {/* TODO: Replace here with Chat's Text Fill Box as same as detail with above!*/}
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <p className="text-[1.125rem] text-[var(--color-Primary-900)] font-semibold">Last Name</p>
-                                <TextField_Temp />
+                                <TextFieldComponent
+                                    label="Last Name"
+                                    textValue=""
+                                    placeHolder="Doe"
+                                    disabled={true}
+                                    icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
+                                />
                             </div>
                         </div>
                         <div className="flex flex-row gap-[3.5rem]">

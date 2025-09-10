@@ -1,125 +1,159 @@
 "use client";
 import { useEffect, useState } from "react";
 import TelPrefix from "./prefix/tel_prefix";
+
 interface Props {
-    label?: string;
-    textValue: string;
-    telValue?: string;
-    placeHolder?: string;
-    telForm?: boolean;
-    required?: boolean;
-    disabled?: boolean;
-    error?: boolean;
-    helperText?: string;
-    onChange?: (value: unknown) => void;
-    onInput?: (value: unknown) => void;
-    // The onChange event returns an object with the structure { tel: string, text: string }
+  label?: string;
+  textValue: string;
+  telValue?: string;
+  placeHolder?: string;
+  telForm?: boolean;
+  required?: boolean;
+  disabled?: boolean; // initial state only
+  error?: boolean;
+  helperText?: string;
+  icon?: React.ReactNode;
+  onChange?: (value: unknown) => void;
+  onInput?: (value: unknown) => void;
 }
 
 type State = "enabled" | "focused" | "hover" | "error" | "disabled";
 
 export default function TextFieldComponent({
-    label,
-    textValue,
-    telValue = "+66",
-    placeHolder,
-    telForm,
-    disabled,
-    error,
-    helperText,
-    onChange,
-    onInput,
+  label,
+  textValue,
+  telValue = "+66",
+  placeHolder,
+  telForm,
+  disabled,
+  error,
+  helperText,
+  icon,
+  onChange,
+  onInput,
 }: Props) {
-    const [state, setState] = useState<
-        "enabled" | "focused" | "hover" | "error" | "disabled"
-    >("enabled");
+  // ✅ Internal disabled state always toggled by icon
+  const [isDisabledInternal, setIsDisabledInternal] = useState<boolean>(
+    disabled ?? false
+  );
 
-    function handleStateChage(newState: State) {
-        if (disabled) {
-            setState("disabled");
-        } else if (error) {
-            setState("error");
-        } else {
-            setState(newState as State);
-        }
+  const [state, setState] = useState<State>(
+    disabled ? "disabled" : error ? "error" : "enabled"
+  );
+
+  const computedDisabled = isDisabledInternal;
+
+  function handleStateChange(newState: State) {
+    if (computedDisabled) {
+      setState("disabled");
+    } else if (error) {
+      setState("error");
+    } else {
+      setState(newState);
     }
+  }
 
-    function resolveBorderColor(state: State) {
-        switch (state) {
-            case "enabled":
-                return "border-gray-200";
-            case "focused":
-                return "border-primary-600";
-            case "hover":
-                return "border-gray-400";
-            case "error":
-                return "border-error-main";
-            case "disabled":
-                return "border-gray-100";
-            default:
-                return "border-gray-200";
-        }
+  function resolveBorderColor(s: State) {
+    switch (s) {
+      case "enabled":
+        return "border-[var(--color-gray-200)]";
+      case "focused":
+        return "border-[var(--color-primary-600)]";
+      case "hover":
+        return "border-[var(--color-gray-400)]";
+      case "error":
+        return "border-[var(--color-error-main)]";
+      case "disabled":
+        return "border-[var(--color-gray-100)]";
+      default:
+        return "border-[var(--color-gray-200)]";
     }
+  }
 
-    function resolveHelperTextColor(state: State) {
-        switch (state) {
-            case "error":
-                return "text-error-light";
-            case "disabled":
-                return "text-gray-400";
-            default:
-                return "text-gray-400";
-        }
+  function resolveHelperTextColor(s: State) {
+    switch (s) {
+      case "error":
+        return "text-[var(--color-error-light)]";
+      case "disabled":
+        return "text-[var(--color-disable-dark)]";
+      default:
+        return "text-[var(--color-gray-400)]";
     }
+  }
 
-    useEffect(() => {
-        if (disabled) {
-            setState("disabled");
-        } else if (error) {
-            setState("error");
-        } else {
-            setState("enabled");
-        }
-    }, [disabled, error]);
+  // Update visual state whenever disabled or error changes
+  useEffect(() => {
+    if (computedDisabled) {
+      setState("disabled");
+    } else if (error) {
+      setState("error");
+    } else {
+      setState("enabled");
+    }
+  }, [computedDisabled, error]);
 
-    return (
-        <div className="flex flex-col w-full h-fit gap-3">
-            <h3 className="text-lg text-primary-900 font-bold">{label}</h3>
-            <div
-                className={`flex p-4 gap-2.5 justify-center text-primary-900 text-[1rem] rounded-[0.25rem] border-2 ${resolveBorderColor(
-                    state
-                )}`}
-                onFocus={() => handleStateChage("focused")}
-                onMouseEnter={() => handleStateChage("hover")}
-                onMouseLeave={() => handleStateChage("enabled")}
+  // Toggle enable/disable when clicking icon
+  function handleIconClick() {
+    setIsDisabledInternal((prev) => !prev);
+  }
+
+  return (
+    <div className="flex flex-col w-full h-fit gap-3">
+      {label && (
+        <h3 className="text-lg font-bold text-[var(--color-Primary-900)]">
+          {label}
+        </h3>
+      )}
+
+      <div
+        className={`flex items-center p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] border-2 ${resolveBorderColor(
+          state
+        )}`}
+        onFocus={() => handleStateChange("focused")}
+        onMouseEnter={() => handleStateChange("hover")}
+        onMouseLeave={() => handleStateChange("enabled")}
+      >
+        {telForm && (
+          <TelPrefix
+            value={telValue}
+            onChange={(e) =>
+              onChange && onChange({ tel: e.target.value, text: textValue })
+            }
+            disabled={computedDisabled}
+          />
+        )}
+
+        {/* Input + Icon container */}
+        <div className="flex items-center w-full">
+          <input
+            className={`w-full h-full bg-transparent text-lg text-[var(--color-gray-400)] disabled:text-[var(--color-disable-dark)] outline-none placeholder-[var(--color-gray-400)] disabled:placeholder-[var(--color-disable-dark)] ${
+              icon ? "pr-4" : ""
+            }`}
+            type="text"
+            placeholder={placeHolder}
+            disabled={computedDisabled}
+            onChange={(e) =>
+              onChange && onChange({ tel: telValue, text: e.target.value })
+            }
+            onInput={onInput}
+          />
+
+          {icon && (
+            <button
+              type="button"
+              onClick={handleIconClick}
+              aria-pressed={computedDisabled}
+              className="ml-2 pr-2 flex items-center cursor-pointer"
             >
-                {telForm && (
-                    <TelPrefix
-                        value={telValue}
-                        onChange={(e) =>
-                            onChange &&
-                            onChange({ tel: e.target.value, text: textValue })
-                        }
-                        disabled={disabled}
-                    />
-                )}
-                <input
-                    className="w-full h-full bg-transparent text-lg outline-none"
-                    type="text"
-                    placeholder={placeHolder}
-                    disabled={disabled}
-                    onChange={(e) =>
-                        onChange &&
-                        onChange({ tel: telValue, text: e.target.value })
-                    }
-                    onInput={onInput}
-                />
-            </div>
-            {helperText && (
-                <p className={`${resolveHelperTextColor(state)}`}>
-                    {helperText}
-                </p>
-            )}
+              {icon}
+            </button>
+          )}
         </div>
-    );
+      </div>
+
+      {helperText && (
+        <p className={`${resolveHelperTextColor(state)}`}>{helperText}</p>
+      )}
+    </div>
+  );
 }
