@@ -1,9 +1,9 @@
-import RegistrationName from "@/components/registration/registration_name";
+import RegistrationName from "@components/registration/registration_name";
 
 export default function Page() {
-  return (
-    <div className="flex items-center justify-center h-screen">
-        <RegistrationName />
-    </div>
-  );
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <RegistrationName />
+        </div>
+    );
 }
