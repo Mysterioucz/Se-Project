@@ -28,12 +28,17 @@ export default function SelectComponent({
     onChange,
     children,
 }: Props) {
+    function resolveTextColor() {
+        if (disabled) return "text-disabled-dark";
+        return "text-gray-400 focus-within:text-primary-900";
+    }
+
     return (
         <Select
             error={error}
             disabled={disabled}
             // need to add group className at Parent element to let tailwind overwrite the default styles of child element
-            className="group w-full"
+            className={`group ${resolveTextColor()}`}
             slotProps={{
                 notchedOutline: {
                     className: `border-2 border-gray-200 ${
