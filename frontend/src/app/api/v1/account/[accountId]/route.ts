@@ -29,7 +29,7 @@ export async function PUT(
     const { updateFirstName, updateLastName } = await req.json();
 
     // If accountId doesn't match the token sent's ID
-    let token = req.headers.get("authorization")!.split(" ")[1];
+    const token = req.headers.get("authorization")!.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     if (decoded.AccountID != accountId) {
         return new Response(
@@ -102,7 +102,7 @@ export async function GET(
     const { accountId } = await params;
 
     // If accountId doesn't match the token sent's ID
-    let token = req.headers.get("authorization")!.split(" ")[1];
+    const token = req.headers.get("authorization")!.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     if (decoded.AccountID != accountId) {
         return new Response(
@@ -163,7 +163,7 @@ export async function DELETE(
     const { accountId } = await params;
 
     // If accountId doesn't match the token sent's ID
-    let token = req.headers.get("authorization")!.split(" ")[1];
+    const token = req.headers.get("authorization")!.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     if (decoded.AccountID != accountId) {
         return new Response(
