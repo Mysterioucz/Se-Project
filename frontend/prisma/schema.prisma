@@ -200,7 +200,8 @@ model Airline_Message {
 }
 
 model Account {
-  AccountID String @id @db.VarChar(50)
+  AccountID String @id @db.VarChar(50) @default(uuid())
+  Email     String @unique
   Password  String
   FirstName String
   LastName  String
@@ -212,7 +213,6 @@ model Account {
 
 model User {
   UserAccountID String @id @db.VarChar(50)
-  Email         String @unique
 
   // Relations
   account           Account       @relation(fields: [UserAccountID], references: [AccountID])
@@ -220,7 +220,6 @@ model User {
   assignedFlights   Assigned_To[]
   purchases         Purchase[]
   involvedInReports Report_To[]
-  sessions          Session[]
 }
 
 model User_Tel_No {
@@ -238,7 +237,7 @@ model Report {
   Attachment        String?
   UserAccountID     String  @db.VarChar(50) // The user who created the report
   AdminAccountID    String  @db.VarChar(50) // The admin handling the report
-  Email             String
+  AccountID             String
   TelNo             String
   PassengerName     String
 
@@ -308,20 +307,4 @@ model Airline_Tel_No {
   airline Airline @relation(fields: [AirlineName], references: [AirlineName])
 
   @@id([TelNo, AirlineName])
-}
-
-// Added from ERD, but not present in initial schema
-model Session {
-  SessionID         String    @id
-  UserAccountID     String    @db.VarChar(50)
-  TokenHash         String
-  CreatedAt         DateTime  @default(now())
-  LastSeenAt        DateTime
-  IdleExpiresAt     DateTime
-  AbsoluteExpiresAt DateTime
-  RevokedAt         DateTime?
-  RevokeReason      String?
-
-  // Relation
-  user User @relation(fields: [UserAccountID], references: [UserAccountID])
 }

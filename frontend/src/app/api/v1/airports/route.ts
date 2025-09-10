@@ -1,4 +1,5 @@
 import prisma from "@/db";
+import { authorize } from "@/src/lib/authMiddleware";
 import { NextRequest } from "next/server";
 
 //@desc     Get airports
@@ -8,7 +9,13 @@ export const GET = async () => {
     try {
         const airports = await prisma.airport.findMany();
 
-        return new Response(JSON.stringify(airports), { status: 200 });
+        return new Response(
+            JSON.stringify({
+                success: true,
+                data: airports,
+            }),
+            { status: 200 }
+        );
     } catch (error) {
         console.log(error);
         return new Response(JSON.stringify({ message: "Error" }), {
@@ -21,11 +28,22 @@ export const GET = async () => {
 //@route    POST /api/v1/airports
 //@access   Private
 export const POST = async (req: NextRequest) => {
+    const protect = await authorize(req, ['Admin']);
+    if (protect.status != 200) {
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: 'Not authorized to this route'
+            }),
+            { status: 401 }
+        );
+    }
+
     const { AirportID, AirportName, City, Country } = await req.json();
-    console.log(req);
+
     if (!AirportID || !AirportName || !City || !Country) {
         return new Response(
-            JSON.stringify({ message: `Something is missing` }),
+            JSON.stringify({ message: "Please provide all required parameters" }),
             { status: 400 }
         );
     }
@@ -49,7 +67,7 @@ export const POST = async (req: NextRequest) => {
         );
     } catch (err) {
         console.log(err);
-        return new Response(JSON.stringify({ message: "Server Error" }), {
+        return new Response(JSON.stringify({ message: "Error" }), {
             status: 500,
         });
     }
