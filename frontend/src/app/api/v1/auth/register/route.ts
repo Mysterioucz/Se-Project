@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         const accountID = newAccount?.AccountID;
         const addUser = await prisma.user.create({
             data: {
-                UserAccountID: accountID
+                UserAccountID: accountID,
             }
         });
 
