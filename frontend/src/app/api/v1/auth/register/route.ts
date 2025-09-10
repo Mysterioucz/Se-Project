@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const { Email, Password, FirstName, LastName } = await req.json();
     if (!Password || !FirstName || !LastName || !Email) {
         return new Response(
-            JSON.stringify({ error: "Please provide all required parameters" }),
+            JSON.stringify({ message: "Please provide all required parameters" }),
             { status: 400 }
         );
     }
