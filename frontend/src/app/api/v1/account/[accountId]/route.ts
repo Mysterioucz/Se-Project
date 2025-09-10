@@ -144,3 +144,146 @@ export async function GET(
         );
     }
 }
+
+export async function DELETE(
+    req: NextRequest,
+    { params }: { params: Promise<{ accountId: string }> }
+) {
+    const protect = await authorize(req, ['User', 'Admin']);
+    if (protect.status != 200) {
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: 'Not authorized to this route'
+            }),
+            { status: 401 }
+        );
+    }
+
+    const { accountId } = await params;
+
+    // If accountId doesn't match the token sent's ID
+    let token = req.headers.get("authorization")!.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    if (decoded.AccountID != accountId) {
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: 'Not authorized to this route'
+            }),
+            { status: 401 }
+        );
+    }
+
+    try {
+        // Find account
+        const account = await prisma.account.findUnique({
+            where: { 
+                AccountID: accountId 
+            },
+        });
+
+        if (! account) {
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    message: "User not found",
+                }),
+                { status: 404 }
+            );
+        }
+
+        // Start a transaction to ensure that all operations are executed atomically
+        await prisma.$transaction(async (prisma) => {
+            // User's Part
+            await prisma.user_Tel_No.deleteMany({
+                where: {
+                    UserAccountID: accountId,
+                },
+            });
+            
+            await prisma.assigned_To.deleteMany({
+                where: {
+                    UserAccountID: accountId,
+                },
+            });
+
+            await prisma.purchase.deleteMany({
+                where: {
+                    UserAccountID: accountId,
+                },
+            });
+
+            await prisma.report_To.deleteMany({
+                where: {
+                    UserAccountID: accountId,
+                },
+            });
+
+            await prisma.report.deleteMany({
+                where: {
+                    UserAccountID: accountId,
+                },
+            });
+            
+            // Admin's Part
+            await prisma.report.deleteMany({
+                where: {
+                    AdminAccountID: accountId,
+                },
+            });
+
+            await prisma.report_To.deleteMany({
+                where: {
+                    AdminAccountID: accountId,
+                },
+            });
+            
+            await prisma.airline_Message.deleteMany({
+                where: {
+                    AdminAccountID: accountId,
+                },
+            });
+            await prisma.contact.deleteMany({
+                where: {
+                    AdminAccountID: accountId,
+                },
+            });
+            
+            await prisma.admin.deleteMany({
+                where: {
+                    AdminAccountID: accountId,
+                },
+            });
+
+            await prisma.user.delete({
+                where: {
+                    UserAccountID: accountId,
+                },
+            });
+
+            await prisma.account.delete({
+                where: {
+                    AccountID: accountId,
+                },
+            });
+        });
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                message: "Account and related data are deleted successfully",
+            }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error(error);
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: "Error",
+            }),
+            { status: 500 }
+        );
+    }
+}
