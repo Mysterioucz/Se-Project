@@ -1,4 +1,5 @@
 "use client";
+import MenuItem from "@mui/material/MenuItem";
 interface Props {
     icons?: React.ReactNode[];
     options: string[];
@@ -23,19 +24,23 @@ export default function ListChoice({
         value: string;
         icon: React.ReactNode;
     }) {
+        // Make sure to import MenuItem from @mui/material at the top of your file:
+        // import MenuItem from '@mui/material/MenuItem';
+
         return (
-            <option
-                className={`p-3 cursor-pointer hover:bg-gray-50 ${itemWidth}`}
+            <MenuItem
+                className={`${maxHeight} ${itemWidth}`}
                 onClick={() => {
                     onClick?.();
                     onChange?.({ target: { value } } as React.ChangeEvent<{
                         value: unknown;
                     }>);
                 }}
+                value={value}
             >
                 {icon}
                 {value}
-            </option>
+            </MenuItem>
         );
     }
 
