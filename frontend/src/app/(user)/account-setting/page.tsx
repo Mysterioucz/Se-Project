@@ -1,25 +1,17 @@
 "use client";
 
-import ProfileCard from "@/components/account-setting/ProfileCard";
-<<<<<<< HEAD
-import Sidebar from "@/components/sidebar/sidebar";
-import ItemComponent from "@/components/item";
+import ProfileCard from '@/src/components/account-setting/ProfileCard';
 import Footer from '../../../components/footer/footer';
-import Button from "@/components/Button";
-=======
->>>>>>> feat/account-setting
-import Navbar from "@/components/Navbar";
+import Button from "@/src/components/Button";
+import Navbar from "@/src/components/Navbar";
 
 export default function AccountSettingPage() {
     return (
         <div className="flex flex-col h-dvh">
-<<<<<<< HEAD
             {/* Navigation Bar */}
-            <Navbar isSignIn={true} displayName="John Doe" />
+            <Navbar displayName="John Doe" />
 
             {/* Main Content */}
-=======
->>>>>>> feat/account-setting
             <div className="mx-[6.25rem] flex flex-col gap-[1rem]">
                 <h1 className="font-sans text-[2.5rem] font-bold leading-[3rem] text-[var(--color-Primary-900)]">
                     Account Management
