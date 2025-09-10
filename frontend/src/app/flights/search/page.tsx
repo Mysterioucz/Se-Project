@@ -34,7 +34,10 @@ export default function Page() {
                     onClick: () => {},
                 }}
             />
-            <SelectPassengerPanel panelData={panelData} onChange={handlePanelDataChange} />
+            <SelectPassengerPanel
+                panelData={panelData}
+                onChange={handlePanelDataChange}
+            />
         </div>
     );
 }
