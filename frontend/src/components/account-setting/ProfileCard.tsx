@@ -3,8 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import Button from "../Button";
-import Modal from "@components/Modal";
-import { TextField_Temp, DropdownSelector_Temp } from "./tempComponent";
 import TextFieldComponent from "../text_field";
 import SelectComponent from "../select";
 import { MenuItem } from "@mui/material";
@@ -77,8 +75,8 @@ export default function ProfileCard() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-[0.75rem]">
-                        <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[2.1875rem]" onClick={() => console.log("Sign Out clicked")} />
-                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[2.1875rem]" onClick={() => console.log("Delete Account clicked")} />
+                        <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[2.625rem]" onClick={() => console.log("Sign Out clicked")} />
+                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[2.625rem]" onClick={() => console.log("Delete Account clicked")} />
                     </div>
                 </div>
             </div>
