@@ -14,19 +14,16 @@ const nextConfig: NextConfig = {
         return config;
     },
 
-    turbopack: {
-        rules: {
-            "*.svg": {
-                loaders: ["@svgr/webpack"],
-                as: "*.ts",
+    experimental: {
+        turbo: {
+            rules: {
+                "*.svg": {
+                    loaders: ["@svgr/webpack"],
+                    as: "*.ts",
+                },
             },
         },
     },
-    eslint: {
-        dirs: ["src/app", "src/components","src/lib"], // Only run ESLint on the 'apps' and 'utils' directories during production builds (next build)
-    },
-
-    serverExternalPackages: ["@prisma/client", "bcrypt"],
 };
 
 export default nextConfig;

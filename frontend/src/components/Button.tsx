@@ -15,54 +15,52 @@ interface ButtonProps {
     disabled?: boolean;
     styleType?: ButtonStyle;  // fill, stroke, text
     size?: ButtonSize;        // sm, md, lg
-    width?: string;
-    height?: string;
-    href?: string;
+    href: string;
 }
 
 export default function Button({
     text,
     iconStart,
     iconEnd,
-    onClick=() => {},
+    onClick,
     disabled = false,
     styleType = "fill",
     size = "md",
-    width = "w-fit",
-    height = "h-full",
-    href,
 }: ButtonProps) {
     const [clicked, setClicked] = useState(false);
     
     const router = useRouter();
+    const goTo = (path: string) => {
+        router.push(path); // เปลี่ยนหน้าไป path ที่กำหนด
+    };
 
     const handleClick = () => {
         if (!disabled) {
             setClicked(!clicked); // toggle สี
-            onClick();
+            goTo("/");
         }
     };
 
 const sizeClasses: Record<ButtonSize, string> = {
-    sm: "py-2 px-2 text-[0.875rem]",
-    md: "py-2 px-4 text-[1rem]",
-    lg: "py-4 px-6 text-[1.125rem]",
+    sm: "py-[var(--spacing-sm)] px-[var(--spacing-sm)] text-[var(--text-body-sm)]",
+    md: "py-[var(--spacing-sm)] px-[var(--spacing-md)] text-[var(--text-body)]",
+    lg: "py-[var(--spacing-md)] px-[var(--spacing-lg)] text-[var(--text-body-lg)]",
 };
 
 const styleClasses: Record<ButtonStyle, string> = {
     fill: `
-      ${clicked ? "border-2 border-primary-300 bg-primary-300 text-white" : "border-2 border-primary-400 bg-primary-400 text-white"}
-      hover:bg-primary-600
+      ${clicked ? "bg-[var(--color-primary-300)] text-[var(--color-common-white)]" : "bg-[var(--color-primary-400)] text-[var(--color-common-white)]"}
+      hover:bg-[var(--color-primary-600)]
     `,
     stroke: `
-      ${clicked ? "border-2 border-primary-300 text-primary-300" : "border-2 border-primary-400 text-primary-400"}
-      bg-white
-      hover:border-primary-600 hover:text-primary-600
+      ${clicked ? "border-2 border-[var(--color-primary-300)] text-[var(--color-primary-300)]" : "border-2 border-[var(--color-primary-400)] text-[var(--color-primary-400)]"}
+      bg-[var(--color-common-white)]
+      hover:border-[var(--color-primary-600)] hover:text-[var(--color-primary-600)]
     `,
     text: `
-      ${clicked ? "text-primary-300" : "text-primary-400"}
-      bg-transparent
-      hover:text-primary-600
+      ${clicked ? "text-[var(--color-primary-300)]" : "text-[var(--color-primary-400)]"}
+      bg-transparent 
+      hover:text-[var(--color-primary-600)]
     `,
 };
 
@@ -71,8 +69,8 @@ return (
         onClick={handleClick}
         disabled={disabled}
         className={`
-        flex items-center justify-center gap-4
-        ${width} ${height} rounded-md
+        flex items-center gap-[var(--spacing-md)]
+        w-fit h-full rounded-[var(--radius-md)]
         transition-colors duration-200
         ${sizeClasses[size]}
         ${styleClasses[styleType]}
