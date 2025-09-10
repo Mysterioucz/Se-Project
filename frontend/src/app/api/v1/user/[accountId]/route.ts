@@ -1,10 +1,16 @@
 import prisma from "@/db";
+// import { authorize, protect } from "@/src/lib/authMiddleware";
 import { NextRequest } from "next/server";
 
 export async function PUT(
     req: NextRequest,
     { params }: { params: Promise<{ accountId: string }> }
 ) {
+    // const protectedTokenResponse = await protect(req);
+    // if (protectedTokenResponse?.status == 401) {
+      // return protectedTokenResponse;
+    // }
+
     const { accountId } = await params;
     const { FirstName, LastName } = await req.json();
 

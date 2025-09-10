@@ -1,4 +1,5 @@
 import prisma from "@/db";
+import { authorize } from "@/src/lib/authMiddleware";
 import { NextRequest } from "next/server";
 
 //@desc     Get airports
@@ -21,15 +22,26 @@ export const GET = async () => {
 //@route    POST /api/v1/airports
 //@access   Private
 export const POST = async (req: NextRequest) => {
+    const protect = await authorize(req, ['Admin']);
+    if (protect.status != 200) {
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: 'Not authorized to this route'
+            }),
+            { status: 401 }
+        );
+    }
+
     const { AirportID, AirportName, City, Country } = await req.json();
-    console.log(req);
+    console.log('checkig airport attribute');
     if (!AirportID || !AirportName || !City || !Country) {
         return new Response(
             JSON.stringify({ message: `Something is missing` }),
             { status: 400 }
         );
     }
-
+    console.log('pass missing check')
     try {
         const newAirport = await prisma.airport.create({
             data: {
@@ -39,7 +51,7 @@ export const POST = async (req: NextRequest) => {
                 Country,
             },
         });
-
+        console.log('passed create')
         return new Response(
             JSON.stringify({
                 success: true,

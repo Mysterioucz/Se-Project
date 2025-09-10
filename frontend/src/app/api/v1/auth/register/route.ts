@@ -6,8 +6,8 @@ import { NextRequest } from "next/server";
 //@route    POST /api/v1/auth/register
 //@access   Public
 export async function POST(req: NextRequest) {
-    const { AccountID, Email, Password, FirstName, LastName } = await req.json();
-    if (!AccountID || !Password || !FirstName || !LastName) {
+    const { Email, Password, FirstName, LastName } = await req.json();
+    if (!Password || !FirstName || !LastName || !Email) {
         return new Response(
             JSON.stringify({ error: "Please provide all required parameters" }),
             { status: 400 }
@@ -17,20 +17,26 @@ export async function POST(req: NextRequest) {
         const salt = await bcrypt.genSalt(12);
         const hashedPassword = await bcrypt.hash(Password, salt);
 
-        const newUser = await prisma.account.create({
+        const newAccount = await prisma.account.create({
             data: {
-                AccountID,
                 Email,
                 Password: hashedPassword,
                 FirstName,
                 LastName,
             },
         });
+        
+        const accountID = newAccount?.AccountID;
+        const addUser = await prisma.user.create({
+            data: {
+                UserAccountID: accountID
+            }
+        });
 
         return new Response(
             JSON.stringify({
                 success: true,
-                data: newUser,
+                data: newAccount,
             }),
             { status: 200 }
         );
