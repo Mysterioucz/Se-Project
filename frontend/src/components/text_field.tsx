@@ -100,7 +100,7 @@ export default function TextFieldComponent({
   return (
     <div className="flex flex-col w-full h-fit gap-3">
       {label && (
-        <h3 className="text-lg font-bold text-[var(--color-Primary-900)]">
+        <h3 className="text-lg font-bold text-[var(--color-primary-900)]">
           {label}
         </h3>
       )}
