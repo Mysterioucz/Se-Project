@@ -7,10 +7,12 @@ import Modal from "@components/Modal";
 import { TextField_Temp, DropdownSelector_Temp } from "./tempComponent";
 import TextFieldComponent from "../text_field";
 import SelectComponent from "../select";
+import { MenuItem } from "@mui/material";
 
 export default function ProfileCard() {
     const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+    const [language, setLanguage] = React.useState("");
 
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
@@ -61,7 +63,17 @@ export default function ProfileCard() {
                             {/* TODO: Replace here with Chat's Dropdown Selector that has Language choices which fetch from Backend*/}
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
                                 <p className="text-[1.125rem] text-[var(--color-Primary-900)] font-semibold">Language</p>
-                                <DropdownSelector_Temp />
+                                <SelectComponent
+                                    labelId="demo-select-label"
+                                    id="demo-select"
+                                    value={language==="" ? "Thai" : language}
+                                    onChange={(e) => setLanguage((e.target as HTMLInputElement).value)}
+                                    error={false}
+                                    disabled={false}
+                                >
+                                    <MenuItem value="Thai">Thai</MenuItem>
+                                    <MenuItem value="English">English</MenuItem>
+                                </SelectComponent>
                             </div>
                             {/* Donot delete this! Just empty space for pretty style */}
                             <div className="flex flex-1 flex-col gap-[0.75rem]"></div>
