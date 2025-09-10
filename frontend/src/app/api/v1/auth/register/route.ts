@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 //@route    POST /api/v1/auth/register
 //@access   Public
 export async function POST(req: NextRequest) {
-    const { AccountID, Password, FirstName, LastName } = await req.json();
+    const { AccountID, Email, Password, FirstName, LastName } = await req.json();
     if (!AccountID || !Password || !FirstName || !LastName) {
         return new Response(
             JSON.stringify({ error: "Please provide all required parameters" }),
@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
         const newUser = await prisma.account.create({
             data: {
                 AccountID,
+                Email,
                 Password: hashedPassword,
                 FirstName,
                 LastName,
