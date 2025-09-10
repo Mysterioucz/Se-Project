@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+<<<<<<< HEAD
 type ButtonStyle = "fill" | "stroke" | "text" |  "red-critical";;
+=======
+type ButtonStyle = "fill" | "stroke" | "text" | "danger";
+>>>>>>> feat/account-setting
 type ButtonSize = "sm" | "md" | "lg";
 type ButtonAlign = "left" | "center" | "right";
 
@@ -75,6 +79,7 @@ export default function Button({
       bg-transparent
       hover:text-primary-600
     `,
+<<<<<<< HEAD
     "red-critical": `
       rounded-[var(--Radius-md,8px)]
       border-[var(--Elevation-sm,1px)] border-[var(--Error-main,#C53737)]
@@ -83,6 +88,13 @@ export default function Button({
       hover:bg-[var(--Error-main,#C53737)] hover:text-white
     `,
   };
+=======
+    danger: `
+      ${clicked ? "border-2 border-error-main bg-white text-error-main" : "border-2 border-error-main bg-white text-error-main"}
+      hover:bg-error-lighter
+    `,
+};
+>>>>>>> feat/account-setting
 
   const alignClasses: Record<ButtonAlign, string> = {
     left: "justify-start pl-[var(--Spacing-md,16px)] pr-[var(--Spacing-sm,8px)]",

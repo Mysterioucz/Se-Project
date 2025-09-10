@@ -3,18 +3,17 @@
 import Link from "next/link";
 import Image from 'next/image';
 import Button from "./Button";
-import { useState } from "react";
+import { useSession } from "next-auth/react"
 
 interface NavbarProps {
-    isSignIn: boolean;
     displayName?: string;
 }
 
-export default function Navbar({ isSignIn, displayName }: NavbarProps) {
-  const [clicked, setClicked] = useState(false);
+export default function Navbar({ displayName }: NavbarProps) {
+  const { data: session, status } = useSession();
 
   return (
-    <nav className="bg-[var(--color-primary-400)] flex mb-[1.5rem] items-center w-full justify-between py-[var(--spacing-sm)] px-[var(--spacing-xl)] sticky top-0 z-99">
+    <nav className="bg-[var(--color-primary-400)] flex mb-[1.5rem] items-center w-full justify-between py-[0.5rem] px-[2rem] sticky top-0 z-99">
       {/* Navigate to main page */}
       <Link href="">
         <Image
@@ -24,7 +23,7 @@ export default function Navbar({ isSignIn, displayName }: NavbarProps) {
           height={50}
           className="w-[3.125rem] h-[3.125rem]"          />
       </Link>
-      <div className="flex items-center gap-[var(--spacing-xl)]">
+      <div className="flex items-center gap-[2rem]">
         {/* Navigate to Customer Support page */}
         <Link href="">
           <p className="text-white text-[var(--text-body)] cursor-pointer">
@@ -41,24 +40,27 @@ export default function Navbar({ isSignIn, displayName }: NavbarProps) {
             className="w-[1.25rem] h-[1.25rem] cursor-pointer"
           />
         </Link>
-        {isSignIn ? (
-          <Button
+        {status === "authenticated" ? (
+          <Link
+            href={"/account-setting"}
+          >
+            <Button
             text={displayName ?? "Can't Fetch Name"}
             styleType="stroke"
             size="md"
             iconStart="/navbar/fi-sr-user.svg"
-            href="" // Navigate to Profile page
-            onClick={() => setClicked(!clicked)}
           />
+          </Link>
         ) : (
-          <Button
+          <Link
+          href={"/login"}>
+            <Button
             text="Sign in / Register"
             styleType="stroke"
             size="md"
             iconStart="/navbar/fi-sr-user.svg"
-            href="" // Navigate to Signin / Register page
-            onClick={() => setClicked(!clicked)}
           />
+          </Link>
         )}
       </div>
     </nav>
