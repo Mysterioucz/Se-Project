@@ -7,7 +7,7 @@ import { NextRequest } from "next/server";
 //@access   Private
 export async function POST(req: NextRequest) {
     const protect = await authorize(req, ['Admin', 'User']);
-    if (protect.status == 200) {
+    if (protect.status != 200) {
         return new Response(
             JSON.stringify({
                 success: false,
