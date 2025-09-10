@@ -24,9 +24,6 @@ export default function ListChoice({
         value: string;
         icon: React.ReactNode;
     }) {
-        // Make sure to import MenuItem from @mui/material at the top of your file:
-        // import MenuItem from '@mui/material/MenuItem';
-
         return (
             <MenuItem
                 className={`${maxHeight} ${itemWidth}`}
