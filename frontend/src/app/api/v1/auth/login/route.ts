@@ -10,7 +10,7 @@ import { NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
     const { Email, Password } = await req.json();
 
-    if (!Email || !Password) {
+    if (! Email || ! Password) {
         return new Response(
             JSON.stringify({
                 success: false,
@@ -22,7 +22,9 @@ export async function POST(req: NextRequest) {
 
     try {
         const account = await prisma.account.findUnique({
-            where: { Email: Email },
+            where: { 
+                Email: Email 
+            },
         });
 
         if (!account) {
@@ -55,7 +57,7 @@ export async function POST(req: NextRequest) {
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET!, {
-            expiresIn: "5h", // Expire the token in 1 hour (you can change this duration)
+            expiresIn: "24h", // changable
         });
 
         const options: { expires: Date; httpOnly: boolean } = {
