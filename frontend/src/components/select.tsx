@@ -1,3 +1,4 @@
+"use client";
 import { Select } from "@mui/material";
 
 interface Props {
@@ -6,7 +7,7 @@ interface Props {
     value: string;
     error?: boolean;
     disabled?: boolean;
-
+    maxChildrenHeight?: string;
     onChange?: (
         event:
             | React.ChangeEvent<HTMLInputElement>
@@ -23,6 +24,7 @@ export default function SelectComponent({
     value,
     error,
     disabled,
+    maxChildrenHeight = "max-h-[16rem]",
     onChange,
     children,
 }: Props) {
@@ -31,7 +33,7 @@ export default function SelectComponent({
             error={error}
             disabled={disabled}
             // need to add group className at Parent element to let tailwind overwrite the default styles of child element
-            className="group"
+            className="group w-full"
             slotProps={{
                 notchedOutline: {
                     className: `border-2 border-gray-200 ${
@@ -43,6 +45,9 @@ export default function SelectComponent({
             id={id}
             value={value}
             onChange={onChange}
+            MenuProps={{
+                className: `${maxChildrenHeight}`,
+            }}
         >
             {children}
         </Select>

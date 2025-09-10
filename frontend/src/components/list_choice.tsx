@@ -1,3 +1,4 @@
+"use client";
 interface Props {
     icons?: React.ReactNode[];
     options: string[];
@@ -23,8 +24,8 @@ export default function ListChoice({
         icon: React.ReactNode;
     }) {
         return (
-            <div
-                className={`p-2 cursor-pointer ${itemWidth}`}
+            <option
+                className={`p-3 cursor-pointer hover:bg-gray-50 ${itemWidth}`}
                 onClick={() => {
                     onClick?.();
                     onChange?.({ target: { value } } as React.ChangeEvent<{
@@ -34,21 +35,11 @@ export default function ListChoice({
             >
                 {icon}
                 {value}
-            </div>
+            </option>
         );
     }
 
-    return (
-        <div
-            className={`flex w-fit shadow-lg/20 p-1 ${maxHeight} top-[100%] bg-common-white flex-col absolute z-10 overflow-y-auto overflow-x-clip`}
-        >
-            {options.map((option, index) => (
-                <ChoiceContainer
-                    key={index}
-                    value={option}
-                    icon={icons?.[index]}
-                />
-            ))}
-        </div>
-    );
+    return options.map((option, index) => (
+        <ChoiceContainer key={index} value={option} icon={icons?.[index]} />
+    ));
 }
