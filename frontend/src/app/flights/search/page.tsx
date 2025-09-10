@@ -1,9 +1,9 @@
 "use client";
-import FlightCard from "@/components/flightCard/flight_card";
+import FlightCard from "@components/flightCard/flight_card";
 import SelectPassengerPanel, {
     PanelData,
-} from "@/components/selectPassengerPanel/select_passenger_panel";
-import { mockFlightData } from "@/data/mockFlightData";
+} from "@components/selectPassengerPanel/select_passenger_panel";
+import { mockFlightData } from "@data/mockFlightData";
 import { useState } from "react";
 
 export default function Page() {
