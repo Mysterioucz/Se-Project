@@ -42,4 +42,4 @@
 # backend generated files
 **/src/generated/prisma
 **/.setup_done
-**/prisma/migrations/*
+**/prisma/migrations/
