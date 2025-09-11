@@ -1,5 +1,5 @@
 "use client";
-import SelectComponent from "@/src/components/select";
+import SelectComponent, { SelectEvent } from "@components/select";
 import { useState } from "react";
 
 // test
@@ -12,7 +12,9 @@ export default function Page() {
                     id="demo-simple-select"
                     labelId="demo-simple-select-label"
                     value={selectedOption}
-                    onChange={(event: any) => setSelectedOption(event.target.value)}
+                    onChange={(event: SelectEvent) =>
+                        setSelectedOption(event.target.value as string)
+                    }
                 >
                     <option value="Option 1">Option 1</option>
                     <option value="Option 2">Option 2</option>
