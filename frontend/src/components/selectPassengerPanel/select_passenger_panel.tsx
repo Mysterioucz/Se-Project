@@ -1,4 +1,4 @@
-import SelectComponent, { OnChangeEvent } from "../select";
+import SelectComponent, { SelectEvent } from "../select";
 
 export interface PanelData {
     adultCount: number;
@@ -87,7 +87,7 @@ function SelectPassengerPanel({ panelData, onClick, onChange }: Props) {
                 labelId="Select Passenger Type"
                 id="passenger-type"
                 value={panelData.seatClass}
-                onChange={(e: OnChangeEvent) => {
+                onChange={(e: SelectEvent) => {
                     onChange?.("seatClass", e.target.value as string);
                 }}
             />
