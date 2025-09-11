@@ -131,10 +131,7 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
 
                     {/* Depart - Return (DatePicker) */}
                     <div className="relative flex flex-row w-full">
-                        <DatePicker
-                            isClicked={dropdownStates.departReturn}
-                            toggleDropdown={() => toggleDropdown('departReturn')}
-                        />
+                        <DatePicker />
                     </div>
 
                     {/* Passengers (Passenger) */}

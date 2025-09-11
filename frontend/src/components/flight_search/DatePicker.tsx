@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { FC } from 'react';
-import { ArrowDropDown, ArrowDropUp, CalendarToday } from '@mui/icons-material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-interface DatePickerComponentProps {
+interface DatePickerProps {
   selectedDate: Date | null;
   setSelectedDate: (date: Date | null) => void;
   onClose: () => void;
@@ -18,7 +20,7 @@ const isSameDay = (date1: Date, date2: Date) =>
   date1.getDate() === date2.getDate();
 
 // --- THE DATE PICKER CALENDAR COMPONENT ---
-export const DatePickerComponent: FC<DatePickerComponentProps> = ({ selectedDate, setSelectedDate, onClose }) => {
+export const DatePickerComponent: FC<DatePickerProps> = ({ selectedDate, setSelectedDate, onClose }) => {
   const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date());
   const pickerRef = useRef<HTMLDivElement>(null);
 
@@ -109,36 +111,49 @@ export const DatePickerComponent: FC<DatePickerComponentProps> = ({ selectedDate
 };
 
 
-
-interface DatePickerProps {
-  isClicked: boolean;
-  toggleDropdown: () => void;
-}
-
-export default function DatePicker({ isClicked, toggleDropdown }: DatePickerProps) {
+export default function Date_Picker() {
+  // State for the date picker dropdown visibility
+  const [isDepartReturnClicked, setDepartReturnClicked] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
+  // Helper function to toggle dropdown visibility and close others
+  const toggleDropdown = () => {
+    setDepartReturnClicked(prevState => !prevState);  // Toggle visibility
+  };
+
+  const formatDate = (date: Date | null): string => {
+    if (!date) return '';
+    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  };
+
+  const getDateButtonText = () => {
+    if (selectedDate) {
+      return formatDate(selectedDate);
+    }
+    return 'Depart - Return';
+  };
+
   return (
-    <div className="relative flex flex-row w-full">
-      <button
-        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-primary-900 border-primary-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
-        onClick={toggleDropdown}
+    <div className='relative flex flex-row w-full'>
+      <button 
+        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-[#022b39] border-[#067399] rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
+        onClick={toggleDropdown}  // Use toggleDropdown to show/hide the calendar
       >
         <div className="flex items-center">
-          <CalendarToday className="mr-2 text-primary-900" />
-          <span className="text-md text-primary-900">Depart - Return</span>
+          <CalendarTodayIcon className="mr-2 text-primary-900" />
+          <span className="text-md text-primary-900">{getDateButtonText()}</span>
         </div>
-        {isClicked ? <ArrowDropUp className="mr-2" /> : <ArrowDropDown className="mr-2" />}
+        { !isDepartReturnClicked && (<ArrowDropDownIcon className='mr-2' />) }
+        { isDepartReturnClicked && (<ArrowDropUpIcon className='mr-2' />) }
       </button>
-      {isClicked && (
-        <div className="absolute top-full mt-2 w-80 bg-white border-2 border-primary-600 rounded-md shadow-lg z-10 p-4">
-          <DatePickerComponent
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            onClose={() => toggleDropdown()} // Close after date is selected
-          />
-        </div>
+      {isDepartReturnClicked && (
+        <DatePickerComponent
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          onClose={() => setDepartReturnClicked(false)}  // Close the picker after a date is selected
+        />
       )}
     </div>
   );
 }
+
