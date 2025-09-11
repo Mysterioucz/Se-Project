@@ -3,6 +3,7 @@ import { FlightTakeoff, FlightLand, ArrowDropDown, ArrowDropUp } from '@mui/icon
 import Passenger from './Passenger';
 import { useState } from 'react';
 import DatePicker from './DatePicker';
+import DateRangePicker from './DateRangePicker';
 
 export default function FlightSearchBar({ headerText }: { headerText: string }) {
     // Consolidated state for dropdown visibility
@@ -131,6 +132,7 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
 
                     {/* Depart - Return (DatePicker) */}
                     <div className="relative flex flex-row w-full">
+                        {/* <DatePicker /> */}
                         <DatePicker />
                     </div>
 
