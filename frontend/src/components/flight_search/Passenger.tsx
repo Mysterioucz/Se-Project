@@ -21,7 +21,7 @@ export default function Passenger({
   return (
     <div className="relative flex flex-row w-full">
       <button
-        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-[#022b39] border-[#067399] rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
+        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-primary-900 border-primary-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-400"
         onClick={toggleDropdown}
       >
         <div className="flex items-center">
@@ -31,7 +31,7 @@ export default function Passenger({
         {isClicked ? <ArrowDropUp className="mr-2" /> : <ArrowDropDown className="mr-2" />}
       </button>
       {isClicked && (
-        <div className="absolute top-full w-full bg-white text-[#022b39] border border-gray-300 rounded shadow-lg z-10">
+        <div className="absolute top-full w-full bg-white text-primary-900 border border-gray-300 rounded shadow-lg z-10">
           <QuantitySelector
             label="Adult"
             description="12+ years old"
