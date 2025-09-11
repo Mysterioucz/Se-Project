@@ -7,13 +7,14 @@ import {
 import Footer from "@components/footer/footer";
 import Sidebar, { SidebarItem } from "@components/sidebar/sidebar";
 import FlightSortTab from "@/src/components/flight_search/sort";
+import FlightFilterTab from "@/src/components/flight_search/filter";
 
 // test
 export default function Page() {
     return (
         <div>
             {/* Example Sidebar Component */}
-            <FlightSortTab/>
+            <FlightFilterTab/>
             <Sidebar>
                 <SidebarItem
                     label="Book Flight"
