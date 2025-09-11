@@ -121,7 +121,7 @@ export default function DatePicker({ isClicked, toggleDropdown }: DatePickerProp
   return (
     <div className="relative flex flex-row w-full">
       <button
-        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-[#022b39] border-[#067399] rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
+        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-primary-900 border-primary-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
         onClick={toggleDropdown}
       >
         <div className="flex items-center">
@@ -131,7 +131,7 @@ export default function DatePicker({ isClicked, toggleDropdown }: DatePickerProp
         {isClicked ? <ArrowDropUp className="mr-2" /> : <ArrowDropDown className="mr-2" />}
       </button>
       {isClicked && (
-        <div className="absolute top-full mt-2 w-80 bg-white border-2 border-[#067399] rounded-md shadow-lg z-10 p-4">
+        <div className="absolute top-full mt-2 w-80 bg-white border-2 border-primary-600 rounded-md shadow-lg z-10 p-4">
           <DatePickerComponent
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
