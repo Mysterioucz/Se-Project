@@ -1,9 +1,7 @@
 import prisma from "@/db";
-import { NextRequest } from "next/server";
 
-// Next.js API route handler for flights
 export async function GET() {
-    // all flights
+    // GET all flights
     try {
         const flights = await prisma.flight.findMany();
         return new Response(
