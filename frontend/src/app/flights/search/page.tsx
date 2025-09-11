@@ -6,12 +6,14 @@ import {
 } from "@components/icons/module";
 import Footer from "@components/footer/footer";
 import Sidebar, { SidebarItem } from "@components/sidebar/sidebar";
+import FlightSortTab from "@/src/components/flight_sort/sort";
 
 // test
 export default function Page() {
     return (
         <div>
             {/* Example Sidebar Component */}
+            <FlightSortTab/>
             <Sidebar>
                 <SidebarItem
                     label="Book Flight"
