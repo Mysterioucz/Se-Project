@@ -6,7 +6,7 @@ import {
 } from "@components/icons/module";
 import Footer from "@components/footer/footer";
 import Sidebar, { SidebarItem } from "@components/sidebar/sidebar";
-import FlightSortTab from "@/src/components/flight_sort/sort";
+import FlightSortTab from "@/src/components/flight_search/sort";
 
 // test
 export default function Page() {
