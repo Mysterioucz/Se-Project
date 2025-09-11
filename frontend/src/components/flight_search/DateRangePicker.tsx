@@ -1,0 +1,183 @@
+import React, { useState, useEffect, useRef } from 'react';
+import type { FC } from 'react';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
+interface DateRangePickerProps {
+  selectedStartDate: Date | null;
+  selectedEndDate: Date | null;
+  setSelectedStartDate: (date: Date | null) => void;
+  setSelectedEndDate: (date: Date | null) => void;
+  onClose: () => void;
+}
+
+const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
+const isSameDay = (date1: Date, date2: Date) =>
+  date1.getFullYear() === date2.getFullYear() &&
+  date1.getMonth() === date2.getMonth() &&
+  date1.getDate() === date2.getDate();
+const isBetweenDates = (date: Date, startDate: Date | null, endDate: Date | null) => {
+  if (!startDate || !endDate) return false;
+  return date >= startDate && date <= endDate;
+};
+
+const DateRangePickerComponent: FC<DateRangePickerProps> = ({
+  selectedStartDate,
+  selectedEndDate,
+  setSelectedStartDate,
+  setSelectedEndDate,
+  onClose,
+}) => {
+  const [currentMonth, setCurrentMonth] = useState(selectedStartDate || new Date());
+  const pickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [onClose]);
+
+  const handleDateClick = (day: number) => {
+    const clickedDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+    clickedDate.setHours(0, 0, 0, 0);
+
+    if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
+      // Start a new range
+      setSelectedStartDate(clickedDate);
+      setSelectedEndDate(null); // Reset the end date
+    } else if (selectedStartDate && !selectedEndDate) {
+      // Set the end date of the range
+      if (clickedDate >= selectedStartDate) {
+        setSelectedEndDate(clickedDate);
+      }
+    }
+  };
+
+  const renderCalendar = () => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const daysInMonth = getDaysInMonth(year, month);
+    const firstDay = getFirstDayOfMonth(year, month);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const dates = [];
+    for (let i = 0; i < firstDay; i++) {
+      dates.push(<div key={`empty-${i}`} className="p-2"></div>);
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+      const date = new Date(year, month, i);
+      const isSelectedStart = selectedStartDate && isSameDay(date, selectedStartDate);
+      const isSelectedEnd = selectedEndDate && isSameDay(date, selectedEndDate);
+      const isBetween = isBetweenDates(date, selectedStartDate, selectedEndDate);
+      const isToday = isSameDay(date, today);
+
+      let dayClass = "text-black w-10 h-10 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-200";
+
+      if (isBetween) {
+        // Apply gradient color to dates in the range
+        dayClass += " bg-gradient-to-r from-[#67C7D9] via-[#A7E3F3] to-[#67C7D9]"; // Gradient for range
+      } else if (isSelectedStart) {
+        dayClass += " bg-[#067399] text-white"; // Start date color
+      } else if (isSelectedEnd) {
+        dayClass += " bg-[#067399] text-white"; // End date color
+      } else if (isToday) {
+        dayClass += " border border-[#067399]";
+      } else {
+        dayClass += " hover:bg-sky-100";
+      }
+
+      dates.push(
+        <div key={i} onClick={() => handleDateClick(i)} className={dayClass}>
+          {i}
+        </div>
+      );
+    }
+    return dates;
+  };
+
+  const handlePrevMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+  const handleNextMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+
+  const monthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+  return (
+    <div ref={pickerRef} className="absolute top-full mt-2 w-80 bg-white border-2 border-[#067399] rounded-md shadow-lg z-10 p-4">
+      <div className="flex justify-between items-center mb-4">
+        <button onClick={handlePrevMonth} className="p-1 rounded-full hover:bg-gray-100">
+          <ChevronLeftIcon className="w-6 h-6 text-[#022b39]" />
+        </button>
+        <div className="font-semibold text-[#022b39]">{monthName}</div>
+        <button onClick={handleNextMonth} className="p-1 rounded-full hover:bg-gray-100">
+          <ChevronRightIcon className="w-6 h-6 text-[#022b39]" />
+        </button>
+      </div>
+      <div className="grid grid-cols-7 text-center text-sm text-gray-500 mb-2">
+        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => <div key={day}>{day}</div>)}
+      </div>
+      <div className="grid grid-cols-7 text-center">
+        {renderCalendar()}
+      </div>
+    </div>
+  );
+};
+
+export default function DateRangePicker() {
+  const [isDateRangeClicked, setDateRangeClicked] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
+
+  const formatDate = (date: Date | null): string => {
+    if (!date) return '';
+    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  };
+
+  const getDateButtonText = () => {
+    if (selectedStartDate && selectedEndDate) {
+      return `${formatDate(selectedStartDate)} - ${formatDate(selectedEndDate)}`;
+    }
+    return 'Select Date Range';
+  };
+
+  const handleButtonClick = () => {
+    // If a date range is already selected, toggle the button click
+    if (selectedStartDate && selectedEndDate) {
+      setDateRangeClicked(!isDateRangeClicked); // Toggle state when a range is selected
+    } else {
+      setDateRangeClicked(!isDateRangeClicked); // Open the picker if no range is selected
+    }
+  };
+
+  return (
+    <div className="relative flex flex-row w-full">
+      <button
+        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-[#022b39] border-[#067399] rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
+        onClick={handleButtonClick}>
+        <div className="flex items-center">
+          <CalendarTodayIcon className="mr-2 text-primary-900" />
+          <span className="text-md text-primary-900">{getDateButtonText()}</span>
+        </div>
+        { !isDateRangeClicked && (<ArrowDropDownIcon className='mr-2' />) }
+        { isDateRangeClicked && (<ArrowDropUpIcon className='mr-2' />) }
+      </button>
+      {isDateRangeClicked && (
+        <DateRangePickerComponent
+          selectedStartDate={selectedStartDate}
+          selectedEndDate={selectedEndDate}
+          setSelectedStartDate={setSelectedStartDate}
+          setSelectedEndDate={setSelectedEndDate}
+          onClose={() => setDateRangeClicked(false)}  // Close the picker after a date range is selected
+        />
+      )}
+    </div>
+  );
+}

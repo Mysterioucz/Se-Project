@@ -6,11 +6,13 @@ import {
 } from "@components/icons/module";
 import Footer from "@components/footer/footer";
 import Sidebar, { SidebarItem } from "@components/sidebar/sidebar";
+import FlightSearchBar from "@/src/components/flight_search/search";
 
 // test
 export default function Page() {
     return (
         <div>
+            <FlightSearchBar headerText="Select flight informations"/>
             {/* Example Sidebar Component */}
             <Sidebar>
                 <SidebarItem
