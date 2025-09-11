@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { Sarabun } from "next/font/google";
 import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import SessionProvider from "@/lib/SessionProvider";
-import Navbar from "@/components/Navbar";
+import SessionProvider from "@src/lib/SessionProvider";
 import { getServerSession } from "next-auth";
+import Navbar from "@components/Navbar";
 
 const sarabun = Sarabun({
-  variable: "--font-sarabun",
-  subsets: ["latin"],
-  weight: ["400", "700"],
+    variable: "--font-sarabun",
+    subsets: ["latin"],
+    weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-  children,
+    children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {

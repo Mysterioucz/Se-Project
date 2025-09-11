@@ -1,8 +1,9 @@
 "use client";
 
-import SvgOpenEye from "@/components/icons/openEye.svg";
-import SvgCloseEye from "@/components/icons/closeEye.svg";
-import Button from "@/components/Button";
+import { saveRegistrationData } from "@components/registration/registration_data";
+import SvgOpenEye from "@components/icons/openEye.svg";
+import SvgCloseEye from "@components/icons/closeEye.svg";
+import Button from "@components/Button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -120,7 +121,11 @@ export default function RegistrationEmail() {
           styleType="stroke"
           size="md"
           width="w-[15rem]"
-          onClick={() => router.push("/registration/email")}
+          onClick={() => {
+            // Clear previous registration data
+            saveRegistrationData({ email: '', firstName: '', lastName: '', password: '' });
+            router.push("/registration/email");
+          }}
         />
       </div>
     </div>
