@@ -1,17 +1,23 @@
 "use client";
 import { Select } from "@mui/material";
+
+
 export type SelectEvent =
-    | React.ChangeEvent<HTMLInputElement>
-    | React.ChangeEvent<{ value: unknown }>
-    | (Event & { target: { value: string; name?: string } });
+	| React.ChangeEvent<HTMLInputElement>
+	| React.ChangeEvent<{ value: unknown }>
+	| (Event & { target: { value: string; name?: string } });
+
 interface Props {
     labelId: string;
     id: string;
     value: string;
     error?: boolean;
     disabled?: boolean;
-    maxChildrenHeight?: string;
-    onChange?: (event: SelectEvent, child?: React.ReactNode) => void;
+
+    onChange?: (
+        event: SelectEvent,
+        child?: React.ReactNode
+    ) => void;
     children?: React.ReactNode;
 }
 
