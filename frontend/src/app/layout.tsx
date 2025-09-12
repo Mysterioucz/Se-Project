@@ -4,6 +4,7 @@ import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import SessionProvider from "@src/lib/SessionProvider";
 import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "../lib/auth";
 
 const sarabun = Sarabun({
     variable: "--font-sarabun",
@@ -21,7 +22,7 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const session = await getServerSession();
+    const session = await getServerSession(nextAuthOptions);
 
     return (
         <html lang="en">

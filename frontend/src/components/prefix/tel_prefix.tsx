@@ -1,5 +1,5 @@
 "use client";
-import { TelArray } from "@/src/data/mockTelPrefix";
+import { TelArray } from "@data/mockTelPrefix";
 import SmallArrowDown from "../icons/fi-sr-angle-small-down.svg";
 import { useEffect, useRef, useState } from "react";
 import ListChoice from "../list_choice";

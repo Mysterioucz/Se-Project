@@ -1,7 +1,8 @@
 import authOptions from "@/auth.config";
 import prisma from "@/db";
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 
 export const nextAuthOptions: NextAuthOptions = {
     ...authOptions,
@@ -9,49 +10,53 @@ export const nextAuthOptions: NextAuthOptions = {
         CredentialsProvider({
             name: "Sign in",
             credentials: {
-                accountId: {
-                    label: "Account ID",
+                email: {
+                    label: "Email",
                     type: "text",
-                    placeholder: "jsmith",
+                    placeholder: "jsmith@example.com",
                 },
-                // TODO: enable email login when schema fixede
-                // email: {
-                //     label: "Email",
-                //     type: "text",
-                //     placeholder: "jsmith@example.com",
-                // },
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials, req) {
-                // Add logic here to look up the user from the credentials supplied
-                const result = await prisma.account.findUnique({
-                    where: { AccountID: credentials?.accountId },
-                });
+                if (!credentials?.email || !credentials?.password)
+                    throw new Error("Missing Email or Password");
+                let account;
+                try {
+                    account = await prisma.account.findUnique({
+                        where: { Email: credentials?.email },
+                    });
+                } catch (e) {
+                    return null;
+                }
 
-                if (!result) return null;
-                const user = {
-                    id: result?.AccountID,
-                    name: result?.FirstName + " " + result?.LastName,
-                    // email: result?.Email,
-                    email: "dummy@gmail.com",
+                if (!account) return null;
+                const isMatch = await bcrypt.compare(
+                    credentials.password,
+                    account.Password
+                );
+                if (!isMatch) throw new Error("Invalid Email or Password");
+                return {
+                    id: account?.AccountID,
+                    name: account?.FirstName + " " + account?.LastName,
+                    email: account?.Email,
                 };
-
-                return user;
             },
         }),
     ],
     callbacks: {
-        async session({ session, user, token }) {
-            console.log("Session callback called", { session, token });
+        signIn: async ({ user, account, profile, email, credentials }) => {
+            return true;
+        },
+        session: ({ session, token }) => {
             if (token && token.user) {
-                session.user = token.user;
+                session.user = token.user as User;
             }
             return session;
         },
         jwt: ({ token, user }) => {
-            console.log("JWT callback called", { token, user });
             if (user) {
                 token.user = user;
+                token.id = user.id;
             }
             return token;
         },

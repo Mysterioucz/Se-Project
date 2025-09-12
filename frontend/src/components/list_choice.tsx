@@ -1,3 +1,5 @@
+"use client";
+import MenuItem from "@mui/material/MenuItem";
 interface Props {
     icons?: React.ReactNode[];
     options: string[];
@@ -23,32 +25,23 @@ export default function ListChoice({
         icon: React.ReactNode;
     }) {
         return (
-            <div
-                className={`p-2 cursor-pointer ${itemWidth}`}
+            <MenuItem
+                className={`${maxHeight} ${itemWidth}`}
                 onClick={() => {
                     onClick?.();
                     onChange?.({ target: { value } } as React.ChangeEvent<{
                         value: unknown;
                     }>);
                 }}
+                value={value}
             >
                 {icon}
                 {value}
-            </div>
+            </MenuItem>
         );
     }
 
-    return (
-        <div
-            className={`flex w-fit shadow-lg/20 p-1 ${maxHeight} top-[100%] bg-common-white flex-col absolute z-10 overflow-y-auto overflow-x-clip`}
-        >
-            {options.map((option, index) => (
-                <ChoiceContainer
-                    key={index}
-                    value={option}
-                    icon={icons?.[index]}
-                />
-            ))}
-        </div>
-    );
+    return options.map((option, index) => (
+        <ChoiceContainer key={index} value={option} icon={icons?.[index]} />
+    ));
 }
