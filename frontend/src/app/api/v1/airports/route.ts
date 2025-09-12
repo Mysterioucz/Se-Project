@@ -28,7 +28,7 @@ export const GET = async () => {
 //@route    POST /api/v1/airports
 //@access   Private
 export const POST = async (req: NextRequest) => {
-    const session = getServerSession(nextAuthOptions);
+    const session = await getServerSession(nextAuthOptions);
     if (!session) {
         return new Response(
             JSON.stringify({

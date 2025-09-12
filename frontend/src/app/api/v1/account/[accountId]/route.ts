@@ -133,16 +133,6 @@ export async function DELETE(
         );
     }
 
-    if (session?.user?.id != accountId) {
-        return new Response(
-            JSON.stringify({
-                success: false,
-                message: "Not authorized to this route",
-            }),
-            { status: 401 }
-        );
-    }
-
     try {
         // Find account
         const account = await prisma.account.findUnique({

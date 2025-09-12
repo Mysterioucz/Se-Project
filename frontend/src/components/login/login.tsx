@@ -5,7 +5,7 @@ import SvgOpenEye from "@components/icons/openEye.svg";
 import SvgCloseEye from "@components/icons/closeEye.svg";
 import Button from "@components/Button";
 import { useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 export default function RegistrationEmail() {
@@ -31,7 +31,7 @@ export default function RegistrationEmail() {
             } else {
                 // Reset error states on successful sign-in
                 setLoginError(false);
-                redirect("/flights/search");
+                router.push("/flights/search");
             }
         });
     }
