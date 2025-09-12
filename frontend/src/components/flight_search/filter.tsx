@@ -45,15 +45,15 @@ export default function FlightFilterTab() {
     ];
 
     return (
-    <div className="flex flex-col bg-primary-200 rounded-lg w-90 px-2">
+    <div className="flex flex-col bg-primary-200 rounded-lg w-90 p-3 h-fit gap-2">
 
         {/* Filter by */}
-        <div className="text-primary-700 text-3xl font-bold py-3 ml-2 mt-3">
+        <div className="text-primary-700 text-3xl font-bold py-2 px-1">
             Filter by
         </div>
 
         {/* Airlines */}
-        <div className="bg-white rounded-lg m-2 px-2">
+        <div className="bg-white rounded-lg px-3 py-4">
             <div className="text-primary-900 text-2xl font-bold mx-3 mt-4">Airlines</div>
             <div className="mx-3">
                 <ul className="space-y-4 max-h-[200] overflow-y-auto pr-2 mb-4 mt-3">
@@ -81,17 +81,17 @@ export default function FlightFilterTab() {
         </div>
         
         {/* Depature Time */}
-        <div className="bg-white rounded-sm m-2">
+        <div className="bg-white rounded-sm px-3 py-4">
             <TimeSlider label="Departure Time" value={departureTime} setValue={setDepartureTime} />
         </div>
         
         {/* Arrival Time */}
-        <div className="bg-white rounded-sm m-2">
+        <div className="bg-white rounded-sm px-3 py-4">
             <TimeSlider label="Arrival Time" value={arrivalTime} setValue={setArrivalTime} />
         </div>
         
         {/* Bottom Button */}
-        <div className="flex flex-row m-2 justify-centerl rounded-sm gap-2">
+        <div className="flex flex-row justify-between rounded-sm gap-2">
             <button className="bg-white text-primary-400 w-full py-2 rounded-sm border-1 border-primary-500 cursor-pointer" onClick={() => handleReset()}>
                 Reset
             </button>

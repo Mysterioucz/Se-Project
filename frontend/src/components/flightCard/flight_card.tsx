@@ -2,19 +2,27 @@
 import AirlineTimestamp, { AirlineTimestampProps } from "./airline_timestamp";
 import PriceCabinClass, { PriceCabinClassProps } from "./price_cabin_class";
 
-interface Props {
+export interface FlightCardProps {
+    id: string;
     airlineTimeStamp: AirlineTimestampProps;
     priceCabinClass: PriceCabinClassProps;
+    onClick?: () => void;
 }
 
 export default function FlightCard({
+    id,
     airlineTimeStamp,
     priceCabinClass,
-}: Props) {
+    onClick,
+}: FlightCardProps) {
     return (
-        <div className="flex p-2 bg-primary-100 w-fit h-fit rounded-sm">
+        <div className="flex p-2 bg-primary-100 w-fit h-fit rounded-sm shadow-md">
             <AirlineTimestamp {...airlineTimeStamp} />
-            <PriceCabinClass {...priceCabinClass} />
+            <PriceCabinClass
+                price={priceCabinClass.price}
+                cabinClass={priceCabinClass.cabinClass}
+                onClick={onClick}
+            />
         </div>
     );
 }

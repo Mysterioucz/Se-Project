@@ -1,19 +1,13 @@
-import Navbar from "@/src/components/Navbar";
-import { nextAuthOptions } from "@/src/lib/auth";
-import { getServerSession } from "next-auth";
+import Navbar from "@components/Navbar";
 
 export default async function Layout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const session = await getServerSession(nextAuthOptions);
     return (
-        <div className="flex flex-col">
-            <Navbar
-                isSignIn={!!session}
-                displayName={session?.user?.name as string}
-            />
+        <div className="flex flex-col bg-primary-50 w-full min-h-screen items-center justify-top">
+            <Navbar />
             {children}
         </div>
     );

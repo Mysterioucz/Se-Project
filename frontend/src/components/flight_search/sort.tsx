@@ -1,7 +1,7 @@
 "use client";
-import LocalAtmIcon from '@mui/icons-material/LocalAtm';
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import PinDropIcon from '@mui/icons-material/PinDrop';
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+import WatchLaterIcon from "@mui/icons-material/WatchLater";
+import PinDropIcon from "@mui/icons-material/PinDrop";
 import { useState } from "react";
 
 export default function FlightSortTab() {
@@ -25,34 +25,51 @@ export default function FlightSortTab() {
             label: "No. of stops",
             detail: "Min - Max",
             icon: <PinDropIcon className="w-9 h-9" />,
-        }
+        },
     ];
 
     const handleOptionClick = (how: string) => {
         // Toggle the selected option: if it's already selected, unselect it; otherwise, select it
-        setSelected(prevSelected => prevSelected === how ? "" : how);
+        setSelected((prevSelected) => (prevSelected === how ? "" : how));
     };
 
     return (
-        <div className="bg-primary-200 p-4 rounded-lg w-75 space-y-3">
-            <div className="text-4xl font-semibold text-primary-700 mt-3 mb-6">Sort by</div>
+        <div className="flex flex-col bg-primary-200 p-3 rounded-lg w-75 h-fit gap-2">
+            <h1 className="text-4xl font-semibold text-primary-700 px-1 py-2">
+                Sort by
+            </h1>
 
             {options.map((option) => (
                 <button
                     key={option.how}
                     onClick={() => handleOptionClick(option.how)} // Toggle selection on click
                     className={`flex items-center gap-3 w-full text-left px-3 py-2 rounded-lg transition 
-                        ${selected === option.how
-                            ? "bg-primary-500 text-white shadow"
-                            : "bg-white hover:bg-sky-100 text-primary-900"
+                        ${
+                            selected === option.how
+                                ? "bg-primary-500 text-white shadow"
+                                : "bg-white hover:bg-sky-100 text-primary-900"
                         }`}
                 >
                     <div className="flex-shrink-0">{option.icon}</div>
-                    
+
                     <div>
-                        <p className={`text-xl font-medium font-medium ${selected === option.how ? "text-white" : "text-primary-900"}`}>{option.label}</p>
-                        <p className={`text-md font-medium ${selected === option.how ? "text-white" : "text-gray-300"}`}>
-                        {option.detail}
+                        <p
+                            className={`text-xl font-medium ${
+                                selected === option.how
+                                    ? "text-white"
+                                    : "text-primary-900"
+                            }`}
+                        >
+                            {option.label}
+                        </p>
+                        <p
+                            className={`text-md font-medium ${
+                                selected === option.how
+                                    ? "text-white"
+                                    : "text-gray-300"
+                            }`}
+                        >
+                            {option.detail}
                         </p>
                     </div>
                 </button>
