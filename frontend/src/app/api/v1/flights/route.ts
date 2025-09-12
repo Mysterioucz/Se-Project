@@ -1,5 +1,4 @@
 import prisma from "@/db";
-import { Prisma } from "@prisma/client";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -33,7 +32,6 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        // CHANGED: Update function signature to accept string arrays
         const findFlights = async (departAirports: string[], arriveAirports: string[], date: string) => {
             const searchDate = new Date(date);
             const startOfDay = new Date(searchDate.setUTCHours(0, 0, 0, 0));
