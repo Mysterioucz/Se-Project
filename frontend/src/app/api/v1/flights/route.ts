@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = req.nextUrl;
 
     // Extract parameters
-    let flightType = searchParams.get('flightType') ?? 'one-way';
+    const flightType = searchParams.get('flightType') ?? 'one-way';
     const classType = searchParams.get('classType');
     // departureAirports and arrivalAirports are list
     const departureAirports = searchParams.get('departureAirport')?.split(',').filter(Boolean);
@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
             const startOfDay = new Date(searchDate.setUTCHours(0, 0, 0, 0));
             const endOfDay = new Date(searchDate.setUTCHours(23, 59, 59, 999));
             
-            // @ts-ignore
+            // @ts-expect-error
             const whereClause: Prisma.FlightWhereInput = {
                 // CHANGED: Use the "in" operator for list-based filtering
                 DepartureAirportID: { in: departAirports },
@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
         const formatFlightData = async (flights: FlightWithAircraft[]) => {
             const formattedFlights = [];
 
-            for (let flight of flights) {
+            for (const flight of flights) {
                 const aircraft = flight.aircraft;
                 if (aircraft) {
                     const cabinClasses = await prisma.cabinClass.findMany({
@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
                         },
                     });
 
-                    for (let cabinClass of cabinClasses) {
+                    for (const cabinClass of cabinClasses) {
                         const departureTime = new Date(flight.DepartTime);
                         const arrivalTime = new Date(flight.ArrivalTime);
                         const hours = (arrivalTime.getTime() - departureTime.getTime()) / 1000 / 3600;
@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
                             price: cabinClass.StandardPrice,
                             aircraftModel: aircraft.ModelName,
                             seatCapacity: aircraft.SeatCapacity,
-                            transitAmount: (flight as any).TransitAmount,
+                            transitAmount: flight.TransitAmount,
                         });
                     }
                 }
