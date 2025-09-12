@@ -17,7 +17,7 @@ export default async function Page() {
             <FlightSearchBar headerText={HeaderText} />
             <div className="flex w-full gap-4">
                 <FlightFilterTab />
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 overflow-y-auto">
                     {mockFlightData.map((flight, index) => (
                         <FlightCard
                             key={index}
