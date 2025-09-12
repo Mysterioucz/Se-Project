@@ -58,7 +58,8 @@ model Aircraft {
 
 model Flight {
   FlightNo           String   @db.VarChar(10)
-  Schedule           DateTime
+  DepartTime         DateTime
+  ArrivalTime        DateTime
   ArrivalAirportID   String   @db.VarChar(10)
   DepartureAirportID String   @db.VarChar(10)
   AirlineName        String   @db.VarChar(100)
@@ -72,7 +73,7 @@ model Flight {
   passengers       Assigned_To[]
   tickets          Ticket[]
 
-  @@id([FlightNo, Schedule])
+  @@id([FlightNo, DepartTime, ArrivalTime])
   @@unique([FlightNo])
 }
 
@@ -90,10 +91,11 @@ model Ticket {
   SeatNo            String
   AircraftRegNo     String
   FlightNo          String
-  Schedule          DateTime
+  DepartTime        DateTime
+  ArrivalTime       DateTime
 
   // Relations
-  flight               Flight                @relation(fields: [FlightNo, Schedule], references: [FlightNo, Schedule])
+  flight               Flight                @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
   seat                 Seat                  @relation(fields: [AircraftRegNo, SeatNo], references: [AircraftRegNo, SeatNo])
   purchase             Purchase?
   domesticTicket       Domestic_Ticket?
@@ -117,14 +119,15 @@ model Operate {
 
 model Assigned_To {
   FlightNo      String   @db.VarChar(10)
-  Schedule      DateTime
+  DepartTime    DateTime
+  ArrivalTime   DateTime
   UserAccountID String   @db.VarChar(50)
 
   // Relations
-  flight Flight @relation(fields: [FlightNo, Schedule], references: [FlightNo, Schedule])
+  flight Flight @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
   user   User   @relation(fields: [UserAccountID], references: [UserAccountID])
 
-  @@id([FlightNo, Schedule, UserAccountID])
+  @@id([FlightNo, DepartTime, ArrivalTime, UserAccountID])
 }
 
 model Contact {
