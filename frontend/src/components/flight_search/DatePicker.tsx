@@ -62,11 +62,7 @@ export const DatePickerComponent: FC<DatePickerProps> = ({ selectedDate, setSele
 
       let dayClass = "text-black w-10 h-10 flex items-center justify-center rounded-full cursor-pointer transition-colors duration-200";
       
-    //   if (date < today) {
-        // dayClass += " cursor-not-allowed";
-    //   } else {
-        dayClass += " hover:bg-sky-100";
-    //   }
+      dayClass += " hover:bg-sky-100";
 
       if (isSelected) {
         dayClass += " bg-[#067399] text-white";
@@ -75,7 +71,6 @@ export const DatePickerComponent: FC<DatePickerProps> = ({ selectedDate, setSele
       }
       
       dates.push(
-        // <div key={i} onClick={() => date >= today && handleDateClick(i)} className={dayClass}>
         <div key={i} onClick={() => handleDateClick(i)} className={dayClass}>
            {i}
        </div>
@@ -110,16 +105,8 @@ export const DatePickerComponent: FC<DatePickerProps> = ({ selectedDate, setSele
   );
 };
 
-
-export default function Date_Picker() {
-  // State for the date picker dropdown visibility
-  const [isDepartReturnClicked, setDepartReturnClicked] = useState(false);
+export default function DatePicker({ isClicked, toggleDropDown }: { isClicked: boolean; toggleDropDown: () => void }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
-  // Helper function to toggle dropdown visibility and close others
-  const toggleDropdown = () => {
-    setDepartReturnClicked(prevState => !prevState);  // Toggle visibility
-  };
 
   const formatDate = (date: Date | null): string => {
     if (!date) return '';
@@ -134,26 +121,25 @@ export default function Date_Picker() {
   };
 
   return (
-    <div className='relative flex flex-row w-full'>
+    <div className="relative flex flex-row w-full">
       <button 
         className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-[#022b39] border-[#067399] rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
-        onClick={toggleDropdown}  // Use toggleDropdown to show/hide the calendar
+        onClick={toggleDropDown}
       >
         <div className="flex items-center">
           <CalendarTodayIcon className="mr-2 text-primary-900" />
           <span className="text-md text-primary-900">{getDateButtonText()}</span>
         </div>
-        { !isDepartReturnClicked && (<ArrowDropDownIcon className='mr-2' />) }
-        { isDepartReturnClicked && (<ArrowDropUpIcon className='mr-2' />) }
+        {!isClicked && <ArrowDropDownIcon className="mr-2" />}
+        {isClicked && <ArrowDropUpIcon className="mr-2" />}
       </button>
-      {isDepartReturnClicked && (
+      {isClicked && (
         <DatePickerComponent
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
-          onClose={() => setDepartReturnClicked(false)}  // Close the picker after a date is selected
+          onClose={toggleDropDown}  // Pass reference, not invoke
         />
       )}
     </div>
   );
 }
-

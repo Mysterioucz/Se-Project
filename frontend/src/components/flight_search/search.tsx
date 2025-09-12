@@ -14,6 +14,7 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
         go: false,
         departReturn: false,
         passengers: false,
+        datepicker: false, // Added state for the DatePicker toggle
     });
 
     // Track passenger counts
@@ -29,7 +30,11 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
             const newState = { ...prevState };
             // Close all dropdowns except the one being toggled
             Object.keys(newState).forEach(key => {
-                newState[key as keyof typeof newState] = key === dropdown ? !newState[key as keyof typeof newState] : false;
+                if (key === dropdown) {
+                    newState[key as keyof typeof newState] = !newState[key as keyof typeof newState];
+                } else {
+                    newState[key as keyof typeof newState] = false;
+                }
             });
             return newState;
         });
@@ -132,8 +137,10 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
 
                     {/* Depart - Return (DatePicker) */}
                     <div className="relative flex flex-row w-full">
-                        {/* <DatePicker /> */}
-                        <DatePicker />
+                        <DateRangePicker
+                            isClicked={dropdownStates.datepicker}
+                            toggleDropDown={() => toggleDropdown('datepicker')}
+                        />
                     </div>
 
                     {/* Passengers (Passenger) */}
