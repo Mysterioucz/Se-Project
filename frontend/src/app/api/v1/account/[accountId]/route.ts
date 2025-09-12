@@ -16,17 +16,6 @@ export async function PUT(
     req: NextRequest,
     { params }: { params: Promise<{ accountId: string }> }
 ) {
-    const protect = await authorize(req, ['User', 'Admin']);
-    if (protect.status != 200) {
-        return new Response(
-            JSON.stringify({
-                success: false,
-                message: 'Not authorized to this route'
-            }),
-            { status: 401 }
-        );
-    }
-
     const { accountId } = await params;
     const { updateFirstName, updateLastName } = await req.json();
 
