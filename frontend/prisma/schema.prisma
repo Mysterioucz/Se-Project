@@ -78,6 +78,16 @@ model Flight {
   @@unique([FlightNo])
 }
 
+model Transit {
+  FlightNo           String   @db.VarChar(10)
+  DepartTime         DateTime
+  ArrivalTime        DateTime
+  Transit            String   @db.VarChar(20)
+  durationToTransit  Int   
+
+  @@id([FlightNo, DepartTime, ArrivalTime])
+}
+
 model Ticket {
   TicketID          String   @id @db.VarChar(50)
   Price             Float

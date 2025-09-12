@@ -1,5 +1,5 @@
 import prisma from "@/db";
-import { Flight, CabinClass } from "@/src/generated/prisma";
+import { Flight, CabinClass, Aircraft } from "@/src/generated/prisma";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -37,15 +37,16 @@ export async function GET(req: NextRequest) {
                         gte: startOfDay,
                         lte: endOfDay,
                     },
-                    NumberAvailable: {
+                    AvailableSeat: {
                         gte: numberOfPassenger, // Ensure there are enough seats
                     },
-                    cabinclass: classType
-                        ? { Class: classType }
-                        : {}, // If classType is specified, filter by class
                 },
                 include: {
-                    cabinclass: true, // Include cabinclass for price and class type
+                    aircraft: { // Join aircraft table via AircraftRegNo in flight
+                        select: {
+                            AircraftRegNo: true, // We need AircraftRegNo to join with cabinclass
+                        },
+                    },
                 },
             });
         };
@@ -57,27 +58,50 @@ export async function GET(req: NextRequest) {
             returningFlights = await findFlights(arrivalAirport, departureAirport, returnDate, flightType);
         }
 
-        // Function to format the flight data
-        const formatFlightData = (flights: Flight[]) => {
-            return flights.map((flight) => {
-                const departureTime = new Date(flight.DepartTime);
-                const arrivalTime = new Date(flight.ArrivalTime);
-                const hours = (arrivalTime.getTime() - departureTime.getTime()) / 1000 / 3600; // Calculate hours
-                return {
-                    airlineName: flight.AirlineName,
-                    departureTime: flight.DepartTime,
-                    arrivalTime: flight.ArrivalTime,
-                    hours,
-                    cabinClass: flight.cabinclass.Class,
-                    price: flight.cabinclass.Price,
-                };
-            });
+        // Now we will join cabinclass via AircraftRegNo in aircraft
+        const formatFlightData = async (flights: Flight[]) => {
+            const formattedFlights = [];
+
+            for (let flight of flights) {
+                const aircraft = flight.aircraft;
+                
+                if (aircraft) {
+                    // Join with cabinclass by AircraftRegNo
+                    const cabinClass = await prisma.cabinClass.findFirst({
+                        where: {
+                            AircraftRegNo: aircraft.AircraftRegNo,
+                            Class: classType ? { equals: classType } : undefined, // If classType is specified, filter by class
+                        },
+                    });
+
+                    // Calculate hours
+                    const departureTime = new Date(flight.DepartTime);
+                    const arrivalTime = new Date(flight.ArrivalTime);
+                    const hours = (arrivalTime.getTime() - departureTime.getTime()) / 1000 / 3600; // Calculate hours
+                    
+                    // Push formatted data
+                    formattedFlights.push({
+                        airlineName: flight.AirlineName,
+                        departureTime: flight.DepartTime,
+                        arrivalTime: flight.ArrivalTime,
+                        hours,
+                        cabinClass: cabinClass ? cabinClass.Class : null,
+                        price: cabinClass ? cabinClass.StandardPrice : null,
+                    });
+                }
+            }
+
+            return formattedFlights;
         };
+
+        // Format both departing and returning flights
+        const formattedDepartingFlights = await formatFlightData(departingFlights);
+        const formattedReturningFlights = await formatFlightData(returningFlights);
 
         // Combine both departing and returning flights into one array
         const combinedFlights = [
-            ...formatFlightData(departingFlights),
-            ...formatFlightData(returningFlights),
+            ...formattedDepartingFlights,
+            ...formattedReturningFlights,
         ];
 
         return new Response(JSON.stringify({
