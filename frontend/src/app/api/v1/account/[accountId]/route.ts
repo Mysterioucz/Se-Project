@@ -2,6 +2,8 @@ import prisma from "@/db";
 import { authorize } from "@/src/lib/authMiddleware";
 import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "@/src/lib/auth";
 
 interface JwtPayload {
     AccountID: string;
@@ -29,9 +31,8 @@ export async function PUT(
     const { updateFirstName, updateLastName } = await req.json();
 
     // If accountId doesn't match the token sent's ID
-    const token = req.headers.get("authorization")!.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    if (decoded.AccountID != accountId) {
+   const session = await getServerSession(nextAuthOptions);
+    if (session?.user?.id != accountId) {
         return new Response(
             JSON.stringify({
                 success: false,
@@ -88,23 +89,12 @@ export async function GET(
     req: NextRequest,
     { params }: { params: Promise<{ accountId: string }> }
 ) {
-    const protect = await authorize(req, ['User']);
-    if (protect.status != 200) {
-        return new Response(
-            JSON.stringify({
-                success: false,
-                message: 'Not authorized to this route'
-            }),
-            { status: 401 }
-        );
-    }
 
     const { accountId } = await params;
 
     // If accountId doesn't match the token sent's ID
-    const token = req.headers.get("authorization")!.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    if (decoded.AccountID != accountId) {
+    const session = await getServerSession(nextAuthOptions);
+    if (session?.user?.id != accountId) {
         return new Response(
             JSON.stringify({
                 success: false,
@@ -149,8 +139,11 @@ export async function DELETE(
     req: NextRequest,
     { params }: { params: Promise<{ accountId: string }> }
 ) {
-    const protect = await authorize(req, ['User', 'Admin']);
-    if (protect.status != 200) {
+    const { accountId } = await params;
+
+    // If accountId doesn't match the token sent's ID
+    const session = await getServerSession(nextAuthOptions);
+    if (session?.user?.id != accountId) {
         return new Response(
             JSON.stringify({
                 success: false,
@@ -160,12 +153,7 @@ export async function DELETE(
         );
     }
 
-    const { accountId } = await params;
-
-    // If accountId doesn't match the token sent's ID
-    const token = req.headers.get("authorization")!.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    if (decoded.AccountID != accountId) {
+    if (session?.user?.id != accountId) {
         return new Response(
             JSON.stringify({
                 success: false,

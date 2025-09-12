@@ -1,6 +1,6 @@
 import authOptions from "@/auth.config";
 import prisma from "@/db";
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
@@ -20,7 +20,8 @@ export const nextAuthOptions: NextAuthOptions = {
             },
             async authorize(credentials, req) {
                 // Add logic here to look up the user from the credentials supplied
-                if (!credentials?.email || !credentials?.password) throw new Error("Missing Email or Password");
+                if (!credentials?.email || !credentials?.password)
+                    throw new Error("Missing Email or Password");
                 let account;
                 try {
                     account = await prisma.account.findUnique({
@@ -35,29 +36,26 @@ export const nextAuthOptions: NextAuthOptions = {
                     credentials.password,
                     account.Password
                 );
-				if(!isMatch) throw new Error("Invalid Email or Password");
-                const user = {
+                if (!isMatch) throw new Error("Invalid Email or Password");
+                return {
                     id: account?.AccountID,
                     name: account?.FirstName + " " + account?.LastName,
                     email: account?.Email,
                 };
-
-                return user;
             },
         }),
     ],
     callbacks: {
-        session: ({ session, user, token }) => {
-            console.log("Session callback called", { session, token });
+        session: ({ session, token }) => {
             if (token && token.user) {
-                session.user = token.user;
+                session.user = token.user as User;
             }
             return session;
         },
         jwt: ({ token, user }) => {
-            console.log("JWT callback called", { token, user });
             if (user) {
                 token.user = user;
+                token.id = user.id;
             }
             return token;
         },

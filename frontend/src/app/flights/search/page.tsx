@@ -12,6 +12,7 @@ import SelectPassengerPanel, { PanelData } from "@/src/components/selectPassenge
 import FlightCard from "@/src/components/flightCard/flight_card";
 import { mockFlightData } from "@/src/data/mockFlightData";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 export default function Page() {
     const [panelData, setPanelData] = useState<PanelData>({
@@ -31,7 +32,6 @@ export default function Page() {
         }));
         console.log({ ...panelData, [key]: value });
     };
-
     return (
         <div className="flex flex-col p-8">
             <FlightCard
