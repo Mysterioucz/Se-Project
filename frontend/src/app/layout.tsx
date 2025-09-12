@@ -13,14 +13,14 @@ const sarabun = Sarabun({
 });
 
 export const metadata: Metadata = {
-    title: "FlyWithSigma",
-    description: "FlyWithSigma - Your Ultimate Flight Companion",
+  title: "FlyWithSigma",
+  description: "FlyWithSigma - Your Ultimate Flight Companion",
 };
 
 export default async function RootLayout({
     children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
     const session = await getServerSession(nextAuthOptions);
 
