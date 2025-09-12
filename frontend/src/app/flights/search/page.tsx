@@ -34,6 +34,9 @@ export default function Page() {
         }));
         console.log({ ...panelData, [key]: value });
     };
+
+	const session = useSession();
+	console.log("Session:", session);
     return (
         <div className="flex flex-col p-8">
 			{/* Logout Example */}
