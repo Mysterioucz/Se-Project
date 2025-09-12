@@ -30,7 +30,6 @@ export default function Modal({
     disableRightButton = false,
 }: ModalProps) {
     const colors = themeColors[variant];
-
     return (
         <Dialog
             open={open}
