@@ -44,6 +44,9 @@ export const nextAuthOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
+        signIn: async ({ user, account, profile, email, credentials }) => {
+            return true;
+        },
         session: ({ session, token }) => {
             if (token && token.user) {
                 session.user = token.user as User;
