@@ -39,26 +39,19 @@ export async function GET(req: NextRequest) {
             const startOfDay = new Date(searchDate.setUTCHours(0, 0, 0, 0));
             const endOfDay = new Date(searchDate.setUTCHours(23, 59, 59, 999));
             
-            // @ts-expect-error: module not import properly
-            const whereClause: Prisma.FlightWhereInput = {
-                // CHANGED: Use the "in" operator for list-based filtering
-                DepartureAirportID: { in: departAirports },
-                ArrivalAirportID: { in: arriveAirports },
-                DepartTime: {
-                    gte: startOfDay,
-                    lte: endOfDay,
-                },
-                AvailableSeat: {
-                    gte: numberOfPassenger,
-                },
-            };
-
-            if (airlines && airlines.length > 0) {
-                whereClause.AirlineName = { in: airlines };
-            }
-
             return await prisma.flight.findMany({
-                where: whereClause,
+                where: {
+                    DepartureAirportID: { in: departAirports },
+                    ArrivalAirportID: { in: arriveAirports },
+                    DepartTime: {
+                        gte: startOfDay,
+                        lte: endOfDay,
+                    },
+                    AvailableSeat: {
+                        gte: numberOfPassenger,
+                    },
+                    ...(airlines && airlines.length > 0 && { AirlineName: { in: airlines } })
+                },
                 include: {
                     aircraft: true,
                 },
