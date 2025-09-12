@@ -123,7 +123,9 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
         </button>
       </div>
       <div className="grid grid-cols-7 text-center text-sm text-gray-500 mb-2">
-        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => <div key={day}>{day}</div>)}
+        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+          <div key={`${day}-${index}`}>{day}</div>
+        ))}
       </div>
       <div className="grid grid-cols-7 text-center">
         {renderCalendar()}
