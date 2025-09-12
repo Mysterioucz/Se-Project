@@ -1,10 +1,12 @@
-"use client";
-import FlightCard from "@components/flightCard/flight_card";
-import SelectPassengerPanel, {
-    PanelData,
-} from "@components/selectPassengerPanel/select_passenger_panel";
-import { mockFlightData } from "@data/mockFlightData";
-import { useState } from "react";
+import {
+    FiBrBookmark,
+    FiBrPlane,
+    FiBrSettings,
+    FiBrUser,
+} from "@components/icons/module";
+import Footer from "@components/footer/footer";
+import Sidebar, { SidebarItem } from "@components/sidebar/sidebar";
+import FlightSearchBar from "@/src/components/flight_search/search";
 
 export default function Page() {
     const [panelData, setPanelData] = useState<PanelData>({
