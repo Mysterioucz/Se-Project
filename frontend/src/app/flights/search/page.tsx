@@ -12,7 +12,6 @@ import FlightSearchBar from "@/src/components/flight_search/search";
 export default function Page() {
     return (
         <div>
-            <FlightSearchBar headerText="Select flight informations"/>
             {/* Example Sidebar Component */}
             <Sidebar>
                 <SidebarItem
