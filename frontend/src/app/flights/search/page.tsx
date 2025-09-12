@@ -1,3 +1,4 @@
+"use client";
 import {
     FiBrBookmark,
     FiBrPlane,
@@ -7,6 +8,10 @@ import {
 import Footer from "@components/footer/footer";
 import Sidebar, { SidebarItem } from "@components/sidebar/sidebar";
 import FlightSearchBar from "@/src/components/flight_search/search";
+import SelectPassengerPanel, { PanelData } from "@/src/components/selectPassengerPanel/select_passenger_panel";
+import FlightCard from "@/src/components/flightCard/flight_card";
+import { mockFlightData } from "@/src/data/mockFlightData";
+import { useState } from "react";
 
 export default function Page() {
     const [panelData, setPanelData] = useState<PanelData>({
@@ -36,7 +41,10 @@ export default function Page() {
                     onClick: () => {},
                 }}
             />
-            <SelectPassengerPanel panelData={panelData} onChange={handlePanelDataChange} />
+            <SelectPassengerPanel
+                panelData={panelData}
+                onChange={handlePanelDataChange}
+            />
         </div>
     );
 }
