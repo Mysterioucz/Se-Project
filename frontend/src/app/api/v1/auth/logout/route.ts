@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 //@desc     Log user out / clear token
 //@route    POST /api/v1/auth/logout
 //@access   Private
-export async function POST(req: NextRequest) {
+async function POST(req: NextRequest) {
     const protect = await authorize(req, ['Admin', 'User']);
     if (protect.status != 200) {
         return new Response(
@@ -32,3 +32,5 @@ export async function POST(req: NextRequest) {
         { status: 200 }
     );
 }
+
+// export { POST }; // This API is deprecated since we are using NextAuth.js for authentication

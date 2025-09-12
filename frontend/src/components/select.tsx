@@ -13,7 +13,7 @@ interface Props {
     value: string;
     error?: boolean;
     disabled?: boolean;
-
+	maxChildrenHeight?: string;
     onChange?: (
         event: SelectEvent,
         child?: React.ReactNode

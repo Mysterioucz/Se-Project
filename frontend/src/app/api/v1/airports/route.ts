@@ -1,5 +1,6 @@
 import prisma from "@/db";
-import { authorize } from "@/src/lib/authMiddleware";
+import { nextAuthOptions } from "@/src/lib/auth";
+import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 
 //@desc     Get airports
@@ -28,12 +29,12 @@ export const GET = async () => {
 //@route    POST /api/v1/airports
 //@access   Private
 export const POST = async (req: NextRequest) => {
-    const protect = await authorize(req, ['Admin']);
-    if (protect.status != 200) {
+    const session = getServerSession(nextAuthOptions);
+    if (!session) {
         return new Response(
             JSON.stringify({
                 success: false,
-                message: 'Not authorized to this route'
+                message: "Not authorized to access this route",
             }),
             { status: 401 }
         );
@@ -43,7 +44,9 @@ export const POST = async (req: NextRequest) => {
 
     if (!AirportID || !AirportName || !City || !Country) {
         return new Response(
-            JSON.stringify({ message: "Please provide all required parameters" }),
+            JSON.stringify({
+                message: "Please provide all required parameters",
+            }),
             { status: 400 }
         );
     }

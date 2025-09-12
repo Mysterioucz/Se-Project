@@ -1,16 +1,7 @@
 import prisma from "@/db";
-import { authorize } from "@/src/lib/authMiddleware";
 import { NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/src/lib/auth";
-
-interface JwtPayload {
-    AccountID: string;
-    Email: string;
-    FirstName: string;
-    LastName: string;
-}
 
 export async function PUT(
     req: NextRequest,
@@ -20,22 +11,23 @@ export async function PUT(
     const { updateFirstName, updateLastName } = await req.json();
 
     // If accountId doesn't match the token sent's ID
-   const session = await getServerSession(nextAuthOptions);
+    const session = await getServerSession(nextAuthOptions);
     if (session?.user?.id != accountId) {
         return new Response(
             JSON.stringify({
                 success: false,
-                message: 'Not authorized to this route'
+                message: "Not authorized to this route",
             }),
             { status: 401 }
         );
     }
 
-    if (! updateFirstName && ! updateLastName) {
+    if (!updateFirstName && !updateLastName) {
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Please provide at least one field to update (FirstName or LastName).",
+                message:
+                    "Please provide at least one field to update (FirstName or LastName).",
             }),
             { status: 400 }
         );
@@ -43,12 +35,12 @@ export async function PUT(
 
     try {
         const updatedUser = await prisma.account.update({
-            where: { 
-                AccountID: accountId 
+            where: {
+                AccountID: accountId,
             },
             data: {
                 ...(updateFirstName && { FirstName: updateFirstName }), // Only update if provided
-                ...(updateLastName && { LastName: updateLastName }),   // Only update if provided
+                ...(updateLastName && { LastName: updateLastName }), // Only update if provided
             },
         });
 
@@ -57,8 +49,8 @@ export async function PUT(
                 success: true,
                 data: {
                     FirstName: updatedUser.FirstName,
-                    LastName: updatedUser.LastName
-                }
+                    LastName: updatedUser.LastName,
+                },
             }),
             { status: 200 }
         );
@@ -78,7 +70,6 @@ export async function GET(
     req: NextRequest,
     { params }: { params: Promise<{ accountId: string }> }
 ) {
-
     const { accountId } = await params;
 
     // If accountId doesn't match the token sent's ID
@@ -87,7 +78,7 @@ export async function GET(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: 'Not authorized to this route'
+                message: "Not authorized to this route",
             }),
             { status: 401 }
         );
@@ -96,7 +87,7 @@ export async function GET(
     try {
         const acc = await prisma.account.findUnique({
             where: {
-                AccountID: accountId 
+                AccountID: accountId,
             },
         });
 
@@ -136,7 +127,7 @@ export async function DELETE(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: 'Not authorized to this route'
+                message: "Not authorized to this route",
             }),
             { status: 401 }
         );
@@ -146,7 +137,7 @@ export async function DELETE(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: 'Not authorized to this route'
+                message: "Not authorized to this route",
             }),
             { status: 401 }
         );
@@ -155,12 +146,12 @@ export async function DELETE(
     try {
         // Find account
         const account = await prisma.account.findUnique({
-            where: { 
-                AccountID: accountId 
+            where: {
+                AccountID: accountId,
             },
         });
 
-        if (! account) {
+        if (!account) {
             return new Response(
                 JSON.stringify({
                     success: false,
@@ -178,7 +169,7 @@ export async function DELETE(
                     UserAccountID: accountId,
                 },
             });
-            
+
             await prisma.assigned_To.deleteMany({
                 where: {
                     UserAccountID: accountId,
@@ -202,7 +193,7 @@ export async function DELETE(
                     UserAccountID: accountId,
                 },
             });
-            
+
             // Admin's Part
             await prisma.report.deleteMany({
                 where: {
@@ -215,7 +206,7 @@ export async function DELETE(
                     AdminAccountID: accountId,
                 },
             });
-            
+
             await prisma.airline_Message.deleteMany({
                 where: {
                     AdminAccountID: accountId,
@@ -226,7 +217,7 @@ export async function DELETE(
                     AdminAccountID: accountId,
                 },
             });
-            
+
             await prisma.admin.deleteMany({
                 where: {
                     AdminAccountID: accountId,

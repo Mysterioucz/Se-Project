@@ -10,7 +10,6 @@ export const nextAuthOptions: NextAuthOptions = {
         CredentialsProvider({
             name: "Sign in",
             credentials: {
-                // TODO: enable email login when schema fixede
                 email: {
                     label: "Email",
                     type: "text",
@@ -19,7 +18,6 @@ export const nextAuthOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials, req) {
-                // Add logic here to look up the user from the credentials supplied
                 if (!credentials?.email || !credentials?.password)
                     throw new Error("Missing Email or Password");
                 let account;

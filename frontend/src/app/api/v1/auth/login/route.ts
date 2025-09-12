@@ -7,10 +7,10 @@ import { NextRequest } from "next/server";
 //@desc     Login
 //@route    POST /api/v1/auth/login
 //@access   Public
-export async function POST(req: NextRequest) {
+async function POST(req: NextRequest) {
     const { Email, Password } = await req.json();
 
-    if (! Email || ! Password) {
+    if (!Email || !Password) {
         return new Response(
             JSON.stringify({
                 success: false,
@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
 
     try {
         const account = await prisma.account.findUnique({
-            where: { 
-                Email: Email 
+            where: {
+                Email: Email,
             },
         });
 
@@ -92,3 +92,5 @@ export async function POST(req: NextRequest) {
         );
     }
 }
+
+// export { POST }; // This API is deprecated since we are using NextAuth.js for authentication
