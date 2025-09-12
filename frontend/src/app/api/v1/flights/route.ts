@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
             const startOfDay = new Date(searchDate.setUTCHours(0, 0, 0, 0));
             const endOfDay = new Date(searchDate.setUTCHours(23, 59, 59, 999));
             
-            // @ts-expect-error
+            // @ts-expect-error: module not import properly
             const whereClause: Prisma.FlightWhereInput = {
                 // CHANGED: Use the "in" operator for list-based filtering
                 DepartureAirportID: { in: departAirports },
