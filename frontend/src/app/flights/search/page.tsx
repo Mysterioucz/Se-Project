@@ -1,40 +1,18 @@
-import {
-    FiBrBookmark,
-    FiBrPlane,
-    FiBrSettings,
-    FiBrUser,
-} from "@components/icons/module";
-import Footer from "@components/footer/footer";
-import Sidebar, { SidebarItem } from "@components/sidebar/sidebar";
+"use client";
 
-// test
+import { signOut, useSession } from "next-auth/react";
+
 export default function Page() {
+
     return (
-        <div>
-            {/* Example Sidebar Component */}
-            <Sidebar>
-                <SidebarItem
-                    label="Book Flight"
-                    href="/flights/search"
-                    logo={<FiBrPlane className="w-5 h-5 aspect-square" />}
-                />
-                <SidebarItem
-                    label="My Bookings"
-                    href="/bookings"
-                    logo={<FiBrBookmark className="w-5 h-5 aspect-square" />}
-                />
-                <SidebarItem
-                    label="Profile"
-                    href="/profile"
-                    logo={<FiBrUser className="w-5 h-5 aspect-square" />}
-                />
-                <SidebarItem
-                    label="Settings"
-                    href="/settings"
-                    logo={<FiBrSettings className="w-5 h-5 aspect-square" />}
-                />
-            </Sidebar>
-            <Footer />
+        <div className="flex flex-col p-8">
+            {/* Logout Example */}
+            <button
+                className="bg-blue-500 text-white p-2 rounded"
+                onClick={() => signOut()}
+            >
+                Logout
+            </button>
         </div>
     );
 }

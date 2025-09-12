@@ -4,6 +4,7 @@ import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import SessionProvider from "@src/lib/SessionProvider";
 import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "../lib/auth";
 
 const sarabun = Sarabun({
     variable: "--font-sarabun",
@@ -12,16 +13,16 @@ const sarabun = Sarabun({
 });
 
 export const metadata: Metadata = {
-    title: "FlyWithSigma",
-    description: "FlyWithSigma - Your Ultimate Flight Companion",
+  title: "FlyWithSigma",
+  description: "FlyWithSigma - Your Ultimate Flight Companion",
 };
 
 export default async function RootLayout({
     children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    const session = await getServerSession();
+    const session = await getServerSession(nextAuthOptions);
 
     return (
         <html lang="en">
