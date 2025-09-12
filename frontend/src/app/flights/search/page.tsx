@@ -1,40 +1,26 @@
-import {
-    FiBrBookmark,
-    FiBrPlane,
-    FiBrSettings,
-    FiBrUser,
-} from "@components/icons/module";
-import Footer from "@components/footer/footer";
-import Sidebar, { SidebarItem } from "@components/sidebar/sidebar";
+"use client";
+import SelectComponent, { SelectEvent } from "@components/select";
+import { useState } from "react";
 
 // test
 export default function Page() {
+    const [selectedOption, setSelectedOption] = useState("Option 1");
     return (
         <div>
-            {/* Example Sidebar Component */}
-            <Sidebar>
-                <SidebarItem
-                    label="Book Flight"
-                    href="/flights/search"
-                    logo={<FiBrPlane className="w-5 h-5 aspect-square" />}
-                />
-                <SidebarItem
-                    label="My Bookings"
-                    href="/bookings"
-                    logo={<FiBrBookmark className="w-5 h-5 aspect-square" />}
-                />
-                <SidebarItem
-                    label="Profile"
-                    href="/profile"
-                    logo={<FiBrUser className="w-5 h-5 aspect-square" />}
-                />
-                <SidebarItem
-                    label="Settings"
-                    href="/settings"
-                    logo={<FiBrSettings className="w-5 h-5 aspect-square" />}
-                />
-            </Sidebar>
-            <Footer />
+            <div className="flex p-6">
+                <SelectComponent
+                    id="demo-simple-select"
+                    labelId="demo-simple-select-label"
+                    value={selectedOption}
+                    onChange={(event: SelectEvent) =>
+                        setSelectedOption(event.target.value as string)
+                    }
+                >
+                    <option value="Option 1">Option 1</option>
+                    <option value="Option 2">Option 2</option>
+                    <option value="Option 3">Option 3</option>
+                </SelectComponent>
+            </div>
         </div>
     );
 }
