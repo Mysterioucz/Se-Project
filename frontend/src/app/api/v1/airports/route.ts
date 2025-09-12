@@ -18,7 +18,6 @@ export const GET = async () => {
             { status: 200 }
         );
     } catch (error) {
-        console.log(error);
         return new Response(JSON.stringify({ message: "Error" }), {
             status: 500,
         });
@@ -69,7 +68,6 @@ export const POST = async (req: NextRequest) => {
             { status: 200 }
         );
     } catch (err) {
-        console.log(err);
         return new Response(JSON.stringify({ message: "Error" }), {
             status: 500,
         });
