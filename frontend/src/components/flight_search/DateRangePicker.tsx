@@ -88,11 +88,11 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
         // Apply gradient color to dates in the range if want
         // dayClass += " bg-gradient-to-r from-[#67C7D9] via-[#A7E3F3] to-[#67C7D9]"; // Gradient for range
       } else if (isSelectedStart) {
-        dayClass += " bg-[#067399] text-white"; // Start date color
+        dayClass += " bg-primary-600 text-white"; // Start date color
       } else if (isSelectedEnd) {
-        dayClass += " bg-[#067399] text-white"; // End date color
+        dayClass += " bg-primary-600 text-white"; // End date color
       } else if (isToday) {
-        dayClass += " border border-[#067399]";
+        dayClass += " border border-primary-600";
       } else {
         dayClass += " hover:bg-sky-100";
       }
@@ -112,14 +112,14 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
   const monthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
 
   return (
-    <div ref={pickerRef} className="absolute top-full mt-2 w-80 bg-white border-2 border-[#067399] rounded-md shadow-lg z-10 p-4">
+    <div ref={pickerRef} className="absolute top-full mt-2 w-80 bg-white border-2 border-primary-600 rounded-md shadow-lg z-10 p-4">
       <div className="flex justify-between items-center mb-4">
         <button onClick={handlePrevMonth} className="p-1 rounded-full hover:bg-gray-100">
-          <ChevronLeftIcon className="w-6 h-6 text-[#022b39]" />
+          <ChevronLeftIcon className="w-6 h-6 text-primary-900" />
         </button>
-        <div className="font-semibold text-[#022b39]">{monthName}</div>
+        <div className="font-semibold text-primary-900">{monthName}</div>
         <button onClick={handleNextMonth} className="p-1 rounded-full hover:bg-gray-100">
-          <ChevronRightIcon className="w-6 h-6 text-[#022b39]" />
+          <ChevronRightIcon className="w-6 h-6 text-primary-900" />
         </button>
       </div>
       <div className="grid grid-cols-7 text-center text-sm text-gray-500 mb-2">
@@ -157,7 +157,7 @@ export default function DateRangePicker({
   return (
     <div className="relative flex flex-row w-full">
       <button
-        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-[#022b39] border-[#067399] rounded-sm focus:outline-none focus:ring-1 focus:ring-[#30A2C5]"
+        className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-primary-900 border-primary-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-400"
         onClick={toggleDropDown}
       >
         <div className="flex items-center">
