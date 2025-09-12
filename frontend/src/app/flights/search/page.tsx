@@ -1,12 +1,18 @@
-import Footer from "@components/footer/footer"
-import Navbar from "@/src/components/Navbar";
-import FlightSearchFunishing from "@components/flight_search/FlightSearchFurnishings";
+"use client";
+
+import { signOut, useSession } from "next-auth/react";
+
 export default function Page() {
+
     return (
-        <div className="flex flex-col items-start gap-[var(--Spacing-xxl,40px)] h-dvh">
-            <Navbar displayName="John Doe" />
-            <FlightSearchFunishing />
-            <Footer />
+        <div className="flex flex-col p-8">
+            {/* Logout Example */}
+            <button
+                className="bg-blue-500 text-white p-2 rounded"
+                onClick={() => signOut()}
+            >
+                Logout
+            </button>
         </div>
     );
 }
