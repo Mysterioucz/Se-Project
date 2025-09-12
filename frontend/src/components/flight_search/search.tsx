@@ -72,7 +72,7 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
                 <div className="text-3xl font-semibold">{headerText}</div>
             </div>
 
-            <div className="bg-white p-4 rounded-lg border-x-5 border-b-5 border-primary-400">
+            <div className="bg-white p-4 rounded-b-lg border-x-5 border-b-5 border-primary-400">
                 {/* Flight type and Class type */}
                 <div className="flex flex-wrap items-center gap-10 mb-2 ml-5 text-lg text-primary-900 font-medium">
                     {/* Flight Type */}
