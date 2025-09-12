@@ -10,11 +10,32 @@ import {
     Button,
     Typography,
     Box,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Button,
+    Typography,
+    Box,
 } from "@mui/material";
 import Image from "next/image";
 import { ModalVariant, ModalProps, themeColors } from "./Helper";
 
 export default function Modal({
+    open,
+    onClose,
+    topic,
+    icon,
+    subTopic,
+    description,
+    leftButtonText,
+    rightButtonText,
+    onLeftButton,
+    onRightButton,
+    variant,
+    preventClose = false,
+    disableRightButton = false,
     open,
     onClose,
     topic,

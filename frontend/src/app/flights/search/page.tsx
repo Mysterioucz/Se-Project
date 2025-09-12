@@ -1,13 +1,18 @@
-import Footer from "@components/footer/footer"
-import Navbar from "@/src/components/Navbar";
+"use client";
 
-// test
+import { signOut, useSession } from "next-auth/react";
+
 export default function Page() {
+
     return (
-        <div>
-            {/* Example Sidebar Component */}
-            <Navbar />
-            <Footer />
+        <div className="flex flex-col p-8">
+            {/* Logout Example */}
+            <button
+                className="bg-blue-500 text-white p-2 rounded"
+                onClick={() => signOut()}
+            >
+                Logout
+            </button>
         </div>
     );
 }
