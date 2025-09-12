@@ -36,25 +36,20 @@ export default function Page() {
         console.log({ ...panelData, [key]: value });
     };
     const session = getSession();
-	console.log(session);	
+    console.log(session);
     return (
-        <>
-            <div className="flex flex-col">
-                <Navbar isSignIn={!!session} />
-                <div className="flex flex-col p-8">
-                    <FlightCard
-                        airlineTimeStamp={mockFlightData.airlineTimeStamp}
-                        priceCabinClass={{
-                            ...mockFlightData.priceCabinClass,
-                            onClick: () => {},
-                        }}
-                    />
-                    <SelectPassengerPanel
-                        panelData={panelData}
-                        onChange={handlePanelDataChange}
-                    />
-                </div>
-            </div>
-        </>
+        <div className="flex flex-col p-8">
+            <FlightCard
+                airlineTimeStamp={mockFlightData.airlineTimeStamp}
+                priceCabinClass={{
+                    ...mockFlightData.priceCabinClass,
+                    onClick: () => {},
+                }}
+            />
+            <SelectPassengerPanel
+                panelData={panelData}
+                onChange={handlePanelDataChange}
+            />
+        </div>
     );
 }
