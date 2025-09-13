@@ -22,8 +22,6 @@ export async function GET(req: NextRequest) {
 
     const departureTimeRange = departureTimeRangeStr?.map(t => parseInt(t, 10)).filter(t => !isNaN(t));
     const arrivalTimeRange = arrivalTimeRangeStr?.map(t => parseInt(t, 10)).filter(t => !isNaN(t));
-        console.log(departureTimeRange);
-        console.log(arrivalTimeRange);
 
     if (!departureAirports || departureAirports.length === 0 || !arrivalAirports || arrivalAirports.length === 0 || !departDate || !numberOfPassenger) {
         return new Response(JSON.stringify({
