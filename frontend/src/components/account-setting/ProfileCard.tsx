@@ -28,7 +28,7 @@ export default function ProfileCard() {
 
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
-            <h2 className="text-[2.5rem] font-bold leading-[3rem] text-[var(--color-primary-900)]">
+            <h2 className="!text-[2.5rem] !font-bold !leading-[3rem] !text-[var(--color-primary-900)]">
                 Account Settings
             </h2>
             <div className="flex flex-col pb-[1.0rem] gap-[1.5rem]">
@@ -42,7 +42,7 @@ export default function ProfileCard() {
                         className="w-[3.125rem] h-[3.125rem]"
                     />
                     {/*fetch email data from Backend */}
-                    <p className="!font-sarabun !text-[18px] !font-semibold !not-italic !leading-[120%] !text-[var(--color-gray-900)]">
+                    <p className="!font-sarabun !text-[1.125rem] !font-semibold !not-italic !leading-[120%] !text-[var(--color-gray-900)]">
                         {String(userEmail) ?? "Can't Fetch Email"}
                     </p>
                 </div>
@@ -71,7 +71,7 @@ export default function ProfileCard() {
                         </div>
                         <div className="flex flex-row gap-[3.5rem]">
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <p className="text-[1.125rem] text-[var(--color-primary-900)] font-semibold">Language</p>
+                                <p className="!text-[1.125rem] !text-[var(--color-primary-900)] !font-semibold">Language</p>
                                 <SelectComponent
                                     labelId="demo-select-label"
                                     id="demo-select"
