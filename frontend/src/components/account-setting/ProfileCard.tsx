@@ -7,6 +7,9 @@ import TextFieldComponent from "../text_field";
 import SelectComponent from "../select";
 import { MenuItem } from "@mui/material";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import ModalDeleteAccount from "@components/modals/modal_delete_account";
+import ModalSignOut from "@components/modals/modal_sign_out";
 
 export default function ProfileCard() {
     const { data: session, status } = useSession();
@@ -15,6 +18,9 @@ export default function ProfileCard() {
     const userLastName = session?.user?.name?.split(" ")[1];
     const [language, setLanguage] = React.useState("");
     
+    const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+
     console.log("Session data:", session);
     console.log("User email:", userEmail);  
     console.log("User first name:", userFirstName);
@@ -83,8 +89,10 @@ export default function ProfileCard() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-[0.75rem]">
-                        <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[2.625rem]" onClick={() => console.log("Sign Out clicked")} />
-                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[2.625rem]" onClick={() => console.log("Delete Account clicked")} />
+                        <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[2.625rem]" onClick={() => setIsSignOutModalOpen(true)} />
+                        <ModalSignOut isOpen={isSignOutModalOpen} onClose={() => setIsSignOutModalOpen(false)} />
+                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[2.625rem]" onClick={() => setIsDeleteModalOpen(true)} />
+                        <ModalDeleteAccount isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} />
                     </div>
                 </div>
             </div>
