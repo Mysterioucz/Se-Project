@@ -6,15 +6,29 @@ import Button from "../Button";
 import TextFieldComponent from "../text_field";
 import SelectComponent from "../select";
 import { MenuItem } from "@mui/material";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import ModalDeleteAccount from "@components/modals/modal_delete_account";
+import ModalSignOut from "@components/modals/modal_sign_out";
 
 export default function ProfileCard() {
+    const { data: session, status } = useSession();
+    const userEmail = session?.user?.email;
+    const userFirstName = session?.user?.name?.split(" ")[0];
+    const userLastName = session?.user?.name?.split(" ")[1];
+    const [language, setLanguage] = React.useState("");
+    
     const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
-    const [language, setLanguage] = React.useState("");
+
+    console.log("Session data:", session);
+    console.log("User email:", userEmail);  
+    console.log("User first name:", userFirstName);
+    console.log("User last name:", userLastName);
 
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
-            <h2 className="text-[2.5rem] font-bold leading-[3rem] text-[var(--color-primary-900)]">
+            <h2 className="!text-[2.5rem] !font-bold !leading-[3rem] !text-[var(--color-primary-900)]">
                 Account Settings
             </h2>
             <div className="flex flex-col pb-[1.0rem] gap-[1.5rem]">
@@ -28,8 +42,8 @@ export default function ProfileCard() {
                         className="w-[3.125rem] h-[3.125rem]"
                     />
                     {/*fetch email data from Backend */}
-                    <p className="font-sarabun text-[1.125rem] font-semibold leading-[120%] text-[var(--color-gray-900)]">
-                        johndoe@example.com
+                    <p className="!font-sarabun !text-[1.125rem] !font-semibold !not-italic !leading-[120%] !text-[var(--color-gray-900)]">
+                        {String(userEmail) ?? "Can't Fetch Email"}
                     </p>
                 </div>
                 <div className="flex flex-col gap-[2rem]">
@@ -39,8 +53,8 @@ export default function ProfileCard() {
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
                                 <TextFieldComponent
                                     label="First Name"
-                                    textValue=""
-                                    placeHolder="John"
+                                    textValue={userFirstName ?? ""}
+                                    placeHolder={userFirstName ?? ""}
                                     disabled={true}
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
                                 />
@@ -48,8 +62,8 @@ export default function ProfileCard() {
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
                                 <TextFieldComponent
                                     label="Last Name"
-                                    textValue=""
-                                    placeHolder="Doe"
+                                    textValue={userLastName ?? ""}
+                                    placeHolder={userLastName ?? ""}
                                     disabled={true}
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
                                 />
@@ -57,7 +71,7 @@ export default function ProfileCard() {
                         </div>
                         <div className="flex flex-row gap-[3.5rem]">
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <p className="text-[1.125rem] text-[var(--color-primary-900)] font-semibold">Language</p>
+                                <p className="!text-[1.125rem] !text-[var(--color-primary-900)] !font-semibold">Language</p>
                                 <SelectComponent
                                     labelId="demo-select-label"
                                     id="demo-select"
@@ -75,8 +89,10 @@ export default function ProfileCard() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-[0.75rem]">
-                        <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[2.625rem]" onClick={() => console.log("Sign Out clicked")} />
-                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[2.625rem]" onClick={() => console.log("Delete Account clicked")} />
+                        <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[2.625rem]" onClick={() => setIsSignOutModalOpen(true)} />
+                        <ModalSignOut isOpen={isSignOutModalOpen} onClose={() => setIsSignOutModalOpen(false)} />
+                        <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[2.625rem]" onClick={() => setIsDeleteModalOpen(true)} />
+                        <ModalDeleteAccount isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} />
                     </div>
                 </div>
             </div>
