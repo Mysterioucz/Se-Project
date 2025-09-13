@@ -15,6 +15,7 @@ interface Props {
   icon?: React.ReactNode;
   onChange?: (value: unknown) => void;
   onInput?: (value: unknown) => void;
+  onSubmit?: (value: unknown) => void; // callback to submit value
 }
 
 type State = "enabled" | "focused" | "hover" | "error" | "disabled";
@@ -31,6 +32,7 @@ export default function TextFieldComponent({
   icon,
   onChange,
   onInput,
+  onSubmit,
 }: Props) {
   // Internal disabled state always toggled by icon
   const [isDisabledInternal, setIsDisabledInternal] = useState<boolean>(
@@ -42,6 +44,14 @@ export default function TextFieldComponent({
   );
 
   const computedDisabled = isDisabledInternal;
+
+  // Internal state for typing when enabled
+  const [currentText, setCurrentText] = useState<string>(textValue);
+
+  // Sync with parent prop if it changes
+  useEffect(() => {
+    setCurrentText(textValue);
+  }, [textValue]);
 
   function handleStateChange(newState: State) {
     if (computedDisabled) {
@@ -92,9 +102,23 @@ export default function TextFieldComponent({
     }
   }, [computedDisabled, error]);
 
-  // Toggle enable/disable when clicking icon
+  // Toggle enable/disable when clicking icon (original behavior)
   function handleIconClick() {
     setIsDisabledInternal((prev) => !prev);
+  }
+
+  // Submit function only if already enabled
+  function submitValueIfEnabled() {
+    if (!icon || computedDisabled) return; // Only submit if icon exists and field is enabled
+    onSubmit?.({ tel: telValue, text: currentText });
+    setIsDisabledInternal(true); // disable after submit
+  }
+
+  // Handle ENTER key press
+  function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      submitValueIfEnabled();
+    }
   }
 
   return (
@@ -117,7 +141,7 @@ export default function TextFieldComponent({
           <TelPrefix
             value={telValue}
             onChange={(e) =>
-              onChange && onChange({ tel: e.target.value, text: textValue })
+              onChange && onChange({ tel: e.target.value, text: currentText })
             }
             disabled={computedDisabled}
           />
@@ -132,16 +156,25 @@ export default function TextFieldComponent({
             type="text"
             placeholder={placeHolder}
             disabled={computedDisabled}
-            onChange={(e) =>
-              onChange && onChange({ tel: telValue, text: e.target.value })
-            }
+            value={currentText}
+            onChange={(e) => {
+              setCurrentText(e.target.value); // update internal state immediately
+              onChange && onChange({ tel: telValue, text: e.target.value });
+            }}
             onInput={onInput}
+            onKeyDown={handleKeyPress}
           />
 
           {icon && (
             <button
               type="button"
-              onClick={handleIconClick}
+              onClick={() => {
+                if (!computedDisabled) {
+                  submitValueIfEnabled(); // submit if already enabled
+                } else {
+                  handleIconClick(); // original toggle logic
+                }
+              }}
               aria-pressed={computedDisabled}
               className="ml-2 pr-2 flex items-center cursor-pointer"
             >
