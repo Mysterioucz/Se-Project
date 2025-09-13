@@ -1,11 +1,49 @@
 'use client';
 import { FlightTakeoff, FlightLand, ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import Passenger from './Passenger';
-import { useState } from 'react';
+import { MouseEventHandler, useState } from 'react';
 import DatePicker from './DatePicker';
 import DateRangePicker from './DateRangePicker';
+import { useEffect } from 'react';
 
-export default function FlightSearchBar({ headerText }: { headerText: string }) {
+type SelectedValues = {
+    flight: string,
+    class: string,
+    leave: string;
+    go: string;
+};
+
+type PassengerCount = {
+    adult: number;
+    children: number;
+    infants: number;
+};
+
+export default function FlightSearchBar({
+    headerText,
+    selectedValues,
+    setSelectedValues,
+    passengerCount,
+    setPassengerCount,
+    selectedStartDate,
+    selectedEndDate,
+    setSelectedStartDate,
+    setSelectedEndDate,
+
+    onSearch, // The function to 
+} : {
+    headerText: string,
+    selectedValues: SelectedValues,
+    setSelectedValues: Function,
+    passengerCount: PassengerCount,
+    setPassengerCount: Function,
+    selectedStartDate: Date | null
+    selectedEndDate: Date | null
+    setSelectedStartDate: Function
+    setSelectedEndDate: Function
+
+    onSearch: MouseEventHandler<HTMLButtonElement>
+}) {
     // Consolidated state for dropdown visibility
     const [dropdownStates, setDropdownStates] = useState({
         flight: false,
@@ -15,21 +53,6 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
         departReturn: false,
         passengers: false,
         datepicker: false, // Added state for the DatePicker toggle
-    });
-
-    // Track selected values for each dropdown
-    const [selectedValues, setSelectedValues] = useState({
-        flight: 'Round trip',  // default value for flight type
-        class: 'Economy',      // default value for class type
-        leave: 'Leaving From?',  // default value for leaving from
-        go: 'Going to?',   // default value for going to
-    });
-
-    // Track passenger counts
-    const [passengerCount, setPassengerCount] = useState({
-        adult: 1,
-        children: 0,
-        infants: 0,
     });
 
     // Helper function to toggle dropdown visibility and close others
@@ -50,7 +73,7 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
 
     // Function to handle changes in passenger counts
     const handlePassengerCountChange = (type: string, value: number) => {
-        setPassengerCount(prevState => ({
+        setPassengerCount((prevState: PassengerCount) => ({
             ...prevState,
             [type]: value,
         }));
@@ -58,13 +81,31 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
 
     // Function to handle selection of a value in any dropdown
     const handleSelection = (dropdown: string, value: string) => {
-        setSelectedValues(prevState => ({
+        setSelectedValues((prevState: SelectedValues) => ({
             ...prevState,
             [dropdown]: value,
         }));
         toggleDropdown(dropdown);  // Close the dropdown after selection
     };
 
+    const [cities, setCities] = useState<string[]>([]);
+    useEffect(() => {
+        async function fetchCities() {
+            try {
+                const response = await fetch('/api/v1/city');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch cities');
+                }
+                const data = await response.json();
+                setCities(data.data.map((city: { City: string }) => city.City));  // Extract city names
+            } catch (err) {
+                console.log('Failed to fetch cities');
+            }
+        }
+
+        fetchCities();
+    }, []);
+    
     return (
         <div className="w-full mx-auto --font-sans">
             {/* Header Text */}
@@ -85,8 +126,8 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
                         </button>
                         {dropdownStates.flight && (
                             <ul className="absolute mt-2 w-40 bg-white text-primary-900 border border-gray-300 rounded shadow-lg z-10">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('flight', 'Round trip')}>Round trip</li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('flight', 'One way')}>One way</li>
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('flight', 'Round Trip')}>Round trip</li>
+                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('flight', 'One Way')}>One way</li>
                             </ul>
                         )}
                     </div>
@@ -126,9 +167,15 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
                         </button>
                         {dropdownStates.leave && (
                             <ul className="absolute top-full max-h-50 w-full bg-white text-primary-900 border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('leave', 'Bangkok')}>Bangkok</li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('leave', 'Chiang Mai')}>Chiang Mai</li>
-                                {/* Add other list items here */}
+                                {cities.map((city, index) => (
+                                    <li
+                                        key={index}
+                                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        onClick={() => handleSelection("leave", city)}
+                                    >
+                                        {city}
+                                    </li>
+                                ))}
                             </ul>
                         )}
                     </div>
@@ -147,9 +194,15 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
                         </button>
                         {dropdownStates.go && (
                             <ul className="absolute top-full max-h-50 w-full bg-white text-primary-900 border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('go', 'Paris')}>Paris</li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('go', 'New York')}>New York</li>
-                                {/* Add other list items here */}
+                                {cities.map((city, index) => (
+                                    <li
+                                        key={index}
+                                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        onClick={() => handleSelection("go", city)}
+                                    >
+                                        {city}
+                                    </li>
+                                ))}
                             </ul>
                         )}
                     </div>
@@ -159,6 +212,10 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
                         <DateRangePicker
                             isClicked={dropdownStates.datepicker}
                             toggleDropDown={() => toggleDropdown('datepicker')}
+                            selectedStartDate={selectedStartDate}  // Pass start date
+                            selectedEndDate={selectedEndDate}      // Pass end date
+                            setSelectedStartDate={setSelectedStartDate}  // Pass setter for start date
+                            setSelectedEndDate={setSelectedEndDate}      // Pass setter for end date
                         />
                     </div>
 
@@ -174,10 +231,9 @@ export default function FlightSearchBar({ headerText }: { headerText: string }) 
 
                     {/* Search */}
                     <button
+                        type="button"
                         className="relative flex items-center text-white text-lg bg-primary-400 rounded-sm py-2 border-2 border-primary-400 pl-10 pr-10 --font-sans hover:bg-primary-600"
-                        onClick={() => {
-                            // TODO Fetch Data
-                        }}
+                        onClick={() => onSearch}
                     >
                         Search
                     </button>

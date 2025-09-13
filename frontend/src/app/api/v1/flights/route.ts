@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     const departDate = searchParams.get("departDate");
     const returnDate = searchParams.get("returnDate");
     const numberOfPassenger = parseInt(
-        searchParams.get("numberOfPassenger") ?? "0",
+        searchParams.get("numberOfPassenger") ?? "1",
         10
     );
 

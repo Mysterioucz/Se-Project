@@ -1,48 +1,59 @@
 'use client'
 import CheckIcon from '@mui/icons-material/Check';
 import TimeSlider from '../TimeSlider';
-import { useState } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
-export default function FlightFilterTab() {
-    const [selectedAirlines, setSelectedAirlines] = useState<number[]>([]);
-    const [departureTime, setDepartureTime] = useState([0, 24]);
-    const [arrivalTime, setArrivalTime] = useState([0, 24]);
-
+export default function FlightFilterTab(
+    {
+        selectedAirlines,
+        setSelectedAirlines,
+        departureTime,
+        setDepartureTime,
+        arrivalTime,
+        setArrivalTime,
+        handleApply
+    } : {
+        selectedAirlines: string[]
+        setSelectedAirlines: Function
+        departureTime: number[]
+        setDepartureTime: Dispatch<SetStateAction<number[]>>
+        arrivalTime: number[]
+        setArrivalTime: Dispatch<SetStateAction<number[]>>,
+        handleApply: Function
+    }
+) {
     const handleReset = () => {
         setSelectedAirlines([]);
         setDepartureTime([0, 24]);
         setArrivalTime([0, 24]);
     };
-    
-    const handleApply = () => {
-        // const filters = {
-        //     airlines: selectedAirlines,
-        //     departure: departureTime,
-        //     arrival: arrivalTime
-        // };
-        // console.log("Applying Filters:", filters);
-        // Fetch Data
-        // alert(`Filters Applied!\n\n${JSON.stringify(filters, null, 2)}`);
-    };
 
-    const handleCheckboxChange = (id: number): void => {
-        setSelectedAirlines((prevSelectedAirlines) =>
-            prevSelectedAirlines.includes(id)
-                ? prevSelectedAirlines.filter((airlineId) => airlineId !== id)
-                : [...prevSelectedAirlines, id]
+    const handleCheckboxChange = (name: string): void => {
+        setSelectedAirlines((prevSelectedAirlines: string[]) =>
+            prevSelectedAirlines.includes(name)
+                ? prevSelectedAirlines.filter((airlineName) => airlineName !== name)
+                : [...prevSelectedAirlines, name]
         );
     };
+    
+    // Get airlines from database
+    const [airlines, setAirlines] = useState<string[]>([]);
+    useEffect(() => {
+        async function fetchAirlines() {
+            try {
+                const response = await fetch('/api/v1/airlines');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch cities');
+                }
+                const data = await response.json();
+                setAirlines(data.data.map((airline: { AirlineName: string }) => airline.AirlineName));  // Extract city names
+            } catch (err) {
+                console.log('Failed to fetch cities');
+            }
+        }
 
-    const mockAirlines = [
-        { id: 1, name: "Airline A" },
-        { id: 2, name: "Airline B" },
-        { id: 3, name: "Airline C" },
-        { id: 4, name: "Airline D" },
-        { id: 5, name: "Airline E" },
-        { id: 6, name: "Airline F" },
-        { id: 7, name: "Airline G" },
-        { id: 8, name: "Airline H" },
-    ];
+        fetchAirlines();
+    }, []);
 
     return (
     <div className="flex flex-col bg-primary-200 rounded-lg w-90 p-3 h-fit gap-2">
@@ -58,21 +69,21 @@ export default function FlightFilterTab() {
             <div className="mx-3">
                 <ul className="space-y-4 max-h-[200] overflow-y-auto pr-2 mb-4 mt-3">
 
-                    {mockAirlines.map((airline) => (
-                    <li key={airline.id}>
+                    {airlines.map((airline, index) => (
+                    <li key={index}>
                         <label className="flex items-center space-x-3 cursor-pointer text-primary-900 text-base">
                         <input
                             type="checkbox"
                             className="hidden peer"
-                            checked={selectedAirlines.includes(airline.id)}
-                            onChange={() => handleCheckboxChange(airline.id)}
+                            checked={selectedAirlines.includes(airline)}
+                            onChange={() => handleCheckboxChange(airline)}
                         />
 
                         <span className="w-6 h-6 border-2 border-dashed border-primary-200 rounded-md flex items-center justify-center transition-all duration-200 peer-checked:bg-primary-200 peer-checked:border-[#a0dde6] peer-checked:border-solid relative">
-                        <CheckIcon className="hidden w-4 h-4 text-white peer-checked:block" />
+                            <CheckIcon className="hidden w-4 h-4 text-white peer-checked:block" />
                         </span>
 
-                        <span className='text-md font-medium'>{airline.name}</span>
+                        <span className="text-md font-medium">{airline}</span>
                         </label>
                     </li>
                     ))}

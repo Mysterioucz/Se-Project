@@ -1,9 +1,12 @@
-import FlightFilterTab from "@/src/components/flight_search/filter";
-import FlightSearchBar from "@/src/components/flight_search/search";
-import FlightSortTab from "@/src/components/flight_search/sort";
+'use client'
+import prisma from "@/db";
+import FlightFilterTab from "@/src/components/flight_search/Filter";
+import FlightSearchBar from "@/src/components/flight_search/Search";
+import FlightSortTab from "@/src/components/flight_search/Sort";
 import FlightCard from "@/src/components/flightCard/flight_card";
 import { mockFlightData } from "@/src/data/mockFlightData";
 import { Flight } from "@/src/generated/prisma";
+import { useEffect, useState } from "react";
 
 interface FlightData {
     airlineName: string;
@@ -25,7 +28,7 @@ interface FlightData {
     transitAmount: number; // Number of stops
 }
 
-// Define the structure for the mapped data
+// Define the structure for the mapped data 
 interface MappedFlightData {
     airlineTimeStamp: {
         airlineName: string;
@@ -74,52 +77,124 @@ async function handleSearch(searchParams: URLSearchParams) {
     return flightData;
 }
 
-export default async function Page({
+export default function Page({
     searchParams,
 }: {
     searchParams: URLSearchParams;
 }) {
     const HeaderText = "Departing Flights";
-    // Fetch flight data example
-    const flightData = await fetch(
-        process.env.API_URL +
-            `/api/v1/flights` +
-            `?departureCity=Bangkok&arrivalCity=Tokyo&departDate=2025-09-14&numberOfPassenger=1`,
-        {
-            method: "GET",
+
+    const [selectedValues, setSelectedValues] = useState({
+        flight: 'Flight type',  // default value for flight type
+        class: 'Class type',      // default value for class type
+        leave: 'Leaving From?',  // default value for leaving from
+        go: 'Going to?',   // default value for going to
+    });
+    const [passengerCount, setPassengerCount] = useState({
+        adult: 1,
+        children: 0,
+        infants: 0,
+    });
+    const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
+    const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
+
+    const [selectedAirlines, setSelectedAirlines] = useState<string[]>([]);
+    const [departureTime, setDepartureTime] = useState([0, 24]);
+    const [arrivalTime, setArrivalTime] = useState([0, 24]);
+    
+    const [sort, setSort] = useState<string>("");
+
+    const [convertedFlightData, setConvertedFlightData] = useState<MappedFlightData[]>([]); // State for storing converted flight data
+    const fetchData = async () => {
+        console.log(`Fetch called`)
+        let totalPassenger = passengerCount.adult + passengerCount.children + passengerCount.infants;
+        try {
+            const url = new URL(`${process.env.API_URL}/api/v1/flights`); // Base URL for API
+            const params = new URLSearchParams();
+            
+            // Search
+            if (selectedValues.flight != 'Flight type') params.append(`flightType`, selectedValues.flight);
+            if (selectedValues.class != 'Class type') params.append(`classType`, selectedValues.class);
+            if (selectedValues.leave != `Leaving from?`) params.append(`departureCity`, selectedValues.leave);
+            if (selectedValues.go != `Going to?`) params.append(`arrivalCity`, selectedValues.go);
+            if (selectedStartDate) {
+                const departDate = selectedStartDate.toISOString().split("T")[0]; // Convert to 'YYYY-MM-DD'
+                params.append('departDate', departDate);
+            }
+
+            if (selectedEndDate) {
+                const returnDate = selectedEndDate.toISOString().split("T")[0]; // Convert to 'YYYY-MM-DD'
+                params.append('returnDate', returnDate);
+            }
+            params.append(`numberOfPassenger`, totalPassenger.toString());
+            // Filter
+            if (selectedAirlines.length > 0) params.append('airlines', selectedAirlines.join(','));
+            params.append(`departureTimeRange`, departureTime.join(`,`));
+            params.append(`arrivalTimeRange`, arrivalTime.join(`,`));
+            // Sort
+            if (sort !== "") params.append(`sortBy`, sort);
+          
+            const flightData = await fetch(url.toString() + `?${params.toString()}`, {
+                method: 'GET',
+            }).then((res) => res.json());
+
+            //REMOVE
+            console.log(flightData);
+            
+            // Transform data to match FlightCard
+            const convertedData = flightData.data.map((flight: FlightData) => ({
+                airlineTimeStamp: {
+                    airlineName: flight.airlineName,
+                    depart: {
+                        time: flight.departHours,
+                        airport: flight.departureAirportID,
+                        city: flight.departCity,
+                    },
+                    arrive: {
+                        time: flight.arrivalHours,
+                        airport: flight.arrivalAirportID,
+                        city: flight.arrivalCity,
+                    },
+                    duration: flight.duration,
+                    stops: flight.transitAmount,
+                },
+                priceCabinClass: {
+                    price: flight.price,
+                    currency: 'USD',
+                    cabinClass: flight.cabinClass,
+                },
+            }));
+            setConvertedFlightData(convertedData);
+        } catch(err) {
+            console.log(`Failed to fetch flights' data`, err);
         }
-    ).then((res) => res.json());
-    console.log(flightData);
-
-    // Convert the returned flight to suit the flight card
-    const convertedFlightData = flightData.data.map((flight: FlightData) => ({
-        airlineTimeStamp: {
-            airlineName: flight.airlineName,
-            depart: {
-                time: flight.departHours, // Assuming departureTime is a string like "09:30"
-                airport: flight.departureAirportID, // Assuming this is the IATA code like "SIN"
-                city: flight.departCity, // You can map it to the city based on your data
-            },
-            arrive: {
-                time: flight.arrivalHours, // Assuming arrivalTime is a string like "12:00"
-                airport: flight.arrivalAirportID, // Assuming this is the IATA code like "NRT"
-                city: flight.arrivalCity, // You can map it to the city based on your data
-            },
-            duration: flight.duration,
-            stops: flight.transitAmount,
-        },
-        priceCabinClass: {
-            price: flight.price,
-            currency: 'USD',
-            cabinClass: flight.cabinClass,
-        },
-    }));
-
+    };
+    
     return (
         <div className="flex flex-col gap-4">
-            <FlightSearchBar headerText={HeaderText} />
+            <FlightSearchBar 
+            headerText={HeaderText} 
+            selectedValues={selectedValues}
+            setSelectedValues={setSelectedValues}
+            passengerCount={passengerCount}
+            setPassengerCount={setPassengerCount}
+            selectedStartDate={selectedStartDate}
+            setSelectedStartDate={setSelectedStartDate}
+            selectedEndDate={selectedEndDate}
+            setSelectedEndDate={setSelectedEndDate}
+            onSearch={fetchData}
+            />
+
             <div className="flex w-full gap-4">
-                <FlightFilterTab />
+                <FlightFilterTab 
+                selectedAirlines={selectedAirlines}
+                setSelectedAirlines={setSelectedAirlines}
+                departureTime={departureTime}
+                setDepartureTime={setDepartureTime}
+                arrivalTime={arrivalTime}
+                setArrivalTime={setArrivalTime}
+                handleApply={fetchData}
+                />
                 <div className="flex flex-col gap-4 overflow-y-auto">
                     {convertedFlightData.map((flight: MappedFlightData, index: number) => (
                         <FlightCard
@@ -130,7 +205,10 @@ export default async function Page({
                         />
                     ))}
                 </div>
-                <FlightSortTab />
+                <FlightSortTab
+                sort={sort}
+                setSort={setSort} 
+                />
             </div>
         </div>
     );

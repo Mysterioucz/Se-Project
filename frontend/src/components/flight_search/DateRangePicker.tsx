@@ -9,8 +9,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 interface DateRangePickerProps {
   selectedStartDate: Date | null;
   selectedEndDate: Date | null;
-  setSelectedStartDate: (date: Date | null) => void;
-  setSelectedEndDate: (date: Date | null) => void;
+  setSelectedStartDate: Function;
+  setSelectedEndDate: Function;
   onClose: () => void;
 }
 
@@ -137,12 +137,18 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
 export default function DateRangePicker({
   isClicked,
   toggleDropDown,
+  selectedStartDate,  // Pass start date
+  selectedEndDate,   // Pass end date
+  setSelectedStartDate,  // Pass setter for start date
+  setSelectedEndDate    // Pass setter for end date
 }: {
   isClicked: boolean;
   toggleDropDown: () => void;
+  selectedStartDate: Date | null  // Pass start date
+  selectedEndDate: Date | null      // Pass end date
+  setSelectedStartDate: Function  // Pass setter for start date
+  setSelectedEndDate: Function     // Pass setter for end date
 }) {
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
-  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
 
   const formatDate = (date: Date | null): string => {
     if (!date) return '';

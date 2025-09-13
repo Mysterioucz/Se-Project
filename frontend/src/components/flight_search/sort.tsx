@@ -4,8 +4,9 @@ import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import PinDropIcon from "@mui/icons-material/PinDrop";
 import { useState } from "react";
 
-export default function FlightSortTab() {
-    const [selected, setSelected] = useState<string>("");
+export default function FlightSortTab(
+    { sort, setSort } : { sort: string, setSort: Function }
+) {
 
     const options = [
         {
@@ -30,7 +31,7 @@ export default function FlightSortTab() {
 
     const handleOptionClick = (how: string) => {
         // Toggle the selected option: if it's already selected, unselect it; otherwise, select it
-        setSelected((prevSelected) => (prevSelected === how ? "" : how));
+        setSort((prevSelected: string) => (prevSelected === how ? "" : how));
     };
 
     return (
@@ -45,7 +46,7 @@ export default function FlightSortTab() {
                     onClick={() => handleOptionClick(option.how)} // Toggle selection on click
                     className={`flex items-center gap-3 w-full text-left px-3 py-2 rounded-lg transition 
                         ${
-                            selected === option.how
+                            sort === option.how
                                 ? "bg-primary-500 text-white shadow"
                                 : "bg-white hover:bg-sky-100 text-primary-900"
                         }`}
@@ -55,7 +56,7 @@ export default function FlightSortTab() {
                     <div>
                         <p
                             className={`text-xl font-medium ${
-                                selected === option.how
+                                sort === option.how
                                     ? "text-white"
                                     : "text-primary-900"
                             }`}
@@ -64,7 +65,7 @@ export default function FlightSortTab() {
                         </p>
                         <p
                             className={`text-md font-medium ${
-                                selected === option.how
+                                sort === option.how
                                     ? "text-white"
                                     : "text-gray-300"
                             }`}
