@@ -22,12 +22,20 @@ export async function GET(req: NextRequest) {
 
     const departureTimeRange = departureTimeRangeStr?.map(t => parseInt(t, 10)).filter(t => !isNaN(t));
     const arrivalTimeRange = arrivalTimeRangeStr?.map(t => parseInt(t, 10)).filter(t => !isNaN(t));
+        console.log(departureTimeRange);
+        console.log(arrivalTimeRange);
 
-    // CHANGED: Update validation to check for non-empty arrays
     if (!departureAirports || departureAirports.length === 0 || !arrivalAirports || arrivalAirports.length === 0 || !departDate || !numberOfPassenger) {
         return new Response(JSON.stringify({
             success: false,
             error: "Missing required search parameters",
+        }), { status: 400 });
+    }
+
+    if (flightType === 'round-trip' && ! returnDate) {
+        return new Response(JSON.stringify({
+            success: false,
+            error: "Missing return date for round-trip flights",
         }), { status: 400 });
     }
 
@@ -140,13 +148,13 @@ export async function GET(req: NextRequest) {
         ];
 
         switch (sortBy) {
-            case 'Price':
+            case 'price':
                 combinedFlights.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
                 break;
-            case 'Flight duration':
+            case 'flight-duration':
                 combinedFlights.sort((a, b) => a.hours - b.hours);
                 break;
-            case 'No. of stops':
+            case 'no-of-stops':
                 combinedFlights.sort((a, b) => a.transitAmount - b.transitAmount);
                 break;
             default:
