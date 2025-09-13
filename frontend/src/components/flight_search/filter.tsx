@@ -56,7 +56,7 @@ export default function FlightFilterTab(
     }, []);
 
     return (
-    <div className="flex flex-col bg-primary-200 rounded-lg w-90 p-3 h-fit gap-2">
+    <div className="flex flex-col bg-primary-200 rounded-lg w-full max-w-[18.75rem] p-3 h-fit gap-2">
 
         {/* Filter by */}
         <div className="text-primary-700 text-3xl font-bold py-2 px-1">

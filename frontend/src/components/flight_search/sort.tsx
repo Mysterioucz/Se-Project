@@ -35,7 +35,7 @@ export default function FlightSortTab(
     };
 
     return (
-        <div className="flex flex-col bg-primary-200 p-3 rounded-lg w-75 h-fit gap-2">
+        <div className="flex flex-col bg-primary-200 p-3 rounded-lg w-full max-w-[15rem] h-fit gap-2 text-nowrap">
             <h1 className="text-4xl font-semibold text-primary-700 px-1 py-2">
                 Sort by
             </h1>
