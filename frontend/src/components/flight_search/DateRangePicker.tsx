@@ -46,8 +46,8 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
   }, [onClose]);
 
   const handleDateClick = (day: number) => {
-    const clickedDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-    clickedDate.setHours(0, 0, 0, 0);
+    const clickedDate = new Date(Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), day));
+    clickedDate.setUTCHours(0, 0, 0, 0);
 
     if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
       // Start a new range
