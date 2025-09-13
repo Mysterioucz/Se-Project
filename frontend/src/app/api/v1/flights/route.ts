@@ -7,15 +7,8 @@ export async function GET(req: NextRequest) {
     // Extract parameters
     const flightType = searchParams.get("flightType") ?? "one-way";
     const classType = searchParams.get("classType");
-    // departureAirports and arrivalAirports are list
-    const departureAirports = searchParams
-        .get("departureAirport")
-        ?.split(",")
-        .filter(Boolean);
-    const arrivalAirports = searchParams
-        .get("arrivalAirport")
-        ?.split(",")
-        .filter(Boolean);
+    const departureCity = searchParams.get("departureCity");
+    const arrivalCity = searchParams.get("arrivalCity");
     const departDate = searchParams.get("departDate");
     const returnDate = searchParams.get("returnDate");
     const numberOfPassenger = parseInt(
@@ -40,15 +33,8 @@ export async function GET(req: NextRequest) {
         ?.map((t) => parseInt(t, 10))
         .filter((t) => !isNaN(t));
 
-    // CHANGED: Update validation to check for non-empty arrays
-    if (
-        !departureAirports ||
-        departureAirports.length === 0 ||
-        !arrivalAirports ||
-        arrivalAirports.length === 0 ||
-        !departDate ||
-        !numberOfPassenger
-    ) {
+    // CHANGED: Validate departureCity and arrivalCity
+    if (!departureCity || !arrivalCity || !departDate || !numberOfPassenger) {
         return new Response(
             JSON.stringify({
                 success: false,
@@ -59,6 +45,39 @@ export async function GET(req: NextRequest) {
     }
 
     try {
+        // Fetch Airport IDs based on cities
+        const departureAirports = await prisma.airport.findMany({
+            where: {
+                City: departureCity,
+            },
+            select: {
+                AirportID: true,
+            },
+        });
+        const arrivalAirports = await prisma.airport.findMany({
+            where: {
+                City: arrivalCity,
+            },
+            select: {
+                AirportID: true,
+            },
+        });
+
+        if (departureAirports.length === 0 || arrivalAirports.length === 0) {
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    error: "No airports found for the specified cities",
+                }),
+                { status: 404 }
+            );
+        }
+
+        // Extract AirportIDs from the results
+        const departureAirportIDs = departureAirports.map((airport) => airport.AirportID);
+        const arrivalAirportIDs = arrivalAirports.map((airport) => airport.AirportID);
+
+        // Helper function to find flights
         const findFlights = async (
             departAirports: string[],
             arriveAirports: string[],
@@ -79,10 +98,9 @@ export async function GET(req: NextRequest) {
                     AvailableSeat: {
                         gte: numberOfPassenger,
                     },
-                    ...(airlines &&
-                        airlines.length > 0 && {
-                            AirlineName: { in: airlines },
-                        }),
+                    ...(airlines && airlines.length > 0 && {
+                        AirlineName: { in: airlines },
+                    }),
                 },
                 include: {
                     aircraft: true,
@@ -93,6 +111,7 @@ export async function GET(req: NextRequest) {
         type FlightWithAircraft = Awaited<
             ReturnType<typeof findFlights>
         >[number];
+
         const formatFlightData = async (flights: FlightWithAircraft[]) => {
             const formattedFlights = [];
 
@@ -109,19 +128,32 @@ export async function GET(req: NextRequest) {
                     for (const cabinClass of cabinClasses) {
                         const departureTime = new Date(flight.DepartTime);
                         const arrivalTime = new Date(flight.ArrivalTime);
-                        const hours =
-                            (arrivalTime.getTime() - departureTime.getTime()) /
-                            1000 /
-                            3600;
+                        const durationInMilliseconds = arrivalTime.getTime() - departureTime.getTime();
+                        const durationInMinutes = durationInMilliseconds / 1000 / 60;
+
+                        // Format duration as "Xh Ym"
+                        const hours = Math.floor(durationInMinutes / 60);
+                        const minutes = Math.floor(durationInMinutes % 60);
+                        const formattedDuration = `${hours}h ${minutes}m`;
+
+                        // Format departHours and arrivalHours as "HH:mm"
+                        const padZero = (num: number) => num.toString().padStart(2, "0");
+                        const departHours = `${padZero(departureTime.getUTCHours())}:${padZero(departureTime.getUTCMinutes())}`;
+                        const arrivalHours = `${padZero(arrivalTime.getUTCHours())}:${padZero(arrivalTime.getUTCMinutes())}`;
 
                         formattedFlights.push({
                             airlineName: flight.AirlineName,
                             flightNo: flight.FlightNo,
                             departureAirportID: flight.DepartureAirportID,
                             arrivalAirportID: flight.ArrivalAirportID,
+                            departCity: departureCity,       // <-- Added
+                            arrivalCity: arrivalCity,      // <-- Added
                             departureTime: flight.DepartTime,
                             arrivalTime: flight.ArrivalTime,
-                            hours: parseFloat(hours.toFixed(2)),
+                            departHours,
+                            arrivalHours,
+                            duration: formattedDuration,
+                            durationInMinutes,
                             cabinClass: cabinClass.Class,
                             price: cabinClass.StandardPrice,
                             aircraftModel: aircraft.ModelName,
@@ -135,10 +167,9 @@ export async function GET(req: NextRequest) {
             return formattedFlights;
         };
 
-        // CHANGED: Pass the airport arrays to the findFlights function
         let departingFlights = await findFlights(
-            departureAirports,
-            arrivalAirports,
+            departureAirportIDs,
+            arrivalAirportIDs,
             departDate
         );
         let returningFlights: FlightWithAircraft[] = [];
@@ -162,10 +193,9 @@ export async function GET(req: NextRequest) {
         }
 
         if (flightType === "round-trip" && returnDate) {
-            // CHANGED: Swap departure and arrival airports for the return flight
             returningFlights = await findFlights(
-                arrivalAirports,
-                departureAirports,
+                arrivalAirportIDs,
+                departureAirportIDs,
                 returnDate
             );
 
@@ -208,7 +238,7 @@ export async function GET(req: NextRequest) {
                 );
                 break;
             case "Flight duration":
-                combinedFlights.sort((a, b) => a.hours - b.hours);
+                combinedFlights.sort((a, b) => a.durationInMinutes - b.durationInMinutes);
                 break;
             case "No. of stops":
                 combinedFlights.sort(
