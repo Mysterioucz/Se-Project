@@ -20,6 +20,9 @@ export default function ProfileCard() {
     const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
+    const [submittedFirstName, setSubmittedFirstName] = React.useState<string>("");
+    const [submittedLastName, setSubmittedLastName] = React.useState<string>("");
+
     console.log("Session data:", session);
     console.log(status)
     console.log("User email:", userEmail);  
@@ -57,6 +60,11 @@ export default function ProfileCard() {
                                     placeHolder={userFirstName ?? ""}
                                     disabled={true}
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
+                                    onSubmit={(val) => {
+                                        const text = (val as any).text;
+                                        setSubmittedFirstName(text);
+                                        console.log("Submitted First Name:", text);
+                                    }}
                                 />
                             </div>
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
@@ -66,6 +74,11 @@ export default function ProfileCard() {
                                     placeHolder={userLastName ?? ""}
                                     disabled={true}
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
+                                    onSubmit={(val) => {
+                                    const text = (val as any).text;
+                                        setSubmittedLastName(text);
+                                        console.log("Submitted Last Name:", text);
+                                    }}
                                 />
                             </div>
                         </div>
