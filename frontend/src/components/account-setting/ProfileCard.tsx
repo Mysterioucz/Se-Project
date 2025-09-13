@@ -7,7 +7,6 @@ import TextFieldComponent from "../text_field";
 import SelectComponent from "../select";
 import { MenuItem } from "@mui/material";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import ModalDeleteAccount from "@components/modals/modal_delete_account";
 import ModalSignOut from "@components/modals/modal_sign_out";
 
@@ -22,6 +21,7 @@ export default function ProfileCard() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
     console.log("Session data:", session);
+    console.log(status)
     console.log("User email:", userEmail);  
     console.log("User first name:", userFirstName);
     console.log("User last name:", userLastName);

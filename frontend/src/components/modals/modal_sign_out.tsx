@@ -1,13 +1,15 @@
 "use client";
 
-import Modal from "@components/Modal"; // adjust the path as needed
+import Modal from "@components/Modal";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+
 
 interface ModalSignOutProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-// TODO: connect with backend
 export default function ModalSignOut({ isOpen, onClose }: ModalSignOutProps) {
     return (
         <Modal
@@ -18,7 +20,7 @@ export default function ModalSignOut({ isOpen, onClose }: ModalSignOutProps) {
             leftButtonText="Cancel"
             rightButtonText="Log Out"
             onLeftButton={() => onClose()}
-            onRightButton={() => {}}
+            onRightButton={() => signOut({ callbackUrl: "/login" })}
             variant="normal"
             preventClose={false}
             disableRightButton={false}

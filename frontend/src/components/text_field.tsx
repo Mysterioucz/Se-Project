@@ -32,7 +32,7 @@ export default function TextFieldComponent({
   onChange,
   onInput,
 }: Props) {
-  // ✅ Internal disabled state always toggled by icon
+  // Internal disabled state always toggled by icon
   const [isDisabledInternal, setIsDisabledInternal] = useState<boolean>(
     disabled ?? false
   );
