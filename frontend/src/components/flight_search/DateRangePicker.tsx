@@ -51,7 +51,7 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
 
     if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
       // Start a new range
-      setSelectedStartDate(clickedDate);
+      setSelectedStartDate(clickedDate); 
       setSelectedEndDate(null); // Reset the end date
     } else if (selectedStartDate && !selectedEndDate) {
       // Set the end date of the range
