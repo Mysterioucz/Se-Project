@@ -8,7 +8,7 @@ export default async function Layout({
     return (
         <div className="flex flex-col bg-primary-50 w-full min-h-screen items-center justify-top">
             <Navbar />
-            {children}
+            <div className="flex flex-col w-full h-full px-[10rem]">{children}</div>
         </div>
     );
 }

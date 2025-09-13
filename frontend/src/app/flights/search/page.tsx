@@ -218,7 +218,7 @@ export default function Page({
                     setArrivalTime={setArrivalTime}
                     handleApply={fetchData}
                 />
-                <div className="flex flex-col gap-4 overflow-y-auto w-full min-w-[39.8125rem]">
+                <div className="flex flex-col gap-4 overflow-y-auto w-full ">
                     {convertedFlightData.length === 0 && (
                         <div className="flex flex-col items-center h-full text-primary-300 justify-center w-full py-4">
                             <MagnifyIcon />
