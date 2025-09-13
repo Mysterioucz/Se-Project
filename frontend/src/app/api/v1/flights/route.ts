@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = req.nextUrl;
 
     // Extract parameters
-    const flightType = searchParams.get("flightType") ?? "one-way";
+    const flightType = searchParams.get("flightType") ?? "One Way";
     const classType = searchParams.get("classType");
     const departureCity = searchParams.get("departureCity");
     const arrivalCity = searchParams.get("arrivalCity");
@@ -192,7 +192,7 @@ export async function GET(req: NextRequest) {
             });
         }
 
-        if (flightType === "round-trip" && returnDate) {
+        if (flightType === "Round Trip" && returnDate) {
             returningFlights = await findFlights(
                 arrivalAirportIDs,
                 departureAirportIDs,
@@ -232,15 +232,15 @@ export async function GET(req: NextRequest) {
         ];
 
         switch (sortBy) {
-            case "Price":
+            case "price":
                 combinedFlights.sort(
                     (a, b) => (a.price ?? Infinity) - (b.price ?? Infinity)
                 );
                 break;
-            case "Flight duration":
+            case "duration":
                 combinedFlights.sort((a, b) => a.durationInMinutes - b.durationInMinutes);
                 break;
-            case "No. of stops":
+            case "stops":
                 combinedFlights.sort(
                     (a, b) => a.transitAmount - b.transitAmount
                 );

@@ -105,13 +105,18 @@ export default function Page({
     const [sort, setSort] = useState<string>("");
 
     const [convertedFlightData, setConvertedFlightData] = useState<MappedFlightData[]>([]); // State for storing converted flight data
+
+    useEffect(() => {
+        fetchData();
+    }, [sort]);
+
     const fetchData = async () => {
-        console.log(`Fetch called`)
         let totalPassenger = passengerCount.adult + passengerCount.children + passengerCount.infants;
         try {
-            const url = new URL(`${process.env.API_URL}/api/v1/flights`); // Base URL for API
+            const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights`); // Base URL for API
+            console.log('URL:', url);
             const params = new URLSearchParams();
-            
+            console.log('Params:', params);
             // Search
             if (selectedValues.flight != 'Flight type') params.append(`flightType`, selectedValues.flight);
             if (selectedValues.class != 'Class type') params.append(`classType`, selectedValues.class);

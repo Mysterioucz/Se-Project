@@ -233,7 +233,7 @@ export default function FlightSearchBar({
                     <button
                         type="button"
                         className="relative flex items-center text-white text-lg bg-primary-400 rounded-sm py-2 border-2 border-primary-400 pl-10 pr-10 --font-sans hover:bg-primary-600"
-                        onClick={() => onSearch}
+                        onClick={onSearch}
                     >
                         Search
                     </button>
