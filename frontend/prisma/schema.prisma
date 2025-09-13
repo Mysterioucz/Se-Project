@@ -76,7 +76,6 @@ model Flight {
   tickets          Ticket[]
 
   @@id([FlightNo, DepartTime, ArrivalTime])
-  @@unique([FlightNo])
 }
 
 model Transit {
