@@ -6,11 +6,19 @@ import Button from "../Button";
 import TextFieldComponent from "../text_field";
 import SelectComponent from "../select";
 import { MenuItem } from "@mui/material";
+import { useSession } from "next-auth/react";
 
 export default function ProfileCard() {
-    const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+    const { data: session, status } = useSession();
+    const userEmail = session?.user?.email;
+    const userFirstName = session?.user?.name?.split(" ")[0];
+    const userLastName = session?.user?.name?.split(" ")[1];
     const [language, setLanguage] = React.useState("");
+    
+    console.log("Session data:", session);
+    console.log("User email:", userEmail);  
+    console.log("User first name:", userFirstName);
+    console.log("User last name:", userLastName);
 
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
@@ -28,8 +36,8 @@ export default function ProfileCard() {
                         className="w-[3.125rem] h-[3.125rem]"
                     />
                     {/*fetch email data from Backend */}
-                    <p className="font-sarabun text-[1.125rem] font-semibold leading-[120%] text-[var(--color-gray-900)]">
-                        johndoe@example.com
+                    <p className="!font-sarabun !text-[18px] !font-semibold !not-italic !leading-[120%] !text-[var(--color-gray-900)]">
+                        {String(userEmail) ?? "Can't Fetch Email"}
                     </p>
                 </div>
                 <div className="flex flex-col gap-[2rem]">
@@ -39,8 +47,8 @@ export default function ProfileCard() {
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
                                 <TextFieldComponent
                                     label="First Name"
-                                    textValue=""
-                                    placeHolder="John"
+                                    textValue={userFirstName ?? ""}
+                                    placeHolder={userFirstName ?? ""}
                                     disabled={true}
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
                                 />
@@ -48,8 +56,8 @@ export default function ProfileCard() {
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
                                 <TextFieldComponent
                                     label="Last Name"
-                                    textValue=""
-                                    placeHolder="Doe"
+                                    textValue={userLastName ?? ""}
+                                    placeHolder={userLastName ?? ""}
                                     disabled={true}
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
                                 />
