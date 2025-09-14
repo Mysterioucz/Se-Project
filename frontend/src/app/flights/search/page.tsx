@@ -19,21 +19,21 @@ import {
 } from "./helper";
 import FlightSearchFunishing from "@/src/components/flight_search/FlightSearchFurnishings";
 import Navbar from "@/src/components/Navbar";
+import { CircularProgress } from "@mui/material";
 
 export default function Page() {
-    const HeaderText = "Departing Flights";
-
-    const [selectedValues, setSelectedValues] = useState(INIT_SELECTED_VALUES);
+	
+	const [selectedValues, setSelectedValues] = useState(INIT_SELECTED_VALUES);
     const [passengerCount, setPassengerCount] = useState(INIT_PASSENGER_COUNT);
     const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
-        INIT_SELECTED_START_DATE
+		INIT_SELECTED_START_DATE
     );
     const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(
         INIT_SELECTED_END_DATE
     );
-
+	
     const [selectedAirlines, setSelectedAirlines] = useState<string[]>(
-        INIT_SELECTED_AIRLINES
+		INIT_SELECTED_AIRLINES
     );
     const [departureTime, setDepartureTime] = useState(INIT_DEPARTURE_TIME);
     const [arrivalTime, setArrivalTime] = useState(INIT_ARRIVAL_TIME);
@@ -42,41 +42,41 @@ export default function Page() {
 
     const [convertedFlightData, setConvertedFlightData] = useState<
         MappedFlightData[]
-    >([]); // State for storing converted flight data
-
-    const [pageState, setPageState] = useState<
+		>([]); // State for storing converted flight data
+		
+		const [pageState, setPageState] = useState<
         "initial" | "loading" | "loaded" | "empty"
-    >("initial");
-
-    const fetchData = async () => {
-        setPageState("loading");
-        let totalPassenger =
+		>("initial");
+		
+		const fetchData = async () => {
+			setPageState("loading");
+			let totalPassenger =
             passengerCount.adult +
             passengerCount.children +
             passengerCount.infants;
-        try {
-            const url = new URL(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights`
-            ); // Base URL for API
-            console.log("URL:", url);
-            const params = new URLSearchParams();
-            console.log("Params:", params);
-            // Search
-            if (selectedValues.flight != "Flight type")
-                params.append(`flightType`, selectedValues.flight);
-            if (selectedValues.class != "Class type")
-                params.append(`classType`, selectedValues.class);
-            if (selectedValues.leave != `Leaving from?`)
-                params.append(`departureCity`, selectedValues.leave);
-            if (selectedValues.go != `Going to?`)
+			try {
+				const url = new URL(
+					`${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights`
+				); // Base URL for API
+				console.log("URL:", url);
+				const params = new URLSearchParams();
+				console.log("Params:", params);
+				// Search
+				if (selectedValues.flight != "Flight type")
+					params.append(`flightType`, selectedValues.flight);
+				if (selectedValues.class != "Class type")
+					params.append(`classType`, selectedValues.class);
+				if (selectedValues.leave != `Leaving from?`)
+					params.append(`departureCity`, selectedValues.leave);
+				if (selectedValues.go != `Going to?`)
                 params.append(`arrivalCity`, selectedValues.go);
-            if (selectedStartDate) {
-                const departDate = selectedStartDate
+			if (selectedStartDate) {
+				const departDate = selectedStartDate
                     .toISOString()
                     .split("T")[0]; // Convert to 'YYYY-MM-DD'
-                params.append("departDate", departDate);
+					params.append("departDate", departDate);
             }
-
+			
             if (selectedEndDate) {
                 const returnDate = selectedEndDate.toISOString().split("T")[0]; // Convert to 'YYYY-MM-DD'
                 params.append("returnDate", returnDate);
@@ -85,24 +85,24 @@ export default function Page() {
             // Filter
             if (selectedAirlines.length > 0)
                 params.append("airlines", selectedAirlines.join(","));
-            params.append(`departureTimeRange`, departureTime.join(`,`));
+			params.append(`departureTimeRange`, departureTime.join(`,`));
             params.append(`arrivalTimeRange`, arrivalTime.join(`,`));
             // Sort
             if (sort !== "") params.append(`sortBy`, sort);
 
             const flightData = await fetch(
-                url.toString() + `?${params.toString()}`,
+				url.toString() + `?${params.toString()}`,
                 {
-                    method: "GET",
+					method: "GET",
                 }
             ).then((res) => res.json());
-
+			
             //REMOVE
             console.log(flightData);
-
+			
             // Transform data to match FlightCard
             const convertedData = flightData.data.map((flight: FlightData) => ({
-                airlineTimeStamp: {
+				airlineTimeStamp: {
                     airlineName: flight.airlineName,
                     depart: {
                         time: flight.departHours,
@@ -130,22 +130,29 @@ export default function Page() {
             }
             setConvertedFlightData(convertedData);
         } catch (err) {
-            console.log(`Failed to fetch flights' data`, err);
+			console.log(`Failed to fetch flights' data`, err);
         }
     };
-
+	
     useEffect(() => {
-        if (pageState !== "initial") {
-            fetchData();
+		if (pageState !== "initial") {
+			fetchData();
         }
     }, [sort]);
+	
+	const [HeaderText, setHeaderText] = useState("Select flight informations");
+	useEffect(() => {
+		if( pageState !== "initial") {
+			setHeaderText("Departing Flights");
+		}
+	},[pageState]);
 
     function renderContent() {
-        if (pageState == "initial") {
+		if (pageState == "initial") {
             return <FlightSearchFunishing />;
         }
         return (
-            <>
+			<>
                 <FlightFilterTab
                     selectedAirlines={selectedAirlines}
                     setSelectedAirlines={setSelectedAirlines}
@@ -155,7 +162,7 @@ export default function Page() {
                     setArrivalTime={setArrivalTime}
                     handleApply={fetchData}
                 />
-                <div className="flex flex-col gap-4 overflow-y-auto w-full ">
+                <div className="flex flex-col gap-4 overflow-y-auto w-full items-center">
                     {renderSearchContent()}
                 </div>
                 <FlightSortTab sort={sort} setSort={setSort} />
@@ -169,8 +176,7 @@ export default function Page() {
         } else if (pageState === "loading") {
             return (
                 <div className="flex flex-col items-center h-full text-primary-300 justify-center w-full py-4">
-                    <MagnifyIcon className="animate-spin" />
-                    <h2>Loading...</h2>
+                    <CircularProgress />
                 </div>
             );
         } else if (pageState === "empty") {
@@ -201,8 +207,8 @@ export default function Page() {
             } justify-top`}
         >
             <Navbar />
-            <div className="flex flex-col w-full h-full px-[10rem]">
-                <div className="flex flex-col gap-4 ">
+            <div className="flex flex-col w-full h-full px-[5rem]">
+                <div className="flex flex-col gap-4 w-full">
                     <FlightSearchBar
                         headerText={HeaderText}
                         selectedValues={selectedValues}

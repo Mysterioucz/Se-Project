@@ -16,7 +16,7 @@ export default function FlightCard({
     onClick,
 }: FlightCardProps) {
     return (
-        <div className="flex p-2 bg-primary-100 w-full h-fit rounded-sm shadow-md">
+        <div className="flex p-2 bg-primary-100 w-full  h-fit rounded-sm shadow-md text-nowrap">
             <AirlineTimestamp {...airlineTimeStamp} />
             <PriceCabinClass
                 price={priceCabinClass.price}

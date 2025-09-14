@@ -107,7 +107,7 @@ export default function FlightSearchBar({
     }, []);
     
     return (
-        <div className="w-full mx-auto --font-sans">
+        <div className="w-full mx-auto text-nowrap">
             {/* Header Text */}
             <div className="bg-primary-400 text-white p-4 rounded-t-sm mt-4">
                 <div className="text-3xl font-medium mx-3">{headerText}</div>
