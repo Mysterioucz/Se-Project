@@ -58,9 +58,7 @@ export default function Page() {
 				const url = new URL(
 					`${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights`
 				); // Base URL for API
-				console.log("URL:", url);
 				const params = new URLSearchParams();
-				console.log("Params:", params);
 				// Search
 				if (selectedValues.flight != "Flight type")
 					params.append(`flightType`, selectedValues.flight);
@@ -97,9 +95,6 @@ export default function Page() {
                 }
             ).then((res) => res.json());
 			
-            //REMOVE
-            console.log(flightData);
-			
             // Transform data to match FlightCard
             const convertedData = flightData.data.map((flight: FlightData) => ({
 				airlineTimeStamp: {
@@ -130,7 +125,7 @@ export default function Page() {
             }
             setConvertedFlightData(convertedData);
         } catch (err) {
-			console.log(`Failed to fetch flights' data`, err);
+			// console.log(`Failed to fetch flights' data`, err);
         }
     };
 	
