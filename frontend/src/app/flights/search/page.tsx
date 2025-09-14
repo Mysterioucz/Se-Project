@@ -4,116 +4,52 @@ import FlightSearchBar from "@/src/components/flight_search/search";
 import FlightSortTab from "@/src/components/flight_search/sort";
 import FlightCard from "@/src/components/flightCard/flight_card";
 import { MagnifyIcon } from "@/src/components/icons/module";
-import { mockFlightData } from "@/src/data/mockFlightData";
 import { useEffect, useState } from "react";
+import {
+    FlightData,
+    INIT_ARRIVAL_TIME,
+    INIT_DEPARTURE_TIME,
+    INIT_PASSENGER_COUNT,
+    INIT_SELECTED_AIRLINES,
+    INIT_SELECTED_END_DATE,
+    INIT_SELECTED_START_DATE,
+    INIT_SELECTED_VALUES,
+    INIT_SORT,
+    MappedFlightData,
+} from "./helper";
+import FlightSearchFunishing from "@/src/components/flight_search/FlightSearchFurnishings";
+import Navbar from "@/src/components/Navbar";
 
-interface FlightData {
-    airlineName: string;
-    flightNo: string;
-    departureAirportID: string;
-    departCity: string;
-    arrivalAirportID: string;
-    arrivalCity: string;
-    departureTime: string; // "09:30"
-    arrivalTime: string; // "12:00"
-    departHours: string;
-    arrivalHours: string;
-    duration: string; // "2h 30m"
-    durationInMinutes: number;
-    cabinClass: string;
-    price: number;
-    aircraftModel: string;
-    seatCapacity: number;
-    transitAmount: number; // Number of stops
-}
-
-// Define the structure for the mapped data
-interface MappedFlightData {
-    airlineTimeStamp: {
-        airlineName: string;
-        depart: {
-            time: string;
-            airport: string;
-            city: string; // You might need a mapping for cities
-        };
-        arrive: {
-            time: string;
-            airport: string;
-            city: string; // You might need a mapping for cities
-        };
-        duration: string;
-        stops: number;
-    };
-    priceCabinClass: {
-        price: number;
-        currency: string;
-        cabinClass: string;
-    };
-}
-
-async function handleSearch(searchParams: URLSearchParams) {
-    const departureAirport = searchParams.get("departureAirport");
-    const arrivalAirport = searchParams.get("arrivalAirport");
-    const departDate = searchParams.get("departDate");
-    const numberOfPassenger = searchParams.get("numberOfPassenger");
-
-    let flightData;
-    if (departureAirport && arrivalAirport && departDate && numberOfPassenger) {
-        // Perform search or API call with the collected parameters
-        try {
-            flightData = await fetch(
-                process.env.API_URL +
-                    "/api/v1/flights" +
-                    searchParams.toString(),
-                {
-                    method: "GET",
-                }
-            ).then((res) => res.json());
-        } catch (e) {
-            console.error("Failed to fetch flight data:", e);
-        }
-    }
-    return flightData;
-}
-
-export default function Page({
-    searchParams,
-}: {
-    searchParams: URLSearchParams;
-}) {
+export default function Page() {
     const HeaderText = "Departing Flights";
 
-    const [selectedValues, setSelectedValues] = useState({
-        flight: "Flight type", // default value for flight type
-        class: "Class type", // default value for class type
-        leave: "Leaving From?", // default value for leaving from
-        go: "Going to?", // default value for going to
-    });
-    const [passengerCount, setPassengerCount] = useState({
-        adult: 1,
-        children: 0,
-        infants: 0,
-    });
+    const [selectedValues, setSelectedValues] = useState(INIT_SELECTED_VALUES);
+    const [passengerCount, setPassengerCount] = useState(INIT_PASSENGER_COUNT);
     const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
-        null
+        INIT_SELECTED_START_DATE
     );
-    const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
+    const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(
+        INIT_SELECTED_END_DATE
+    );
 
-    const [selectedAirlines, setSelectedAirlines] = useState<string[]>([]);
-    const [departureTime, setDepartureTime] = useState([0, 24]);
-    const [arrivalTime, setArrivalTime] = useState([0, 24]);
+    const [selectedAirlines, setSelectedAirlines] = useState<string[]>(
+        INIT_SELECTED_AIRLINES
+    );
+    const [departureTime, setDepartureTime] = useState(INIT_DEPARTURE_TIME);
+    const [arrivalTime, setArrivalTime] = useState(INIT_ARRIVAL_TIME);
 
-    const [sort, setSort] = useState<string>("");
+    const [sort, setSort] = useState<string>(INIT_SORT);
 
     const [convertedFlightData, setConvertedFlightData] = useState<
         MappedFlightData[]
     >([]); // State for storing converted flight data
 
-    useEffect(() => {
-        fetchData();
-    }, [sort]);
+    const [pageState, setPageState] = useState<
+        "initial" | "loading" | "loaded" | "empty"
+    >("initial");
 
     const fetchData = async () => {
+        setPageState("loading");
         let totalPassenger =
             passengerCount.adult +
             passengerCount.children +
@@ -187,28 +123,29 @@ export default function Page({
                     cabinClass: flight.cabinClass,
                 },
             }));
+            if (convertedData.length === 0) {
+                setPageState("empty");
+            } else {
+                setPageState("loaded");
+            }
             setConvertedFlightData(convertedData);
         } catch (err) {
             console.log(`Failed to fetch flights' data`, err);
         }
     };
 
-    return (
-        <div className="flex flex-col gap-4">
-            <FlightSearchBar
-                headerText={HeaderText}
-                selectedValues={selectedValues}
-                setSelectedValues={setSelectedValues}
-                passengerCount={passengerCount}
-                setPassengerCount={setPassengerCount}
-                selectedStartDate={selectedStartDate}
-                setSelectedStartDate={setSelectedStartDate}
-                selectedEndDate={selectedEndDate}
-                setSelectedEndDate={setSelectedEndDate}
-                onSearch={fetchData}
-            />
+    useEffect(() => {
+        if (pageState !== "initial") {
+            fetchData();
+        }
+    }, [sort]);
 
-            <div className="flex w-full gap-4">
+    function renderContent() {
+        if (pageState == "initial") {
+            return <FlightSearchFunishing />;
+        }
+        return (
+            <>
                 <FlightFilterTab
                     selectedAirlines={selectedAirlines}
                     setSelectedAirlines={setSelectedAirlines}
@@ -219,24 +156,68 @@ export default function Page({
                     handleApply={fetchData}
                 />
                 <div className="flex flex-col gap-4 overflow-y-auto w-full ">
-                    {convertedFlightData.length === 0 && (
-                        <div className="flex flex-col items-center h-full text-primary-300 justify-center w-full py-4">
-                            <MagnifyIcon />
-                            <h2>Flight Not Found</h2>
-                        </div>
-                    )}
-                    {convertedFlightData.map(
-                        (flight: MappedFlightData, index: number) => (
-                            <FlightCard
-                                key={index}
-                                id={index.toString()}
-                                airlineTimeStamp={flight.airlineTimeStamp}
-                                priceCabinClass={flight.priceCabinClass}
-                            />
-                        )
-                    )}
+                    {renderSearchContent()}
                 </div>
                 <FlightSortTab sort={sort} setSort={setSort} />
+            </>
+        );
+    }
+
+    function renderSearchContent() {
+        if (pageState === "initial") {
+            return <FlightSearchFunishing />;
+        } else if (pageState === "loading") {
+            return (
+                <div className="flex flex-col items-center h-full text-primary-300 justify-center w-full py-4">
+                    <MagnifyIcon className="animate-spin" />
+                    <h2>Loading...</h2>
+                </div>
+            );
+        } else if (pageState === "empty") {
+            return (
+                <div className="flex flex-col items-center h-full text-primary-300 justify-center w-full py-4">
+                    <MagnifyIcon />
+                    <h2>Flight Not Found</h2>
+                </div>
+            );
+        } else if (pageState === "loaded") {
+            return convertedFlightData.map(
+                (flight: MappedFlightData, index: number) => (
+                    <FlightCard
+                        key={index}
+                        id={index.toString()}
+                        airlineTimeStamp={flight.airlineTimeStamp}
+                        priceCabinClass={flight.priceCabinClass}
+                    />
+                )
+            );
+        }
+    }
+
+    return (
+        <div
+            className={`flex flex-col w-full min-h-screen items-center ${
+                pageState === "initial" ? "" : "bg-primary-50"
+            } justify-top`}
+        >
+            <Navbar />
+            <div className="flex flex-col w-full h-full px-[10rem]">
+                <div className="flex flex-col gap-4 ">
+                    <FlightSearchBar
+                        headerText={HeaderText}
+                        selectedValues={selectedValues}
+                        setSelectedValues={setSelectedValues}
+                        passengerCount={passengerCount}
+                        setPassengerCount={setPassengerCount}
+                        selectedStartDate={selectedStartDate}
+                        setSelectedStartDate={setSelectedStartDate}
+                        selectedEndDate={selectedEndDate}
+                        setSelectedEndDate={setSelectedEndDate}
+                        onSearch={fetchData}
+                    />
+
+                    <div className="flex w-full gap-4">{renderContent()}</div>
+                </div>
             </div>
         </div>
     );

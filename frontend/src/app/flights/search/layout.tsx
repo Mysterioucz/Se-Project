@@ -4,11 +4,7 @@ export default async function Layout({
     children,
 }: {
     children: React.ReactNode;
+    params: { searchParams: URLSearchParams };
 }) {
-    return (
-        <div className="flex flex-col bg-primary-50 w-full min-h-screen items-center justify-top">
-            <Navbar />
-            <div className="flex flex-col w-full h-full px-[10rem]">{children}</div>
-        </div>
-    );
+    return children;
 }
