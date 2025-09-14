@@ -29,6 +29,9 @@ export default function ProfileCard() {
     console.log("User first name:", userFirstName);
     console.log("User last name:", userLastName);
 
+    console.log("Submitted First Name:", submittedFirstName);
+    console.log("Submitted Last Name:", submittedLastName);
+
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
             <h2 className="!text-[2.5rem] !font-bold !leading-[3rem] !text-[var(--color-primary-900)]">
