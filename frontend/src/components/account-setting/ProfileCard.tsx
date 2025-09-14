@@ -65,7 +65,7 @@ export default function ProfileCard() {
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
                                     onChange={(val) => console.log("Typing First Name:", val)}
                                     onSubmit={(val) => {
-                                        const text = (val as any).text;
+                                        const { text } = val as { text: string };
                                         setSubmittedFirstName(text);
                                         console.log("Submitted First Name:", text);
                                     }}
@@ -80,10 +80,9 @@ export default function ProfileCard() {
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
                                     onChange={(val) => console.log("Typing Last Name:", val)}
                                     onSubmit={(val) => {
-                                        const text = (val as any).text;
+                                        const { text } = val as { text: string };
                                         setSubmittedLastName(text);
                                         console.log("Submitted Last Name:", text);
-                                        // TODO: send to backend here
                                     }}
                                 />
                             </div>
@@ -94,12 +93,11 @@ export default function ProfileCard() {
                                 <SelectComponent
                                     labelId="demo-select-label"
                                     id="demo-select"
-                                    value={language==="" ? "Thai" : language}
+                                    value={language==="" ? "English" : language}
                                     onChange={(e) => setLanguage((e.target as HTMLInputElement).value)}
                                     error={false}
                                     disabled={false}
                                 >
-                                    <MenuItem value="Thai">Thai</MenuItem>
                                     <MenuItem value="English">English</MenuItem>
                                 </SelectComponent>
                             </div>
