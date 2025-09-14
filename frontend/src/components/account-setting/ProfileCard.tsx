@@ -11,21 +11,20 @@ import ModalDeleteAccount from "@components/modals/modal_delete_account";
 import ModalSignOut from "@components/modals/modal_sign_out";
 
 export default function ProfileCard() {
-  const { data: session } = useSession();
+  const { data: session, update: updateSession } = useSession();
   const userEmail = session?.user?.email;
-  const userFirstName = session?.user?.name?.split(" ")[0];
-  const userLastName = session?.user?.name?.split(" ")[1];
+  const userFirstName = session?.user?.name?.split(" ")[0] ?? "";
+  const userLastName = session?.user?.name?.split(" ")[1] ?? "";
 
   const [language, setLanguage] = React.useState("");
   const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+  const [firstName, setFirstName] = React.useState(userFirstName);
+  const [lastName, setLastName] = React.useState(userLastName);
 
-  const [submittedFirstName, setSubmittedFirstName] = React.useState<string>("");
-  const [submittedLastName, setSubmittedLastName] = React.useState<string>("");
+  const accountId = session?.user?.id;
 
-  const accountId = session?.user?.id; // Needed for API URL
-
-  // Function to update user name via API
+  // Function to update user name via API and refresh session
   async function updateName(updateFirstName?: string, updateLastName?: string) {
     if (!accountId) return;
 
@@ -38,9 +37,12 @@ export default function ProfileCard() {
 
       const data = await res.json();
       if (res.ok) {
-        console.log("Updated user:", data.data);
-        if (data.data.FirstName) setSubmittedFirstName(data.data.FirstName);
-        if (data.data.LastName) setSubmittedLastName(data.data.LastName);
+        // Update local state
+        if (data.data.FirstName) setFirstName(data.data.FirstName);
+        if (data.data.LastName) setLastName(data.data.LastName);
+
+        // Refresh session so session.user.name updates immediately
+        await updateSession();
       } else {
         console.error("Failed to update:", data.message);
       }
@@ -75,8 +77,8 @@ export default function ProfileCard() {
               <div className="flex flex-1 flex-col gap-[0.75rem]">
                 <TextFieldComponent
                   label="First Name"
-                  textValue={userFirstName ?? ""}
-                  placeHolder={userFirstName ?? ""}
+                  textValue={firstName}
+                  placeHolder={firstName}
                   disabled={true}
                   icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
                   onSubmit={(val) => {
@@ -88,8 +90,8 @@ export default function ProfileCard() {
               <div className="flex flex-1 flex-col gap-[0.75rem]">
                 <TextFieldComponent
                   label="Last Name"
-                  textValue={userLastName ?? ""}
-                  placeHolder={userLastName ?? ""}
+                  textValue={lastName}
+                  placeHolder={lastName}
                   disabled={true}
                   icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
                   onSubmit={(val) => {
@@ -100,7 +102,6 @@ export default function ProfileCard() {
               </div>
             </div>
 
-            {/* Language select etc. */}
             <div className="flex flex-row gap-[3.5rem]">
               <div className="flex flex-1 flex-col gap-[0.75rem]">
                 <p className="!text-[1.125rem] !text-[var(--color-primary-900)] !font-semibold">
@@ -122,9 +123,25 @@ export default function ProfileCard() {
           </div>
 
           <div className="flex flex-col gap-[0.75rem]">
-            <Button text="Sign Out" align="center" styleType="fill" size="md" width="w-full" height="h-[2.625rem]" onClick={() => setIsSignOutModalOpen(true)} />
+            <Button
+              text="Sign Out"
+              align="center"
+              styleType="fill"
+              size="md"
+              width="w-full"
+              height="h-[2.625rem]"
+              onClick={() => setIsSignOutModalOpen(true)}
+            />
             <ModalSignOut isOpen={isSignOutModalOpen} onClose={() => setIsSignOutModalOpen(false)} />
-            <Button text="Delete Account" align="center" styleType="red-critical" size="md" width="w-full" height="h-[2.625rem]" onClick={() => setIsDeleteModalOpen(true)} />
+            <Button
+              text="Delete Account"
+              align="center"
+              styleType="red-critical"
+              size="md"
+              width="w-full"
+              height="h-[2.625rem]"
+              onClick={() => setIsDeleteModalOpen(true)}
+            />
             <ModalDeleteAccount isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} />
           </div>
         </div>
