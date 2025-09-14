@@ -8,20 +8,33 @@ import { loadRegistrationData } from "./registration_data";
 
 async function handleRegistrationData() {
     const data = loadRegistrationData();
-    const result = await fetch("/api/v1/auth/register", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            Email: data.email,
-            Password: data.password,
-            FirstName: data.firstName,
-            LastName: data.lastName,
-        }),
-    });
+    try {
+        const result = await fetch("/api/v1/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                Email: data.email,
+                Password: data.password,
+                FirstName: data.firstName,
+                LastName: data.lastName,
+            }),
+        });
 
-    return result.json();
+        if (!result.ok) {
+            return { success: false, error: "Network response was not ok." };
+        }
+
+        try {
+            const json = await result.json();
+            return json;
+        } catch (jsonError) {
+            return { success: false, error: "Failed to parse response." };
+        }
+    } catch (error) {
+        return { success: false, error: "Network error." };
+    }
 }
 
 export default function RegistrationTerms() {
@@ -92,11 +105,15 @@ export default function RegistrationTerms() {
                     } text-[16px] cursor-pointer hover:opacity-90`}
                     onClick={() => {
                         if (accepted) {
-                            handleRegistrationData().then((res) => {
-								if(res.success){
-									router.push("/registration/success");
-								}
-							});
+                            handleRegistrationData()
+                                .then((res) => {
+                                    if (res.success) {
+                                        router.push("/registration/success");
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error("Registration error:", error);
+                                });
                         }
                     }}
                 >
