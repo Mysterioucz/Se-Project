@@ -1,14 +1,18 @@
-'use client';
-import { FlightTakeoff, FlightLand, ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
-import Passenger from './Passenger';
-import { MouseEventHandler, useState } from 'react';
-import DatePicker from './DatePicker';
-import DateRangePicker from './DateRangePicker';
-import { useEffect } from 'react';
+"use client";
+import {
+    FlightTakeoff,
+    FlightLand,
+    ArrowDropDown,
+    ArrowDropUp,
+} from "@mui/icons-material";
+import Passenger from "./Passenger";
+import { MouseEventHandler, useState } from "react";
+import DateRangePicker from "./DateRangePicker";
+import { useEffect } from "react";
 
 type SelectedValues = {
-    flight: string,
-    class: string,
+    flight: string;
+    class: string;
     leave: string;
     go: string;
 };
@@ -30,19 +34,19 @@ export default function FlightSearchBar({
     setSelectedStartDate,
     setSelectedEndDate,
 
-    onSearch, // The function to 
-} : {
-    headerText: string,
-    selectedValues: SelectedValues,
-    setSelectedValues: Function,
-    passengerCount: PassengerCount,
-    setPassengerCount: Function,
-    selectedStartDate: Date | null
-    selectedEndDate: Date | null
-    setSelectedStartDate: Function
-    setSelectedEndDate: Function
+    onSearch, // The function to
+}: {
+    headerText: string;
+    selectedValues: SelectedValues;
+    setSelectedValues: (values: SelectedValues) => void;
+    passengerCount: PassengerCount;
+    setPassengerCount: (count: PassengerCount) => void;
+    selectedStartDate: Date | null;
+    selectedEndDate: Date | null;
+    setSelectedStartDate: (date: Date | null) => void;
+    setSelectedEndDate: (date: Date | null) => void;
 
-    onSearch: MouseEventHandler<HTMLButtonElement>
+    onSearch: MouseEventHandler<HTMLButtonElement>;
 }) {
     // Consolidated state for dropdown visibility
     const [dropdownStates, setDropdownStates] = useState({
@@ -57,12 +61,13 @@ export default function FlightSearchBar({
 
     // Helper function to toggle dropdown visibility and close others
     const toggleDropdown = (dropdown: string) => {
-        setDropdownStates(prevState => {
+        setDropdownStates((prevState) => {
             const newState = { ...prevState };
             // Close all dropdowns except the one being toggled
-            Object.keys(newState).forEach(key => {
+            Object.keys(newState).forEach((key) => {
                 if (key === dropdown) {
-                    newState[key as keyof typeof newState] = !newState[key as keyof typeof newState];
+                    newState[key as keyof typeof newState] =
+                        !newState[key as keyof typeof newState];
                 } else {
                     newState[key as keyof typeof newState] = false;
                 }
@@ -73,39 +78,39 @@ export default function FlightSearchBar({
 
     // Function to handle changes in passenger counts
     const handlePassengerCountChange = (type: string, value: number) => {
-        setPassengerCount((prevState: PassengerCount) => ({
-            ...prevState,
-            [type]: value,
-        }));
+        setPassengerCount({
+            ...passengerCount,
+            [type as keyof PassengerCount]: value,
+        });
     };
 
     // Function to handle selection of a value in any dropdown
-    const handleSelection = (dropdown: string, value: string) => {
-        setSelectedValues((prevState: SelectedValues) => ({
-            ...prevState,
+    const handleSelection = (dropdown: keyof SelectedValues, value: string) => {
+        setSelectedValues({
+            ...selectedValues,
             [dropdown]: value,
-        }));
-        toggleDropdown(dropdown);  // Close the dropdown after selection
+        });
+        toggleDropdown(dropdown); // Close the dropdown after selection
     };
 
     const [cities, setCities] = useState<string[]>([]);
     useEffect(() => {
         async function fetchCities() {
             try {
-                const response = await fetch('/api/v1/city');
+                const response = await fetch("/api/v1/city");
                 if (!response.ok) {
-                    throw new Error('Failed to fetch cities');
+                    throw new Error("Failed to fetch cities");
                 }
                 const data = await response.json();
-                setCities(data.data.map((city: { City: string }) => city.City));  // Extract city names
+                setCities(data.data.map((city: { City: string }) => city.City)); // Extract city names
             } catch (err) {
-                console.log('Failed to fetch cities');
+                console.log("Failed to fetch cities");
             }
         }
 
         fetchCities();
     }, []);
-    
+
     return (
         <div className="w-full mx-auto text-nowrap">
             {/* Header Text */}
@@ -118,34 +123,83 @@ export default function FlightSearchBar({
                 <div className="flex flex-wrap items-center gap-10 mb-2 ml-5 text-lg text-primary-900 font-medium">
                     {/* Flight Type */}
                     <div className="relative">
-                        <button
-                            onClick={() => toggleDropdown('flight')}
-                        >
+                        <button onClick={() => toggleDropdown("flight")}>
                             <span>{selectedValues.flight}</span>
-                            {dropdownStates.flight ? <ArrowDropUp /> : <ArrowDropDown />}
+                            {dropdownStates.flight ? (
+                                <ArrowDropUp />
+                            ) : (
+                                <ArrowDropDown />
+                            )}
                         </button>
                         {dropdownStates.flight && (
                             <ul className="absolute mt-2 w-40 bg-white text-primary-900 border border-gray-300 rounded shadow-lg z-10">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('flight', 'Round Trip')}>Round trip</li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('flight', 'One Way')}>One way</li>
+                                <li
+                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() =>
+                                        handleSelection("flight", "Round Trip")
+                                    }
+                                >
+                                    Round trip
+                                </li>
+                                <li
+                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() =>
+                                        handleSelection("flight", "One Way")
+                                    }
+                                >
+                                    One way
+                                </li>
                             </ul>
                         )}
                     </div>
 
                     {/* Class Type */}
                     <div className="relative">
-                        <button
-                            onClick={() => toggleDropdown('class')}
-                        >
+                        <button onClick={() => toggleDropdown("class")}>
                             <span>{selectedValues.class}</span>
-                            {dropdownStates.class ? <ArrowDropUp /> : <ArrowDropDown />}
+                            {dropdownStates.class ? (
+                                <ArrowDropUp />
+                            ) : (
+                                <ArrowDropDown />
+                            )}
                         </button>
                         {dropdownStates.class && (
                             <ul className="absolute mt-2 w-40 bg-white text-primary-900 border border-gray-300 rounded shadow-lg z-10">
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('class', 'Economy')}>Economy</li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('class', 'Premium Economy')}>Premium Economy</li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('class', 'Business')}>Business</li>
-                                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSelection('class', 'First')}>First</li>
+                                <li
+                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() =>
+                                        handleSelection("class", "Economy")
+                                    }
+                                >
+                                    Economy
+                                </li>
+                                <li
+                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() =>
+                                        handleSelection(
+                                            "class",
+                                            "Premium Economy"
+                                        )
+                                    }
+                                >
+                                    Premium Economy
+                                </li>
+                                <li
+                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() =>
+                                        handleSelection("class", "Business")
+                                    }
+                                >
+                                    Business
+                                </li>
+                                <li
+                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() =>
+                                        handleSelection("class", "First")
+                                    }
+                                >
+                                    First
+                                </li>
                             </ul>
                         )}
                     </div>
@@ -157,13 +211,17 @@ export default function FlightSearchBar({
                     <div className="relative flex flex-row w-full">
                         <button
                             className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-primary-900 border-primary-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-400"
-                            onClick={() => toggleDropdown('leave')}
+                            onClick={() => toggleDropdown("leave")}
                         >
                             <div className="flex items-center">
                                 <FlightTakeoff className="mr-2" />
                                 <span>{selectedValues.leave}</span>
                             </div>
-                            {dropdownStates.leave ? <ArrowDropUp className="mr-2" /> : <ArrowDropDown className="mr-2" />}
+                            {dropdownStates.leave ? (
+                                <ArrowDropUp className="mr-2" />
+                            ) : (
+                                <ArrowDropDown className="mr-2" />
+                            )}
                         </button>
                         {dropdownStates.leave && (
                             <ul className="absolute top-full max-h-50 w-full bg-white text-primary-900 border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
@@ -171,7 +229,9 @@ export default function FlightSearchBar({
                                     <li
                                         key={index}
                                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => handleSelection("leave", city)}
+                                        onClick={() =>
+                                            handleSelection("leave", city)
+                                        }
                                     >
                                         {city}
                                     </li>
@@ -184,13 +244,17 @@ export default function FlightSearchBar({
                     <div className="relative flex flex-row w-full">
                         <button
                             className="relative flex items-center justify-between w-full pl-3 py-2 border-2 text-primary-900 border-primary-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-400"
-                            onClick={() => toggleDropdown('go')}
+                            onClick={() => toggleDropdown("go")}
                         >
                             <div className="flex items-center">
                                 <FlightLand className="mr-2" />
                                 <span>{selectedValues.go}</span>
                             </div>
-                            {dropdownStates.go ? <ArrowDropUp className="mr-2" /> : <ArrowDropDown className="mr-2" />}
+                            {dropdownStates.go ? (
+                                <ArrowDropUp className="mr-2" />
+                            ) : (
+                                <ArrowDropDown className="mr-2" />
+                            )}
                         </button>
                         {dropdownStates.go && (
                             <ul className="absolute top-full max-h-50 w-full bg-white text-primary-900 border border-gray-300 rounded shadow-lg z-10 overflow-y-scroll">
@@ -198,7 +262,9 @@ export default function FlightSearchBar({
                                     <li
                                         key={index}
                                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onClick={() => handleSelection("go", city)}
+                                        onClick={() =>
+                                            handleSelection("go", city)
+                                        }
                                     >
                                         {city}
                                     </li>
@@ -211,11 +277,11 @@ export default function FlightSearchBar({
                     <div className="relative flex flex-row w-full">
                         <DateRangePicker
                             isClicked={dropdownStates.datepicker}
-                            toggleDropDown={() => toggleDropdown('datepicker')}
-                            selectedStartDate={selectedStartDate}  // Pass start date
-                            selectedEndDate={selectedEndDate}      // Pass end date
-                            setSelectedStartDate={setSelectedStartDate}  // Pass setter for start date
-                            setSelectedEndDate={setSelectedEndDate}      // Pass setter for end date
+                            toggleDropDown={() => toggleDropdown("datepicker")}
+                            selectedStartDate={selectedStartDate} // Pass start date
+                            selectedEndDate={selectedEndDate} // Pass end date
+                            setSelectedStartDate={setSelectedStartDate} // Pass setter for start date
+                            setSelectedEndDate={setSelectedEndDate} // Pass setter for end date
                         />
                     </div>
 
@@ -223,9 +289,11 @@ export default function FlightSearchBar({
                     <div className="relative flex flex-row w-full">
                         <Passenger
                             isClicked={dropdownStates.passengers}
-                            toggleDropdown={() => toggleDropdown('passengers')}
-                            handlePassengerCountChange={handlePassengerCountChange}  // Pass the function to update passenger count
-                            passengerCount={passengerCount}  // Pass current counts to be displayed in QuantitySelector
+                            toggleDropdown={() => toggleDropdown("passengers")}
+                            handlePassengerCountChange={
+                                handlePassengerCountChange
+                            } // Pass the function to update passenger count
+                            passengerCount={passengerCount} // Pass current counts to be displayed in QuantitySelector
                         />
                     </div>
 

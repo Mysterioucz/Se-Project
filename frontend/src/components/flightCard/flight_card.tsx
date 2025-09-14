@@ -1,4 +1,4 @@
-'use client";';
+'use client';
 import AirlineTimestamp, { AirlineTimestampProps } from "./airline_timestamp";
 import PriceCabinClass, { PriceCabinClassProps } from "./price_cabin_class";
 

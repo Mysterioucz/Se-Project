@@ -2,12 +2,14 @@
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import PinDropIcon from "@mui/icons-material/PinDrop";
-import { useState } from "react";
 
-export default function FlightSortTab(
-    { sort, setSort } : { sort: string, setSort: Function }
-) {
-
+export default function FlightSortTab({
+    sort,
+    setSort,
+}: {
+    sort: string;
+    setSort: (value: string) => void;
+}) {
     const options = [
         {
             how: "price",
@@ -31,7 +33,7 @@ export default function FlightSortTab(
 
     const handleOptionClick = (how: string) => {
         // Toggle the selected option: if it's already selected, unselect it; otherwise, select it
-        setSort((prevSelected: string) => (prevSelected === how ? "" : how));
+        setSort(sort === how ? "" : how);
     };
 
     return (
