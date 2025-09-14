@@ -15,6 +15,7 @@ interface Props {
   icon?: React.ReactNode;
   onChange?: (value: unknown) => void;
   onInput?: (value: unknown) => void;
+  onSubmit?: (value: unknown) => void; // callback to submit value
 }
 
 type State = "enabled" | "focused" | "hover" | "error" | "disabled";
@@ -31,8 +32,9 @@ export default function TextFieldComponent({
   icon,
   onChange,
   onInput,
+  onSubmit,
 }: Props) {
-  // ✅ Internal disabled state always toggled by icon
+  // Internal disabled state (toggled by icon)
   const [isDisabledInternal, setIsDisabledInternal] = useState<boolean>(
     disabled ?? false
   );
@@ -43,66 +45,68 @@ export default function TextFieldComponent({
 
   const computedDisabled = isDisabledInternal;
 
-  function handleStateChange(newState: State) {
-    if (computedDisabled) {
-      setState("disabled");
-    } else if (error) {
-      setState("error");
-    } else {
-      setState(newState);
+  // Internal text state (for typing while enabled)
+  const [currentText, setCurrentText] = useState<string>(textValue);
+
+  // Sync text when props change or field toggles
+  useEffect(() => {
+    if (!computedDisabled) {
+      setCurrentText(textValue);
     }
+  }, [textValue, computedDisabled]);
+
+  function handleStateChange(newState: State) {
+    if (computedDisabled) setState("disabled");
+    else if (error) setState("error");
+    else setState(newState);
   }
 
   function resolveBorderColor(s: State) {
     switch (s) {
-      case "enabled":
-        return "border-[var(--color-gray-200)]";
-      case "focused":
-        return "border-[var(--color-primary-600)]";
-      case "hover":
-        return "border-[var(--color-gray-400)]";
-      case "error":
-        return "border-[var(--color-error-main)]";
-      case "disabled":
-        return "border-[var(--color-gray-100)]";
-      default:
-        return "border-[var(--color-gray-200)]";
+      case "enabled": return "border-[var(--color-gray-200)]";
+      case "focused": return "border-[var(--color-primary-600)]";
+      case "hover": return "border-[var(--color-gray-400)]";
+      case "error": return "border-[var(--color-error-main)]";
+      case "disabled": return "border-[var(--color-gray-100)]";
+      default: return "border-[var(--color-gray-200)]";
     }
   }
 
   function resolveHelperTextColor(s: State) {
     switch (s) {
-      case "error":
-        return "text-[var(--color-error-light)]";
-      case "disabled":
-        return "text-[var(--color-disable-dark)]";
-      default:
-        return "text-[var(--color-gray-400)]";
+      case "error": return "text-[var(--color-error-light)]";
+      case "disabled": return "text-[var(--color-disable-dark)]";
+      default: return "text-[var(--color-gray-400)]";
     }
   }
 
-  // Update visual state whenever disabled or error changes
   useEffect(() => {
-    if (computedDisabled) {
-      setState("disabled");
-    } else if (error) {
-      setState("error");
-    } else {
-      setState("enabled");
-    }
+    if (computedDisabled) setState("disabled");
+    else if (error) setState("error");
+    else setState("enabled");
   }, [computedDisabled, error]);
 
-  // Toggle enable/disable when clicking icon
+  // Original icon toggle (enable/disable)
   function handleIconClick() {
     setIsDisabledInternal((prev) => !prev);
+  }
+
+  // Submit function
+  function submitValueIfEnabled() {
+    if (!icon || computedDisabled) return;
+    onSubmit?.({ tel: telValue, text: currentText });
+    setIsDisabledInternal(true); // disable after submit
+  }
+
+  // Handle ENTER key
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") submitValueIfEnabled();
   }
 
   return (
     <div className="flex flex-col w-full h-fit gap-3">
       {label && (
-        <h3 className="!text-lg !font-bold !text-[var(--color-primary-900)]">
-          {label}
-        </h3>
+        <h3 className="!text-lg !font-bold !text-[var(--color-primary-900)]">{label}</h3>
       )}
 
       <div
@@ -117,31 +121,34 @@ export default function TextFieldComponent({
           <TelPrefix
             value={telValue}
             onChange={(e) =>
-              onChange && onChange({ tel: e.target.value, text: textValue })
+              onChange && onChange({ tel: e.target.value, text: currentText })
             }
             disabled={computedDisabled}
           />
         )}
 
-        {/* Input + Icon container */}
         <div className="flex items-center w-full">
           <input
-            className={`w-full h-full bg-transparent text-lg text-[var(--color-gray-400)] disabled:text-[var(--color-disable-dark)] outline-none placeholder-[var(--color-gray-400)] disabled:placeholder-[var(--color-disable-dark)] ${
-              icon ? "pr-4" : ""
-            }`}
             type="text"
+            className={`w-full h-full bg-transparent text-lg text-[var(--color-gray-400)] disabled:text-[var(--color-disable-dark)] outline-none placeholder-[var(--color-gray-400)] disabled:placeholder-[var(--color-disable-dark)] ${icon ? "pr-4" : ""}`}
             placeholder={placeHolder}
             disabled={computedDisabled}
-            onChange={(e) =>
-              onChange && onChange({ tel: telValue, text: e.target.value })
-            }
+            value={currentText}
+            onChange={(e) => {
+              setCurrentText(e.target.value);
+              onChange && onChange({ tel: telValue, text: e.target.value });
+            }}
             onInput={onInput}
+            onKeyDown={handleKeyDown}
           />
 
           {icon && (
             <button
               type="button"
-              onClick={handleIconClick}
+              onClick={() => {
+                if (!computedDisabled) submitValueIfEnabled();
+                else handleIconClick();
+              }}
               aria-pressed={computedDisabled}
               className="ml-2 pr-2 flex items-center cursor-pointer"
             >
@@ -151,9 +158,7 @@ export default function TextFieldComponent({
         </div>
       </div>
 
-      {helperText && (
-        <p className={`${resolveHelperTextColor(state)}`}>{helperText}</p>
-      )}
+      {helperText && <p className={`${resolveHelperTextColor(state)}`}>{helperText}</p>}
     </div>
   );
 }

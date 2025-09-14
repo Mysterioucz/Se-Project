@@ -15,18 +15,18 @@ export default function Footer() {
               height={55}
               className="aspect-square w-[3.4375rem] h-[3.4375rem]"
             />
-            <p className="text-[#044359] font-sarabun text-[2rem] font-bold leading-[120%]">
+            <p className="!text-[#044359] !font-sarabun !text-[2rem] !font-bold !leading-[120%]">
               FlyWithSigma
             </p>
           </div>
-          <p className="text-[#5F696C] font-sarabun text-[1rem] font-normal leading-[120%] max-w-[18.1875rem]">
+          <p className="!text-[#5F696C] !font-sarabun !text-[1rem] !font-normal !leading-[120%] !max-w-[18.1875rem]">
             The future of travel: smooth, aesthetic, and always on trend.
           </p>
         </div>
 
         {/* Section 2 */}
         <div className="flex flex-col items-start gap-6">
-          <p className="text-[#044359] font-sarabun text-[1.125rem] font-semibold leading-[120%]">
+          <p className="!text-[#044359] !font-sarabun !text-[1.125rem] !font-semibold !leading-[120%]">
             Support
           </p>
           <div className="flex flex-col justify-center items-start gap-3 self-stretch">
@@ -75,7 +75,7 @@ export default function Footer() {
 
         {/* Section 3 */}
         <div className="flex flex-col items-start gap-6">
-          <p className="text-[#044359] font-sarabun text-[1.125rem] font-semibold leading-[120%]">
+          <p className="!text-[#044359] !font-sarabun !text-[1.125rem] !font-semibold !leading-[120%]">
             Legal
           </p>
 

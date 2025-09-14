@@ -13,13 +13,11 @@ export default function AccountSettingPage() {
 
             {/* Main Content */}
             <div className="mx-[6.25rem] mt-[1.25rem] flex flex-col gap-[2rem]">
-                <h1 className="font-sans text-[2.5rem] font-bold leading-[3rem] text-[var(--color-primary-900)]">
+                <h1 className="!font-sans !text-[3rem] !font-bold !leading-[3rem] !text-[var(--color-primary-900)]">
                     Account Management
                 </h1>
                 <div className="h-fit border-dashed border-1 border-[var(--color-gray-300)]">
                     <div className="flex h-fit p-[0.75rem] items-start gap-[1rem] self-stretch border border-dashed border-[var(--Gray-300,#848B8F)]">
-                        {" "}
-                        {/*h-[44.4375rem]*/}
                         <div className="flex flex-col w-[19.1875rem] px-[1.5rem] py-[2rem] pl-[1rem] items-center self-stretch border-r border-dashed border-[var(--color-gray-300)]">
                             <div className="flex flex-col items-start gap-[0.75rem] self-stretch">
                                 <Button
