@@ -42,7 +42,6 @@ export default function RegistrationName() {
   const onSubmit = (data: FormData) => {
     console.log("✅ Valid name:", data.firstName, data.lastName);
     saveRegistrationData({ firstName: data.firstName, lastName: data.lastName });
-    console.log("Current registration data:", registrationData);
     router.push("/registration/password");
   };
 

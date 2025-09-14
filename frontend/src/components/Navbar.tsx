@@ -9,7 +9,7 @@ export default function Navbar() {
     const { data: session, status } = useSession();
     const displayName = session?.user?.name;
     return (
-        <nav className="bg-primary-400 flex mb-[1.5rem] items-center w-full justify-between py-[0.5rem] px-[2rem] sticky top-0 z-99">
+        <nav className="bg-primary-400 flex items-center w-full justify-between py-[0.5rem] px-[2rem] sticky top-0 z-99">
             {/* Navigate to main page */}
             <Link href="">
                 <Image

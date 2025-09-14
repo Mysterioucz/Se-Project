@@ -46,7 +46,6 @@ export default function RegistrationPassword() {
 
   const onSubmit = (data: FormData) => {
     saveRegistrationData({ password: data.password });
-    console.log("Current registration data:", registrationData);
     router.push("/registration/terms");
   };
 
