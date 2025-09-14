@@ -34,7 +34,6 @@ export default function RegistrationEmail() {
   const onSubmit = (data: FormData) => {
     console.log("✅ Valid email:", data.email);
     saveRegistrationData({ email: data.email });
-    console.log("Current registration data:", registrationData);
     router.push("/registration/name");
   };
 

@@ -4,7 +4,7 @@
 
 const REGISTRATION_DATA_KEY = "registrationData";
 
-function loadRegistrationData(): { [key: string]: string } {
+export function loadRegistrationData(): { [key: string]: string } {
     if (typeof window !== 'undefined') {
         const data = localStorage.getItem(REGISTRATION_DATA_KEY);
         return data
