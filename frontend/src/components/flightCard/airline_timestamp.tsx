@@ -41,7 +41,7 @@ function FlightTimestamp({
                 <p>{depart.airport}</p>
                 <p>{depart.city}</p>
             </div>
-            <div className="flex flex-col pr-2 pl-2 pb-1 pt-1 gap-1 justify-center">
+            <div className="flex flex-col pr-2 pl-2 pb-1 pt-1 gap-1 justify-center text-center">
                 <p className="text-xs">{duration}</p>
                 <FlightCardDivider />
                 <p className="text-xs">
@@ -61,7 +61,7 @@ function FlightTimestamp({
 
 function AirlineTimestamp(props: AirlineTimestampProps) {
     return (
-        <div className="flex flex-col p-4 gap-2 bg-common-white rounded-sm">
+        <div className="flex flex-col p-4 w-full min-w-[28rem] h-fit gap-2 bg-common-white rounded-sm">
             <AirlineName airlineName={props.airlineName} />
             <FlightTimestamp
                 depart={props.depart}
