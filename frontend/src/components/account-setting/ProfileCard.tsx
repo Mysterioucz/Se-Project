@@ -60,6 +60,7 @@ export default function ProfileCard() {
                                     placeHolder={userFirstName ?? ""}
                                     disabled={true}
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
+                                    onChange={(val) => console.log("Typing First Name:", val)}
                                     onSubmit={(val) => {
                                         const text = (val as any).text;
                                         setSubmittedFirstName(text);
@@ -74,10 +75,12 @@ export default function ProfileCard() {
                                     placeHolder={userLastName ?? ""}
                                     disabled={true}
                                     icon={<img src="/profile-card/fi-sr-pencil.svg" alt="toggle" className="w-5 h-5" />}
+                                    onChange={(val) => console.log("Typing Last Name:", val)}
                                     onSubmit={(val) => {
-                                    const text = (val as any).text;
+                                        const text = (val as any).text;
                                         setSubmittedLastName(text);
                                         console.log("Submitted Last Name:", text);
+                                        // TODO: send to backend here
                                     }}
                                 />
                             </div>
