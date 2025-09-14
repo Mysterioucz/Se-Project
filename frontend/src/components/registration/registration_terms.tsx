@@ -4,6 +4,25 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { termsText } from "@components/registration/terms_and_conditions";
 import React from "react";
+import { loadRegistrationData } from "./registration_data";
+
+async function handleRegistrationData() {
+    const data = loadRegistrationData();
+    const result = await fetch("/api/v1/auth/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            Email: data.email,
+            Password: data.password,
+            FirstName: data.firstName,
+            LastName: data.lastName,
+        }),
+    });
+
+    return result.json();
+}
 
 export default function RegistrationTerms() {
     const [accepted, setAccepted] = useState(false);
@@ -71,7 +90,15 @@ export default function RegistrationTerms() {
                     } rounded-md items-center justify-center ${
                         accepted ? "text-white" : "text-disable-dark"
                     } text-[16px] cursor-pointer hover:opacity-90`}
-                    onClick={() => router.push("/registration/success")}
+                    onClick={() => {
+                        if (accepted) {
+                            handleRegistrationData().then((res) => {
+								if(res.success){
+									router.push("/registration/success");
+								}
+							});
+                        }
+                    }}
                 >
                     Next
                 </button>
