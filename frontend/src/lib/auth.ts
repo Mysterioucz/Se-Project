@@ -61,8 +61,10 @@ export const nextAuthOptions: NextAuthOptions = {
             }
             if (trigger === "update") {
                 // console.log(session);
-                token.name = session.user.name;
-                (token.user as User).name = session.user.name;
+                if (session.user && session.user.name) {
+                    token.name = session.user.name;
+                    (token.user as User).name = session.user.name;
+                }
             }
             return token;
         },
