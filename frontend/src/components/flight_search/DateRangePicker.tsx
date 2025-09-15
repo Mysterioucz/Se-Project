@@ -5,7 +5,6 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { SelectedValues } from "./search";
 
 interface DateRangePickerProps {
     selectedStartDate: Date | null;
