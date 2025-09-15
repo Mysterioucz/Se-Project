@@ -53,13 +53,18 @@ export default function ProfileCard() {
                 //         }`,
                 //     },
                 // });
-                updateSession({
-                    user: {
-                        name: `${updateFirstName || firstName} ${
-                            updateLastName || lastName
-                        }`,
-                    },
-                });
+                if (
+                    data.data.FirstName !== firstName ||
+                    data.data.LastName !== lastName
+                ) {
+                    updateSession({
+                        user: {
+                            name: `${updateFirstName || firstName} ${
+                                updateLastName || lastName
+                            }`,
+                        },
+                    });
+                }
             } else {
                 console.error("Failed to update:", data.message);
             }

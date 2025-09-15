@@ -44,8 +44,8 @@ export default function SelectComponent({
             className={`group ${resolveTextColor()}`}
             slotProps={{
                 notchedOutline: {
-                    className: `border-2 border-gray-200 ${
-                        disabled ? "" : "group-hover:border-gray-400"
+                    className: `border-2 border-gray-100 ${
+                        disabled ? "" : "group-hover:border-gray-200"
                     } group-[.Mui-focused]:border-primary-600 group-[.Mui-error]:border-error-main  `,
                 },
             }}
