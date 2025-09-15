@@ -11,7 +11,7 @@ export default function Navbar() {
     return (
         <nav className="bg-primary-400 flex items-center w-full justify-between py-[0.5rem] px-[2rem] sticky top-0 z-99">
             {/* Navigate to main page */}
-            <Link href="">
+            <Link href="/">
                 <Image
                     src={"/logo/logo_nobg_white.svg"}
                     alt="White Logo"
@@ -28,7 +28,7 @@ export default function Navbar() {
                     </p>
                 </Link>
                 {/* Navigate to Cart page */}
-                <Link href="">
+                <Link href="/cart">
                     <Image
                         src={"/navbar/fi-br-shopping-cart.svg"}
                         alt="Cart"
@@ -40,7 +40,7 @@ export default function Navbar() {
                 {status === "authenticated" ? (
                     <Link href={"/account-setting"}>
                         <Button
-						//TODO: change to display name when the problem of editing profile name resolved
+                            //TODO: change to display name when the problem of editing profile name resolved
                             text={"Profile"}
                             styleType="stroke"
                             size="md"
