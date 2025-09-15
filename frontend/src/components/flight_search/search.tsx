@@ -10,14 +10,14 @@ import { MouseEventHandler, useState } from "react";
 import DateRangePicker from "./DateRangePicker";
 import { useEffect } from "react";
 
-type SelectedValues = {
-    flight: string;
+export type SelectedValues = {
+    flight: "One Way" | "Round Trip";
     class: string;
     leave: string;
     go: string;
 };
 
-type PassengerCount = {
+export type PassengerCount = {
     adult: number;
     children: number;
     infants: number;
@@ -282,6 +282,7 @@ export default function FlightSearchBar({
                             selectedEndDate={selectedEndDate} // Pass end date
                             setSelectedStartDate={setSelectedStartDate} // Pass setter for start date
                             setSelectedEndDate={setSelectedEndDate} // Pass setter for end date
+                            selectType={selectedValues.flight} // Pass type of selection (depart or return)
                         />
                     </div>
 

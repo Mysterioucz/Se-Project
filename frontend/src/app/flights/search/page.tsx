@@ -1,6 +1,9 @@
 "use client";
 import FlightFilterTab from "@/src/components/flight_search/filter";
-import FlightSearchBar from "@/src/components/flight_search/search";
+import FlightSearchBar, {
+    PassengerCount,
+    SelectedValues,
+} from "@/src/components/flight_search/search";
 import FlightSortTab from "@/src/components/flight_search/sort";
 import FlightCard from "@/src/components/flightCard/flight_card";
 import { MagnifyIcon } from "@/src/components/icons/module";
@@ -22,8 +25,11 @@ import Navbar from "@/src/components/Navbar";
 import { CircularProgress } from "@mui/material";
 
 export default function Page() {
-    const [selectedValues, setSelectedValues] = useState(INIT_SELECTED_VALUES);
-    const [passengerCount, setPassengerCount] = useState(INIT_PASSENGER_COUNT);
+    //TODO: Need to refactor the whole page to be stateless and use searchParams instead
+    const [selectedValues, setSelectedValues] =
+        useState<SelectedValues>(INIT_SELECTED_VALUES);
+    const [passengerCount, setPassengerCount] =
+        useState<PassengerCount>(INIT_PASSENGER_COUNT);
     const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
         INIT_SELECTED_START_DATE
     );
@@ -59,10 +65,8 @@ export default function Page() {
             ); // Base URL for API
             const params = new URLSearchParams();
             // Search
-            if (selectedValues.flight != "Flight type")
-                params.append(`flightType`, selectedValues.flight);
-            if (selectedValues.class != "Class type")
-                params.append(`classType`, selectedValues.class);
+            params.append(`flightType`, selectedValues.flight);
+            params.append(`classType`, selectedValues.class);
             if (selectedValues.leave != `Leaving from?`)
                 params.append(`departureCity`, selectedValues.leave);
             if (selectedValues.go != `Going to?`)

@@ -5,12 +5,14 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { SelectedValues } from "./search";
 
 interface DateRangePickerProps {
     selectedStartDate: Date | null;
     selectedEndDate: Date | null;
     setSelectedStartDate: (date: Date | null) => void;
     setSelectedEndDate: (date: Date | null) => void;
+    selectType: "One Way" | "Round Trip";
     onClose: () => void;
 }
 
@@ -36,6 +38,7 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
     selectedEndDate,
     setSelectedStartDate,
     setSelectedEndDate,
+    selectType,
     onClose,
 }) => {
     const [currentMonth, setCurrentMonth] = useState(
@@ -62,16 +65,23 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
             Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), day)
         );
         clickedDate.setUTCHours(0, 0, 0, 0);
-
-        if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
-            // Start a new range
+        if (selectType === "One Way") {
+            // Select only one date
             setSelectedStartDate(clickedDate);
-            setSelectedEndDate(null); // Reset the end date
-        } else if (selectedStartDate && !selectedEndDate) {
-            // Set the end date of the range
-            if (clickedDate >= selectedStartDate) {
-                setSelectedEndDate(clickedDate);
-                onClose(); // Close the picker after selecting the range
+            setSelectedEndDate(clickedDate);
+            onClose(); 
+        } else if (selectType === "Round Trip" && selectedStartDate) {
+            // Ensure return date is not before depart date
+            if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
+                // Start a new range
+                setSelectedStartDate(clickedDate);
+                setSelectedEndDate(null); // Reset the end date
+            } else if (selectedStartDate && !selectedEndDate) {
+                // Set the end date of the range
+                if (clickedDate >= selectedStartDate) {
+                    setSelectedEndDate(clickedDate);
+                    onClose(); // Close the picker after selecting the range
+                }
             }
         }
     };
@@ -186,6 +196,7 @@ export default function DateRangePicker({
     selectedEndDate, // Pass end date
     setSelectedStartDate, // Pass setter for start date
     setSelectedEndDate, // Pass setter for end date
+    selectType, // Pass type of selection (depart or return)
 }: {
     isClicked: boolean;
     toggleDropDown: () => void;
@@ -193,6 +204,7 @@ export default function DateRangePicker({
     selectedEndDate: Date | null; // Pass end date
     setSelectedStartDate: (date: Date | null) => void; // Pass setter for start date
     setSelectedEndDate: (date: Date | null) => void; // Pass setter for end date
+    selectType: "One Way" | "Round Trip"; // Pass type of selection (depart or return)
 }) {
     const formatDate = (date: Date | null): string => {
         if (!date) return "";
@@ -205,9 +217,9 @@ export default function DateRangePicker({
 
     const getDateButtonText = () => {
         if (selectedStartDate && selectedEndDate) {
-			if(selectedStartDate.getTime() === selectedEndDate.getTime()) {
-				return `${formatDate(selectedStartDate)}`;
-			}
+            if (selectedStartDate.getTime() === selectedEndDate.getTime()) {
+                return `${formatDate(selectedStartDate)}`;
+            }
             return `${formatDate(selectedStartDate)} - ${formatDate(
                 selectedEndDate
             )}`;
@@ -236,6 +248,7 @@ export default function DateRangePicker({
                     selectedEndDate={selectedEndDate}
                     setSelectedStartDate={setSelectedStartDate}
                     setSelectedEndDate={setSelectedEndDate}
+                    selectType={selectType}
                     onClose={toggleDropDown} // Close picker after selecting date range
                 />
             )}
