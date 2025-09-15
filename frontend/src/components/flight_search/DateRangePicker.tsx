@@ -64,6 +64,7 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
             Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), day)
         );
         clickedDate.setUTCHours(0, 0, 0, 0);
+		//TODO: need to create enum for selectType
         if (selectType === "One Way") {
             // Select only one date
             setSelectedStartDate(clickedDate);
