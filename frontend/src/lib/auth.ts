@@ -53,10 +53,18 @@ export const nextAuthOptions: NextAuthOptions = {
             }
             return session;
         },
-        jwt: ({ token, user }) => {
+        jwt: ({ token, trigger, session, user }) => {
+            // console.log("JWT callback:", { token, trigger, session, user });
             if (user) {
                 token.user = user;
                 token.id = user.id;
+            }
+            if (trigger === "update") {
+                // console.log(session);
+                if (session.user && session.user.name) {
+                    token.name = session.user.name;
+                    (token.user as User).name = session.user.name;
+                }
             }
             return token;
         },
