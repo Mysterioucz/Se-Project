@@ -1,37 +1,68 @@
 "use client";
 import { useEffect, useState } from "react";
 import TelPrefix from "./prefix/tel_prefix";
+
 interface Props {
-    label: string;
+    label?: string;
     textValue: string;
-    telValue: string;
+    telValue?: string;
     placeHolder?: string;
     telForm?: boolean;
     required?: boolean;
-    disabled?: boolean;
+    disabled?: boolean; // initial state only
     error?: boolean;
     helperText?: string;
+    icon?: React.ReactNode;
     onChange?: (value: unknown) => void;
-    // The onChange event returns an object with the structure { tel: string, text: string }
+    onInput?: (value: unknown) => void;
+    onSubmit?: (value: unknown) => void; // callback to submit value
 }
+
+type State = "enabled" | "focused" | "hover" | "error" | "disabled";
 
 export default function TextFieldComponent({
     label,
     textValue,
-    telValue,
+    telValue = "+66",
     placeHolder,
     telForm,
     disabled,
     error,
     helperText,
+    icon,
     onChange,
+    onInput,
+    onSubmit,
 }: Props) {
-    const [state, setState] = useState<
-        "enabled" | "focused" | "hover" | "error" | "disabled"
-    >("enabled");
+    // Internal disabled state (toggled by icon)
+    const [isDisabledInternal, setIsDisabledInternal] = useState<boolean>(
+        disabled ?? false
+    );
 
-    function resolveBorderColor(state: string) {
-        switch (state) {
+    const [state, setState] = useState<State>(
+        disabled ? "disabled" : error ? "error" : "enabled"
+    );
+
+    const computedDisabled = isDisabledInternal;
+
+    // Internal text state (for typing while enabled)
+    const [currentText, setCurrentText] = useState<string>(textValue);
+
+    // Sync text when props change or field toggles
+    useEffect(() => {
+        if (!computedDisabled) {
+            setCurrentText(textValue);
+        }
+    }, [textValue, computedDisabled]);
+
+    function handleStateChange(newState: State) {
+        if (computedDisabled) setState("disabled");
+        else if (error) setState("error");
+        else setState(newState);
+    }
+
+    function resolveBorderColor(s: State) {
+        switch (s) {
             case "enabled":
                 return "border-gray-200";
             case "focused":
@@ -39,7 +70,7 @@ export default function TextFieldComponent({
             case "hover":
                 return "border-gray-400";
             case "error":
-                return "border-error-500";
+                return "border-error-main";
             case "disabled":
                 return "border-gray-100";
             default:
@@ -47,71 +78,104 @@ export default function TextFieldComponent({
         }
     }
 
-    function resolveHelperTextColor(state: string) {
-        switch (state) {
+    function resolveHelperTextColor(s: State) {
+        switch (s) {
             case "error":
                 return "text-error-light";
             case "disabled":
-                return "text-gray-400";
+                return "text-disable-dark";
             default:
                 return "text-gray-400";
         }
     }
 
     useEffect(() => {
-        if (disabled) {
-            setState("disabled");
-        } else if (error) {
-            setState("error");
-        } else {
-            setState("enabled");
-        }
-    }, [disabled, error]);
+        if (computedDisabled) setState("disabled");
+        else if (error) setState("error");
+        else setState("enabled");
+    }, [computedDisabled, error]);
+
+    // Original icon toggle (enable/disable)
+    function handleIconClick() {
+        setIsDisabledInternal((prev) => !prev);
+    }
+
+    // Submit function
+    function submitValueIfEnabled() {
+        if (!icon || computedDisabled) return;
+        onSubmit?.({ tel: telValue, text: currentText });
+        setIsDisabledInternal(true); // disable after submit
+    }
+
+    // Handle ENTER key
+    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === "Enter") submitValueIfEnabled();
+    }
 
     return (
         <div className="flex flex-col w-full h-fit gap-3">
-            <h3 className="text-primary-900 font-bold">{label}</h3>
+            {label && (
+                <h3 className="!text-lg !font-bold !text-color-primary-900">
+                    {label}
+                </h3>
+            )}
+
             <div
-                className={`flex p-4 gap-2.5 justify-center text-primary-900 text-[1rem] rounded-[0.25rem] border-2 ${resolveBorderColor(
+                className={`flex items-center p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] border-2 ${resolveBorderColor(
                     state
                 )}`}
-                onFocus={() => {
-                    if (!disabled) {
-                        setState("focused");
-                    }
-                }}
-                onMouseEnter={() => {
-                    if (!disabled) {
-                        setState("hover");
-                    }
-                }}
-                onMouseLeave={() =>
-                    setState(
-                        disabled ? "disabled" : error ? "error" : "enabled"
-                    )
-                }
+                onFocus={() => handleStateChange("focused")}
+                onMouseEnter={() => handleStateChange("hover")}
+                onMouseLeave={() => handleStateChange("enabled")}
             >
                 {telForm && (
                     <TelPrefix
                         value={telValue}
                         onChange={(e) =>
                             onChange &&
-                            onChange({ tel: e.target.value, text: textValue })
+                            onChange({ tel: e.target.value, text: currentText })
                         }
-                        disabled={disabled}
+                        disabled={computedDisabled}
                     />
                 )}
-                <input
-                    className="w-full h-full bg-transparent text-lg outline-none"
-                    type="text"
-                    placeholder={placeHolder}
-                    disabled={disabled}
-                    onChange={(e) =>
-                        onChange &&
-                        onChange({ tel: telValue, text: e.target.value })
-                    }
-                />
+
+                <div className="flex items-center w-full">
+                    <input
+                        type="text"
+                        className={`w-full h-full bg-transparent text-lg text-color-gray-400 disabled:text-color-disable-dark outline-none placeholder:text-color-gray-400 disabled:placeholder:text-color-disable-dark ${
+                            icon ? "pr-4" : ""
+                        }`}
+                        placeholder={placeHolder}
+                        disabled={computedDisabled}
+                        value={currentText}
+                        onChange={(e) => {
+                            setCurrentText(e.target.value);
+                            onChange &&
+                                onChange({
+                                    tel: telValue,
+                                    text: e.target.value,
+                                });
+                        }}
+                        onInput={onInput}
+                        onKeyDown={handleKeyDown}
+                    />
+
+                    {icon && (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (!computedDisabled) submitValueIfEnabled();
+                                else handleIconClick();
+                            }}
+                            aria-pressed={computedDisabled}
+                            className="ml-2 pr-2 flex items-center cursor-pointer"
+                        >
+                            {icon}
+                        </button>
+                    )}
+                </div>
             </div>
+
             {helperText && (
                 <p className={`${resolveHelperTextColor(state)}`}>
                     {helperText}

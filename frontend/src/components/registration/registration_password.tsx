@@ -1,12 +1,16 @@
 "use client";
 
+import {
+  registrationData,
+  saveRegistrationData,
+} from "@components/registration/registration_data"; // Import shared registration data
 import { useForm } from "react-hook-form"; // Main form hook
 import { z } from "zod"; // Schema validation library
 import { zodResolver } from "@hookform/resolvers/zod"; // Connect Zod to React Hook Form
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import SvgOpenEye from "@/components/icons/openEye.svg";
-import SvgCloseEye from "@/components/icons/closeEye.svg";
+import SvgOpenEye from "@components/icons/openEye.svg";
+import SvgCloseEye from "@components/icons/closeEye.svg";
 
 const schema = z
   .object({
@@ -44,6 +48,7 @@ export default function RegistrationPassword() {
   });
 
   const onSubmit = (data: FormData) => {
+    saveRegistrationData({ password: data.password });
     router.push("/registration/terms");
   };
 
@@ -186,8 +191,15 @@ export default function RegistrationPassword() {
             </div>
           </div>
         </div>
-        {/* TODO: add link */}
-        <p className="text-[1rem] text-gray-300">Privacy Policy</p>
+        <div className="flex flex-row gap-1">
+          <p className="text-[1rem] text-gray-300">Privacy Policy</p>
+          <p
+            className="text-primary-400 cursor-pointer"
+            onClick={() => router.push("/registration/privacyPolicy")}
+          >
+            Link
+          </p>
+        </div>
       </div>
 
       {/* Bottom Part */}

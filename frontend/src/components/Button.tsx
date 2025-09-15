@@ -2,102 +2,129 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
-type ButtonStyle = "fill" | "stroke" | "text";
+type ButtonStyle = "fill" | "stroke" | "text" |  "red-critical";;
 type ButtonSize = "sm" | "md" | "lg";
+type ButtonAlign = "left" | "center" | "right";
 
 interface ButtonProps {
-    text: string;
-    iconStart?: string;
-    iconEnd?: string;
-    onClick?: () => void;
-    disabled?: boolean;
-    styleType?: ButtonStyle;  // fill, stroke, text
-    size?: ButtonSize;        // sm, md, lg
-    href: string;
+  text: string;
+  iconStart?: string;
+  iconEnd?: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  styleType?: ButtonStyle; // fill, stroke, text
+  size?: ButtonSize; // sm, md, lg
+  width?: string;
+  height?: string;
+  href?: string;
+  align?: ButtonAlign; // left, center, right
 }
 
 export default function Button({
-    text,
-    iconStart,
-    iconEnd,
-    onClick,
-    disabled = false,
-    styleType = "fill",
-    size = "md",
+  text,
+  iconStart,
+  iconEnd,
+  onClick = () => {},
+  disabled = false,
+  styleType = "fill",
+  size = "md",
+  width = "w-fit",
+  height = "h-full",
+  href,
+  align = "center", // default center
 }: ButtonProps) {
-    const [clicked, setClicked] = useState(false);
-    
-    const router = useRouter();
-    const goTo = (path: string) => {
-        router.push(path); // เปลี่ยนหน้าไป path ที่กำหนด
-    };
+  const [clicked, setClicked] = useState(false);
 
-    const handleClick = () => {
-        if (!disabled) {
-            setClicked(!clicked); // toggle สี
-            goTo("/");
-        }
-    };
+  const router = useRouter();
 
-const sizeClasses: Record<ButtonSize, string> = {
-    sm: "py-[var(--spacing-sm)] px-[var(--spacing-sm)] text-[var(--text-body-sm)]",
-    md: "py-[var(--spacing-sm)] px-[var(--spacing-md)] text-[var(--text-body)]",
-    lg: "py-[var(--spacing-md)] px-[var(--spacing-lg)] text-[var(--text-body-lg)]",
-};
+  const handleClick = () => {
+    if (!disabled) {
+      setClicked(!clicked); // toggle สี
+      onClick();
+    }
+  };
 
-const styleClasses: Record<ButtonStyle, string> = {
+  const sizeClasses: Record<ButtonSize, string> = {
+    sm: "py-2 px-2 text-[0.875rem]",
+    md: "py-2 px-4 text-[1rem]",
+    lg: "py-4 px-6 text-[1.125rem]",
+  };
+
+  const styleClasses: Record<ButtonStyle, string> = {
     fill: `
-      ${clicked ? "bg-[var(--color-primary-300)] text-[var(--color-common-white)]" : "bg-[var(--color-primary-400)] text-[var(--color-common-white)]"}
-      hover:bg-[var(--color-primary-600)]
+      ${
+        clicked
+          ? "border-2 border-primary-300 bg-primary-300 text-white"
+          : "border-2 border-primary-400 bg-primary-400 text-white"
+      }
+      hover:bg-primary-600
     `,
     stroke: `
-      ${clicked ? "border-2 border-[var(--color-primary-300)] text-[var(--color-primary-300)]" : "border-2 border-[var(--color-primary-400)] text-[var(--color-primary-400)]"}
-      bg-[var(--color-common-white)]
-      hover:border-[var(--color-primary-600)] hover:text-[var(--color-primary-600)]
+      ${
+        clicked
+          ? "border-2 border-primary-300 text-primary-300"
+          : "border-2 border-primary-400 text-primary-400"
+      }
+      bg-white
+      hover:border-primary-600 hover:text-primary-600
     `,
     text: `
-      ${clicked ? "text-[var(--color-primary-300)]" : "text-[var(--color-primary-400)]"}
-      bg-transparent 
-      hover:text-[var(--color-primary-600)]
+      ${clicked ? "text-primary-300" : "text-primary-400"}
+      bg-transparent
+      hover:text-primary-600
     `,
-};
+    "red-critical": `
+      rounded-[var(--Radius-md,8px)]
+      border-[var(--Elevation-sm,1px)] border-[var(--Error-main,#C53737)]
+      bg-[var(--Common-white,#FFF)]
+      text-[var(--Error-main,#C53737)]
+      hover:bg-[var(--Error-main,#C53737)] hover:text-white
+    `,
+  };
 
-return (
+  const alignClasses: Record<ButtonAlign, string> = {
+    left: "justify-start pl-[var(--Spacing-md,16px)] pr-[var(--Spacing-sm,8px)]",
+    center: "justify-center px-[var(--Spacing-md,16px)]",
+    right: "justify-end pr-[var(--Spacing-md,16px)] pl-[var(--Spacing-sm,8px)]",
+  };
+
+  return (
     <button
-        onClick={handleClick}
-        disabled={disabled}
-        className={`
-        flex items-center gap-[var(--spacing-md)]
-        w-fit h-full rounded-[var(--radius-md)]
+      onClick={handleClick}
+      disabled={disabled}
+      className={`
+        flex items-center ${alignClasses[align]} gap-4
+        ${width} ${height} rounded-md
         transition-colors duration-200
         ${sizeClasses[size]}
         ${styleClasses[styleType]}
         ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+        gap-[var(--Spacing-md,16px)]
+        py-[var(--Spacing-sm,8px)]
       `}
+      style={styleType === "red-critical" ? { border: "var(--Elevation-sm,1px) solid var(--Error-main,#C53737)" } : undefined}
     >
-        {
-            iconStart
-            &&
-            <Image
-                src={iconStart}
-                alt="Icon start"
-                width={20}
-                height={20}
-                className="w-[1.25rem] h-[1.25rem]" />
-        }
-        <span className="text-inherit">{text}</span>
-        {
-            iconEnd
-            &&
-            <Image
-                src={iconEnd}
-                alt="Icon end"
-                width={20}
-                height={20}
-                className="w-[1.25rem] h-[1.25rem]" />
-        }
+      {iconStart && (
+        <Image
+          src={iconStart}
+          alt="Icon start"
+          width={20}
+          height={20}
+          className="w-[1.25rem] h-[1.25rem]"
+        />
+      )}
+      <span className="text-inherit">{text}</span>
+      {iconEnd && (
+        <Image
+          src={iconEnd}
+          alt="Icon end"
+          width={20}
+          height={20}
+          className="w-[1.25rem] h-[1.25rem]"
+        />
+      )}
     </button>
-);
+  );
 }

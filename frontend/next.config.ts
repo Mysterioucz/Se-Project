@@ -9,21 +9,24 @@ const nextConfig: NextConfig = {
 
         config.module.rules.push({
             test: /\.svg$/,
-            use: [{ loader: "@svgr/webpack", options: { icon: true } }],
+            use: [{ loader: "@svgr/webpack", options: { icon: false } }],
         });
         return config;
     },
 
-    experimental: {
-        turbo: {
-            rules: {
-                "*.svg": {
-                    loaders: ["@svgr/webpack"],
-                    as: "*.ts",
-                },
+    turbopack: {
+        rules: {
+            "*.svg": {
+                loaders: ["@svgr/webpack"],
+                as: "*.ts",
             },
         },
     },
+    eslint: {
+        dirs: ["src/app", "src/components", "src/lib"], // Only run ESLint on the 'apps' and 'utils' directories during production builds (next build)
+    },
+
+    serverExternalPackages: ["@prisma/client", "bcrypt"],
 };
 
 export default nextConfig;

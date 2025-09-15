@@ -1,0 +1,324 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  output          = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Airport {
+  AirportID   String @id @db.VarChar(10)
+  AirportName String @db.VarChar(100)
+  City        String @db.VarChar(100)
+  Country     String @db.VarChar(100)
+
+  // Relations
+  operates         Operate[]
+  departureFlights Flight[]  @relation("DepartureFlights")
+  arrivalFlights   Flight[]  @relation("ArrivalFlights")
+}
+
+model Airline {
+  AirlineName      String  @id @db.VarChar(100)
+  AirlineCaption   String  @db.VarChar(255)
+  Website          String? @db.VarChar(255)
+  AmountOfAircraft Int
+  Logo             String? @db.VarChar(255)
+
+  // Relations
+  operates  Operate[]
+  aircrafts Aircraft[]
+  flights   Flight[]
+  telNos    Airline_Tel_No[]
+  messages  Airline_Message[]
+  contacts  Contact[]
+}
+
+model Aircraft {
+  AircraftRegNo String @id @db.VarChar(20)
+  AirlineName   String @db.VarChar(100)
+  SeatCapacity  Int
+  ModelName     String @db.VarChar(100)
+
+  // Relations
+  airline Airline      @relation(fields: [AirlineName], references: [AirlineName])
+  seats   Seat[]
+  flights Flight[]
+  cabins  CabinClass[]
+}
+
+model Flight {
+  FlightNo           String   @db.VarChar(10)
+  DepartTime         DateTime
+  ArrivalTime        DateTime
+  ArrivalAirportID   String   @db.VarChar(10)
+  DepartureAirportID String   @db.VarChar(10)
+  AirlineName        String   @db.VarChar(100)
+  AircraftRegNo      String   @db.VarChar(20)
+  AvailableSeat      Int
+  TransitAmount      Int
+
+  // Relations
+  arrivalAirport   Airport       @relation("ArrivalFlights", fields: [ArrivalAirportID], references: [AirportID])
+  departureAirport Airport       @relation("DepartureFlights", fields: [DepartureAirportID], references: [AirportID])
+  airline          Airline       @relation(fields: [AirlineName], references: [AirlineName])
+  aircraft         Aircraft      @relation(fields: [AircraftRegNo], references: [AircraftRegNo])
+  passengers       Assigned_To[]
+  tickets          Ticket[]
+
+  @@id([FlightNo, DepartTime, ArrivalTime])
+}
+
+model Transit {
+  FlightNo           String   @db.VarChar(10)
+  DepartTime         DateTime
+  ArrivalTime        DateTime
+  Transit            String   @db.VarChar(20)
+  durationToTransit  Int   
+
+  @@id([FlightNo, DepartTime, ArrivalTime])
+}
+
+model Ticket {
+  TicketID          String   @id @db.VarChar(50)
+  Price             Float
+  TicketStatus      String
+  PassengerName     String
+  PassengerLastName String
+  Gender            String
+  DateOfBirth       DateTime
+  Nationality       String
+  BaggageChecked    Float
+  BaggageCabin      Float
+  SeatNo            String
+  AircraftRegNo     String
+  FlightNo          String
+  DepartTime        DateTime
+  ArrivalTime       DateTime
+
+  // Relations
+  flight               Flight                @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
+  seat                 Seat                  @relation(fields: [AircraftRegNo, SeatNo], references: [AircraftRegNo, SeatNo])
+  purchase             Purchase?
+  domesticTicket       Domestic_Ticket?
+  internationalTicket  International_Ticket?
+  roundTripTicketPart1 Round_Trip_Ticket?    @relation("RoundTrip1")
+  roundTripTicketPart2 Round_Trip_Ticket?    @relation("RoundTrip2")
+}
+
+// --- Join / Associative Tables ---
+
+model Operate {
+  AirportID   String @db.VarChar(10)
+  AirlineName String @db.VarChar(100)
+
+  // Relations
+  airport Airport @relation(fields: [AirportID], references: [AirportID])
+  airline Airline @relation(fields: [AirlineName], references: [AirlineName])
+
+  @@id([AirportID, AirlineName])
+}
+
+model Assigned_To {
+  FlightNo      String   @db.VarChar(10)
+  DepartTime    DateTime
+  ArrivalTime   DateTime
+  UserAccountID String   @db.VarChar(50)
+
+  // Relations
+  flight Flight @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
+  user   User   @relation(fields: [UserAccountID], references: [UserAccountID])
+
+  @@id([FlightNo, DepartTime, ArrivalTime, UserAccountID])
+}
+
+model Contact {
+  AdminAccountID String @db.VarChar(50)
+  AirlineName    String @db.VarChar(50)
+  ContactStatus  String
+
+  // Relations
+  admin   Admin   @relation(fields: [AdminAccountID], references: [AdminAccountID])
+  airline Airline @relation(fields: [AirlineName], references: [AirlineName])
+
+  @@id([AdminAccountID, AirlineName])
+}
+
+model Report_To {
+  UserAccountID  String @db.VarChar(50)
+  AdminAccountID String @db.VarChar(50)
+  ReportStatus   String
+
+  // Relations
+  //user   User   @relation(fields: [UserAccountID], references: [UserAccountID])
+  admin   Admin    @relation(fields: [AdminAccountID], references: [AdminAccountID])
+  user    User     @relation(fields: [UserAccountID], references: [UserAccountID])
+  Reports Report[] @relation("CreatedReports")
+
+  @@id([UserAccountID, AdminAccountID])
+}
+
+// --- Other Models ---
+
+model CabinClass {
+  AircraftRegNo String   @db.VarChar(20)
+  Class         String   @db.VarChar(20)
+  StandardPrice Float
+  // Relations
+  aircraft      Aircraft @relation(fields: [AircraftRegNo], references: [AircraftRegNo])
+
+  @@id([AircraftRegNo, Class])
+}
+
+model Seat {
+  AircraftRegNo String @db.VarChar(20)
+  SeatNo        String @db.VarChar(10)
+  SeatType      String
+
+  // Relations
+  aircraft Aircraft @relation(fields: [AircraftRegNo], references: [AircraftRegNo])
+  tickets  Ticket[]
+
+  @@id([AircraftRegNo, SeatNo])
+}
+
+model Admin {
+  AdminAccountID      String            @id @db.VarChar(50)
+  IPAddress           String?
+  // Relations
+  account             Account           @relation(fields: [AdminAccountID], references: [AccountID])
+  sentAirlineMessages Airline_Message[]
+  contacts            Contact[]
+  involvedInReports   Report_To[]
+}
+
+model Airline_Message {
+  AirlineName    String @db.VarChar(100)
+  AdminAccountID String @db.VarChar(50)
+  MessageText    String
+
+  // Relations
+  admin   Admin   @relation(fields: [AdminAccountID], references: [AdminAccountID])
+  airline Airline @relation(fields: [AirlineName], references: [AirlineName])
+
+  @@id([AirlineName, AdminAccountID, MessageText])
+}
+
+model Account {
+  AccountID String @id @db.VarChar(50) @default(uuid())
+  Email     String @unique
+  Password  String
+  FirstName String
+  LastName  String
+
+  // Relations for inheritance
+  user  User?
+  admin Admin?
+}
+
+model User {
+  UserAccountID String @id @db.VarChar(50)
+
+  // Relations
+  account           Account       @relation(fields: [UserAccountID], references: [AccountID])
+  telNos            User_Tel_No[]
+  assignedFlights   Assigned_To[]
+  purchases         Purchase[]
+  involvedInReports Report_To[]
+}
+
+model User_Tel_No {
+  UserAccountID String @id @db.VarChar(50)
+  TelNo         String @db.VarChar(20)
+
+  // Relation
+  user User @relation(fields: [UserAccountID], references: [UserAccountID])
+}
+
+model Report {
+  ReportID          String  @id @db.VarChar(50)
+  ReportDescription String
+  BookingID         String
+  Attachment        String?
+  UserAccountID     String  @db.VarChar(50) // The user who created the report
+  AdminAccountID    String  @db.VarChar(50) // The admin handling the report
+  AccountID             String
+  TelNo             String
+  PassengerName     String
+
+  // Relations
+  creator Report_To @relation("CreatedReports", fields: [UserAccountID, AdminAccountID], references: [UserAccountID, AdminAccountID])
+}
+
+// --- Ticket Specialization Models ---
+
+model Domestic_Ticket {
+  TicketID String @id @db.VarChar(50)
+
+  // Relation
+  ticket Ticket @relation(fields: [TicketID], references: [TicketID])
+}
+
+model International_Ticket {
+  TicketID       String   @id @db.VarChar(50)
+  PassportNo     String
+  IssuedCountry  String
+  PassportExpiry DateTime
+
+  // Relation
+  ticket Ticket @relation(fields: [TicketID], references: [TicketID])
+}
+
+model Round_Trip_Ticket {
+  TicketID  String @id @db.VarChar(50) // Represents the first ticket in the pair
+  TicketID2 String @unique @db.VarChar(50) // Represents the second ticket
+
+  // Relations
+  ticket1 Ticket @relation("RoundTrip1", fields: [TicketID], references: [TicketID])
+  ticket2 Ticket @relation("RoundTrip2", fields: [TicketID2], references: [TicketID])
+}
+
+// --- Transaction Models ---
+
+model Purchase {
+  TicketID      String @unique @db.VarChar(50)
+  PaymentID     String @unique @db.VarChar(50)
+  UserAccountID String @db.VarChar(50)
+
+  // Relations
+  ticket  Ticket  @relation(fields: [TicketID], references: [TicketID])
+  payment Payment @relation(fields: [PaymentID], references: [PaymentID])
+  user    User    @relation(fields: [UserAccountID], references: [UserAccountID])
+
+  @@id([TicketID, PaymentID])
+}
+
+model Payment {
+  PaymentID         String   @id @db.VarChar(50)
+  PaymentDateTime   DateTime
+  PaymentMethod     String
+  TransactionStatus String
+  Amount            Float
+
+  // Relation
+  purchase Purchase?
+}
+
+model Airline_Tel_No {
+  TelNo       String @db.VarChar(20)
+  AirlineName String @db.VarChar(100)
+
+  // Relation
+  airline Airline @relation(fields: [AirlineName], references: [AirlineName])
+
+  @@id([TelNo, AirlineName])
+}
