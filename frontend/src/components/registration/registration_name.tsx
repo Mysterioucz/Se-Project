@@ -51,7 +51,7 @@ export default function RegistrationName() {
             className="flex flex-col justify-center gap-8 w-[32.5rem]"
         >
             {/* Top Part */}
-            <p className="text-[2.5rem] font-medium text-primary-900">
+            <p className="!text-[2.5rem] !font-medium !text-primary-900">
                 Enter Your Information
             </p>
 
@@ -59,10 +59,10 @@ export default function RegistrationName() {
             <div className="flex flex-col gap-2">
                 <div className="flex flex-col gap-3">
                     <p
-                        className={`text-[1.125rem] font-semibold ${
+                        className={`!text-[1.125rem] !font-semibold ${
                             errors.firstName
-                                ? "text-error-main"
-                                : "text-primary-900"
+                                ? "!text-error-dark"
+                                : "!text-primary-900"
                         }`}
                     >
                         First Name*
@@ -99,10 +99,10 @@ export default function RegistrationName() {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-3">
                         <p
-                            className={`text-[1.125rem] font-semibold ${
+                            className={`!text-[1.125rem] !font-semibold ${
                                 errors.lastName
-                                    ? "text-error-main"
-                                    : "text-primary-900"
+                                    ? "!text-error-dark"
+                                    : "!text-primary-900"
                             }`}
                         >
                             Last Name*
