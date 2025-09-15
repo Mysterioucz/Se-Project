@@ -40,7 +40,8 @@ export default function Navbar() {
                 {status === "authenticated" ? (
                     <Link href={"/account-setting"}>
                         <Button
-                            text={displayName ?? "Can't Fetch Name"}
+						//TODO: change to display name when the problem of editing profile name resolved
+                            text={"Profile"}
                             styleType="stroke"
                             size="md"
                             iconStart="/navbar/fi-sr-user.svg"

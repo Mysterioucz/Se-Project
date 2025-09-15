@@ -39,14 +39,14 @@ export default function RegistrationEmail() {
     return (
         <div className="flex flex-col items-center justify-center gap-8">
             {/* Top Part */}
-            <p className="text-[3rem] font-bold text-primary-900">Sign In</p>
+            <p className="!text-[3rem] !font-bold !text-primary-900">Sign In</p>
 
             {/* Email Part */}
 
             <div className="flex flex-col gap-3">
                 <p
-                    className={`text-[1.125rem] font-semibold ${
-                        loginError ? "text-error-main" : "text-primary-900"
+                    className={`!text-[1.125rem] !font-semibold ${
+                        loginError ? "!text-error-dark" : "!text-primary-900"
                     }`}
                 >
                     Email Address*
@@ -79,10 +79,10 @@ export default function RegistrationEmail() {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-3">
                         <p
-                            className={`text-[1.125rem] font-semibold ${
+                            className={`!text-[1.125rem] !font-semibold ${
                                 loginError
-                                    ? "text-error-main"
-                                    : "text-primary-900"
+                                    ? "!text-error-dark"
+                                    : "!text-primary-900"
                             }`}
                         >
                             Password*
@@ -121,12 +121,12 @@ export default function RegistrationEmail() {
 
                 <div className="flex flex-row justify-between">
                     {loginError && (
-                        <p className="text-error-main text-[1rem]">
+                        <p className="!text-error-main !text-[1rem]">
                             Invalid Email or Password
                         </p>
                     )}
                     {/* TODO: implement onClick (Goto reset password page) */}
-                    <p className="text-primary-500 text-[1rem] cursor-pointer">
+                    <p className="!text-primary-500 !text-[1rem] cursor-pointer">
                         Forget Password?
                     </p>
                 </div>

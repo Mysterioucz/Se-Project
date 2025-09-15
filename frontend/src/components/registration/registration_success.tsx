@@ -13,10 +13,10 @@ export default function RegistrationSuccess() {
                     ✓
                 </div>
                 <div className="flex flex-col items-center justify-center gap-3">
-                    <p className="text-[2.125rem] text-success-main">
+                    <p className="!text-[2.125rem] !text-success-main">
                         Successfully Signed Up !
                     </p>
-                    <p className="text-[1rem] text-gray-300">
+                    <p className="!text-[1rem] !text-gray-300">
                         You’ve already signed up! Log in to continue.
                     </p>
                 </div>

@@ -1,6 +1,9 @@
 "use client";
 
-import { registrationData, saveRegistrationData } from "@components/registration/registration_data"; // Import shared registration data
+import {
+    registrationData,
+    saveRegistrationData,
+} from "@components/registration/registration_data"; // Import shared registration data
 import { useForm } from "react-hook-form"; // Main form hook
 import { z } from "zod"; // Schema validation library
 import { zodResolver } from "@hookform/resolvers/zod"; // Connect Zod to React Hook Form
@@ -20,22 +23,22 @@ export default function RegistrationEmail() {
     const [focused, setFocused] = useState(false);
     const router = useRouter();
 
-  const {
-    register, // Connects inputs to form
-    handleSubmit, // Handles form submission and validation
-    formState: { errors }, // Stores validation errors
-  } = useForm<FormData>({
-    resolver: zodResolver(schema), // Connect Zod schema for validation
-    defaultValues: {
-      email: registrationData.email || "",
-    },
-  });
+    const {
+        register, // Connects inputs to form
+        handleSubmit, // Handles form submission and validation
+        formState: { errors }, // Stores validation errors
+    } = useForm<FormData>({
+        resolver: zodResolver(schema), // Connect Zod schema for validation
+        defaultValues: {
+            email: registrationData.email || "",
+        },
+    });
 
-  const onSubmit = (data: FormData) => {
-    console.log("✅ Valid email:", data.email);
-    saveRegistrationData({ email: data.email });
-    router.push("/registration/name");
-  };
+    const onSubmit = (data: FormData) => {
+        console.log("✅ Valid email:", data.email);
+        saveRegistrationData({ email: data.email });
+        router.push("/registration/name");
+    };
 
     return (
         <form
@@ -43,7 +46,7 @@ export default function RegistrationEmail() {
             className="flex flex-col justify-center gap-8 w-[32.5rem]"
         >
             {/* Top Part */}
-            <p className="text-[2.5rem] font-medium text-primary-900">
+            <p className="!text-[2.5rem] !font-medium !text-primary-900">
                 Create an account
             </p>
 
@@ -52,10 +55,10 @@ export default function RegistrationEmail() {
                 {/* Email Part */}
                 <div className="flex flex-col gap-3">
                     <p
-                        className={`text-[1.125rem] font-semibold ${
+                        className={`!text-[1.125rem] !font-semibold ${
                             errors.email
-                                ? "text-error-main"
-                                : "text-primary-900"
+                                ? "!text-error-main"
+                                : "!text-primary-900"
                         }`}
                     >
                         Email Address*
@@ -106,8 +109,8 @@ export default function RegistrationEmail() {
             "
                     />
                     <p className="text-[0.875rem] text-primary-400">
-                        Yes, I would like Fly with Sigma to send me info about
-                        new promotion, events, or other related-content.
+                        Yes, I would like FlyWithSigma to send me info about
+                        new promotions, events, or other related-content.
                     </p>
                 </div>
             </div>
