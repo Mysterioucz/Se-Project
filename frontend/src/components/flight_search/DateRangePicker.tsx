@@ -205,6 +205,9 @@ export default function DateRangePicker({
 
     const getDateButtonText = () => {
         if (selectedStartDate && selectedEndDate) {
+			if(selectedStartDate.getTime() === selectedEndDate.getTime()) {
+				return `${formatDate(selectedStartDate)}`;
+			}
             return `${formatDate(selectedStartDate)} - ${formatDate(
                 selectedEndDate
             )}`;

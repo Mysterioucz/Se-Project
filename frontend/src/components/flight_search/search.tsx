@@ -139,7 +139,7 @@ export default function FlightSearchBar({
                                         handleSelection("flight", "Round Trip")
                                     }
                                 >
-                                    Round trip
+                                    <p>Round trip</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -147,7 +147,7 @@ export default function FlightSearchBar({
                                         handleSelection("flight", "One Way")
                                     }
                                 >
-                                    One way
+                                    <p>One way</p>
                                 </li>
                             </ul>
                         )}
@@ -171,10 +171,10 @@ export default function FlightSearchBar({
                                         handleSelection("class", "Economy")
                                     }
                                 >
-                                    Economy
+                                    <p>Economy</p>
                                 </li>
                                 <li
-                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    className="px-4 py-2 w-fit hover:bg-gray-100 cursor-pointer"
                                     onClick={() =>
                                         handleSelection(
                                             "class",
@@ -182,7 +182,7 @@ export default function FlightSearchBar({
                                         )
                                     }
                                 >
-                                    Premium Economy
+                                    <p>Premium Economy</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -190,7 +190,7 @@ export default function FlightSearchBar({
                                         handleSelection("class", "Business")
                                     }
                                 >
-                                    Business
+                                    <p>Business</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -198,7 +198,7 @@ export default function FlightSearchBar({
                                         handleSelection("class", "First")
                                     }
                                 >
-                                    First
+                                    <p>First</p>
                                 </li>
                             </ul>
                         )}
