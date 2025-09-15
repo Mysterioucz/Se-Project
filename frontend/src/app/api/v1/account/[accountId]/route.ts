@@ -59,7 +59,7 @@ export async function PUT(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Error",
+                message: error,
             }),
             { status: 500 }
         );
@@ -108,7 +108,7 @@ export async function GET(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Error",
+                message: error,
             }),
             { status: 500 }
         );
@@ -239,7 +239,7 @@ export async function DELETE(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Error",
+                message: error,
             }),
             { status: 500 }
         );
