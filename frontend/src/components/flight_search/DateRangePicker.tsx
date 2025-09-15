@@ -80,7 +80,7 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
             setSelectedStartDate(clickedDate);
             setSelectedEndDate(clickedDate);
             onClose();
-        } else if (selectType === "Round Trip" && selectedStartDate) {
+        } else if (selectType === "Round Trip") {
             // Ensure return date is not before depart date
             if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
                 // Start a new range

@@ -9,6 +9,7 @@ import Passenger from "./Passenger";
 import { MouseEventHandler, useState } from "react";
 import DateRangePicker from "./DateRangePicker";
 import { useEffect } from "react";
+import { set } from "zod";
 
 export type SelectedValues = {
     flight: "One Way" | "Round Trip";
@@ -86,6 +87,10 @@ export default function FlightSearchBar({
 
     // Function to handle selection of a value in any dropdown
     const handleSelection = (dropdown: keyof SelectedValues, value: string) => {
+        if (dropdown === "flight" && value !== selectedValues.flight) {
+            setSelectedStartDate(null); // Clear start date when flight type changes
+            setSelectedEndDate(null); // Clear return date for one way flights
+        }
         setSelectedValues({
             ...selectedValues,
             [dropdown]: value,

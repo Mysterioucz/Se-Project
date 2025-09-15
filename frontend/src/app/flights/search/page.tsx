@@ -53,6 +53,10 @@ export default function Page() {
         "initial" | "loading" | "loaded" | "empty"
     >("initial");
 
+    const [flightState, setFlightState] = useState<"depart" | "return">(
+        "depart"
+    );
+
     const fetchData = async () => {
         setPageState("loading");
         const totalPassenger =
@@ -140,11 +144,33 @@ export default function Page() {
 
     const [HeaderText, setHeaderText] = useState("Select flight informations");
     useEffect(() => {
-        if (pageState !== "initial") {
+        if (pageState === "initial") {
+            setHeaderText("Select flight informations");
+        } else if (selectedValues.flight === "One Way") {
             setHeaderText("Departing Flights");
+            setFlightState("depart");
+        } else if (selectedValues.flight === "Round Trip") {
+            if (flightState === "depart") {
+                setHeaderText("Departing Flights");
+            } else if (flightState === "return") {
+                setHeaderText("Returning Flights");
+            }
         }
-    }, [pageState]);
+    }, [pageState, flightState]);
 
+    function handleSelectFlightCard(id: string) {
+        //TODO: handle flight selection state
+        if (selectedValues.flight === "One Way") {
+            alert(`You have selected your departing flight.`);
+            return;
+        }
+        if (flightState === "depart") {
+            setFlightState("return");
+            alert(
+                "Departure flight selected. Please select your returning flight."
+            );
+        }
+    }
     function renderContent() {
         if (pageState == "initial") {
             return <FlightSearchFunishing />;
@@ -192,6 +218,7 @@ export default function Page() {
                         id={index.toString()}
                         airlineTimeStamp={flight.airlineTimeStamp}
                         priceCabinClass={flight.priceCabinClass}
+                        onClick={() => handleSelectFlightCard(index.toString())}
                     />
                 )
             );
