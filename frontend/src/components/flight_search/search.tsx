@@ -9,15 +9,16 @@ import Passenger from "./Passenger";
 import { MouseEventHandler, useState } from "react";
 import DateRangePicker from "./DateRangePicker";
 import { useEffect } from "react";
+import { set } from "zod";
 
-type SelectedValues = {
-    flight: string;
+export type SelectedValues = {
+    flight: "One Way" | "Round Trip";
     class: string;
     leave: string;
     go: string;
 };
 
-type PassengerCount = {
+export type PassengerCount = {
     adult: number;
     children: number;
     infants: number;
@@ -86,6 +87,10 @@ export default function FlightSearchBar({
 
     // Function to handle selection of a value in any dropdown
     const handleSelection = (dropdown: keyof SelectedValues, value: string) => {
+        if (dropdown === "flight" && value !== selectedValues.flight) {
+            setSelectedStartDate(null); // Clear start date when flight type changes
+            setSelectedEndDate(null); // Clear return date for one way flights
+        }
         setSelectedValues({
             ...selectedValues,
             [dropdown]: value,
@@ -139,7 +144,7 @@ export default function FlightSearchBar({
                                         handleSelection("flight", "Round Trip")
                                     }
                                 >
-                                    Round trip
+                                    <p>Round trip</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -147,7 +152,7 @@ export default function FlightSearchBar({
                                         handleSelection("flight", "One Way")
                                     }
                                 >
-                                    One way
+                                    <p>One way</p>
                                 </li>
                             </ul>
                         )}
@@ -171,10 +176,10 @@ export default function FlightSearchBar({
                                         handleSelection("class", "Economy")
                                     }
                                 >
-                                    Economy
+                                    <p>Economy</p>
                                 </li>
                                 <li
-                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    className="px-4 py-2 w-fit hover:bg-gray-100 cursor-pointer"
                                     onClick={() =>
                                         handleSelection(
                                             "class",
@@ -182,7 +187,7 @@ export default function FlightSearchBar({
                                         )
                                     }
                                 >
-                                    Premium Economy
+                                    <p>Premium Economy</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -190,7 +195,7 @@ export default function FlightSearchBar({
                                         handleSelection("class", "Business")
                                     }
                                 >
-                                    Business
+                                    <p>Business</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -198,7 +203,7 @@ export default function FlightSearchBar({
                                         handleSelection("class", "First")
                                     }
                                 >
-                                    First
+                                    <p>First</p>
                                 </li>
                             </ul>
                         )}
@@ -282,6 +287,7 @@ export default function FlightSearchBar({
                             selectedEndDate={selectedEndDate} // Pass end date
                             setSelectedStartDate={setSelectedStartDate} // Pass setter for start date
                             setSelectedEndDate={setSelectedEndDate} // Pass setter for end date
+                            selectType={selectedValues.flight} // Pass type of selection (depart or return)
                         />
                     </div>
 

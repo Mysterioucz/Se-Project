@@ -1,3 +1,8 @@
+import {
+    PassengerCount,
+    SelectedValues,
+} from "@/src/components/flight_search/search";
+
 export interface FlightData {
     airlineName: string;
     flightNo: string;
@@ -42,13 +47,13 @@ export interface MappedFlightData {
     };
 }
 
-export const INIT_SELECTED_VALUES = {
-    flight: "Flight type",
-    class: "Class type",
+export const INIT_SELECTED_VALUES: SelectedValues = {
+    flight: "One Way",
+    class: "Economy",
     leave: "Leaving From?",
     go: "Going to?",
 };
-export const INIT_PASSENGER_COUNT = {
+export const INIT_PASSENGER_COUNT: PassengerCount = {
     adult: 1,
     children: 0,
     infants: 0,

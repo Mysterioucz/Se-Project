@@ -1,6 +1,9 @@
 "use client";
 import FlightFilterTab from "@/src/components/flight_search/filter";
-import FlightSearchBar from "@/src/components/flight_search/search";
+import FlightSearchBar, {
+    PassengerCount,
+    SelectedValues,
+} from "@/src/components/flight_search/search";
 import FlightSortTab from "@/src/components/flight_search/sort";
 import FlightCard from "@/src/components/flightCard/flight_card";
 import { MagnifyIcon } from "@/src/components/icons/module";
@@ -22,8 +25,11 @@ import Navbar from "@/src/components/Navbar";
 import { CircularProgress } from "@mui/material";
 
 export default function Page() {
-    const [selectedValues, setSelectedValues] = useState(INIT_SELECTED_VALUES);
-    const [passengerCount, setPassengerCount] = useState(INIT_PASSENGER_COUNT);
+    //TODO: Need to refactor the whole page to be stateless and use searchParams instead
+    const [selectedValues, setSelectedValues] =
+        useState<SelectedValues>(INIT_SELECTED_VALUES);
+    const [passengerCount, setPassengerCount] =
+        useState<PassengerCount>(INIT_PASSENGER_COUNT);
     const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
         INIT_SELECTED_START_DATE
     );
@@ -47,6 +53,10 @@ export default function Page() {
         "initial" | "loading" | "loaded" | "empty"
     >("initial");
 
+    const [flightState, setFlightState] = useState<"depart" | "return">(
+        "depart"
+    );
+
     const fetchData = async () => {
         setPageState("loading");
         const totalPassenger =
@@ -59,10 +69,8 @@ export default function Page() {
             ); // Base URL for API
             const params = new URLSearchParams();
             // Search
-            if (selectedValues.flight != "Flight type")
-                params.append(`flightType`, selectedValues.flight);
-            if (selectedValues.class != "Class type")
-                params.append(`classType`, selectedValues.class);
+            params.append(`flightType`, selectedValues.flight);
+            params.append(`classType`, selectedValues.class);
             if (selectedValues.leave != `Leaving from?`)
                 params.append(`departureCity`, selectedValues.leave);
             if (selectedValues.go != `Going to?`)
@@ -136,11 +144,33 @@ export default function Page() {
 
     const [HeaderText, setHeaderText] = useState("Select flight informations");
     useEffect(() => {
-        if (pageState !== "initial") {
+        if (pageState === "initial") {
+            setHeaderText("Select flight informations");
+        } else if (selectedValues.flight === "One Way") {
             setHeaderText("Departing Flights");
+            setFlightState("depart");
+        } else if (selectedValues.flight === "Round Trip") {
+            if (flightState === "depart") {
+                setHeaderText("Departing Flights");
+            } else if (flightState === "return") {
+                setHeaderText("Returning Flights");
+            }
         }
-    }, [pageState]);
+    }, [pageState, flightState]);
 
+    function handleSelectFlightCard(id: string) {
+        //TODO: handle flight selection state
+        if (selectedValues.flight === "One Way") {
+            alert(`You have selected your departing flight.`);
+            return;
+        }
+        if (flightState === "depart") {
+            setFlightState("return");
+            alert(
+                "Departure flight selected. Please select your returning flight."
+            );
+        }
+    }
     function renderContent() {
         if (pageState == "initial") {
             return <FlightSearchFunishing />;
@@ -188,6 +218,7 @@ export default function Page() {
                         id={index.toString()}
                         airlineTimeStamp={flight.airlineTimeStamp}
                         priceCabinClass={flight.priceCabinClass}
+                        onClick={() => handleSelectFlightCard(index.toString())}
                     />
                 )
             );
