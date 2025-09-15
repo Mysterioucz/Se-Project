@@ -5,7 +5,7 @@ export async function GET() {
     try {
         // Fetch cities from the database, ensuring they are distinct
         const airlines = await prisma.airline.findMany({
-            distinct: ['AirlineName'], // Fetch only distinct cities
+            distinct: ["AirlineName"], // Fetch only distinct cities
             select: {
                 AirlineName: true, // Only select the City field
             },
@@ -32,7 +32,7 @@ export async function GET() {
         return NextResponse.json(
             {
                 success: false,
-                message: "Error fetching airlines",
+                message: `Error fetching airlines: ${error}`,
             },
             { status: 500 }
         );

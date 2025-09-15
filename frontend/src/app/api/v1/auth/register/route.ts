@@ -9,7 +9,9 @@ export async function POST(req: NextRequest) {
     const { Email, Password, FirstName, LastName } = await req.json();
     if (!Password || !FirstName || !LastName || !Email) {
         return new Response(
-            JSON.stringify({ message: "Please provide all required parameters" }),
+            JSON.stringify({
+                message: "Please provide all required parameters",
+            }),
             { status: 400 }
         );
     }
@@ -25,12 +27,12 @@ export async function POST(req: NextRequest) {
                 LastName,
             },
         });
-        
+
         const accountID = newAccount?.AccountID;
         const addUser = await prisma.user.create({
             data: {
                 UserAccountID: accountID,
-            }
+            },
         });
 
         return new Response(
@@ -43,7 +45,7 @@ export async function POST(req: NextRequest) {
     } catch (error) {
         return new Response(
             JSON.stringify({
-                message: "Error",
+                message: error,
             }),
             { status: 500 }
         );
