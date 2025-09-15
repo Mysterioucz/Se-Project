@@ -64,12 +64,22 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
             Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), day)
         );
         clickedDate.setUTCHours(0, 0, 0, 0);
-		//TODO: need to create enum for selectType
+        const today = new Date(
+            Date.UTC(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                new Date().getDate()
+            )
+        );
+        if (clickedDate.getDate() < today.getDate()) {
+            return; // Prevent selecting past dates
+        }
+        //TODO: need to create enum for selectType
         if (selectType === "One Way") {
             // Select only one date
             setSelectedStartDate(clickedDate);
             setSelectedEndDate(clickedDate);
-            onClose(); 
+            onClose();
         } else if (selectType === "Round Trip" && selectedStartDate) {
             // Ensure return date is not before depart date
             if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
@@ -78,7 +88,7 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
                 setSelectedEndDate(null); // Reset the end date
             } else if (selectedStartDate && !selectedEndDate) {
                 // Set the end date of the range
-                if (clickedDate >= selectedStartDate) {
+                if (clickedDate > selectedStartDate) {
                     setSelectedEndDate(clickedDate);
                     onClose(); // Close the picker after selecting the range
                 }
