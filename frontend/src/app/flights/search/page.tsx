@@ -133,6 +133,8 @@ export default function Page() {
             setConvertedFlightData(convertedData);
         } catch (err) {
             // console.log(`Failed to fetch flights' data`, err);
+			alert("Failed to fetch flight data. Please try again later.");
+			setPageState("empty");
         }
     };
 
