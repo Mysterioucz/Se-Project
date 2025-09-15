@@ -1,6 +1,9 @@
 "use client";
 
-import { registrationData, saveRegistrationData } from "@components/registration/registration_data"; // Import shared registration data
+import {
+  registrationData,
+  saveRegistrationData,
+} from "@components/registration/registration_data"; // Import shared registration data
 import { useForm } from "react-hook-form"; // Main form hook
 import { z } from "zod"; // Schema validation library
 import { zodResolver } from "@hookform/resolvers/zod"; // Connect Zod to React Hook Form
@@ -8,24 +11,24 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const schema = z.object({
-    firstName: z
-        .string()
-        .min(2, "First name must be at least 2 characters")
-        .max(100, "First name must be at most 100 characters")
-        .nonempty("First name is required"),
-    lastName: z
-        .string()
-        .min(2, "Last name must be at least 2 characters")
-        .max(100, "Last name must be at most 100 characters")
-        .nonempty("Last name is required"),
+  firstName: z
+    .string()
+    .min(2, "First name must be at least 2 characters")
+    .max(100, "First name must be at most 100 characters")
+    .nonempty("First name is required"),
+  lastName: z
+    .string()
+    .min(2, "Last name must be at least 2 characters")
+    .max(100, "Last name must be at most 100 characters")
+    .nonempty("Last name is required"),
 });
 
 type FormData = z.infer<typeof schema>;
 
 export default function RegistrationName() {
-    const [nameFocused, setNameFocused] = useState(false);
-    const [lastNameFocused, setLastNameFocused] = useState(false);
-    const router = useRouter();
+  const [nameFocused, setNameFocused] = useState(false);
+  const [lastNameFocused, setLastNameFocused] = useState(false);
+  const router = useRouter();
 
   const {
     register, // Connects inputs to form
@@ -41,7 +44,10 @@ export default function RegistrationName() {
 
   const onSubmit = (data: FormData) => {
     console.log("✅ Valid name:", data.firstName, data.lastName);
-    saveRegistrationData({ firstName: data.firstName, lastName: data.lastName });
+    saveRegistrationData({
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
     router.push("/registration/password");
   };
 
@@ -134,26 +140,24 @@ export default function RegistrationName() {
                         </div>
                     </div>
                 </div>
-                {/* TODO: add link */}
-                <p className="text-[1rem] text-gray-300">Privacy Policy</p>
             </div>
 
-            {/* Bottom Part */}
-            <div className="flex justify-center gap-4">
-                <button
-                    type="button"
-                    className="w-[7rem] h-[2.1875rem] bg-white rounded-md items-center justify-center text-primary-400 border-1 border-primary-400 text-[16px] cursor-pointer hover:opacity-90"
-                    onClick={() => router.push("/registration/email")}
-                >
-                    Back
-                </button>
-                <button
-                    type="submit"
-                    className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px] cursor-pointer hover:opacity-90"
-                >
-                    Next
-                </button>
-            </div>
-        </form>
-    );
+      {/* Bottom Part */}
+      <div className="flex justify-center gap-4">
+        <button
+          type="button"
+          className="w-[7rem] h-[2.1875rem] bg-white rounded-md items-center justify-center text-primary-400 border-1 border-primary-400 text-[16px] cursor-pointer hover:opacity-90"
+          onClick={() => router.push("/registration/email")}
+        >
+          Back
+        </button>
+        <button
+          type="submit"
+          className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px] cursor-pointer hover:opacity-90"
+        >
+          Next
+        </button>
+      </div>
+    </form>
+  );
 }

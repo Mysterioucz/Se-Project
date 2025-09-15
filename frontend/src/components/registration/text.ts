@@ -93,3 +93,19 @@ These Terms shall be governed by and construed in accordance with the laws of Th
 11. Amendments to These Terms
 
 We reserve the right to modify these Terms at any time. We will post the revised terms on the Platform and update the "Last Updated" date. Your continued use of the Platform after such changes constitutes your acceptance of the new Terms.`;
+
+export const privacyPolicyText = `FlywithSigma – Flight Booking System
+
+At FlywithSigma, we value your privacy. We collect personal details (such as name, contact, passport/ID), booking information (flights, seats, travel dates), and payment data (processed securely through trusted providers). We also collect basic technical data (e.g., IP, browser, cookies) to improve our service.
+
+Your information is used only to process bookings, manage payments, send confirmations or updates, and comply with legal requirements. We may share necessary data with airlines, payment providers, and authorities when required by law. We never sell your personal information.
+
+We protect your data with encryption and secure systems, and we retain it only as long as necessary. You have the right to access, correct, or request deletion of your personal data.
+
+Our website/app uses cookies to enhance your experience. You may disable cookies in your browser, but some features may not function properly.
+
+We may update this policy from time to time, and changes will be posted here.
+
+Contact Us
+FlywithSigma Customer Support
+Email: support@flywithsigma.com | Phone: +1 (555) 123-4567`;
