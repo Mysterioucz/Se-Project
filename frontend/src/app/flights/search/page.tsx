@@ -23,6 +23,7 @@ import {
 import FlightSearchFunishing from "@/src/components/flight_search/FlightSearchFurnishings";
 import Navbar from "@/src/components/Navbar";
 import { CircularProgress } from "@mui/material";
+import Footer from "@/src/components/footer/footer";
 
 export default function Page() {
     //TODO: Need to refactor the whole page to be stateless and use searchParams instead
@@ -133,8 +134,8 @@ export default function Page() {
             setConvertedFlightData(convertedData);
         } catch (err) {
             // console.log(`Failed to fetch flights' data`, err);
-			alert("Failed to fetch flight data. Please try again later.");
-			setPageState("empty");
+            alert("Failed to fetch flight data. Please try again later.");
+            setPageState("empty");
         }
     };
 
@@ -229,7 +230,7 @@ export default function Page() {
 
     return (
         <div
-            className={`flex flex-col w-full min-h-screen items-center ${
+            className={`flex flex-col gap-10 w-full min-h-screen items-center ${
                 pageState === "initial" ? "" : "bg-primary-50"
             } justify-top`}
         >
@@ -252,6 +253,7 @@ export default function Page() {
                     <div className="flex w-full gap-4">{renderContent()}</div>
                 </div>
             </div>
+            {pageState === "initial" ? <Footer /> : null}
         </div>
     );
 }
