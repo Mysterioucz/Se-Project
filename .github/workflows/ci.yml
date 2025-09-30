@@ -23,20 +23,20 @@ jobs:
         with:
           node-version: 20
           cache: "pnpm"
-          cache-dependency-path: ./frontend/pnpm-lock.yaml
+          cache-dependency-path: ./pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: ./frontend
+        working-directory: ./
 
       - name: Run lint
         run: pnpm lint
-        working-directory: ./frontend
+        working-directory: ./
 
       # - name: Run tests
       #   run: pnpm test
-      #   working-directory: ./frontend
+      #   working-directory: ./
 
       - name: Build
         run: pnpm build
-        working-directory: ./frontend
+        working-directory: ./
