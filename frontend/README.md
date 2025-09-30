@@ -136,8 +136,30 @@ Through this project, we gained experience in:
 
 ## 📬 Collaborator
 
-👤 **Chatrin Yoonchalard**
+👤 **Chatrin Yoonchalard**  
+*Role: Full-Stack Developer, CI/CD Workflow*
 
 * Email: [chatrinyoonchalard@gmail.com](chatrinyoonchalard@gmail.com)
 * GitHub: [Mysterioucz](https://github.com/Mysterioucz)
 * LinkedIn: [Chatrin Yoonchalard](linkedin.com/in/chatrin-yoon)
+
+👤 **Chanatda Konchom**  
+*Role: Front-end, UX-UI Design*
+
+* Email: [chanatdakc@gmail.com](chanatdakc@gmail.com)
+* Github: [098ff](https://github.com/098ff)
+* LinkedIn: [Chanatda Konchom](https://www.linkedin.com/in/chanatda-konchom-0b8376366/)
+
+👤 **Nantaporn Phuaphanbun**  
+*Role: Back-end Developer, UX-UI Design*
+
+* Email: [feihao28@gmail.com](feihao28@gmail.com)
+* GitHub: [uunws](https://github.com/uunws)
+* LinkedIn: [Nantaporn Phuaphanbun](https://www.linkedin.com/in/nantaporn-phuaphanbun-a82395369/)
+
+👤 **Punyapat Kijvorachai**  
+*Role: Back-end Developer*
+
+* Email: [mewpunyapat@gmail.com](mewpunyapat@gmail.com)
+* GitHub: [mewpunyapat](https://github.com/mewpunyapat)
+* LinkedIn: [Punyapat Kijvorachai](https://www.linkedin.com/in/punyapatk)
