@@ -58,7 +58,7 @@ export default function RegistrationPassword() {
       className="flex flex-col justify-center gap-8 w-[32.5rem]"
     >
       {/* Top Part */}
-      <p className="text-[2.5rem] font-medium text-primary-900">
+      <p className="!text-[2.5rem] !font-medium !text-primary-900">
         Enter Your Information
       </p>
 
@@ -67,8 +67,8 @@ export default function RegistrationPassword() {
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-3">
             <p
-              className={`text-[1.125rem] font-semibold ${
-                errors.password ? "text-error-main" : "text-primary-900"
+              className={`!text-[1.125rem] !font-semibold ${
+                errors.password ? "!text-error-main" : "!text-primary-900"
               }`}
             >
               Password*
@@ -152,8 +152,8 @@ export default function RegistrationPassword() {
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-3">
             <p
-              className={`text-[1.125rem] font-semibold ${
-                errors.confirmPassword ? "text-error-main" : "text-primary-900"
+              className={`!text-[1.125rem] !font-semibold ${
+                errors.confirmPassword ? "!text-error-main" : "!text-primary-900"
               }`}
             >
               Confirm Password*
