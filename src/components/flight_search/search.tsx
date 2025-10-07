@@ -10,6 +10,8 @@ import { MouseEventHandler, useState } from "react";
 import DateRangePicker from "./DateRangePicker";
 import { useEffect } from "react";
 import { set } from "zod";
+import { FlightTypes } from "@/src/enums/FlightTypes";
+import { ClassTypes } from "@/src/enums/ClassTypes";
 
 export type SelectedValues = {
     flight: "One Way" | "Round Trip";
@@ -144,7 +146,7 @@ export default function FlightSearchBar({
                                         handleSelection("flight", "Round Trip")
                                     }
                                 >
-                                    <p>Round trip</p>
+                                    <p>{FlightTypes.ROUND_TRIP}</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -152,7 +154,7 @@ export default function FlightSearchBar({
                                         handleSelection("flight", "One Way")
                                     }
                                 >
-                                    <p>One way</p>
+                                    <p>{FlightTypes.ONE_WAY}</p>
                                 </li>
                             </ul>
                         )}
@@ -176,7 +178,7 @@ export default function FlightSearchBar({
                                         handleSelection("class", "Economy")
                                     }
                                 >
-                                    <p>Economy</p>
+                                    <p>{ClassTypes.ECONOMY}</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 w-fit hover:bg-gray-100 cursor-pointer"
@@ -187,7 +189,7 @@ export default function FlightSearchBar({
                                         )
                                     }
                                 >
-                                    <p>Premium Economy</p>
+                                    <p>{ClassTypes.PREMIUM_ECONOMY}</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -195,7 +197,7 @@ export default function FlightSearchBar({
                                         handleSelection("class", "Business")
                                     }
                                 >
-                                    <p>Business</p>
+                                    <p>{ClassTypes.BUSINESS}</p>
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -203,7 +205,7 @@ export default function FlightSearchBar({
                                         handleSelection("class", "First")
                                     }
                                 >
-                                    <p>First</p>
+                                    <p>{ClassTypes.FIRST}</p>
                                 </li>
                             </ul>
                         )}
