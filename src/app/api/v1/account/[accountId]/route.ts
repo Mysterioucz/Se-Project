@@ -2,6 +2,7 @@ import prisma from "@/db";
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/src/lib/auth";
+import { ErrorMessages } from "@/src/enums/ErrorMessages";
 
 export async function PUT(
     req: NextRequest,
@@ -16,7 +17,7 @@ export async function PUT(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Not authorized to this route",
+                message: ErrorMessages.PERMISSION,
             }),
             { status: 401 }
         );
@@ -26,8 +27,7 @@ export async function PUT(
         return new Response(
             JSON.stringify({
                 success: false,
-                message:
-                    "Please provide at least one field to update (FirstName or LastName).",
+                message: ErrorMessages.MISSING_PARAMETER,
             }),
             { status: 400 }
         );
@@ -59,7 +59,7 @@ export async function PUT(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: error,
+                message: ErrorMessages.SERVER,
             }),
             { status: 500 }
         );
@@ -78,7 +78,7 @@ export async function GET(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Not authorized to this route",
+                message: ErrorMessages.PERMISSION,
             }),
             { status: 401 }
         );
@@ -104,11 +104,11 @@ export async function GET(
             { status: 200 }
         );
     } catch (error) {
-        console.error(error);
+        console.log(error)
         return new Response(
             JSON.stringify({
                 success: false,
-                message: error,
+                message: ErrorMessages.SERVER,
             }),
             { status: 500 }
         );
@@ -127,7 +127,7 @@ export async function DELETE(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Not authorized to this route",
+                message: ErrorMessages.PERMISSION,
             }),
             { status: 401 }
         );
@@ -145,7 +145,7 @@ export async function DELETE(
             return new Response(
                 JSON.stringify({
                     success: false,
-                    message: "User not found",
+                    message: ErrorMessages.ACCOUNT_NOT_FOUND,
                 }),
                 { status: 404 }
             );
@@ -239,7 +239,7 @@ export async function DELETE(
         return new Response(
             JSON.stringify({
                 success: false,
-                message: error,
+                message: ErrorMessages.SERVER,
             }),
             { status: 500 }
         );

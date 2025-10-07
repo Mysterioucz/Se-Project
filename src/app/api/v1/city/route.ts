@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db"; // Ensure prisma is correctly set up
+import { ErrorMessages } from "@/src/enums/ErrorMessages";
 
 export async function GET() {
     try {
@@ -14,7 +15,7 @@ export async function GET() {
             return NextResponse.json(
                 {
                     success: false,
-                    message: "No cities found",
+                    message: ErrorMessages.NOT_FOUND,
                 },
                 { status: 404 }
             );
@@ -32,7 +33,7 @@ export async function GET() {
         return NextResponse.json(
             {
                 success: false,
-                message: "Error fetching cities",
+                message: ErrorMessages.SERVER,
             },
             { status: 500 }
         );
