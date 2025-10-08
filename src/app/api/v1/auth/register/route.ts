@@ -1,4 +1,5 @@
 import prisma from "@/db";
+import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import bcrypt from "bcrypt";
 import { NextRequest } from "next/server";
 
@@ -10,7 +11,7 @@ export async function POST(req: NextRequest) {
     if (!Password || !FirstName || !LastName || !Email) {
         return new Response(
             JSON.stringify({
-                message: "Please provide all required parameters",
+                message: ErrorMessages.MISSING_PARAMETER,
             }),
             { status: 400 }
         );
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
     } catch (error) {
         return new Response(
             JSON.stringify({
-                message: error,
+                message: ErrorMessages.SERVER,
             }),
             { status: 500 }
         );

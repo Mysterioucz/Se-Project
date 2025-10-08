@@ -1,4 +1,5 @@
 import prisma from "@/db";
+import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -38,7 +39,7 @@ export async function GET(req: NextRequest) {
         return new Response(
             JSON.stringify({
                 success: false,
-                error: "Missing required search parameters",
+                error: ErrorMessages.MISSING_PARAMETER,
             }),
             { status: 400 }
         );
@@ -67,7 +68,7 @@ export async function GET(req: NextRequest) {
             return new Response(
                 JSON.stringify({
                     success: false,
-                    error: "No airports found for the specified cities",
+                    error: ErrorMessages.NOT_FOUND,
                 }),
                 { status: 404 }
             );
@@ -264,7 +265,7 @@ export async function GET(req: NextRequest) {
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Error processing request",
+                message: ErrorMessages.SERVER,
             }),
             { status: 500 }
         );

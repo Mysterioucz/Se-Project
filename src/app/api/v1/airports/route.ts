@@ -1,4 +1,5 @@
 import prisma from "@/db";
+import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { nextAuthOptions } from "@/src/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
@@ -18,7 +19,7 @@ export const GET = async () => {
             { status: 200 }
         );
     } catch (error) {
-        return new Response(JSON.stringify({ message: "Error" }), {
+        return new Response(JSON.stringify({ message: ErrorMessages.SERVER }), {
             status: 500,
         });
     }
@@ -33,7 +34,7 @@ export const POST = async (req: NextRequest) => {
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Not authorized to access this route",
+                message: ErrorMessages.PERMISSION,
             }),
             { status: 401 }
         );
@@ -44,7 +45,7 @@ export const POST = async (req: NextRequest) => {
     if (!AirportID || !AirportName || !City || !Country) {
         return new Response(
             JSON.stringify({
-                message: "Please provide all required parameters",
+                message: ErrorMessages.MISSING_PARAMETER,
             }),
             { status: 400 }
         );
@@ -68,7 +69,7 @@ export const POST = async (req: NextRequest) => {
             { status: 200 }
         );
     } catch (err) {
-        return new Response(JSON.stringify({ message: err }), {
+        return new Response(JSON.stringify({ message: ErrorMessages.SERVER }), {
             status: 500,
         });
     }
