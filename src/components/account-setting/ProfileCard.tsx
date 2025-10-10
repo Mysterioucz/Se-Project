@@ -79,7 +79,7 @@ export default function ProfileCard() {
                 Account Settings
             </h2>
 
-            <div className="flex flex-col pb-[1.0rem] gap-[1.5rem]">
+            <div className="flex flex-col pb-[1rem] gap-[1.5rem]">
                 <div className="flex flex-row gap-[1rem] justify-start items-center">
                     <Image
                         src={"/profile-icon.svg"}

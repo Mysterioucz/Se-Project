@@ -44,7 +44,7 @@ export default function RegistrationTerms() {
   return (
     <div className="flex flex-col items-center justify-center gap-8">
       {/* Top Part */}
-      <p className="text-[2.5rem] font-medium text-primary-900">
+      <p className="!text-[2.5rem] !font-medium !text-primary-900">
         Terms and Conditions
       </p>
 
