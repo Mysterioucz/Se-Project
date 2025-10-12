@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { use } from "react";
-import Button from "../Button";
+import Button from "../../../../components/Button";
 import { checkoutPaths, isCheckoutPath } from "./helper";
 
 interface PriceBreakdown {

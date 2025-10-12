@@ -1,6 +1,6 @@
-import CheckoutProgress from "@/src/components/checkout/CheckoutProgress";
-import PriceSummary from "@/src/components/checkout/PriceSummary";
-import PriceSummaryLoading from "@/src/components/checkout/PriceSummaryLoading";
+import CheckoutProgress from "@/src/app/(user)/checkout/_components/CheckoutProgress";
+import PriceSummary from "@/src/app/(user)/checkout/_components/PriceSummary";
+import PriceSummaryLoading from "@/src/app/(user)/checkout/_components/PriceSummaryLoading";
 import Navbar from "@/src/components/Navbar";
 import { Suspense } from "react";
 
