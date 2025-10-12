@@ -1,4 +1,5 @@
 import Button from "@/src/components/Button";
+import FlightDetailSummary from "@/src/components/paymentConfirmation/flightDetailSummary";
 export default function Page() {
   return (
 
@@ -14,10 +15,12 @@ export default function Page() {
                         Type Trip : One-Way
                     </div>
                 </div>
+                {/* for dev */}
+                <FlightDetailSummary />
             </div>
 
             <div className="flex items-start gap-[4rem] self-stretch">
-                {/* add more children here */}
+                {/* x-axis spacing */}
             </div>
 
             <div className="flex flex-col items-start gap-[1rem] [flex:1_0_0] bg-blue-100 p-[1rem]">
