@@ -1,8 +1,13 @@
 "use client";
 import MenuItem from "@mui/material/MenuItem";
+
+interface Option {
+    prefix?: React.ReactNode;
+    value: string;
+    suffix?: React.ReactNode;
+}
 interface Props {
-    icons?: React.ReactNode[];
-    options: string[];
+    options: Option[];
     maxHeight?: string;
     itemWidth?: string;
     onClick?: () => void;
@@ -10,38 +15,36 @@ interface Props {
 }
 
 export default function ListChoice({
-    icons,
     options,
     maxHeight = "max-h-[12.5rem]",
     itemWidth,
     onClick,
     onChange,
 }: Props) {
-    function ChoiceContainer({
-        value,
-        icon,
-    }: {
-        value: string;
-        icon: React.ReactNode;
-    }) {
+    function ChoiceContainer({ option }: { option: Option }) {
         return (
             <MenuItem
                 className={`${maxHeight} ${itemWidth}`}
                 onClick={() => {
                     onClick?.();
-                    onChange?.({ target: { value } } as React.ChangeEvent<{
+                    onChange?.({
+                        target: { value: option.value },
+                    } as React.ChangeEvent<{
                         value: unknown;
                     }>);
                 }}
-                value={value}
+                value={option.value}
             >
-                {icon}
-                {value}
+                <div className="flex gap-2">
+                    {option.prefix}
+                    {option.value}
+                    {option.suffix}
+                </div>
             </MenuItem>
         );
     }
 
     return options.map((option, index) => (
-        <ChoiceContainer key={index} value={option} icon={icons?.[index]} />
+        <ChoiceContainer key={index} option={option} />
     ));
 }
