@@ -1,8 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { use } from "react";
 import Button from "../Button";
+import { checkoutPaths, isCheckoutPath } from "./helper";
 
 interface PriceBreakdown {
     basePrice: number;
@@ -11,74 +12,68 @@ interface PriceBreakdown {
     total: number;
 }
 
+// Create a cache for the price data promise
+let priceDataPromise: Promise<PriceBreakdown> | null = null;
+
+const fetchPriceData = async (): Promise<PriceBreakdown> => {
+    // TODO: Replace with actual API call
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+
+    // Dummy price data
+    return {
+        basePrice: 42000,
+        taxes: 6000,
+        fees: 2000,
+        total: 50000,
+    };
+};
+
+const getPriceData = (): Promise<PriceBreakdown> => {
+    if (!priceDataPromise) {
+        priceDataPromise = fetchPriceData();
+    }
+    return priceDataPromise;
+};
+
 export default function PriceSummary() {
-    const [priceData, setPriceData] = useState<PriceBreakdown>({
-        basePrice: 0,
-        taxes: 0,
-        fees: 0,
-        total: 0,
-    });
-    const [isLoading, setIsLoading] = useState(true);
     const pathname = usePathname();
-	const suffixButtonText = new Map<string, string>([
-		["/checkout/info", "Go to seat selection"],
-		["/checkout/seat", "Go to make payment"],
-		["/checkout/payment", "Go to confirmation"],
-	]);
+    const router = useRouter();
+    const priceData = use(getPriceData()); // This will suspend until the promise resolves
 
-    useEffect(() => {
-        // TODO: Replace with actual API call
-        const fetchPriceData = async () => {
-            setIsLoading(true);
-            try {
-                // Dummy API call simulation
-                await new Promise((resolve) => setTimeout(resolve, 1000));
+    const prefixButtonText = new Map<string, string>([
+        ["/checkout/info", "Cancel"],
+        ["/checkout/seat", "Back"],
+        ["/checkout/payment", "Back"],
+    ]);
+    const suffixButtonText = new Map<string, string>([
+        ["/checkout/info", "Go to seat selection"],
+        ["/checkout/seat", "Go to make payment"],
+        ["/checkout/payment", "Go to confirmation"],
+    ]);
 
-                // Dummy price data
-                const dummyData: PriceBreakdown = {
-                    basePrice: 42000,
-                    taxes: 6000,
-                    fees: 2000,
-                    total: 50000,
-                };
-
-                setPriceData(dummyData);
-            } catch (error) {
-                console.error("Error fetching price data:", error);
-            } finally {
-                setIsLoading(false);
+    const handleBackButton = () => {
+        if (isCheckoutPath(pathname)) {
+            if (checkoutPaths.indexOf(pathname) === 0) {
+                router.push("/");
+            } else {
+                router.push(checkoutPaths[checkoutPaths.indexOf(pathname) - 1]);
             }
-        };
-
-        fetchPriceData();
-    }, []);
-
-    const handleCancel = () => {
-        // TODO: Implement cancel logic
-        console.log("Cancel clicked");
+        }
     };
 
-    const handleGoToPayment = () => {
-        // TODO: Implement navigation to payment
-        console.log("Go to payment clicked");
-        window.location.href = "/checkout/payment";
+    const handleNextButton = () => {
+        if (isCheckoutPath(pathname)) {
+            router.push(checkoutPaths[checkoutPaths.indexOf(pathname) + 1]);
+        }
+    };
+
+    const resolvePrefixButtonText = () => {
+        return prefixButtonText.get(pathname) || "Cancel";
     };
 
     const resolveSuffixButtonText = () => {
-		return suffixButtonText.get(pathname) || "Next";
+        return suffixButtonText.get(pathname) || "Next";
     };
-
-    if (isLoading) {
-        return (
-            <div className="border-2 border-dashed border-blue-400 rounded-lg p-6 bg-blue-50">
-                <div className="animate-pulse">
-                    <div className="h-8 bg-gray-300 rounded mb-4"></div>
-                    <div className="h-10 bg-gray-300 rounded mb-2"></div>
-                    <div className="h-10 bg-gray-300 rounded"></div>
-                </div>
-            </div>
-        );
-    }
 
     if (pathname === "/checkout/payment") {
         return null;
@@ -97,15 +92,15 @@ export default function PriceSummary() {
             {/* Action Buttons */}
             <div className="flex gap-4 justify-between">
                 <Button
-                    text="Cancel"
+                    text={resolvePrefixButtonText()}
                     width="w-full"
-                    onClick={handleCancel}
+                    onClick={handleBackButton}
                     styleType="stroke"
                 />
                 <Button
                     text={resolveSuffixButtonText()}
                     width="w-full"
-                    onClick={handleGoToPayment}
+                    onClick={handleNextButton}
                 />
             </div>
         </div>
