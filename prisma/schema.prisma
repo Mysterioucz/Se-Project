@@ -74,6 +74,8 @@ model Flight {
   aircraft         Aircraft      @relation(fields: [AircraftRegNo], references: [AircraftRegNo])
   passengers       Assigned_To[]
   tickets          Ticket[]
+  departCarts      Cart[] @relation("DepartFlight")
+  returnCarts      Cart[] @relation("ReturnFlight")
 
   @@id([FlightNo, DepartTime, ArrivalTime])
 }
@@ -234,6 +236,7 @@ model User {
   assignedFlights   Assigned_To[]
   purchases         Purchase[]
   involvedInReports Report_To[]
+  carts             Cart[]
 }
 
 model User_Tel_No {
@@ -321,4 +324,26 @@ model Airline_Tel_No {
   airline Airline @relation(fields: [AirlineName], references: [AirlineName])
 
   @@id([TelNo, AirlineName])
+}
+
+model Cart {
+  id             Int      @id @default(autoincrement())
+  flightType     String
+  classType      String
+  UserAccountID  String
+  user    User @relation(fields: [UserAccountID], references: [UserAccountID])
+
+  // Depart Flight (always required)
+  departFlightNo          String
+  departFlightDepartTime  DateTime
+  departFlightArrivalTime DateTime
+  departFlight            Flight @relation("DepartFlight", fields: [departFlightNo, departFlightDepartTime, departFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
+
+  // Return Flight (optional)
+  returnFlightNo          String?
+  returnFlightDepartTime  DateTime?
+  returnFlightArrivalTime DateTime?
+  returnFlight            Flight? @relation("ReturnFlight", fields: [returnFlightNo, returnFlightDepartTime, returnFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
+
+  createdAt DateTime @default(now())
 }
