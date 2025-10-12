@@ -1,5 +1,6 @@
 import Button from "@/src/components/Button";
 import FlightDetailSummary from "@/src/components/paymentConfirmation/flightDetailSummary";
+import PassengerInfoSummary from "@/src/components/paymentConfirmation/passengerInfoSummary";
 export default function Page() {
   return (
 
@@ -23,8 +24,8 @@ export default function Page() {
                 {/* x-axis spacing */}
             </div>
 
-            <div className="flex flex-col items-start gap-[1rem] [flex:1_0_0] bg-blue-100 p-[1rem]">
-                <p>Some content</p>
+            <div className="flex flex-col items-start gap-[1rem] [flex:1_0_0] bg-common-white p-[1rem]">
+                <PassengerInfoSummary />
             </div>
         </div>
 

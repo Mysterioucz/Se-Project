@@ -72,17 +72,17 @@ export default function FlightDetailSummary() {
             </div>
 
             <div className="flex flex-col justify-center items-start self-stretch px-4 py-[0.75rem] gap-[0.75rem] bg-primary-50">
-                <span className="font-sarabun text-[1rem] leading-[120%] text-[#067399]">
+                <span className="font-sarabun text-[1rem] leading-[120%] text-primary-600">
                     <span className="font-bold">Flight Number: </span>
                     <span className="font-normal">123456789A</span>
                 </span>
 
-                <span className="font-sarabun text-[1rem] leading-[120%] text-[#067399]">
+                <span className="font-sarabun text-[1rem] leading-[120%] text-primary-600">
                     <span className="font-bold">Cabin Class: </span>
                     <span className="font-normal">Economy</span>
                 </span>
 
-                <span className="font-sarabun text-[1rem] leading-[120%] text-[#067399]">
+                <span className="font-sarabun text-[1rem] leading-[120%] text-primary-600">
                     <span className="font-bold">Duration: </span>
                     <span className="font-normal">1h 10m</span>
                 </span>
