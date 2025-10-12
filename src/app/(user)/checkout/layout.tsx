@@ -1,6 +1,8 @@
-import CheckoutProgress from "@/src/components/checkout/CheckoutProgress";
-import PriceSummary from "@/src/components/checkout/PriceSummary";
+import CheckoutProgress from "@/src/app/(user)/checkout/_components/CheckoutProgress";
+import PriceSummary from "@/src/app/(user)/checkout/_components/PriceSummary";
+import PriceSummaryLoading from "@/src/app/(user)/checkout/_components/PriceSummaryLoading";
 import Navbar from "@/src/components/Navbar";
+import { Suspense } from "react";
 
 export default function CheckoutLayout({
     children,
@@ -12,7 +14,9 @@ export default function CheckoutLayout({
             <Navbar />
             <CheckoutProgress />
             <div className="flex w-full px-32">{children}</div>
-            <PriceSummary />
+            <Suspense fallback={<PriceSummaryLoading />}>
+                <PriceSummary />
+            </Suspense>
         </div>
     );
 }

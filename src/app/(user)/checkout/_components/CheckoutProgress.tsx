@@ -33,19 +33,17 @@ export default function CheckoutProgress() {
         return (
             <div
                 key={step.id}
-                className="flex flex-col items-center relative z-10"
+                className="flex flex-col items-center relative z-10 cursor-pointer"
                 onClick={() => clickNode(step.id)}
             >
                 {/* Circle */}
                 <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
                         index <= currentStepIndex
                             ? "bg-primary-400 text-white"
-                            : "bg-white text-gray-200"
+                            : "bg-gray-200 text-gray-200"
                     }`}
-                >
-                    <div className="w-3 h-3 rounded-full bg-current"></div>
-                </div>
+                ></div>
                 {/* Step Title */}
                 <span
                     className={`mt-2 text-sm font-medium transition-colors duration-300 ${
@@ -59,6 +57,10 @@ export default function CheckoutProgress() {
             </div>
         );
     }
+
+	if(pathname === "/checkout/payment/success") {
+		return null;
+	}
 
     return (
         <div className="w-full max-w-[67.5rem]">
@@ -76,8 +78,8 @@ export default function CheckoutProgress() {
                     className="absolute top-3.5 left-5 h-1 bg-primary-400 -z-10 transition-all duration-500 ease-in-out"
                     style={{
                         width: `calc(${
-                            (currentStepIndex / (steps.length - 1)) * 100
-                        }% - 2rem`,
+                            (currentStepIndex / (steps.length - 1)) * 95
+                        }%`,
                     }}
                 ></div>
             </div>
