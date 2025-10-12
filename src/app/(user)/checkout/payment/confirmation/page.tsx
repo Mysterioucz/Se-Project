@@ -1,3 +1,4 @@
+import Button from "@/src/components/Button";
 export default function Page() {
   return (
 
@@ -9,7 +10,7 @@ export default function Page() {
         <div className="flex items-start gap-16 self-stretch">
             <div className="flex flex-col items-start gap-[0.625rem] w-[35rem] p-[1rem]">
                 <div className="flex items-start self-stretch px-4 py-2 rounded-md bg-primary-50">
-                    <div className="font-sarabun text-[1rem] font-semibold leading-[120%] text-primary-900 m-0">
+                    <div className="font-sarabun text-[1.2rem] font-semibold leading-[120%] text-primary-900 m-0">
                         Type Trip : One-Way
                     </div>
                 </div>
@@ -23,8 +24,18 @@ export default function Page() {
                 <p>Some content</p>
             </div>
         </div>
-    </div>
 
+        <div className="flex flex-col items-center self-stretch py-4">
+             <Button
+                text="Done"
+                size="md"
+                width="w-[400px]"
+                align="center"
+                styleType="fill"
+            />
+        </div>
+
+    </div>
 
   );
 }
