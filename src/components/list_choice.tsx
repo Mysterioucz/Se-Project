@@ -1,7 +1,7 @@
 "use client";
 import MenuItem from "@mui/material/MenuItem";
 
-interface Option {
+export interface Option {
     prefix?: React.ReactNode;
     value: string;
     suffix?: React.ReactNode;
