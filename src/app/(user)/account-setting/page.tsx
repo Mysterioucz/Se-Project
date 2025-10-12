@@ -1,6 +1,6 @@
 "use client";
 
-import ProfileCard from "@components/account-setting/ProfileCard";
+import ProfileCard from "@/src/app/(user)/account-setting/_components/ProfileCard";
 import Footer from "@components/footer/footer";
 import Button from "@components/Button";
 import Navbar from "@components/Navbar";
