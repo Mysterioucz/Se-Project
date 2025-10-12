@@ -11,7 +11,7 @@ export default function CheckoutLayout({
         <div className="flex flex-col min-h-screen gap-8 items-center">
             <Navbar />
             <CheckoutProgress />
-            <div className="flex w-full px-32">{children}</div>
+            <div className="flex w-full px-32">{children}</div> 
             <PriceSummary />
         </div>
     );

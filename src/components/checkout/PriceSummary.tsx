@@ -1,6 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import Button from "../Button";
 
 interface PriceBreakdown {
     basePrice: number;
@@ -17,6 +19,12 @@ export default function PriceSummary() {
         total: 0,
     });
     const [isLoading, setIsLoading] = useState(true);
+    const pathname = usePathname();
+	const suffixButtonText = new Map<string, string>([
+		["/checkout/info", "Go to seat selection"],
+		["/checkout/seat", "Go to make payment"],
+		["/checkout/payment", "Go to confirmation"],
+	]);
 
     useEffect(() => {
         // TODO: Replace with actual API call
@@ -56,6 +64,10 @@ export default function PriceSummary() {
         window.location.href = "/checkout/payment";
     };
 
+    const resolveSuffixButtonText = () => {
+		return suffixButtonText.get(pathname) || "Next";
+    };
+
     if (isLoading) {
         return (
             <div className="border-2 border-dashed border-blue-400 rounded-lg p-6 bg-blue-50">
@@ -68,45 +80,33 @@ export default function PriceSummary() {
         );
     }
 
-    return (
-        <div className="border-2 border-dashed border-blue-400 rounded-lg p-6 bg-blue-50">
-            {/* Price Breakdown (Optional - can be shown/hidden) */}
-            <div className="mb-4 space-y-2 text-sm text-gray-600">
-                <div className="flex justify-between">
-                    <span>Base Price:</span>
-                    <span>{priceData.basePrice.toLocaleString()}฿</span>
-                </div>
-                <div className="flex justify-between">
-                    <span>Taxes & Fees:</span>
-                    <span>
-                        {(priceData.taxes + priceData.fees).toLocaleString()}฿
-                    </span>
-                </div>
-                <hr className="border-gray-300" />
-            </div>
+    if (pathname === "/checkout/payment") {
+        return null;
+    }
 
+    return (
+        <div className="border-2 border-primary-300 rounded-lg p-6 w-full max-w-[56.25rem]">
             {/* Total */}
             <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-gray-800">Total</h3>
-                <span className="text-xl font-bold text-gray-800">
+                <h1 className="text-xl font-bold text-primary-900">Total</h1>
+                <h1 className="text-xl font-bold text-primary-900">
                     {priceData.total.toLocaleString()}฿
-                </span>
+                </h1>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4">
-                <button
+            <div className="flex gap-4 justify-between">
+                <Button
+                    text="Cancel"
+                    width="w-full"
                     onClick={handleCancel}
-                    className="flex-1 px-4 py-3 border border-blue-400 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors duration-200"
-                >
-                    Cancel
-                </button>
-                <button
+                    styleType="stroke"
+                />
+                <Button
+                    text={resolveSuffixButtonText()}
+                    width="w-full"
                     onClick={handleGoToPayment}
-                    className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
-                >
-                    Go to make payment
-                </button>
+                />
             </div>
         </div>
     );
