@@ -1,6 +1,6 @@
 "use client";
 import CheckIcon from "@mui/icons-material/Check";
-import TimeSlider from "../TimeSlider";
+import TimeSlider from "../../../../components/TimeSlider";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 export default function FlightFilterTab({
