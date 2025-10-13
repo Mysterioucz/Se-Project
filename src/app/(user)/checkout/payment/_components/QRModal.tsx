@@ -110,7 +110,7 @@ export default function QRModal({ open, onClose }: QRModalProps) {
                     size="md"
                     width="w-full"
                     height="h-full"
-                    onClick={() => router.push("/checkout/payment/success")}
+                    onClick={() => router.push("/payment-success")}
                 />
             </DialogActions>
         </Dialog>
