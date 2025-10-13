@@ -89,6 +89,46 @@ export default function Page() {
         ]
     };
 
+    const mockReturnFlightDetail = {
+        flightLeg: FlightLegTypes.RETURN,
+        departurePlace: "London",
+        arrivalPlace: "Bangkok",
+        airline: "Thai Airways",
+        flightNumber: "TG911",
+        cabinClass: "Business",
+        segments: [
+            {
+                Time: "10:00",
+                Date: "2025-11-10",
+                Airport: "LHR",
+                Place: "London Heathrow Airport"
+            },
+            {
+                Time: "14:30",
+                Date: "2025-11-10",
+                Airport: "DXB",
+                Place: "Dubai International Airport"
+            },
+            {
+                Time: "16:30",
+                Date: "2025-11-10",
+                Airport: "DXB",
+                Place: "Dubai International Airport"
+            },
+            {
+                Time: "06:00",
+                Date: "2025-11-11",
+                Airport: "BKK",
+                Place: "Bangkok Suvarnabhumi Airport"
+            }
+        ]
+    };
+
+    const mockRoundTripFlights = [
+        mockFlightDetail,
+        mockReturnFlightDetail
+    ];
+
     return (
         <div className="flex flex-col w-full justify-center gap-10 py-md">
             <h1 className="font-sarabun text-[2rem] font-bold leading-[120%] text-primary-600">
@@ -103,15 +143,18 @@ export default function Page() {
                         </div>
                     </div>
                     
-                    <FlightDetailSummary
-                        flightLeg={mockFlightDetail.flightLeg}
-                        departurePlace={mockFlightDetail.departurePlace}
-                        arrivalPlace={mockFlightDetail.arrivalPlace}
-                        airline={mockFlightDetail.airline}
-                        flightNumber={mockFlightDetail.flightNumber}
-                        cabinClass={mockFlightDetail.cabinClass}
-                        segments={mockFlightDetail.segments}
-                    />
+                    {mockRoundTripFlights.map((flight, index) => (
+                        <FlightDetailSummary
+                            key={index}
+                            flightLeg={flight.flightLeg}
+                            departurePlace={flight.departurePlace}
+                            arrivalPlace={flight.arrivalPlace}
+                            airline={flight.airline}
+                            flightNumber={flight.flightNumber}
+                            cabinClass={flight.cabinClass}
+                            segments={flight.segments}
+                        />
+                    ))}
 
                 </div>
 
@@ -135,6 +178,7 @@ export default function Page() {
                     width="w-[400px]"
                     align="center"
                     styleType="fill"
+                    href="/flights/search"
                 />
             </div>
 

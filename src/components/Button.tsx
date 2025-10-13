@@ -43,6 +43,10 @@ export default function Button({
     if (!disabled) {
       setClicked(!clicked); // toggle สี
       onClick();
+
+      if (href) {
+        router.push(href);
+      }
     }
   };
 
