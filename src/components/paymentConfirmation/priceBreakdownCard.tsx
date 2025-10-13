@@ -1,6 +1,6 @@
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 
-interface TicketSummaryProps {
+export interface TicketSummaryProps {
     type: PassengerTypes;
     price: number;   // price per ticket
     quantity: number;
@@ -28,7 +28,7 @@ function TicketSummary({ type, price, quantity }: TicketSummaryProps) {
     );
 }
 
-interface BaggageSummaryProps {
+export interface BaggageSummaryProps {
     personal_item_price: number;
     carry_on_item_price: number;
     checked_baggage_price: number;
