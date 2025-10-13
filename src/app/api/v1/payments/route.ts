@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db";
 import { z } from "zod";
+import crypto from "crypto";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
@@ -8,7 +9,7 @@ import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
 
 const CreatePaymentSchema = z.object({
   ticketId: z.string().min(1, "ticketId is required"),
-  userAccountId: z.string().min(1, "userAccountId is required"),
+//   userAccountId: z.string().min(1, "userAccountId is required"),
   amount: z.number().positive("amount must be > 0"),
   method: PaymentMethodSchema,
   status: PaymentStatusSchema.default("PAID")
@@ -17,9 +18,9 @@ const CreatePaymentSchema = z.object({
 export async function POST(request: NextRequest, 
     { params }: { params: { accountId: string } }) {
         //check if the user is already logged in
-        const { accountId } = await params;
+        const { accountId } = params;
         const session = await getServerSession(nextAuthOptions);
-        if (session?.user.id != accountId) {
+        if (!session?.user?.id || String(session.user.id) !== accountId) {
             return new Response(
                 JSON.stringify({
                     success: false,
@@ -30,7 +31,6 @@ export async function POST(request: NextRequest,
         }
 
     try {
-
         const body = CreatePaymentSchema.parse(await request.json());
         const { ticketId, amount, method, status } = body;
 
@@ -108,6 +108,24 @@ export async function POST(request: NextRequest,
         );
         
     } catch (err: any) {
-
+        if (err?.name === "ZodError") {
+            return NextResponse.json(
+                { success: false, message: "Validation error", details: err.errors },
+                { status: 400 }
+            );
+        }
+        if (err?.code === "P2002") {
+            return NextResponse.json(
+                { success: false, message: "Duplicate payment or purchase." },
+                { status: 409 }
+            );
+        }
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: ErrorMessages.SERVER,
+            }),
+            {status: 500}
+        );
     }
 }
