@@ -72,7 +72,7 @@ export default function Page() {
           </div>
           <div className="flex gap-[1rem]">
             <Button
-              text="Back"
+              text="Back to Home page"
               align="center"
               styleType="stroke"
               size="md"
@@ -82,7 +82,7 @@ export default function Page() {
               onClick={() => router.push("/")}
             />
             <Button
-              text="Confirm Payment"
+              text="View Booking detail"
               align="center"
               styleType="fill"
               size="md"

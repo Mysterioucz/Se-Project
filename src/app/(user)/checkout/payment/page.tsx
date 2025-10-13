@@ -38,7 +38,7 @@ export default function Page() {
     if (isQRmethod) {
       setQRModalOpen(true);
     } else {
-      router.push("/checkout/payment/success");
+      router.push("/payment-success");
     }
   };
 

@@ -45,8 +45,8 @@ export default function Button({
 
   const sizeClasses: Record<ButtonSize, string> = {
     sm: "py-2 px-2 text-[0.875rem]",
-    md: "py-2 px-4 text-[1rem]",
-    lg: "py-4 px-6 text-[1.125rem]",
+    md: "py-2 px-4 text-[1rem] font-semibold",
+    lg: "py-4 px-6 text-[1.125rem] font-semibold",
   };
 
   const styleClasses: Record<ButtonStyle, string> = {
