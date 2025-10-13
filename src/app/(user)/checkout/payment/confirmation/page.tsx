@@ -30,6 +30,26 @@ export default function Page() {
         paymentMethod: PaymentMethodTypes.BankTransfer
     }
 
+    // Example passenger data
+    const passengers = [
+        {
+            GivenName: "John",
+            LastName: "Doe",
+            GenderOnID: "Male",
+            Birthdate: "01/01/1990",
+            Nationality: "American",
+            SeatNo: "12A"
+        },
+        {
+            GivenName: "Jane",
+            LastName: "Smith",
+            GenderOnID: "Female",
+            Birthdate: "05/08/1998",
+            Nationality: "Thai",
+            SeatNo: "12B"
+        }
+    ];  
+
     return (
         <div className="flex flex-col w-full justify-center gap-10 py-md">
             <h1 className="font-sarabun text-[2rem] font-bold leading-[120%] text-primary-600">
@@ -53,8 +73,9 @@ export default function Page() {
                 </div>
 
                 <div className="flex flex-col items-start gap-[1rem] [flex:1_0_0] bg-common-white p-[1rem]">
-                    <PassengerInfoSummary />
-                    <PassengerInfoSummary />
+                    {passengers.map((p, idx) => (
+                        <PassengerInfoSummary key={idx} count={idx + 1} {...p} />
+                    ))}
                     <PriceBreakdownCard tickets={tickets} baggage={baggage} />
                     <PaymentDetailSummary bookingId={paymentDetail.bookingId} paymentMethod={paymentDetail.paymentMethod}/>
                 </div>
