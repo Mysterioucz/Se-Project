@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import PaymentMethods from "./_components/PaymentMethods";
+import { useState } from "react";
 import ContactInform from "./_components/ContactInform";
+import PaymentMethods from "./_components/PaymentMethods";
 import QRModal from "./_components/QRModal";
 import Button from "@components/Button";
 
@@ -63,9 +63,13 @@ export default function Page() {
             <div className="text-[2rem] font-bold text-[var(--color-primary-900)] mb-[1.5rem]">
               Contact Information
             </div>
-            <ContactInform onStatusChange={handleContactStatusChange} />
+            <ContactInform
+              onStatusChange={handleContactStatusChange}
+            />
           </div>
         </div>
+
+{/* Do NOT delete these comments it's essential for adapt with Footer global component */}
 
         <div className="flex gap-[1.5rem] h-[3.5rem]">
           <Button
@@ -92,7 +96,10 @@ export default function Page() {
         </div>
       </div>
 
-      <QRModal open={isQRModalOpen} onClose={() => setQRModalOpen(false)} />
+      <QRModal
+        open={isQRModalOpen}
+        onClose={() => setQRModalOpen(false)}
+      />
     </div>
   );
 }

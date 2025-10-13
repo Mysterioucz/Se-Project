@@ -37,7 +37,7 @@ function ItemList({
             <div className="flex gap-2 items-center justify-center">
                 <button
                     className="text-gray-200"
-                    onClick={(e) => {
+                    onClick={() => {
                         const newCount = Math.max(0, count - 1);
                         onChange(itemKey as keyof PanelData, newCount);
                     }}
@@ -47,7 +47,7 @@ function ItemList({
                 <p>{count}</p>
                 <button
                     className="text-primary-400"
-                    onClick={(e) => {
+                    onClick={() => {
                         const newCount = count + 1;
                         onChange(itemKey as keyof PanelData, newCount);
                     }}
