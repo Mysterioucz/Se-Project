@@ -1,7 +1,7 @@
 import {
     PassengerCount,
     SelectedValues,
-} from "@/src/components/flight_search/search";
+} from "@/src/app/flights/search/_components/search";
 
 export interface FlightData {
     airlineName: string;

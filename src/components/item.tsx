@@ -5,11 +5,12 @@ type ItemState = "enabled" | "focused" | "hover";
 
 interface Props {
     prefix: ReactNode;
+    suffix?: ReactNode;
     label: string;
     onClick?: () => void;
 }
 
-export default function ItemComponent({ prefix, label, onClick }: Props) {
+export default function ItemComponent({ prefix, label, suffix, onClick }: Props) {
     function resolveTextColor(state: ItemState) {
         switch (state) {
             case "enabled":
@@ -67,6 +68,11 @@ export default function ItemComponent({ prefix, label, onClick }: Props) {
             </div>
             <div className="flex h-fit items-center">
                 <h3 className={`font-bold ${textColor}`}>{label}</h3>
+            </div>
+            <div
+                className={`max-w-[1.25rem] max-h-[1.25rem] h-[1.25rem] w-[1.25rem] ${iconColor}`}
+            >
+                {suffix}
             </div>
         </button>
     );

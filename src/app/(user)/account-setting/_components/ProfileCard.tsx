@@ -2,9 +2,9 @@
 
 import React from "react";
 import Image from "next/image";
-import Button from "../Button";
-import TextFieldComponent from "../text_field";
-import SelectComponent from "../select";
+import Button from "../../../../components/Button";
+import TextFieldComponent from "../../../../components/text_field";
+import SelectComponent from "../../../../components/select";
 import { MenuItem } from "@mui/material";
 import { useSession } from "next-auth/react";
 import ModalDeleteAccount from "@components/modals/modal_delete_account";

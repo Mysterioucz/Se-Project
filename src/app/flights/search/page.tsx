@@ -1,10 +1,10 @@
 "use client";
-import FlightFilterTab from "@/src/components/flight_search/filter";
+import FlightFilterTab from "@/src/app/flights/search/_components/filter";
 import FlightSearchBar, {
     PassengerCount,
     SelectedValues,
-} from "@/src/components/flight_search/search";
-import FlightSortTab from "@/src/components/flight_search/sort";
+} from "@/src/app/flights/search/_components/search";
+import FlightSortTab from "@/src/app/flights/search/_components/sort";
 import FlightCard from "@/src/components/flightCard/flight_card";
 import { MagnifyIcon } from "@/src/components/icons/module";
 import { useEffect, useState } from "react";
@@ -20,7 +20,7 @@ import {
     INIT_SORT,
     MappedFlightData,
 } from "./helper";
-import FlightSearchFunishing from "@/src/components/flight_search/FlightSearchFurnishings";
+import FlightSearchFunishing from "@/src/app/flights/search/_components/FlightSearchFurnishings";
 import Navbar from "@/src/components/Navbar";
 import { CircularProgress } from "@mui/material";
 import Footer from "@/src/components/footer/footer";
