@@ -17,7 +17,7 @@ function TicketSummary({ type, price, quantity }: TicketSummaryProps) {
             {/* Price and Count */}
             <div className="grid w-[7.25rem] h-[1.75rem] gap-y-[0.5rem] flex-shrink-0 row-start-1 row-span-1 col-start-2 col-span-1 justify-self-end grid-rows-[repeat(1,minmax(0,1fr))] grid-cols-[repeat(2,minmax(0,1fr))]">
                 <div className="row-start-1 row-span-1 col-start-1 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-[0.875rem] font-normal leading-[120%] whitespace-nowrap">
-                    ฿ {price}
+                    ฿ {price.toFixed(2)}
                 </div>
 
                 <div className="row-start-1 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-[0.875rem] font-normal leading-[120%]">
@@ -35,7 +35,7 @@ interface BaggageSummaryProps {
 }
 
 function BaggageSummary({personal_item_price, carry_on_item_price, checked_baggage_price}: BaggageSummaryProps) {
-    const formatPrice = (price: number) => (price === 0 ? "Free" : `฿ ${price}`);
+    const formatPrice = (price: number) => (price === 0 ? "Free" : `฿ ${price.toFixed(2)}`);
     
     return (
         <div className="grid h-[5.688rem] pl-3 gap-y-2 gap-x-8 self-stretch grid-rows-3 grid-cols-2">
@@ -55,13 +55,20 @@ function BaggageSummary({personal_item_price, carry_on_item_price, checked_bagga
                 Checked Baggage
             </div>
             <div className="row-start-3 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-sm font-normal leading-[1.2]">
-                ฿ {checked_baggage_price}
+                ฿ {checked_baggage_price.toFixed(2)}
             </div>
         </div>
     );
 }
 
-export default function PriceBreakdownCard() {
+interface PriceBreakdownCardProps {
+    tickets: TicketSummaryProps[];
+    baggage: BaggageSummaryProps;
+}
+
+export default function PriceBreakdownCard({ tickets, baggage }: PriceBreakdownCardProps) {
+    const totalPrice = tickets.reduce((sum, t) => sum + t.price * t.quantity, 0) + baggage.personal_item_price + baggage.carry_on_item_price + baggage.checked_baggage_price;
+
     return (
         <div className="flex flex-col items-start self-stretch gap-[1rem] p-[1rem_1.5rem] rounded-[0.5rem] border-[0.125rem] border-primary-300 bg-white">
             {/* Price Breakdown */}
@@ -80,7 +87,9 @@ export default function PriceBreakdownCard() {
                         </div>
 
                         {/* Ticket Summary Components */}
-                        <TicketSummary type={PassengerTypes.Adult} price={1000.00} quantity={1}/>
+                        {tickets.map((t, idx) => (
+                            <TicketSummary key={idx} {...t} />
+                        ))}
                     </div>
 
 
@@ -91,7 +100,7 @@ export default function PriceBreakdownCard() {
                         </div>
 
                         {/* Baggage Summary Components */}
-                        <BaggageSummary personal_item_price={100} carry_on_item_price={200} checked_baggage_price={300}/>
+                        <BaggageSummary {...baggage} />
                     </div>
                 </div>
             </div>
@@ -106,7 +115,7 @@ export default function PriceBreakdownCard() {
                 </div>
 
                 <div className="text-primary-600 font-sarabun text-[1.125rem] font-semibold leading-[1.2]">
-                    ฿ 1,000.00
+                    ฿ {totalPrice.toFixed(2)}
                 </div>
             </div>
         </div>
