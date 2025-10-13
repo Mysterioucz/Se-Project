@@ -33,8 +33,11 @@ export default async function CheckoutLayout({
             <div className="flex w-full px-32 gap-32">
                 <div className="flex w-full">{children}</div>
                 <div className="flex flex-col w-full gap-10 max-w-[21.25rem]">
-					<BookingInfo />
-                    <PriceBreakdownCard tickets={dummyTickets} baggage={dummyBaggage} />
+                    <BookingInfo />
+                    <PriceBreakdownCard
+                        tickets={dummyTickets}
+                        baggage={dummyBaggage}
+                    />
                 </div>
             </div>
             <Suspense fallback={<PriceSummaryLoading />}>
