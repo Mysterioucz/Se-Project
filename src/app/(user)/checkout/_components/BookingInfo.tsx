@@ -1,4 +1,4 @@
-import { TimeForwardIcon } from "@/src/components/icons/module";
+import { TimeForwardIcon, TwoWayArrowIcon } from "@/src/components/icons/module";
 
 export interface Flight {
     flightNumber: string;
@@ -88,17 +88,22 @@ function FlightContent({
 function Content({ departure, arrival }: BookingInfoProps) {
     return (
         <div className="flex flex-col gap-4 ">
-            <span className="font-extrabold text-[1.125rem] text-primary-700">
-                {departure.departureCity} ⇔ {arrival?.departureCity}
-            </span>
+            <div className="flex font-extrabold text-[1.125rem] text-primary-700 items-baseline gap-1">
+                <span>{departure.departureCity}</span>
+				<TwoWayArrowIcon />
+                <span>{arrival?.departureCity}</span>
+            </div>
             <FlightContent flight={departure} headerText="Depart" />
             {arrival && <FlightContent flight={arrival} headerText="Return" />}
         </div>
     );
 }
 
-export default function BookingInfo() {
-	// Mock data
+async function fetchBookingInfo(): Promise<BookingInfoProps> {
+    // TODO: Replace with actual API call
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+	
+    // Dummy price data
     const departure: Flight = {
         flightNumber: "AB123",
         departureCity: "New York",
@@ -118,6 +123,13 @@ export default function BookingInfo() {
         date: "2023-10-02",
         duration: "6h",
     };
+
+    return { departure, arrival };
+}
+
+export default async function BookingInfo() {
+	
+	const { departure, arrival } = await fetchBookingInfo(); // This will suspend until the promise resolves
 
     return (
         <div className="flex flex-col gap-6 px-6 py-4 border-2 border-primary-300 rounded-lg w-full">
