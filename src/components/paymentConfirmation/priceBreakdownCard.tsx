@@ -28,12 +28,35 @@ function TicketSummary({ type, price, quantity }: TicketSummaryProps) {
     );
 }
 
-function BaggageSummary() {
+interface BaggageSummaryProps {
+    personal_item_price: number;
+    carry_on_item_price: number;
+    checked_baggage_price: number;
+}
+
+function BaggageSummary({personal_item_price, carry_on_item_price, checked_baggage_price}: BaggageSummaryProps) {
+    const formatPrice = (price: number) => (price === 0 ? "Free" : `฿ ${price}`);
+    
     return (
-        <div className="flex flex-col items-start gap-[0.5rem] self-stretch">
-            {/* Replace with your baggage items */}
-            <div className="text-primary-600 font-sarabun text-[1rem]">20kg x1</div>
-            <div className="text-primary-600 font-sarabun text-[1rem]">15kg x1</div>
+        <div className="grid h-[5.688rem] pl-3 gap-y-2 gap-x-8 self-stretch grid-rows-3 grid-cols-2">
+            <div className="text-gray-500 font-sarabun text-sm font-normal leading-[1.2] row-start-1 row-span-1 col-start-1 col-span-1">
+                Personal Item
+            </div>
+            <div className="row-start-1 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-sm font-normal leading-[1.2]">
+                {formatPrice(personal_item_price)}
+            </div>
+            <div className="text-gray-500 font-sarabun text-sm font-normal leading-[1.2] row-start-2 row-span-1 col-start-1 col-span-1">
+                Carry-on Baggage
+            </div>
+            <div className="row-start-2 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-sm font-normal leading-[1.2]">
+                {formatPrice(carry_on_item_price)}
+            </div>
+            <div className="text-gray-500 font-sarabun text-sm font-normal leading-[1.2] row-start-3 row-span-1 col-start-1 col-span-1">
+                Checked Baggage
+            </div>
+            <div className="row-start-3 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-sm font-normal leading-[1.2]">
+                ฿ {checked_baggage_price}
+            </div>
         </div>
     );
 }
@@ -68,7 +91,7 @@ export default function PriceBreakdownCard() {
                         </div>
 
                         {/* Baggage Summary Components */}
-
+                        <BaggageSummary personal_item_price={100} carry_on_item_price={200} checked_baggage_price={300}/>
                     </div>
                 </div>
             </div>
