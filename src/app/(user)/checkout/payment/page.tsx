@@ -4,7 +4,7 @@ import PaymentMethods from "./_components/PaymentMethods";
 
 export default function Page() {
 	return (
-		<div className="flex flex-row px-[8rem] gap-[8rem] justify-between w-full">
+		<div className="flex flex-row gap-[8rem] justify-between w-full">
 			<div className="flex flex-col gap-[1.5rem] w-full">
 				<div className="text-[3rem] font-bold text-[var(--color-primary-900)]">Payment</div>
 
