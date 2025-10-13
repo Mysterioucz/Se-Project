@@ -4,7 +4,7 @@ import PassengerInfoSummary from "@/src/components/paymentConfirmation/passenger
 import PaymentDetailSummary from "@/src/components/paymentConfirmation/paymentDetailSummary";
 import PriceBreakdownCard from "@/src/components/paymentConfirmation/priceBreakdownCard";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
-
+import { PaymentMethodTypes } from "@/src/enums/PaymentMethodTypes";
 
 export default function Page() {
     // Example ticket data
@@ -19,6 +19,11 @@ export default function Page() {
         carry_on_item_price: 200,
         checked_baggage_price: 300,
     };
+
+    const paymentDetail = {
+        bookingId: "1763GUG6172",
+        paymentMethod: PaymentMethodTypes.BankTransfer
+    }
 
     return (
         <div className="flex flex-col w-full justify-center gap-10 py-md">
@@ -46,7 +51,7 @@ export default function Page() {
                     <PassengerInfoSummary />
                     <PassengerInfoSummary />
                     <PriceBreakdownCard tickets={tickets} baggage={baggage} />
-                    <PaymentDetailSummary />
+                    <PaymentDetailSummary bookingId={paymentDetail.bookingId} paymentMethod={paymentDetail.paymentMethod}/>
                 </div>
             </div>
 
