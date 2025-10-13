@@ -1,14 +1,14 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
-import Button from "../../../../components/Button";
-import TextFieldComponent from "../../../../components/text_field";
-import SelectComponent from "../../../../components/select";
-import { MenuItem } from "@mui/material";
-import { useSession } from "next-auth/react";
+import Button from "@components/Button";
 import ModalDeleteAccount from "@components/modals/modal_delete_account";
 import ModalSignOut from "@components/modals/modal_sign_out";
+import SelectComponent from "@components/select";
+import TextFieldComponent from "@components/text_field";
+import { MenuItem } from "@mui/material";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import React from "react";
 
 export default function ProfileCard() {
     const { data: session, update: updateSession } = useSession();
@@ -28,7 +28,7 @@ export default function ProfileCard() {
     // Function to update user name via API and refresh session
     async function updateName(
         updateFirstName?: string,
-        updateLastName?: string
+        updateLastName?: string,
     ) {
         if (!accountId) return;
 
@@ -153,7 +153,8 @@ export default function ProfileCard() {
                                     }
                                     onChange={(e) =>
                                         setLanguage(
-                                            (e.target as HTMLInputElement).value
+                                            (e.target as HTMLInputElement)
+                                                .value,
                                         )
                                     }
                                     error={false}
