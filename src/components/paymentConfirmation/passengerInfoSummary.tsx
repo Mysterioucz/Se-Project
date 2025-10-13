@@ -8,7 +8,7 @@ interface PassengerInfoSummaryProps {
     SeatNo: string;
 }
 
-export default function PassengerInfoSummary({count, GivenName,LastName,GenderOnID,Birthdate,Nationality,SeatNo}: PassengerInfoSummaryProps) {
+export default function PassengerInfoSummary({count,GivenName,LastName,GenderOnID,Birthdate,Nationality,SeatNo}: PassengerInfoSummaryProps) {
     return (
         <div className="flex flex-col items-start self-stretch p-4 gap-4 rounded-md bg-primary-50">
             <span className="text-primary-900 font-sarabun text-[1.5rem] font-semibold leading-[1.2]">
