@@ -14,7 +14,7 @@ import BookingInfo from "./_components/BookingInfo";
 export default async function CheckoutLayout({
     children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
     const headerList = await headers();
     const dummyTickets: TicketSummaryProps[] = [
