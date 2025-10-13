@@ -1,4 +1,4 @@
-import { TimeForwardIcon, TwoWayArrowIcon } from "@/src/components/icons/module";
+import { OneWayArrowIcon, TimeForwardIcon, TwoWayArrowIcon } from "@/src/components/icons/module";
 
 export interface Flight {
     flightNumber: string;
@@ -90,8 +90,8 @@ function Content({ departure, arrival }: BookingInfoProps) {
         <div className="flex flex-col gap-4 ">
             <div className="flex font-extrabold text-[1.125rem] text-primary-700 items-baseline gap-1">
                 <span>{departure.departureCity}</span>
-				<TwoWayArrowIcon />
-                <span>{arrival?.departureCity}</span>
+                {arrival ? <TwoWayArrowIcon /> : <OneWayArrowIcon />}
+                <span>{departure.arrivalCity}</span>
             </div>
             <FlightContent flight={departure} headerText="Depart" />
             {arrival && <FlightContent flight={arrival} headerText="Return" />}
@@ -102,7 +102,7 @@ function Content({ departure, arrival }: BookingInfoProps) {
 async function fetchBookingInfo(): Promise<BookingInfoProps> {
     // TODO: Replace with actual API call
     await new Promise((resolve) => setTimeout(resolve, 3000));
-	
+
     // Dummy price data
     const departure: Flight = {
         flightNumber: "AB123",
@@ -136,7 +136,7 @@ export default async function BookingInfo() {
             <h2 className="font-semibold text-primary-900">
                 Booking Information
             </h2>
-            <Content departure={departure} arrival={arrival} />
+            <Content departure={departure} arrival={arrival}/>
         </div>
     );
 }

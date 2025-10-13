@@ -8,3 +8,4 @@ export { default as FiBrSettings } from "./fi-br-setting.svg";
 export { default as MagnifyIcon } from "./magnify_icon.svg";
 export {default as TimeForwardIcon} from "./fi-br-time-forward.svg";
 export {default as TwoWayArrowIcon} from "./two-way-arrow.svg";
+export { default as OneWayArrowIcon } from "./one-way-arrow.svg";
