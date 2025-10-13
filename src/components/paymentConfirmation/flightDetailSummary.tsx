@@ -1,4 +1,30 @@
 import Image from "next/image";
+import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
+
+function DepartureComponent() {
+    return (
+        <div>Departure Component</div>
+    );
+}
+
+function ArrivalComponent() {
+    return (
+        <div>Arrival Component</div>
+    );
+}
+
+function DepartureTransferComponent() {
+    return (
+        <div>Departure Transfer Component</div>
+    );
+}
+
+function ArrivalTransferComponent() {
+    return (
+        <div>Arrival Transfer Component</div>
+    );
+}   
+
 export default function FlightDetailSummary() {
   return (
     <div className="flex flex-col items-start self-stretch rounded-md border-[0.125rem] border-primary-300 bg-white overflow-hidden">

@@ -46,7 +46,10 @@ export default function Page() {
             GenderOnID: "Female",
             Birthdate: "05/08/1998",
             Nationality: "Thai",
-            SeatNo: "12B"
+            SeatNo: "12B",
+            PassportNo: "A12345678",
+            PassportIssueDate: "01/01/2020",
+            PassportExpiryDate: "01/01/2030"
         }
     ];  
 
