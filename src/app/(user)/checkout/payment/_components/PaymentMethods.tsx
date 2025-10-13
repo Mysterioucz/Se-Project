@@ -6,11 +6,19 @@ import BankSelect, { BankOption } from "./BankSelect";
 
 interface PaymentMethodsProps {
   onStatusChange: (isValid: boolean) => void;
+  onQRmethodChange: (isQR: boolean) => void;
 }
 
-export default function PaymentMethods({ onStatusChange }: PaymentMethodsProps) {
+export default function PaymentMethods({
+  onStatusChange,
+  onQRmethodChange,
+}: PaymentMethodsProps) {
   const [selected, setSelected] = useState("mobile");
   const [bank, setBank] = useState("");
+
+  useEffect(() => {
+    onQRmethodChange(selected === "qr");
+  }, [selected, onQRmethodChange]);
 
   useEffect(() => {
     let isValid = false;
