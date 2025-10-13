@@ -17,7 +17,7 @@ let priceDataPromise: Promise<PriceBreakdown> | null = null;
 
 const fetchPriceData = async (): Promise<PriceBreakdown> => {
     // TODO: Replace with actual API call
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     // Dummy price data
     return {
@@ -74,10 +74,6 @@ export default function PriceSummary() {
     const resolveSuffixButtonText = () => {
         return suffixButtonText.get(pathname) || "Next";
     };
-
-    if (pathname === "/checkout/payment") {
-        return null;
-    }
 
     return (
         <div className="border-2 border-primary-300 rounded-lg p-6 w-full max-w-[56.25rem]">

@@ -1,4 +1,14 @@
+import { NextResponse } from "next/dist/server/web/spec-extension/response";
+import { NextRequest } from "next/server";
+
 export { default } from "next-auth/middleware";
+
+export function middleware(request: NextRequest) {
+    const pathname = request.nextUrl.pathname;
+    const response = NextResponse.next();
+    response.headers.set("x-pathname", pathname);
+    return response;
+}
 
 export const config = {
     matcher: [

@@ -58,10 +58,6 @@ export default function CheckoutProgress() {
         );
     }
 
-	if(pathname === "/checkout/payment/success") {
-		return null;
-	}
-
     return (
         <div className="w-full max-w-[67.5rem]">
             <div className="relative">
