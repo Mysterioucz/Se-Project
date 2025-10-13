@@ -1,8 +1,8 @@
 "use client";
 
 import ProfileCard from "@/src/app/(user)/account-setting/_components/ProfileCard";
-import Footer from "@components/footer/footer";
 import Button from "@components/Button";
+import Footer from "@components/footer/footer";
 import Navbar from "@components/Navbar";
 
 export default function AccountSettingPage() {
@@ -42,7 +42,7 @@ export default function AccountSettingPage() {
                                     height="h-[3rem]"
                                     onClick={() =>
                                         console.log(
-                                            "Notification Center clicked"
+                                            "Notification Center clicked",
                                         )
                                     }
                                 />
@@ -68,7 +68,7 @@ export default function AccountSettingPage() {
                                     height="h-[3rem]"
                                     onClick={() =>
                                         console.log(
-                                            "Privacy & Security clicked"
+                                            "Privacy & Security clicked",
                                         )
                                     }
                                 />

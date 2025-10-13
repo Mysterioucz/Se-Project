@@ -1,93 +1,93 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import PaymentMethods from "./_components/PaymentMethods";
-import ContactInform from "./_components/ContactInform";
-import PriceBreakdownCard from "@components/paymentConfirmation/priceBreakdownCard";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import ContactInform from "./_components/ContactInform";
+import PaymentMethods from "./_components/PaymentMethods";
 import QRModal from "./_components/QRModal";
-import Button from "@components/Button";
 
 export default function Page() {
-  const router = useRouter();
+    const router = useRouter();
 
-  // TODO: Fetch actual data from backend to check if user fill in all required info
-  const [isPaymentValid, setIsPaymentValid] = useState(false);
-  const [isQRmethod, setQRmethod] = useState(false);
-  const [isContactValid, setIsContactValid] = useState(false);
-  const [isQRModalOpen, setQRModalOpen] = useState(false);
+    // TODO: Fetch actual data from backend to check if user fill in all required info
+    const [isPaymentValid, setIsPaymentValid] = useState(false);
+    const [isQRmethod, setQRmethod] = useState(false);
+    const [isContactValid, setIsContactValid] = useState(false);
+    const [isQRModalOpen, setQRModalOpen] = useState(false);
 
-  const handlePaymentStatusChange = (isValid: boolean) => {
-    setIsPaymentValid(isValid);
-  };
-  const handleQRmethodChange = (isQR: boolean) => {
-    setQRmethod(isQR);
-  };
-  const handleContactStatusChange = (isValid: boolean) => {
-    setIsContactValid(isValid);
-  };
+    const handlePaymentStatusChange = (isValid: boolean) => {
+        setIsPaymentValid(isValid);
+    };
+    const handleQRmethodChange = (isQR: boolean) => {
+        setQRmethod(isQR);
+    };
+    const handleContactStatusChange = (isValid: boolean) => {
+        setIsContactValid(isValid);
+    };
 
-  const ticketMockData = [
-    {
-      type: PassengerTypes.Adult,
-      price: 1500.0,
-      quantity: 2,
-    },
-    {
-      type: PassengerTypes.Child,
-      price: 1200.0,
-      quantity: 1,
-    },
-  ];
-  const baggageMockData = {
-    personal_item_price: 0,
-    carry_on_item_price: 500.0,
-    checked_baggage_price: 900.0,
-  };
+    const ticketMockData = [
+        {
+            type: PassengerTypes.Adult,
+            price: 1500.0,
+            quantity: 2,
+        },
+        {
+            type: PassengerTypes.Child,
+            price: 1200.0,
+            quantity: 1,
+        },
+    ];
+    const baggageMockData = {
+        personal_item_price: 0,
+        carry_on_item_price: 500.0,
+        checked_baggage_price: 900.0,
+    };
 
-  const isFormComplete = isPaymentValid && isContactValid;
+    const isFormComplete = isPaymentValid && isContactValid;
 
-  const handleConfirmPayment = () => {
-    if (!isFormComplete) {
-      console.log("User didn't fill in all required info");
-      return;
-    }
+    const handleConfirmPayment = () => {
+        if (!isFormComplete) {
+            console.log("User didn't fill in all required info");
+            return;
+        }
 
-    if (isQRmethod) {
-      setQRModalOpen(true);
-    } else {
-      router.push("/payment-success");
-    }
-  };
+        if (isQRmethod) {
+            setQRModalOpen(true);
+        } else {
+            router.push("/payment-success");
+        }
+    };
 
-  return (
-    <div className="flex flex-row gap-[8rem] justify-between pb-[2rem] w-full">
-      <div className="flex flex-col gap-[1.5rem] w-full">
-        <div className="text-[3rem] font-bold text-[var(--color-primary-900)]">
-          Payment
-        </div>
+    return (
+        <div className="flex flex-row gap-[8rem] justify-between pb-[2rem] w-full">
+            <div className="flex flex-col gap-[1.5rem] w-full">
+                <div className="text-[3rem] font-bold text-[var(--color-primary-900)]">
+                    Payment
+                </div>
 
-        <div className="flex flex-col gap-[2rem]">
-          <div className="gap-[2rem] p-[1.5rem] bg-[var(--color-primary-50)] rounded-[0.5rem]">
-            <div className="text-[2rem] font-bold text-[var(--color-primary-900)] mb-[1.5rem]">
-              Payment Methods
-            </div>
-            <PaymentMethods
-              onStatusChange={handlePaymentStatusChange}
-              onQRmethodChange={handleQRmethodChange}
-            />
-          </div>
+                <div className="flex flex-col gap-[2rem]">
+                    <div className="gap-[2rem] p-[1.5rem] bg-[var(--color-primary-50)] rounded-[0.5rem]">
+                        <div className="text-[2rem] font-bold text-[var(--color-primary-900)] mb-[1.5rem]">
+                            Payment Methods
+                        </div>
+                        <PaymentMethods
+                            onStatusChange={handlePaymentStatusChange}
+                            onQRmethodChange={handleQRmethodChange}
+                        />
+                    </div>
 
-          <div className="gap-[2rem] p-[1.5rem] bg-[var(--color-primary-50)] rounded-[0.5rem]">
-            <div className="text-[2rem] font-bold text-[var(--color-primary-900)] mb-[1.5rem]">
-              Contact Information
-            </div>
-            <ContactInform onStatusChange={handleContactStatusChange} />
-          </div>
-        </div>
+                    <div className="gap-[2rem] p-[1.5rem] bg-[var(--color-primary-50)] rounded-[0.5rem]">
+                        <div className="text-[2rem] font-bold text-[var(--color-primary-900)] mb-[1.5rem]">
+                            Contact Information
+                        </div>
+                        <ContactInform
+                            onStatusChange={handleContactStatusChange}
+                        />
+                    </div>
+                </div>
 
-        <div className="flex gap-[1.5rem] h-[3.5rem]">
+                {/* <div className="flex gap-[1.5rem] h-[3.5rem]">
           <Button
             text="Back"
             align="center"
@@ -109,19 +109,13 @@ export default function Page() {
             onClick={handleConfirmPayment}
             disabled={!isFormComplete}
           />
+        </div> */}
+            </div>
+
+            <QRModal
+                open={isQRModalOpen}
+                onClose={() => setQRModalOpen(false)}
+            />
         </div>
-      </div>
-
-      <div className="flex flex-col gap-[2.5rem] w-[500px]">
-        {/* TODO: Use Booking Info Sidebar component here */}
-        <div className="h-[30rem] bg-red-500"></div>
-        <PriceBreakdownCard
-          tickets={ticketMockData}
-          baggage={baggageMockData}
-        />
-      </div>
-
-      <QRModal open={isQRModalOpen} onClose={() => setQRModalOpen(false)} />
-    </div>
-  );
+    );
 }
