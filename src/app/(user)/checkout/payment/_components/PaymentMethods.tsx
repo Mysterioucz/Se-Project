@@ -1,12 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import BankSelect, { BankOption } from "./BankSelect";
 
-export default function PaymentMethods() {
+interface PaymentMethodsProps {
+  onStatusChange: (isValid: boolean) => void;
+}
+
+export default function PaymentMethods({ onStatusChange }: PaymentMethodsProps) {
   const [selected, setSelected] = useState("mobile");
   const [bank, setBank] = useState("");
+
+  useEffect(() => {
+    let isValid = false;
+    if (selected === "mobile") {
+      isValid = bank !== "";
+    } else if (selected === "qr") {
+      isValid = true;
+    }
+    onStatusChange(isValid);
+  }, [selected, bank, onStatusChange]);
 
   return (
     <div className="flex flex-col gap-[1.5rem] w-full">
