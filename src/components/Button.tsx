@@ -14,12 +14,12 @@ interface ButtonProps {
   iconEnd?: string;
   onClick?: () => void;
   disabled?: boolean;
-  styleType?: ButtonStyle; // fill, stroke, text
-  size?: ButtonSize; // sm, md, lg
+  styleType?: ButtonStyle;
+  size?: ButtonSize;
   width?: string;
   height?: string;
   href?: string;
-  align?: ButtonAlign; // left, center, right
+  align?: ButtonAlign;
 }
 
 export default function Button({
@@ -33,54 +33,44 @@ export default function Button({
   width = "w-fit",
   height = "h-full",
   href,
-  align = "center", // default center
+  align = "center",
 }: ButtonProps) {
-  const [clicked, setClicked] = useState(false);
-
   const router = useRouter();
 
   const handleClick = () => {
     if (!disabled) {
-      setClicked(!clicked); // toggle สี
       onClick();
     }
   };
 
   const sizeClasses: Record<ButtonSize, string> = {
     sm: "py-2 px-2 text-[0.875rem]",
-    md: "py-2 px-4 text-[1rem]",
-    lg: "py-4 px-6 text-[1.125rem]",
+    md: "py-2 px-4 text-[1rem] font-semibold",
+    lg: "py-4 px-6 text-[1.125rem] font-semibold",
   };
 
   const styleClasses: Record<ButtonStyle, string> = {
     fill: `
-      ${
-        clicked
-          ? "border-2 border-primary-300 bg-primary-300 text-white"
-          : "border-2 border-primary-400 bg-primary-400 text-white"
-      }
+      border-2 border-primary-400 bg-primary-400 text-white
       hover:bg-primary-600
+      disabled:bg-[var(--color-disable-light)] disabled:text-[var(--color-disable-dark)] disabled:border-transparent
     `,
     stroke: `
-      ${
-        clicked
-          ? "border-2 border-primary-300 text-primary-300"
-          : "border-2 border-primary-400 text-primary-400"
-      }
-      bg-white
+      border-2 border-primary-400 text-primary-400 bg-white
       hover:border-primary-600 hover:text-primary-600
+      disabled:border-[var(--color-disable-dark)] disabled:text-[var(--color-disable-dark)] disabled:bg-[var(--color-disable-lighter)]
     `,
     text: `
-      ${clicked ? "text-primary-300" : "text-primary-400"}
-      bg-transparent
+      text-primary-400 bg-transparent
       hover:text-primary-600
+      disabled:text-[var(--color-disable-dark)]
     `,
     "red-critical": `
-      rounded-[var(--Radius-md,8px)]
-      border-[var(--Elevation-sm,1px)] border-[var(--Error-main,#C53737)]
-      bg-[var(--Common-white,#FFF)]
-      text-[var(--Error-main,#C53737)]
-      hover:bg-[var(--Error-main,#C53737)] hover:text-white
+      rounded-[var(--Radius-md,0.5rem)]
+      border-solid border-[0.125rem] border-[var(--color-error-main,#C53737)]
+      bg-[var(--Common-white,#FFF)] text-[var(--color-error-main,#C53737)]
+      hover:bg-[var(--color-error-main,#C53737)] hover:text-white
+      disabled:bg-[var(--color-disable-light)] disabled:text-[var(--color-disable-dark)] disabled:border-[var(--color-disable-dark)]
     `,
   };
 
@@ -95,16 +85,16 @@ export default function Button({
       onClick={handleClick}
       disabled={disabled}
       className={`
-        flex items-center ${alignClasses[align]} gap-4
+        flex items-center ${alignClasses[align]}
         ${width} ${height} rounded-md
         transition-colors duration-200
+        cursor-pointer
+        disabled:cursor-not-allowed
         ${sizeClasses[size]}
         ${styleClasses[styleType]}
-        ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
         gap-[var(--Spacing-md,16px)]
         py-[var(--Spacing-sm,8px)]
       `}
-      style={styleType === "red-critical" ? { border: "var(--Elevation-sm,1px) solid var(--Error-main,#C53737)" } : undefined}
     >
       {iconStart && (
         <Image

@@ -5,9 +5,9 @@ import Navbar from "@/src/components/Navbar";
 import { Suspense } from "react";
 
 export default function CheckoutLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
     return (
         <div className="flex flex-col min-h-screen gap-8 items-center">

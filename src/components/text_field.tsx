@@ -121,7 +121,7 @@ export default function TextFieldComponent({
             )}
 
             <div
-                className={`flex items-center p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] border-2 ${resolveBorderColor(
+                className={`flex items-center p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] bg-white border-2 ${resolveBorderColor(
                     state
                 )}`}
                 onFocus={() => handleStateChange("focused")}
