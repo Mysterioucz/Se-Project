@@ -4,8 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PaymentMethods from "./_components/PaymentMethods";
 import ContactInform from "./_components/ContactInform";
-import PriceBreakdownCard from "@components/paymentConfirmation/priceBreakdownCard";
-import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import QRModal from "./_components/QRModal";
 import Button from "@components/Button";
 
@@ -26,24 +24,6 @@ export default function Page() {
   };
   const handleContactStatusChange = (isValid: boolean) => {
     setIsContactValid(isValid);
-  };
-
-  const ticketMockData = [
-    {
-      type: PassengerTypes.Adult,
-      price: 1500.0,
-      quantity: 2,
-    },
-    {
-      type: PassengerTypes.Child,
-      price: 1200.0,
-      quantity: 1,
-    },
-  ];
-  const baggageMockData = {
-    personal_item_price: 0,
-    carry_on_item_price: 500.0,
-    checked_baggage_price: 900.0,
   };
 
   const isFormComplete = isPaymentValid && isContactValid;
@@ -110,15 +90,6 @@ export default function Page() {
             disabled={!isFormComplete}
           />
         </div>
-      </div>
-
-      <div className="flex flex-col gap-[2.5rem] w-[500px]">
-        {/* TODO: Use Booking Info Sidebar component here */}
-        <div className="h-[30rem] bg-red-500"></div>
-        <PriceBreakdownCard
-          tickets={ticketMockData}
-          baggage={baggageMockData}
-        />
       </div>
 
       <QRModal open={isQRModalOpen} onClose={() => setQRModalOpen(false)} />
