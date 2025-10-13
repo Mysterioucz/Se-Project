@@ -44,7 +44,7 @@ export default function ListChoice({
         );
     }
 
-    return options.map((option, index) => (
-        <ChoiceContainer key={index} option={option} />
+    return options.map((option) => (
+        <ChoiceContainer key={option.value} option={option} />
     ));
 }
