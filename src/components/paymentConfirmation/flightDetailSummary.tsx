@@ -37,7 +37,6 @@ function durationCalculation(segments: FlightSegment[]): string {
     return `${hours}h ${minutes}m`;
 }
 
-
 function DepartureComponent({ seg }: { seg: FlightSegment }) {
     return (
         <div className="flex flex-col gap-1">
@@ -171,25 +170,19 @@ export default function FlightDetailSummary({flightLeg, departurePlace, arrivalP
             </div>
 
             <div className="flex flex-col items-start pl-16 gap-1">
-                
                 {segments.map((seg, idx) => {
                     if (idx === 0) {
-                        // First segment: Departure
-                        return <DepartureComponent key={idx} seg={seg} />;
+                    return <DepartureComponent key={idx} seg={seg} />;
                     } else if (idx === segments.length - 1) {
-                        // Last segment: Arrival
-                        return <ArrivalComponent key={idx} seg={seg} />;
+                    return <ArrivalComponent key={idx} seg={seg} />;
                     } else {
-                        // Intermediate segments: transfer
-                        return (
-                            <div key={idx}>
-                                <ArrivalTransferComponent seg={seg} />
-                                <DepartureTransferComponent seg={seg} />
-                            </div>
-                        );
+                        if (idx % 2 === 1) {
+                            return <ArrivalTransferComponent key={idx} seg={seg} />;
+                        } else {
+                            return <DepartureTransferComponent key={idx} seg={seg} />;
+                        }
                     }
                 })}
-
             </div>
 
             <div className="flex flex-col justify-center items-start self-stretch px-4 py-[0.75rem] gap-[0.75rem] bg-primary-50">

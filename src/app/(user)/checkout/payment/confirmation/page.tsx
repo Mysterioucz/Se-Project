@@ -75,7 +75,13 @@ export default function Page() {
                 Place: "Dubai International Airport"
             },
             {
-                Time: "18:30",
+                Time: "16:00",
+                Date: "2025-11-01",
+                Airport: "DXB",
+                Place: "Dubai International Airport"
+            },
+            {
+                Time: "20:30",
                 Date: "2025-11-01",
                 Airport: "LHR",
                 Place: "London Heathrow Airport"
