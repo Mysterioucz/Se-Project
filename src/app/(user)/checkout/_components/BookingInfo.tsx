@@ -1,4 +1,8 @@
-import { OneWayArrowIcon, TimeForwardIcon, TwoWayArrowIcon } from "@/src/components/icons/module";
+import {
+    OneWayArrowIcon,
+    TimeForwardIcon,
+    TwoWayArrowIcon,
+} from "@/src/components/icons/module";
 
 export interface Flight {
     flightNumber: string;
@@ -128,15 +132,13 @@ async function fetchBookingInfo(): Promise<BookingInfoProps> {
 }
 
 export default async function BookingInfo() {
-	
-	const { departure, arrival } = await fetchBookingInfo(); // This will suspend until the promise resolves
-
+    const { departure, arrival } = await fetchBookingInfo(); // This will suspend until the promise resolves
     return (
         <div className="flex flex-col gap-6 px-6 py-4 border-2 border-primary-300 rounded-lg w-full">
             <h2 className="font-semibold text-primary-900">
                 Booking Information
             </h2>
-            <Content departure={departure} arrival={arrival}/>
+            <Content departure={departure} arrival={arrival} />
         </div>
     );
 }
