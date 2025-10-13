@@ -2,9 +2,10 @@ import Button from "@/src/components/Button";
 import FlightDetailSummary from "@/src/components/paymentConfirmation/flightDetailSummary";
 import PassengerInfoSummary from "@/src/components/paymentConfirmation/passengerInfoSummary";
 import PaymentDetailSummary from "@/src/components/paymentConfirmation/paymentDetailSummary";
+import PriceBreakdownCard from "@/src/components/paymentConfirmation/priceBreakdownCard";
+
 export default function Page() {
   return (
-
     <div className="flex flex-col w-full justify-center gap-10 py-md">
         <h1 className="font-sarabun text-[2rem] font-bold leading-[120%] text-primary-600">
             Flight Order Summary
@@ -19,6 +20,7 @@ export default function Page() {
                 </div>
                 {/* for dev */}
                 <FlightDetailSummary />
+                <FlightDetailSummary />
             </div>
 
             <div className="flex items-start gap-[4rem] self-stretch">
@@ -27,6 +29,8 @@ export default function Page() {
 
             <div className="flex flex-col items-start gap-[1rem] [flex:1_0_0] bg-common-white p-[1rem]">
                 <PassengerInfoSummary />
+                <PassengerInfoSummary />
+                <PriceBreakdownCard />
                 <PaymentDetailSummary />
             </div>
         </div>
