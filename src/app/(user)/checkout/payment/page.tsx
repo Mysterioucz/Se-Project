@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PaymentMethods from "./_components/PaymentMethods";
 import ContactInform from "./_components/ContactInform";
+import PriceBreakdownCard from "@components/paymentConfirmation/priceBreakdownCard";
+import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import QRModal from "./_components/QRModal";
 import Button from "@components/Button";
 
@@ -11,7 +13,6 @@ export default function Page() {
   const router = useRouter();
 
   // TODO: Fetch actual data from backend to check if user fill in all required info
-
   const [isPaymentValid, setIsPaymentValid] = useState(false);
   const [isQRmethod, setQRmethod] = useState(false);
   const [isContactValid, setIsContactValid] = useState(false);
@@ -25,6 +26,24 @@ export default function Page() {
   };
   const handleContactStatusChange = (isValid: boolean) => {
     setIsContactValid(isValid);
+  };
+
+  const ticketMockData = [
+    {
+      type: PassengerTypes.Adult,
+      price: 1500.0,
+      quantity: 2,
+    },
+    {
+      type: PassengerTypes.Child,
+      price: 1200.0,
+      quantity: 1,
+    },
+  ];
+  const baggageMockData = {
+    personal_item_price: 0,
+    carry_on_item_price: 500.0,
+    checked_baggage_price: 900.0,
   };
 
   const isFormComplete = isPaymentValid && isContactValid;
@@ -54,10 +73,10 @@ export default function Page() {
             <div className="text-[2rem] font-bold text-[var(--color-primary-900)] mb-[1.5rem]">
               Payment Methods
             </div>
-            <PaymentMethods 
-				onStatusChange={handlePaymentStatusChange} 
-				onQRmethodChange={handleQRmethodChange}
-			/>
+            <PaymentMethods
+              onStatusChange={handlePaymentStatusChange}
+              onQRmethodChange={handleQRmethodChange}
+            />
           </div>
 
           <div className="gap-[2rem] p-[1.5rem] bg-[var(--color-primary-50)] rounded-[0.5rem]">
@@ -93,13 +112,16 @@ export default function Page() {
         </div>
       </div>
 
-      {/* TODO: Call Right side bar to be used here */}
-      <div className="w-[21.25rem] h-[47.5625rem] bg-red-500"></div>
+      <div className="flex flex-col gap-[2.5rem] w-[500px]">
+        {/* TODO: Use Booking Info Sidebar component here */}
+        <div className="h-[30rem] bg-red-500"></div>
+        <PriceBreakdownCard
+          tickets={ticketMockData}
+          baggage={baggageMockData}
+        />
+      </div>
 
-	  <QRModal
-        open={isQRModalOpen}	
-        onClose={() => setQRModalOpen(false)}
-      />
+      <QRModal open={isQRModalOpen} onClose={() => setQRModalOpen(false)} />
     </div>
   );
 }
