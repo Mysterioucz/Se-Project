@@ -87,11 +87,12 @@ export default function PriceBreakdownCard({ tickets, baggage }: PriceBreakdownC
                         </div>
 
                         {/* Ticket Summary Components */}
-                        {tickets.map((t, idx) => (
-                            <TicketSummary key={idx} {...t} />
-                        ))}
+                        <div className="flex flex-col self-stretch space-y-[0.5rem]">
+                            {tickets.map((t, idx) => (
+                                <TicketSummary key={idx} {...t} />
+                            ))}
+                        </div>
                     </div>
-
 
                     {/* Baggage */}
                     <div className="flex flex-col items-start gap-[1rem] self-stretch">

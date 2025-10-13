@@ -5,8 +5,12 @@ import PaymentDetailSummary from "@/src/components/paymentConfirmation/paymentDe
 import PriceBreakdownCard from "@/src/components/paymentConfirmation/priceBreakdownCard";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { PaymentMethodTypes } from "@/src/enums/PaymentMethodTypes";
+import { FlightTypes } from "@/src/enums/FlightTypes";
 
 export default function Page() {
+    // Example flight data
+    const flightType = FlightTypes.ROUND_TRIP;
+
     // Example ticket data
     const tickets = [
         { type: PassengerTypes.Adult, price: 1000, quantity: 1 },
@@ -20,6 +24,7 @@ export default function Page() {
         checked_baggage_price: 300,
     };
 
+    // Example payment data
     const paymentDetail = {
         bookingId: "1763GUG6172",
         paymentMethod: PaymentMethodTypes.BankTransfer
@@ -35,7 +40,7 @@ export default function Page() {
                 <div className="flex flex-col items-start gap-[0.625rem] w-[35rem] p-[1rem]">
                     <div className="flex items-start self-stretch px-4 py-2 rounded-md bg-primary-50">
                         <div className="font-sarabun text-[1.2rem] font-semibold leading-[120%] text-primary-900 m-0">
-                            Type Trip : One-Way
+                            Type Trip : {flightType}
                         </div>
                     </div>
                     {/* for dev */}
