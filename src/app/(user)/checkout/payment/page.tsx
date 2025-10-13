@@ -93,7 +93,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Right-side Bar */}
+      {/* TODO: Call Right side bar to be used here */}
       <div className="w-[21.25rem] h-[47.5625rem] bg-red-500"></div>
 
 	  <QRModal
