@@ -99,22 +99,21 @@ export async function POST(request: NextRequest,
       { status: 201, headers: {Location: `/api/v1/payments/${paymentId}` } }
     );
         
-    } catch (err: any) {
-        if (err?.name === "ZodError") {
-            return NextResponse.json(
-                { success: false, message: "Validation error", details: err.errors },
-                { status: 400 }
-            );
+    } catch (err: unknown) {
+        if (err instanceof z.ZodError) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: "Validation error",
+              details: err.issues,
+            },
+            { status: 400 }
+          );
         }
-        if (err?.code === "P2002") {
-            return NextResponse.json(
-                { success: false, message: "Duplicate payment or purchase." },
-                { status: 409 }
-            );
-        }
-        return NextResponse.json (
-            { success: false, message: ErrorMessages.SERVER, details: err.message },
-            { status: 500 }
-        )
+    
+      return NextResponse.json(
+        { success: false, message: ErrorMessages.SERVER},
+        { status: 500 }
+      );
     }
 }
