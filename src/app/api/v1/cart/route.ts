@@ -122,8 +122,8 @@ export async function DELETE(req: NextRequest) {
     const session = await getServerSession(nextAuthOptions);
 
     if (!session?.user?.id) {
-        return new Response(
-            JSON.stringify({ success: false, message: ErrorMessages.AUTHENTICATION }),
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.AUTHENTICATION },
             { status: 401 }
         );
     }
@@ -132,8 +132,8 @@ export async function DELETE(req: NextRequest) {
         const { cartId } = await req.json();
 
         if (!cartId || isNaN(parseInt(cartId))) {
-            return new Response(
-                JSON.stringify({ success: false, message: ErrorMessages.MISSING_PARAMETER }),
+            return NextResponse.json(
+                { success: false, message: ErrorMessages.MISSING_PARAMETER },
                 { status: 400 }
             );
         }
@@ -147,17 +147,23 @@ export async function DELETE(req: NextRequest) {
         });
 
         if (!cartItem) {
-            return new Response(
-                JSON.stringify({ success: false, message: ErrorMessages.PERMISSION }),
+            return NextResponse.json(
+                { success: false, message: ErrorMessages.PERMISSION },
                 { status: 403 }
             );
         }
         
-        await prisma.cart.delete({ where: { id: cartItemId } });
+        await prisma.cart.delete({ where: { id: cartItemId, UserAccountID: session.user.id } });
 
-        return new Response(JSON.stringify({ success: true, message: "Item removed from cart." }), { status: 200 });
+        return NextResponse.json(
+            { success: true, message: "Item removed from cart." },
+            { status: 200 }
+            );
     } catch (error) {
         console.error("Error deleting cart item:", error);
-        return new Response(JSON.stringify({ success: false, message: ErrorMessages.SERVER }), { status: 500 });
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.SERVER },
+            { status: 500 }
+        );
     }
 }
