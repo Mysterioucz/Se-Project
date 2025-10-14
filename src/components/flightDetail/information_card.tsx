@@ -24,6 +24,23 @@ const FYI = {
 };
 
 export default function InformationCard(props: InformationCardProps) {
+    const [passengerInformation,setPassengerInformation] = useState<object>({
+        givenName: "",
+        lastName: "",
+        gender: "",
+        dayOfBirth: "",
+        monthOfBirth: "",
+        yearOfBirth: "",
+        nationality: "",
+        passportNo: "",
+        dayOfIssue: "",
+        monthOfIssue: "",
+        yearOfIssue: "",
+        dayOfExpiry: "",
+        monthOfExpiry: "",
+        yearOfExpiry: ""
+    });
+
     const [givenName, setGivenName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
 
@@ -104,12 +121,21 @@ export default function InformationCard(props: InformationCardProps) {
                     <TextFieldComponent 
                         label="Date of Birth*"
                         placeHolder="DD/MM/YYYY"
-                        textValue=""
+                        textValue={dateOfBirth}
                         width="w-[13.5625rem]"
                         height="h-[3.1875rem]"
                         labelFont="!font-normal"
                         labelSize="!text-[1rem]"
                         gap="gap-1"
+                        onChange={
+                            (value) => {
+                                const input =
+                                    value !== null && typeof value === "object" && "text" in value
+                                        ? (value.text as string)
+                                        : String(value ?? "");
+                                    setDateOfBirth(input);
+                            }
+                        }
                     />
                 {/* Nationality */}
                 <div className="flex flex-col gap-1">
@@ -147,32 +173,59 @@ export default function InformationCard(props: InformationCardProps) {
                         <TextFieldComponent
                             label="Passport No.*"
                             placeHolder="Enter your passport no."
-                            textValue=""
+                            textValue={passportNo}
                             width="w-[13.5625rem]"
                             height="h-[3.1875rem]"
                             labelFont="!font-normal"
                             labelSize="!text-[1rem]"
                             gap="gap-1"
+                            onChange={
+                                (value) => {
+                                    const input =
+                                        value !== null && typeof value === "object" && "text" in value
+                                            ? (value.text as string)
+                                            : String(value ?? "");
+                                    setPassportNo(input);
+                                }
+                            }
                         />
                         <TextFieldComponent
                             label="Issue Date*"
                             placeHolder="DD/MM/YYYY"
-                            textValue=""
+                            textValue={issueDate}
                             width="w-[13.5625rem]"
                             height="h-[3.1875rem]"
                             labelFont="!font-normal"
                             labelSize="!text-[1rem]"
                             gap="gap-1"
+                            onChange={
+                                (value) => {
+                                    const input =
+                                        value !== null && typeof value === "object" && "text" in value
+                                            ? (value.text as string)
+                                            : String(value ?? "");
+                                    setIssueDate(input);
+                                }
+                            }
                         />
                         <TextFieldComponent
                             label="Expiry Date*"
                             placeHolder="DD/MM/YYYY"
-                            textValue=""
+                            textValue={expiryDate}
                             width="w-[13.5625rem]"
                             height="h-[3.1875rem]"
                             labelFont="!font-normal"
                             labelSize="!text-[1rem]"
                             gap="gap-1"
+                            onChange={
+                                (value) => {
+                                    const input =
+                                        value !== null && typeof value === "object" && "text" in value
+                                            ? (value.text as string)
+                                            : String(value ?? "");
+                                    setExpiryDate(input);
+                                }
+                            }
                         />
                     </div>
                 </div>
@@ -189,6 +242,81 @@ export default function InformationCard(props: InformationCardProps) {
                 width="w-full"
                 height="h-[2.1875rem]"
                 size="md"
+                onClick={() => {
+                    if (givenName === "" || lastName === "") {
+                        // TODO: send error
+                        console.log("Given name or last name is empty");
+                        return;
+                    }
+                    if (gender === "" || dateOfBirth === "" || nationality === "") {
+                        // TODO: send error
+                        console.log("Please fill in all required fields");
+                        return;
+                    }
+
+                    if (props.international) {
+                        if (passportNo === "" || issueDate === "" || expiryDate === "") {
+                            // TODO: send error
+                            console.log("Please fill in all required fields");
+                            return;
+                        }
+                    }
+
+                    const [dayOfBirth, monthOfBirth, yearOfBirth] = dateOfBirth.split("/");
+                    const [dayOfIssue, monthOfIssue, yearOfIssue] = issueDate.split("/");
+                    const [dayOfExpiry, monthOfExpiry, yearOfExpiry] = expiryDate.split("/");
+                    if (isNaN(Date.parse(`${yearOfBirth}-${monthOfBirth}-${dayOfBirth}`))) {
+                        console.log("Invalid date of birth");
+                        return;
+                    }
+                    if (props.international) {  
+                    if (isNaN(Date.parse(`${yearOfIssue}-${monthOfIssue}-${dayOfIssue}`))) {
+                        console.log("Invalid issue date");
+                        return;
+                    }
+                    if (isNaN(Date.parse(`${yearOfExpiry}-${monthOfExpiry}-${dayOfExpiry}`))) {
+                        console.log("Invalid expiry date");
+                        return;
+                    }
+                    }
+
+                    const info: {
+                        givenName: string;
+                        lastName: string;
+                        gender: string;
+                        dayOfBirth: string;
+                        monthOfBirth: string;
+                        yearOfBirth: string;
+                        nationality: string;
+                        passportNo?: string;
+                        dayOfIssue?: string;
+                        monthOfIssue?: string;
+                        yearOfIssue?: string;
+                        dayOfExpiry?: string;
+                        monthOfExpiry?: string;
+                        yearOfExpiry?: string;
+                    } = {
+                        givenName,
+                        lastName,
+                        gender,
+                        dayOfBirth,
+                        monthOfBirth,
+                        yearOfBirth,
+                        nationality,
+                    };
+                    if (props.international) {
+                        info.passportNo = passportNo;
+                        info.dayOfIssue = dayOfIssue;
+                        info.monthOfIssue = monthOfIssue;
+                        info.yearOfIssue = yearOfIssue;
+                        info.dayOfExpiry = dayOfExpiry;
+                        info.monthOfExpiry = monthOfExpiry;
+                        info.yearOfExpiry = yearOfExpiry;
+                    }
+
+                    setPassengerInformation(info);
+                    console.log(info);
+                }}
             />
         </div>
     );
