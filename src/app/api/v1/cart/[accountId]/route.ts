@@ -1,0 +1,122 @@
+import prisma from "@/db";
+import { NextRequest } from "next/server";
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "@/src/lib/auth";
+import { ErrorMessages } from "@/src/enums/ErrorMessages";
+
+export async function GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ UserAccountID: string }> }
+) {
+    const { UserAccountID } = await params;
+
+    // If accountId doesn't match the token sent's ID
+    const session = await getServerSession(nextAuthOptions);
+    if (session?.user?.id != UserAccountID) {
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: ErrorMessages.PERMISSION,
+            }),
+            { status: 401 }
+        );
+    }
+
+    try {
+        const carts = await prisma.cart.findMany({
+            where: { UserAccountID },
+        });
+
+        const results = [];
+        for (const cart of carts) {
+            // Get Depart Flight info
+            const departFlight = await prisma.flight.findFirst({
+                where: {
+                    FlightNo: cart.DepartFlightNo,
+                    DepartTime: cart.DepartFlightDepartTime,
+                    ArrivalTime: cart.DepartFlightArrivalTime,
+                },
+                select: {
+                    AirlineName: true,
+                    TransitAmount: true,
+                    DepartureAirportID: true,
+                    ArrivalAirportID: true,
+                },
+            });
+
+            // Get Return Flight info (if exists)
+                const returnFlight = cart.ReturnFlightNo ? await prisma.flight.findFirst({
+                    where: {
+                        FlightNo: cart.ReturnFlightNo,
+                        DepartTime: cart.ReturnFlightDepartTime!,
+                        ArrivalTime: cart.ReturnFlightArrivalTime!,
+                    },
+                    select: {
+                        AirlineName: true,
+                        TransitAmount: true,
+                    },
+                }) 
+                : null;
+            
+            // Get Airport cities
+            const departureAirport = departFlight ? await prisma.airport.findUnique({
+                where: { AirportID: departFlight.DepartureAirportID },
+                select: { City: true },
+                })
+            : null;
+
+            const arrivalAirport = departFlight ? await prisma.airport.findUnique({
+                where: { AirportID: departFlight.ArrivalAirportID },
+                select: { City: true },
+                })
+            : null;
+
+            // Combine into one JSON object
+            results.push({
+                FlightType: cart.FlightType,
+                ClassType: cart.ClassType,
+                Adults: cart.Adults,
+                Childrens: cart.Childrens,
+                Infants: cart.Infants,
+                Price: cart.Price,
+
+                Depart: {
+                    FlightNo: cart.DepartFlightNo,
+                    DepartTime: cart.DepartFlightDepartTime,
+                    ArrivalTime: cart.DepartFlightArrivalTime,
+                    AirlineName: departFlight?.AirlineName ?? null,
+                    Stops: departFlight?.TransitAmount ?? null,
+                    DepartureCity: departureAirport?.City ?? null,
+                    ArrivalCity: arrivalAirport?.City ?? null,
+                },
+
+                Return: cart.ReturnFlightNo
+                    ? {
+                        FlightNo: cart.ReturnFlightNo,
+                        DepartTime: cart.ReturnFlightDepartTime,
+                        ArrivalTime: cart.ReturnFlightArrivalTime,
+                        AirlineName: returnFlight?.AirlineName ?? null,
+                        Stops: returnFlight?.TransitAmount ?? null,
+                    }
+                    : null,
+                });
+            }
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                data: results,
+            }),
+            { status: 200 }
+        );
+    } catch (error) {
+        console.log(error)
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: ErrorMessages.SERVER,
+            }),
+            { status: 500 }
+        );
+    }
+}
