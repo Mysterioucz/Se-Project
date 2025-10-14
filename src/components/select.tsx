@@ -15,9 +15,11 @@ interface Props {
   error?: boolean;
   disabled?: boolean;
   maxChildrenHeight?: string;
+  width?: string;
   onChange?: (event: SelectEvent, child?: React.ReactNode) => void;
   children?: React.ReactNode;
   placeholder?: string;
+  bgColor?: string;
   renderSelected?: (selected: string) => ReactNode;
 }
 
@@ -32,6 +34,8 @@ export default function SelectComponent({
   children,
   placeholder = "Select an option",
   renderSelected,
+  width = "w-full",
+  bgColor = "bg-white",
 }: Props) {
   function resolveTextColor() {
     if (disabled) return "text-disabled-dark";
@@ -43,7 +47,7 @@ export default function SelectComponent({
       error={error}
       disabled={disabled}
       displayEmpty
-      className={`group ${resolveTextColor()}`}
+      className={`group ${resolveTextColor()} ${width} ${bgColor}`}
       slotProps={{
         notchedOutline: {
           className: `border-2 border-gray-100 ${
