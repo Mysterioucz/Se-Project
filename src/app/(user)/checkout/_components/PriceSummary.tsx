@@ -1,8 +1,8 @@
 "use client";
 
+import Button from "@/src/components/Button";
 import { usePathname, useRouter } from "next/navigation";
 import { use } from "react";
-import Button from "../../../../components/Button";
 import { checkoutPaths, isCheckoutPath } from "./helper";
 
 interface PriceBreakdown {
@@ -17,7 +17,7 @@ let priceDataPromise: Promise<PriceBreakdown> | null = null;
 
 const fetchPriceData = async (): Promise<PriceBreakdown> => {
     // TODO: Replace with actual API call
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     // Dummy price data
     return {
@@ -75,11 +75,8 @@ export default function PriceSummary() {
         return suffixButtonText.get(pathname) || "Next";
     };
 
-    if (pathname === "/checkout/payment") {
-        return null;
-    }
-
     return (
+        //TODO: Change to only button after UI review
         <div className="border-2 border-primary-300 rounded-lg p-6 w-full max-w-[56.25rem]">
             {/* Total */}
             <div className="flex justify-between items-center mb-6">

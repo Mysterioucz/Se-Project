@@ -1,6 +1,6 @@
 "use client";
 
-import Modal from "@components/Modal"; // adjust the path as needed
+import Modal from "@components/Modal";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 

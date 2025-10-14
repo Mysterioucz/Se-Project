@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>Flight Cart</div>;
+    return <div>Flight Cart</div>;
 }
