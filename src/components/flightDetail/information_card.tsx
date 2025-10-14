@@ -24,8 +24,16 @@ const FYI = {
 };
 
 export default function InformationCard(props: InformationCardProps) {
+    const [givenName, setGivenName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+
     const [gender, setGender] = useState<string>("");
+    const [dateOfBirth, setDateOfBirth] = useState<string>("");
     const [nationality, setNationality] = useState<string>("");
+
+    const [passportNo, setPassportNo] = useState<string>("");
+    const [issueDate, setIssueDate] = useState<string>("");
+    const [expiryDate, setExpiryDate] = useState<string>("");
 
     return (
         <div className="flex flex-col w-[44.625rem] p-6 gap-8 rounded-lg bg-primary-50">
@@ -36,22 +44,40 @@ export default function InformationCard(props: InformationCardProps) {
                     <TextFieldComponent 
                         label="Given names*"
                         placeHolder="Enter your given names"
-                        textValue=""
+                        textValue={givenName}
                         width="w-[20.5625rem]"
                         height="h-[3.1875rem]"
                         labelFont="!font-normal"
                         labelSize="!text-[1rem]"
                         gap="gap-1"
+                        onChange={
+                            (value) => {
+                                const upper =
+                                    value !== null && typeof value === "object" && "text" in value
+                                        ? (value.text as string).toUpperCase()
+                                        : String(value ?? "").toUpperCase();
+                                    setGivenName(upper);
+                            }
+                        }
                     />
                     <TextFieldComponent 
                         label="Lastname*"
                         placeHolder="Enter your lastname"
-                        textValue=""
+                        textValue={lastName}
                         width="w-[20.5625rem]"
                         height="h-[3.1875rem]"
                         labelFont="!font-normal"
                         labelSize="!text-[1rem]"
                         gap="gap-1"
+                        onChange={
+                            (value) => {
+                                const upper =
+                                    value !== null && typeof value === "object" && "text" in value
+                                        ? (value.text as string).toUpperCase()
+                                        : String(value ?? "").toUpperCase();
+                                    setLastName(upper);
+                            }
+                        }
                     />
             </div>
             {/* Personal Information */}
