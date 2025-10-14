@@ -9,7 +9,6 @@ import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
 
 const CreatePaymentSchema = z.object({
   ticketId: z.string().min(1, "ticketId is required"),
-//   userAccountId: z.string().min(1, "userAccountId is required"),
   amount: z.number().positive("amount must be > 0"),
   method: PaymentMethodSchema,
   status: PaymentStatusSchema.default("PAID")
@@ -21,11 +20,8 @@ export async function POST(request: NextRequest,
         const { accountId } = params;
         const session = await getServerSession(nextAuthOptions);
         if (!session?.user?.id || String(session.user.id) !== accountId) {
-            return new Response(
-                JSON.stringify({
-                    success: false,
-                    message: ErrorMessages.AUTHENTICATION,
-                }),
+            return NextResponse.json(
+                { error: {message: ErrorMessages.AUTHENTICATION} },
                 { status: 401 }
             );
         }
@@ -38,8 +34,8 @@ export async function POST(request: NextRequest,
         const ticket = await prisma.ticket.findUnique({ where: { TicketID: ticketId } });
         if (!ticket) {
             return NextResponse.json(
-                { error: { code: "TICKET_NOT_FOUND", message: "Ticket not found." } },
-                { status: 404 }
+                { error: {code: "TICKET_NOT_FOUND", message: "Ticket not found." } },
+                { status: 404}
             );
         }
 
@@ -76,36 +72,32 @@ export async function POST(request: NextRequest,
         },
       });
 
-    //   if (status === "PAID") {
-    //     await tx.ticket.update({
-    //       where: { TicketID: ticketId },
-    //       data: { TicketStatus: "PAID" }, 
-    //     });
-    //   }
+      if (status === "PAID") {
+        await tx.ticket.update({
+          where: { TicketID: ticketId },
+          data: { TicketStatus: "PAID" }, 
+        });
+      }
 
       return { payment, purchase };
     });
 
-    return new Response(
-            JSON.stringify({
-                success: true,
-                data: {
-                    payment: {
-                    id: result.payment.PaymentID,
-                    dateTime: result.payment.PaymentDateTime,
-                    method: result.payment.PaymentMethod,
-                    status: result.payment.TransactionStatus,
-                    amount: result.payment.Amount,
-                }, 
-                purchase: {
-                    ticketId,
-                    paymentId: result.payment.PaymentID,
-                    userAccountId: accountId,
-                }
-            },
-            }),
-            { status: 201}
-        );
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          payment: {
+            id: result.payment.PaymentID,
+            dateTime: result.payment.PaymentDateTime,
+            method: result.payment.PaymentMethod,
+            status: result.payment.TransactionStatus,
+            amount: result.payment.Amount,
+          },
+          purchase: { ticketId, paymentId: result.payment.PaymentID, userAccountId: accountId },
+        },
+      },
+      { status: 201, headers: {Location: `/api/v1/payments/${paymentId}` } }
+    );
         
     } catch (err: any) {
         if (err?.name === "ZodError") {
@@ -120,12 +112,9 @@ export async function POST(request: NextRequest,
                 { status: 409 }
             );
         }
-        return new Response(
-            JSON.stringify({
-                success: false,
-                message: ErrorMessages.SERVER,
-            }),
-            {status: 500}
-        );
+        return NextResponse.json (
+            { success: false, message: ErrorMessages.SERVER, details: err.message },
+            { status: 500 }
+        )
     }
 }
