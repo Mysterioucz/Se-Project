@@ -37,7 +37,7 @@ export default function TextFieldComponent({
     helperText,
     icon,
     width = "w-full",
-    height = "h-fit",
+    height,
     labelFont="!font-bold",
     labelSize="!text-lg",
     labelColor="!text-color-primary-900",
@@ -126,7 +126,7 @@ export default function TextFieldComponent({
     }
 
     return (
-        <div className={`flex flex-col ${width} ${height} ${gap}`}>
+        <div className={`flex flex-col ${width} ${gap}`}>
             {label && (
                 <h3 className={`${labelFont} ${labelSize} ${labelColor}`}>
                     {label}
@@ -134,7 +134,7 @@ export default function TextFieldComponent({
             )}
 
             <div
-                className={`flex items-center p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] bg-white border-2 ${resolveBorderColor(
+                className={`flex items-center ${height} p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] bg-white border-2 ${resolveBorderColor(
                     state
                 )}`}
                 onFocus={() => handleStateChange("focused")}
