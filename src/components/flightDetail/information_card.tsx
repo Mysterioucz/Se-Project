@@ -42,15 +42,23 @@ export default function InformationCard(props: InformationCardProps) {
     });
 
     const [givenName, setGivenName] = useState<string>("");
+    const [errorGivenName, setErrorGivenName] = useState<boolean>(false);
     const [lastName, setLastName] = useState<string>("");
+    const [errorLastName, setErrorLastName] = useState<boolean>(false);
 
     const [gender, setGender] = useState<string>("");
+    const [errorGender, setErrorGender] = useState<boolean>(false);
     const [dateOfBirth, setDateOfBirth] = useState<string>("");
+    const [errorDateOfBirth, setErrorDateOfBirth] = useState<boolean>(false);
     const [nationality, setNationality] = useState<string>("");
+    const [errorNationality, setErrorNationality] = useState<boolean>(false);
 
     const [passportNo, setPassportNo] = useState<string>("");
+    const [errorPassportNo, setErrorPassportNo] = useState<boolean>(false);
     const [issueDate, setIssueDate] = useState<string>("");
+    const [errorIssueDate, setErrorIssueDate] = useState<boolean>(false);
     const [expiryDate, setExpiryDate] = useState<string>("");
+    const [errorExpiryDate, setErrorExpiryDate] = useState<boolean>(false);
 
     return (
         <div className="flex flex-col w-[44.625rem] p-6 gap-8 rounded-lg bg-primary-50">
@@ -67,6 +75,7 @@ export default function InformationCard(props: InformationCardProps) {
                         labelFont="!font-normal"
                         labelSize="!text-[1rem]"
                         gap="gap-1"
+                        error={errorGivenName}
                         onChange={
                             (value) => {
                                 const upper =
@@ -86,6 +95,7 @@ export default function InformationCard(props: InformationCardProps) {
                         labelFont="!font-normal"
                         labelSize="!text-[1rem]"
                         gap="gap-1"
+                        error={errorLastName}
                         onChange={
                             (value) => {
                                 const upper =
@@ -109,6 +119,7 @@ export default function InformationCard(props: InformationCardProps) {
                         placeholder="Select your gender"
                         width="w-[13.5625rem]"
                         height="h-[3.1875rem]"
+                        error={errorGender}
                     >
                         <ListChoice 
                             maxHeight="max-h-[5.375rem]"
@@ -127,6 +138,7 @@ export default function InformationCard(props: InformationCardProps) {
                         labelFont="!font-normal"
                         labelSize="!text-[1rem]"
                         gap="gap-1"
+                        error={errorDateOfBirth}
                         onChange={
                             (value) => {
                                 const input =
@@ -147,6 +159,7 @@ export default function InformationCard(props: InformationCardProps) {
                         placeholder="Select your nationality"
                         width="w-[13.5625rem]"
                         height="h-[3.1875rem]"
+                        error={errorNationality}
                     >
                         <ListChoice
                             maxHeight="max-h-[191px]"
@@ -179,6 +192,7 @@ export default function InformationCard(props: InformationCardProps) {
                             labelFont="!font-normal"
                             labelSize="!text-[1rem]"
                             gap="gap-1"
+                            error={errorPassportNo}
                             onChange={
                                 (value) => {
                                     const input =
@@ -198,6 +212,7 @@ export default function InformationCard(props: InformationCardProps) {
                             labelFont="!font-normal"
                             labelSize="!text-[1rem]"
                             gap="gap-1"
+                            error={errorIssueDate}
                             onChange={
                                 (value) => {
                                     const input =
@@ -217,6 +232,7 @@ export default function InformationCard(props: InformationCardProps) {
                             labelFont="!font-normal"
                             labelSize="!text-[1rem]"
                             gap="gap-1"
+                            error={errorExpiryDate}
                             onChange={
                                 (value) => {
                                     const input =
@@ -243,22 +259,63 @@ export default function InformationCard(props: InformationCardProps) {
                 height="h-[2.1875rem]"
                 size="md"
                 onClick={() => {
-                    if (givenName === "" || lastName === "") {
+                    if (givenName === "") {
                         // TODO: send error
-                        console.log("Given name or last name is empty");
-                        return;
+                        console.log("Given name is empty");
+                        setErrorGivenName(true);
+                    }else{
+                        setErrorGivenName(false);
                     }
-                    if (gender === "" || dateOfBirth === "" || nationality === "") {
+                    if (lastName === "") {
                         // TODO: send error
-                        console.log("Please fill in all required fields");
-                        return;
+                        console.log("Last name is empty");
+                        setErrorLastName(true);
+                    }else{
+                        setErrorLastName(false);
+                    }
+                    if (gender === "") {
+                        // TODO: send error
+                        console.log("Gender is empty");
+                        setErrorGender(true);
+                    }else{
+                        setErrorGender(false);
+                    }
+                    if (dateOfBirth === "") {
+                        // TODO: send error
+                        console.log("Date of birth is empty");
+                        setErrorDateOfBirth(true);
+                    }else{
+                        setErrorDateOfBirth(false);
+                    }
+                    if (nationality === "") {
+                        // TODO: send error
+                        console.log("Nationality is empty");
+                        setErrorNationality(true);
+                    }else{
+                        setErrorNationality(false);
                     }
 
                     if (props.international) {
-                        if (passportNo === "" || issueDate === "" || expiryDate === "") {
+                        if (passportNo === "") {
                             // TODO: send error
-                            console.log("Please fill in all required fields");
-                            return;
+                            console.log("Passport no is empty");
+                            setErrorPassportNo(true);
+                        }else{
+                            setErrorPassportNo(false);
+                        }
+                        if (issueDate === "") {
+                            // TODO: send error
+                            console.log("Issue date is empty");
+                            setErrorIssueDate(true);
+                        }else{
+                            setErrorIssueDate(false);
+                        }
+                        if (expiryDate === "") {
+                            // TODO: send error
+                            console.log("Expiry date is empty");
+                            setErrorExpiryDate(true);
+                        }else{
+                            setErrorExpiryDate(false);
                         }
                     }
 
@@ -267,16 +324,22 @@ export default function InformationCard(props: InformationCardProps) {
                     const [dayOfExpiry, monthOfExpiry, yearOfExpiry] = expiryDate.split("/");
                     if (isNaN(Date.parse(`${yearOfBirth}-${monthOfBirth}-${dayOfBirth}`))) {
                         console.log("Invalid date of birth");
-                        return;
+                        setErrorDateOfBirth(true);
+                    }else{
+                        setErrorDateOfBirth(false);
                     }
                     if (props.international) {  
                     if (isNaN(Date.parse(`${yearOfIssue}-${monthOfIssue}-${dayOfIssue}`))) {
                         console.log("Invalid issue date");
-                        return;
+                        setErrorIssueDate(true);
+                    }else{
+                        setErrorIssueDate(false);
                     }
                     if (isNaN(Date.parse(`${yearOfExpiry}-${monthOfExpiry}-${dayOfExpiry}`))) {
                         console.log("Invalid expiry date");
-                        return;
+                        setErrorExpiryDate(true);
+                    }else{
+                        setErrorExpiryDate(false);
                     }
                     }
 
@@ -314,8 +377,13 @@ export default function InformationCard(props: InformationCardProps) {
                         info.yearOfExpiry = yearOfExpiry;
                     }
 
-                    setPassengerInformation(info);
-                    console.log(info);
+                    if (errorGivenName || errorLastName || errorGender || errorDateOfBirth || errorNationality || errorPassportNo || errorIssueDate || errorExpiryDate) {
+                        console.log("Please fix the errors before saving.");
+                        return;
+                    }else{
+                        setPassengerInformation(info);
+                        console.log(info);
+                    }
                 }}
             />
         </div>
