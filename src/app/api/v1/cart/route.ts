@@ -167,3 +167,40 @@ export async function DELETE(req: NextRequest) {
         );
     }
 }
+
+export async function GET(_req: NextRequest) {
+  const session = await getServerSession(nextAuthOptions);
+
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { success: false, message: ErrorMessages.AUTHENTICATION },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const cartItems = await prisma.cart.findMany({
+      where: { UserAccountID: session.user.id },
+      include: {
+        departFlight: {
+          include: { departureAirport: true, arrivalAirport: true, airline: true },
+        },
+        returnFlight: {
+          include: { departureAirport: true, arrivalAirport: true, airline: true },
+        },
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
+    return NextResponse.json(
+      { success: true, data: cartItems },
+      { status: 200, headers: { "Cache-Control": "no-store" } }
+    );
+  } catch (err) {
+    console.error("Error fetching cart items:", err);
+    return NextResponse.json(
+      { success: false, message: ErrorMessages.SERVER },
+      { status: 500 }
+    );
+  }
+}
