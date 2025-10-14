@@ -6,6 +6,7 @@ import PriceBreakdownCard from "@/src/components/paymentConfirmation/priceBreakd
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { PaymentMethodTypes } from "@/src/enums/PaymentMethodTypes";
 import { FlightTypes } from "@/src/enums/FlightTypes";
+import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
 
 export default function Page() {
     // Example flight data
@@ -46,9 +47,87 @@ export default function Page() {
             GenderOnID: "Female",
             Birthdate: "05/08/1998",
             Nationality: "Thai",
-            SeatNo: "12B"
+            SeatNo: "12B",
+            PassportNo: "A12345678",
+            PassportIssueDate: "01/01/2020",
+            PassportExpiryDate: "01/01/2030"
         }
-    ];  
+    ];
+
+    const mockFlightDetail = {
+        flightLeg: FlightLegTypes.DEPARTURE,
+        departurePlace: "Bangkok",
+        arrivalPlace: "London",
+        airline: "Thai Airways",
+        flightNumber: "TG910",
+        cabinClass: "Business",
+        segments: [
+            {
+                Time: "08:30",
+                Date: "2025-11-01",
+                Airport: "BKK",
+                Place: "Bangkok Suvarnabhumi Airport"
+            },
+            {
+                Time: "14:00",
+                Date: "2025-11-01",
+                Airport: "DXB",
+                Place: "Dubai International Airport"
+            },
+            {
+                Time: "16:00",
+                Date: "2025-11-01",
+                Airport: "DXB",
+                Place: "Dubai International Airport"
+            },
+            {
+                Time: "20:30",
+                Date: "2025-11-01",
+                Airport: "LHR",
+                Place: "London Heathrow Airport"
+            }
+        ]
+    };
+
+    const mockReturnFlightDetail = {
+        flightLeg: FlightLegTypes.RETURN,
+        departurePlace: "London",
+        arrivalPlace: "Bangkok",
+        airline: "Thai Airways",
+        flightNumber: "TG911",
+        cabinClass: "Business",
+        segments: [
+            {
+                Time: "10:00",
+                Date: "2025-11-10",
+                Airport: "LHR",
+                Place: "London Heathrow Airport"
+            },
+            {
+                Time: "14:30",
+                Date: "2025-11-10",
+                Airport: "DXB",
+                Place: "Dubai International Airport"
+            },
+            {
+                Time: "16:30",
+                Date: "2025-11-10",
+                Airport: "DXB",
+                Place: "Dubai International Airport"
+            },
+            {
+                Time: "06:00",
+                Date: "2025-11-11",
+                Airport: "BKK",
+                Place: "Bangkok Suvarnabhumi Airport"
+            }
+        ]
+    };
+
+    const mockRoundTripFlights = [
+        mockFlightDetail,
+        mockReturnFlightDetail
+    ];
 
     return (
         <div className="flex flex-col w-full justify-center gap-10 py-md">
@@ -63,9 +142,20 @@ export default function Page() {
                             Type Trip : {flightType}
                         </div>
                     </div>
-                    {/* for dev */}
-                    <FlightDetailSummary />
-                    <FlightDetailSummary />
+                    
+                    {mockRoundTripFlights.map((flight, index) => (
+                        <FlightDetailSummary
+                            key={index}
+                            flightLeg={flight.flightLeg}
+                            departurePlace={flight.departurePlace}
+                            arrivalPlace={flight.arrivalPlace}
+                            airline={flight.airline}
+                            flightNumber={flight.flightNumber}
+                            cabinClass={flight.cabinClass}
+                            segments={flight.segments}
+                        />
+                    ))}
+
                 </div>
 
                 <div className="flex items-start gap-[4rem] self-stretch">
@@ -88,6 +178,7 @@ export default function Page() {
                     width="w-[400px]"
                     align="center"
                     styleType="fill"
+                    href="/flights/search"
                 />
             </div>
 

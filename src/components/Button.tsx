@@ -40,6 +40,10 @@ export default function Button({
   const handleClick = () => {
     if (!disabled) {
       onClick();
+
+      if (href) {
+        router.push(href);
+      }
     }
   };
 
