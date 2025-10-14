@@ -15,6 +15,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//enums
+enum TicketStatus {
+  BOOKED
+  CANCELLED
+  CHECKED_IN
+  COMPLETED
+}
+
+//models
 model Airport {
   AirportID   String @id @db.VarChar(10)
   AirportName String @db.VarChar(100)
@@ -93,7 +102,7 @@ model Transit {
 model Ticket {
   TicketID          String   @id @db.VarChar(50)
   Price             Float
-  TicketStatus      String
+  TicketStatus      TicketStatus  @default(BOOKED)
   PassengerName     String
   PassengerLastName String
   Gender            String
@@ -185,6 +194,7 @@ model Seat {
   AircraftRegNo String @db.VarChar(20)
   SeatNo        String @db.VarChar(10)
   SeatType      String
+  IsAvailable   Boolean @default(true) //update to false when ticket with seatno is created
 
   // Relations
   aircraft Aircraft @relation(fields: [AircraftRegNo], references: [AircraftRegNo])
