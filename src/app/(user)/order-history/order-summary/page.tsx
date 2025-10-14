@@ -1,3 +1,6 @@
+"use client";
+
+import React from "react";
 import Button from "@/src/components/Button";
 import FlightDetailSummary from "@/src/components/paymentConfirmation/flightDetailSummary";
 import PassengerInfoSummary from "@/src/components/paymentConfirmation/passengerInfoSummary";
@@ -7,8 +10,10 @@ import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { PaymentMethodTypes } from "@/src/enums/PaymentMethodTypes";
 import { FlightTypes } from "@/src/enums/FlightTypes";
 import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+    const router = useRouter();
     // Example flight data
     const flightType = FlightTypes.ROUND_TRIP;
 
@@ -178,7 +183,9 @@ export default function Page() {
                     width="w-[400px]"
                     align="center"
                     styleType="fill"
-                    href="/flights/search"
+                    onClick={() => {
+                        router.push('/flights/search');
+                    }}
                 />
             </div>
 
