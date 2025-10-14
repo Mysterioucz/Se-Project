@@ -26,7 +26,7 @@ export default function ListChoice({
             <MenuItem
                 className={`${maxHeight} ${itemWidth}`}
                 onClick={() => {
-                    onClick?.();
+                    // onClick?.(); fix this error
                     onChange?.({
                         target: { value: option.value },
                     } as React.ChangeEvent<{
