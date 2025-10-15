@@ -104,7 +104,7 @@ export default function FlightSearchBar({
     useEffect(() => {
         async function fetchCities() {
             try {
-                const response = await fetch("/api/v1/city");
+                const response = await fetch("/api/v1/cities");
                 if (!response.ok) {
                     throw new Error("Failed to fetch cities");
                 }
@@ -143,18 +143,18 @@ export default function FlightSearchBar({
                                 <li
                                     className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                     onClick={() =>
-                                        handleSelection("flight", "Round Trip")
-                                    }
-                                >
-                                    <p>{FlightTypes.ROUND_TRIP}</p>
-                                </li>
-                                <li
-                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                    onClick={() =>
                                         handleSelection("flight", "One Way")
                                     }
                                 >
                                     <p>{FlightTypes.ONE_WAY}</p>
+                                </li>
+                                <li
+                                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() =>
+                                        handleSelection("flight", "Round Trip")
+                                    }
+                                >
+                                    <p>{FlightTypes.ROUND_TRIP}</p>
                                 </li>
                             </ul>
                         )}
