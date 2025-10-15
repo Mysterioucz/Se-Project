@@ -11,16 +11,16 @@ export async function GET(
     const { UserAccountID } = await params;
 
     // If accountId doesn't match the token sent's ID
-    // const session = await getServerSession(nextAuthOptions);
-    // if (session?.user?.id != UserAccountID) {
-    //     return new Response(
-    //         JSON.stringify({
-    //             success: false,
-    //             message: ErrorMessages.PERMISSION,
-    //         }),
-    //         { status: 401 }
-    //     );
-    // }
+    const session = await getServerSession(nextAuthOptions);
+    if (session?.user?.id != UserAccountID) {
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: ErrorMessages.PERMISSION,
+            }),
+            { status: 401 }
+        );
+    }
 
     try {
         const carts = await prisma.cart.findMany({

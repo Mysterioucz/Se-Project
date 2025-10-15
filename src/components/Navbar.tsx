@@ -8,6 +8,9 @@ import { useSession } from "next-auth/react";
 export default function Navbar() {
     const { data: session, status } = useSession();
     const displayName = session?.user?.name;
+
+    const AccountID = session?.user.id;
+
     return (
         <nav className="bg-primary-400 flex items-center w-full justify-between py-[0.5rem] px-[2rem] sticky top-0 z-99">
             {/* Navigate to main page */}
@@ -28,15 +31,30 @@ export default function Navbar() {
                     </p>
                 </Link>
                 {/* Navigate to Cart page */}
-                <Link href="/cart">
-                    <Image
-                        src={"/navbar/fi-br-shopping-cart.svg"}
-                        alt="Cart"
-                        width={20}
-                        height={20}
-                        className="w-[1.25rem] h-[1.25rem] cursor-pointer"
-                    />
-                </Link>
+                {status === "authenticated" ? (
+                    <Link href={`/cart/${AccountID}`}>
+                        <Image
+                            src={"/navbar/fi-br-shopping-cart.svg"}
+                            alt="Cart"
+                            width={20}
+                            height={20}
+                            className="w-[1.25rem] h-[1.25rem] cursor-pointer"
+                        />
+                    </Link>
+                ) : (
+                    <Link href={"/login"}>
+                        <Image
+                            src={"/navbar/fi-br-shopping-cart.svg"}
+                            alt="Cart"
+                            width={20}
+                            height={20}
+                            className="w-[1.25rem] h-[1.25rem] cursor-pointer"
+                        />
+                    </Link>
+                )}
+
+
+                
                 {status === "authenticated" ? (
                     <Link href={"/account-setting"}>
                         <Button

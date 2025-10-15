@@ -9,7 +9,7 @@ import { CartType } from '../enums/CartType';
 import ModalDeleteFromCart from './ModalDeleteFromCart';
 import deleteFromCart from '@/src/lib/deleteFromCart';
 
-export default function CartClient({ initialCartData }: { initialCartData: CartType[] }) {
+export default function CartClient({ initialCartData, AccountID }: { initialCartData: CartType[], AccountID: string }) {
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
     const [idToDelete, setIdToDelete] = React.useState<number>(-1);
@@ -62,7 +62,7 @@ export default function CartClient({ initialCartData }: { initialCartData: CartT
         isOpen={isDeleteModalOpen} 
         onClose={() => setIsDeleteModalOpen(false)} 
         handleDeleteFromCart={handleDeleteFromCart} 
-        UserAccountID={"8c92f19a-70c6-4857-a22b-611d7e201f84"} //GETID FROM SESSION 
+        UserAccountID={AccountID}
         CartID={idToDelete}
         />
         
@@ -89,7 +89,7 @@ export default function CartClient({ initialCartData }: { initialCartData: CartT
                         />
                     ))
                 ) : (
-                    <div className="text-center text-2xl font-bold rounded-lg bg-primary-50 text-primary-600">
+                    <div className="text-center text-2xl font-bold rounded-lg bg-primary-50 text-primary-600 my-10">
                         {Cart.EMPTY}
                     </div>
                 )}
