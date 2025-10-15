@@ -29,26 +29,21 @@ export default function CartItem({ item, isSelected, onSelect, onRemove } : {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-white">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white">
                 <div className="md:col-span-2">
-                <FlightDetail item={item} />
-                { (item.FlightType == "Round-trip")
+                <FlightDetail headerText="Depart" departAirport={item.DepartureAirport} arrivalAirport={item.ArrivalAirport} departCity={item.DepartureCity} arrivalCity={item.ArrivalCity} flight={item.Depart} />
 
+                { (item.FlightType == "Round-trip") &&
+                    <FlightDetail headerText="Return" departAirport={item.ArrivalAirport} arrivalAirport={item.DepartureAirport} departCity={item.ArrivalCity} arrivalCity={item.DepartureCity} flight={item.Return} />
                 }
-                {/* <FlightDetail leg={item.departLeg} type="Depart" />
-                {item.returnLeg && (
-                    <div className="mt-4 pt-4 border-t border-dashed">
-                    <FlightDetail leg={item.returnLeg} type="Return" />
-                    </div>
-                )} */}
                 </div>
 
-                <div className="bg-primary-100 rounded-lg p-4 flex flex-col justify-center items-center text-center -m-1 md:m-0 text-primary-600">
-                <div className="font-semibold">
+                <div className="bg-primary-100 p-4 flex flex-col justify-center items-right text-right -m-1 md:m-0 text-primary-600 h-full">
+                <div className="">
                     {item.Adults} Adults, {item.Childrens} Children, {item.Infants} Infants
                 </div>
-                <div className="text-xl">{item.ClassType}</div>
-                <div className="text-3xl font-bold mt-4">
+                <div className="text-xl font-semibold">{item.ClassType} Class</div>
+                <div className="text-3xl font-bold mt-3">
                     ฿ {item.Price.toLocaleString()}
                 </div>
                 </div>

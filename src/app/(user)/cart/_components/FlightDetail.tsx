@@ -1,36 +1,40 @@
-import { FlightCardDivider } from "@/src/components/icons/module";
+import { FiSrPlane, FlightCardDivider } from "@/src/components/icons/module";
 import { CartType } from "../enums/CartType";
+import { FlightDetailType } from "../enums/FlightDetailType";
 
-export default function FlightDetail({ item }: { item: CartType } ) {
-    const formattedDepartDate = formatToShortDate(item.Depart.DepartTime);
+export default function FlightDetail({ headerText, departAirport, arrivalAirport, departCity, arrivalCity, flight }: { 
+    headerText: string,
+    departAirport: string,
+    arrivalAirport: string,
+    departCity: string,
+    arrivalCity: string,
+    flight: FlightDetailType
+} ) {
     
-
-    return (<div className="mt-2">
-        <div className="flex items-center text-sm font-semibold text-gray-600">
-            <div className="w-16">Depart</div>
-            <div className="ml-4 text-primary-600">{item.Depart.AirlineName}</div>
-            <div className="ml-auto text-gprimary-400">{formattedDepartDate}</div>
+    return (<div className="m-4">
+        <div className="flex items-center text-sm text-gray-600">
+            <div className="w-16 bg-primary-50 text-center rounded-lg text-primary-400 font-semibold">{headerText}</div>
+            <div className="ml-4 text-2xl font-bold text-primary-600">{flight?.AirlineName}</div>
+            <div className="ml-4 text-primary-400 text-xl">{formatToShortDate(flight?.DepartTime ?? null)}</div>
         </div>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="my-1 mx-10 flex items-center justify-between">
             <div className="text-left">
-                <div className="text-2xl font-bold text-gray-800">{formatToTime(item.Depart.DepartTime)}</div>
-                <div className="text-sm font-semibold">{item.DepartureAirport}</div>
-                <div className="text-xs text-gray-500">{item.DepartureCity}</div>
+                <div className="text-2xl font-bold text-black">{formatToTime(flight?.DepartTime ?? null)}</div>
+                <div className="text-md">{departAirport}</div>
+                <div className="text-md">{departCity}</div>
             </div>
 
-            <div className="flex-grow text-center px-4 text-sm text-black">
-                <div className="">{getFlightDuration(item.Depart.DepartTime, item.Depart.ArrivalTime)}</div>
-            <div className="relative h-px bg-gray-300 my-1">
-                <FlightCardDivider className="w-4 h-4 text-primary-600 bg-white p-0.5 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-            </div>
-                {item.Depart.Stops > 0 && <div className="text-sm text-black">{item.Depart.Stops} Stops</div>}
+            <div className="text-center px-4 text-black">
+                <div className="text-md">{getFlightDuration(flight?.DepartTime ?? null, flight?.ArrivalTime ?? null)}</div>
+                <FlightCardDivider />
+                {(flight?.Stops ?? 0) > 0 && <div className="text-sm text-black">{flight?.Stops} Stops</div>}
             </div>
 
             <div className="text-right text-black">
-                <div className="text-2xl font-bold">{formatToTime(item.Depart.ArrivalTime)}</div>
-                <div className="">{item.ArrivalAirport}</div>
-                <div className="">{item.ArrivalCity}</div>
+                <div className="text-2xl font-bold text-black">{formatToTime(flight?.ArrivalTime ?? null)}</div>
+                <div className="text-md">{arrivalAirport}</div>
+                <div className="text-md">{arrivalCity}</div>
             </div>
         </div>
 
@@ -49,7 +53,9 @@ export function formatToShortDate(dateValue: Date | null): string {
     });
 }
 
-export function formatToTime(dateValue: Date | string): string {
+export function formatToTime(dateValue: Date | null): string {
+    if (! dateValue) return "";
+
     const date = new Date(dateValue);
     if (isNaN(date.getTime())) return "";
     return date.toLocaleTimeString("en-US", {
@@ -60,9 +66,11 @@ export function formatToTime(dateValue: Date | string): string {
 }
 
 export function getFlightDuration(
-    departTime: Date,
-    arrivalTime: Date
+    departTime: Date | null,
+    arrivalTime: Date | null
 ): string {
+    if (! departTime || ! arrivalTime) return "";
+
     const depart = new Date(departTime);
     const arrival = new Date(arrivalTime);
 
