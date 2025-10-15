@@ -6,7 +6,8 @@ on:
   pull_request:
 
 jobs:
-  lint-test-build:
+  build:
+    name: Lint, Test & Build
     runs-on: ubuntu-latest
 
     steps:
