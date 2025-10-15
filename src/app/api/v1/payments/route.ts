@@ -14,17 +14,18 @@ const CreatePaymentSchema = z.object({
   status: PaymentStatusSchema.default("PAID")
 });
 
-export async function POST(request: NextRequest, 
-    { params }: { params: { accountId: string } }) {
+export async function POST(request: NextRequest) {
         //check if the user is already logged in
-        const { accountId } = params;
         const session = await getServerSession(nextAuthOptions);
-        if (!session?.user?.id || String(session.user.id) !== accountId) {
-            return NextResponse.json(
-                { error: {message: ErrorMessages.AUTHENTICATION} },
-                { status: 401 }
-            );
+        if (!session?.user?.id) {
+          return NextResponse.json(
+              { error: { message: ErrorMessages.AUTHENTICATION } },
+              { status: 401 }
+          );
         }
+
+    // The accountId is securely obtained from the session object.
+    const accountId = String(session.user.id);
 
     try {
         const body = CreatePaymentSchema.parse(await request.json());
