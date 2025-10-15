@@ -163,3 +163,24 @@ Through this project, we gained experience in:
 * Email: [mewpunyapat@gmail.com](mewpunyapat@gmail.com)
 * GitHub: [mewpunyapat](https://github.com/mewpunyapat)
 * LinkedIn: [Punyapat Kijvorachai](https://www.linkedin.com/in/punyapatk)
+
+👤 **Khanapong Kamchoom**  
+*Role: Back-end Developer*
+
+* Email: [khanapong.3721.gg@gmail.com](khanapong.3721.gg@gmail.com)
+* GitHub: [tisismark](https://github.com/tisismark)
+* LinkedIn: [Khanapong Kamchoom](https://www.linkedin.com/in/khanapong-kamchoom-0a963b159/)
+
+👤**Chayut Archamongkol**  
+*Role: Full-Stack Developer*
+
+* Email: [chyut2005@gmail.com](chyut2005@gmail.com)
+* GitHub: [faith-cr](https://github.com/faith-cr)
+* LinkedIn: [Chayut Arhcamongkol](https://www.linkedin.com/in/chayut-ar/)
+
+👤 **Chayaphon Kultanon**  
+*Role: Front-end Developer*
+
+* Email: [chyaphon33793@gmail.com](chyaphon33793@gmail.com)
+* GitHub: [ChayaphonKultanon](https://github.com/ChayaphonKultanon)
+* LinkedIn: [Chayaphon Kultanon](https://www.linkedin.com/in/chayaphonkultanon/)
