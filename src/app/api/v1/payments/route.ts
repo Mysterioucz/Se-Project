@@ -73,12 +73,14 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      if (status === "PAID") {
-        await tx.ticket.update({
-          where: { TicketID: ticketId },
-          data: { TicketStatus: "PAID" }, 
-        });
-      }
+      //Update ticket status if payment is successful
+      //need to resolve enum issue concerning TicketStatus later
+      // if (status === "PAID") {
+      //   await tx.ticket.update({
+      //     where: { TicketID: ticketId },
+      //     data: { TicketStatus: "PAID" }, 
+      //   });
+      // }
 
       return { payment, purchase };
     });
