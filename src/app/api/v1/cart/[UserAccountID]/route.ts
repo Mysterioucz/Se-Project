@@ -13,6 +13,7 @@ export async function GET(
     try {
         const carts = await prisma.cart.findMany({
             where: { UserAccountID },
+            orderBy: { createdAt: "desc" }
         });
 
         const results = [];
@@ -72,7 +73,6 @@ export async function GET(
                 ArrivalAirport: departFlight?.ArrivalAirportID,
                 DepartureCity: departureAirport?.City ?? null,
                 ArrivalCity: arrivalAirport?.City ?? null,
-
 
                 Depart: {
                     FlightNo: cart.DepartFlightNo,
