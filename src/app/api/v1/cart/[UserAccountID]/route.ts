@@ -112,3 +112,57 @@ export async function GET(
         );
     }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { UserAccountID: string } }
+) {
+  const { UserAccountID } = params;
+
+  try {
+    // Parse CartID from body
+    const body = await req.json();
+    const { CartID } = body;
+
+    if (!CartID) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Missing CartID in request body",
+        }),
+        { status: 400 }
+      );
+    }
+
+    const deletedCart = await prisma.cart.deleteMany({
+      where: {
+        UserAccountID,
+        ID: Number(CartID),
+      },
+    });
+
+    if (deletedCart.count === 0) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: ErrorMessages.NOT_FOUND,
+        }),
+        { status: 404 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ success: true }),
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: ErrorMessages.SERVER,
+      }),
+      { status: 500 }
+    );
+  }
+}
