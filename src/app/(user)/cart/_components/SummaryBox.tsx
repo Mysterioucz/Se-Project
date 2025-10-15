@@ -24,7 +24,7 @@ export default function SummaryBox({selectedCount, totalPrice} : {selectedCount:
             className={`w-full mt-3 py-3 rounded-lg font-bold transition-colors text-lg ${
                 isButtonDisabled
                 ? 'bg-gray-100 cursor-not-allowed text-gray-400'
-                : 'bg-primary-600 hover:bg-teal-700 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500'
+                : 'bg-primary-600 hover:bg-primary-800 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500'
             }`}
             >
                 {Cart.NEXT}
