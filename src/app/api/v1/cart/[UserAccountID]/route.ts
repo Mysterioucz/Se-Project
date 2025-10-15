@@ -113,11 +113,8 @@ export async function GET(
     }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { UserAccountID: string } }
-) {
-  const { UserAccountID } = params;
+export async function DELETE(req: NextRequest) {
+  const UserAccountID = req.nextUrl.pathname.split('/').pop();
 
   try {
     // Parse CartID from body
