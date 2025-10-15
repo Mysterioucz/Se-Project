@@ -5,7 +5,7 @@ import ShoppingCart from '@mui/icons-material/ShoppingCart';
 import { Cart } from '@/src/enums/Cart';
 import SummaryBox from './SummaryBox';
 import CartItem from './CartItem';
-import { CartType } from '../enums/CartType';
+import { CartType } from '../../../../../enums/CartType';
 import ModalDeleteFromCart from './ModalDeleteFromCart';
 import deleteFromCart from '@/src/lib/deleteFromCart';
 

@@ -1,5 +1,5 @@
 import DeleteOutline from '@mui/icons-material/DeleteOutline';
-import { CartType } from '../enums/CartType';
+import { CartType } from '../../../../../enums/CartType';
 import FlightDetail from './FlightDetail';
 
 export default function CartItem({ item, isSelected, onSelect, onRemove } : { 

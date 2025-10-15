@@ -1,6 +1,6 @@
 import { FiSrPlane, FlightCardDivider } from "@/src/components/icons/module";
-import { CartType } from "../enums/CartType";
-import { FlightDetailType } from "../enums/FlightDetailType";
+import { CartType } from "../../../../../enums/CartType";
+import { FlightDetailType } from "../../../../../enums/FlightDetailType";
 
 export default function FlightDetail({ headerText, departAirport, arrivalAirport, departCity, arrivalCity, flight }: { 
     headerText: string,
