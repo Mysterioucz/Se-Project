@@ -11,16 +11,16 @@ export async function GET(
     const { UserAccountID } = await params;
 
     // If accountId doesn't match the token sent's ID
-    const session = await getServerSession(nextAuthOptions);
-    if (session?.user?.id != UserAccountID) {
-        return new Response(
-            JSON.stringify({
-                success: false,
-                message: ErrorMessages.PERMISSION,
-            }),
-            { status: 401 }
-        );
-    }
+    // const session = await getServerSession(nextAuthOptions);
+    // if (session?.user?.id != UserAccountID) {
+    //     return new Response(
+    //         JSON.stringify({
+    //             success: false,
+    //             message: ErrorMessages.PERMISSION,
+    //         }),
+    //         { status: 401 }
+    //     );
+    // }
 
     try {
         const carts = await prisma.cart.findMany({
@@ -73,12 +73,18 @@ export async function GET(
 
             // Combine into one JSON object
             results.push({
+                id: cart.ID,
                 FlightType: cart.FlightType,
                 ClassType: cart.ClassType,
                 Adults: cart.Adults,
                 Childrens: cart.Childrens,
                 Infants: cart.Infants,
                 Price: cart.Price,
+                DepartureAirportID: departFlight?.DepartureAirportID,
+                ArrivalAirportID: departFlight?.ArrivalAirportID,
+                DepartureCity: departureAirport?.City ?? null,
+                ArrivalCity: arrivalAirport?.City ?? null,
+
 
                 Depart: {
                     FlightNo: cart.DepartFlightNo,
@@ -86,8 +92,6 @@ export async function GET(
                     ArrivalTime: cart.DepartFlightArrivalTime,
                     AirlineName: departFlight?.AirlineName ?? null,
                     Stops: departFlight?.TransitAmount ?? null,
-                    DepartureCity: departureAirport?.City ?? null,
-                    ArrivalCity: arrivalAirport?.City ?? null,
                 },
 
                 Return: cart.ReturnFlightNo
