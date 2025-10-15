@@ -100,7 +100,7 @@ export async function GET(
                     }
                     : null,
                 });
-            } 
+            }
 
         return new Response(
             JSON.stringify({

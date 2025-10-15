@@ -4,18 +4,18 @@ export default function SummaryBox({selectedCount, totalPrice} : {selectedCount:
     const isButtonDisabled = (selectedCount == 0);
 
     return (
-        <div className="border border-2 border-primary-300 rounded-lg bg-white p-3 font-bold">
+        <div className="border border-2 border-primary-300 rounded-lg bg-white p-3 text-lg font-bold">
             
-            <div className="flex justify-between items-center mx-1 text-xl text-primary-600 font-bold">
-            <p className="">{Cart.SELECTED}</p>
-            <p className="">{selectedCount}</p>
+            <div className="flex justify-between items-center mx-1 text-primary-600">
+            <div className="">{Cart.SELECTED}</div>
+            <div className="">{selectedCount}</div>
             </div>
 
-            <div className="flex justify-between items-center mx-1 text-xl text-primary-600">
-            <p className="">{Cart.TOTAL_PRICE}</p>
-            <p className="">
+            <div className="flex justify-between items-center mx-1 text-primary-600">
+            <div className="">{Cart.TOTAL_PRICE}</div>
+            <div className="">
                 ฿ {totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
+            </div>
             </div>
 
 

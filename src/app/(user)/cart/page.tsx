@@ -55,7 +55,7 @@ const mockCartData = [
 ];
 
 export default async function CartPage() {
-    // const carData = await getCart();
+    // const carData = await getCart("8c92f19a-70c6-4857-a22b-611d7e201f84");
 
     const [cartItems, setCartItems] = useState(mockCartData);
     const [selectedIds, setSelectedIds] = useState(new Set());
