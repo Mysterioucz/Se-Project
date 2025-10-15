@@ -8,14 +8,13 @@ interface IParams {
   };
 }
 
-//@desc     Get available seat for a specific ticket's flight
+//@desc     Get additional services and seat avaliability for ticket's flight
 //@route    GET /api/v1/ticket/{id}
 //@access   Public
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) 
 {
   try {
     const { id } = await context.params;
-    console.log("id:",id);
     const ticket = await prisma.ticket.findUnique({
       where: {
         TicketID: id,
@@ -44,7 +43,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
         },
       },
     });
-    console.log("ticket:", ticket);
     if (!ticket || !ticket.flight) {
       return new Response(
             JSON.stringify({
@@ -55,16 +53,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
         );
     }
 
-    // const availableSeats = ticket?.flight?.aircraft?.seats;
-
-    // return new Response(
-    //         JSON.stringify({
-    //             success: true,
-    //             count: availableSeats.length,
-    //             data: availableSeats,
-    //         }),
-    //         { status: 200 }
-    //     );
     const responseData = {
       services: {
         extraBaggageAvailable: ticket.flight.ExtraBaggage,
