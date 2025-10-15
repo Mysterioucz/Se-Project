@@ -1,6 +1,7 @@
 export default async function deleteFromCart(CartID:number, UserAccountID:string) {
+    const ID = CartID.toString();
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/cart/${UserAccountID}/${CartID}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/cart/${UserAccountID}/${ID}`, {
             method: "DELETE",
         });
 
