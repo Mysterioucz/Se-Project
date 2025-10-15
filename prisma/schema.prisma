@@ -75,6 +75,8 @@ model Flight {
   AircraftRegNo      String   @db.VarChar(20)
   AvailableSeat      Int
   TransitAmount      Int
+  ExtraBaggage       Boolean @default(false) 
+  SeatSelect         Boolean @default(false)
 
   // Relations
   arrivalAirport   Airport       @relation("ArrivalFlights", fields: [ArrivalAirportID], references: [AirportID])
