@@ -15,7 +15,7 @@ export default function CartItem({ item, isSelected, onSelect, onRemove } : {
                 <div className="flex items-center">
                 <input
                     type="checkbox"
-                    className="h-5 w-5 rounded mx-2 bg-primary-300 text-primary focus:white cursor-pointer"
+                    className="h-5 w-5 rounded mx-2 accent-white bg-primary-300 text-primary focus:white cursor-pointer"
                     checked={isSelected}
                     onChange={() => onSelect(item.id)}
                 />
