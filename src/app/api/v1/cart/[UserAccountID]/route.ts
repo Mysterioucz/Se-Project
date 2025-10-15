@@ -80,8 +80,8 @@ export async function GET(
                 Childrens: cart.Childrens,
                 Infants: cart.Infants,
                 Price: cart.Price,
-                DepartureAirportID: departFlight?.DepartureAirportID,
-                ArrivalAirportID: departFlight?.ArrivalAirportID,
+                DepartureAirport: departFlight?.DepartureAirportID,
+                ArrivalAirport: departFlight?.ArrivalAirportID,
                 DepartureCity: departureAirport?.City ?? null,
                 ArrivalCity: arrivalAirport?.City ?? null,
 

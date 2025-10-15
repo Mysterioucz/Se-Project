@@ -8,7 +8,7 @@ import CartItem from './CartItem';
 import { CartType } from '../enums/CartType';
 
 export default function CartClient({ initialCartData }: { initialCartData: CartType[] }) {
-    
+
     const [cartItems, setCartItems] = useState<CartType[]>(initialCartData);
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 
@@ -62,6 +62,7 @@ export default function CartClient({ initialCartData }: { initialCartData: CartT
                 {cartItems.length > 0 ? (
                     cartItems.map((item: CartType) => (
                         <CartItem
+                            key={item.id}
                             item={item}
                             isSelected={selectedIds.has(item.id)}
                             onSelect={handleSelectItem}
