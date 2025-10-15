@@ -32,15 +32,14 @@ export default function CartClient({ initialCartData }: { initialCartData: CartT
         // setSelectedIds(newSelectedIds);
     };
 
-    const totalPrice = 0;
-    // const totalPrice = useMemo(() => {
-    //     return cartItems?.reduce((total:number, item:CartType) => {
-    //         if (selectedIds.has(item.id)) {
-    //         return total + item.Price;
-    //         }
-    //         return total;
-    //     }, 0);
-    // }, [cartItems, selectedIds]);
+    const totalPrice = useMemo(() => {
+        return cartItems?.reduce((total:number, item:CartType) => {
+            if (selectedIds.has(item.id)) {
+            return total + item.Price;
+            }
+            return total;
+        }, 0);
+    }, [cartItems, selectedIds]);
 
     return (
     <main>

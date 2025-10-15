@@ -29,6 +29,7 @@ export default function FlightDetail({ headerText, departAirport, arrivalAirport
                 <div className="text-md">{getFlightDuration(flight?.DepartTime ?? null, flight?.ArrivalTime ?? null)}</div>
                 <FlightCardDivider />
                 {(flight?.Stops ?? 0) > 0 && <div className="text-sm text-black">{flight?.Stops} Stops</div>}
+                {(flight?.Stops ?? 0) == 0 && <div className="text-sm text-black">Nonstop</div>}
             </div>
 
             <div className="text-right text-black">
