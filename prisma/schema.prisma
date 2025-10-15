@@ -339,8 +339,8 @@ model Airline_Tel_No {
 }
 
 model Cart {
-  ID             Int      @id @default(autoincrement())
-  FlightType     String
+  ID             Int      @default(autoincrement())
+  FlightType     String   
   ClassType      String
   UserAccountID  String
   user    User @relation(fields: [UserAccountID], references: [UserAccountID])
@@ -363,4 +363,5 @@ model Cart {
   ReturnFlight            Flight? @relation("ReturnFlight", fields: [ReturnFlightNo, ReturnFlightDepartTime, ReturnFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
 
   createdAt DateTime @default(now())
+  @@id([ID, UserAccountID])
 }

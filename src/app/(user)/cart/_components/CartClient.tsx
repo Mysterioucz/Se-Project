@@ -6,8 +6,13 @@ import { Cart } from '@/src/enums/Cart';
 import SummaryBox from './SummaryBox';
 import CartItem from './CartItem';
 import { CartType } from '../enums/CartType';
+import ModalDeleteFromCart from './ModalDeleteFromCart';
+import deleteFromCart from '@/src/lib/deleteFromCart';
 
 export default function CartClient({ initialCartData }: { initialCartData: CartType[] }) {
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+    const [idToDelete, setIdToDelete] = React.useState<number>(-1);
 
     const [cartItems, setCartItems] = useState<CartType[]>(initialCartData);
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
@@ -20,16 +25,11 @@ export default function CartClient({ initialCartData }: { initialCartData: CartT
             newSelectedIds.add(id);
         }
         setSelectedIds(newSelectedIds);
-    };
+    };    
 
-    const handleRemoveItem = (id: number) => {
-        // setCartItems((prevItems) =>
-        //     prevItems.filter((item: CartType) => item.id !== id)
-        // );
-        // //NEED TO CALL FETCH TO DELETE TOO
-        // const newSelectedIds = new Set(selectedIds);
-        // newSelectedIds.delete(id);
-        // setSelectedIds(newSelectedIds);
+    const handleRemoveClick = (CartID: number) => {
+        setIsDeleteModalOpen(true);
+        setIdToDelete(CartID);
     };
 
     const totalPrice = useMemo(() => {
@@ -41,10 +41,30 @@ export default function CartClient({ initialCartData }: { initialCartData: CartT
         }, 0);
     }, [cartItems, selectedIds]);
 
+    const handleDeleteFromCart = (CartID: number, UserAccountID:string) => {
+        setCartItems((prevItems) =>
+            prevItems.filter((item: CartType) => item.id !== CartID)
+        );
+
+        const newSelectedIds = new Set(selectedIds);
+        newSelectedIds.delete(CartID);
+        setSelectedIds(newSelectedIds);
+        deleteFromCart(CartID, UserAccountID);
+    }
+
     return (
     <main>
         { /* Navigation Bar */ }
         <Navbar/>
+
+        {/* Modal Pop-Up */}
+        <ModalDeleteFromCart 
+        isOpen={isDeleteModalOpen} 
+        onClose={() => setIsDeleteModalOpen(false)} 
+        handleDeleteFromCart={handleDeleteFromCart} 
+        UserAccountID={"8c92f19a-70c6-4857-a22b-611d7e201f84"} //GETID FROM SESSION 
+        CartID={idToDelete}
+        />
         
         {/* Cart */}
         <div className="container mx-auto p-4 sm:p-6 md:p-8">
@@ -65,7 +85,7 @@ export default function CartClient({ initialCartData }: { initialCartData: CartT
                             item={item}
                             isSelected={selectedIds.has(item.id)}
                             onSelect={handleSelectItem}
-                            onRemove={handleRemoveItem}
+                            onRemove={handleRemoveClick}
                         />
                     ))
                 ) : (
