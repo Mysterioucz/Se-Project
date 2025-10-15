@@ -75,6 +75,8 @@ model Flight {
   AircraftRegNo      String   @db.VarChar(20)
   AvailableSeat      Int
   TransitAmount      Int
+  ExtraBaggage       Boolean @default(false) // fix : additional services
+  SeatSelect         Boolean @default(false) // fix : additional services
 
   // Relations
   arrivalAirport   Airport       @relation("ArrivalFlights", fields: [ArrivalAirportID], references: [AirportID])
@@ -337,23 +339,28 @@ model Airline_Tel_No {
 }
 
 model Cart {
-  id             Int      @id @default(autoincrement())
-  flightType     String
-  classType      String
+  ID             Int      @id @default(autoincrement())
+  FlightType     String
+  ClassType      String
   UserAccountID  String
   user    User @relation(fields: [UserAccountID], references: [UserAccountID])
 
+  Adults         Int
+  Childrens      Int
+  Infants        Int
+  Price          Int
+
   // Depart Flight (always required)
-  departFlightNo          String
-  departFlightDepartTime  DateTime
-  departFlightArrivalTime DateTime
-  departFlight            Flight @relation("DepartFlight", fields: [departFlightNo, departFlightDepartTime, departFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
+  DepartFlightNo          String
+  DepartFlightDepartTime  DateTime
+  DepartFlightArrivalTime DateTime
+  DepartFlight            Flight @relation("DepartFlight", fields: [DepartFlightNo, DepartFlightDepartTime, DepartFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
 
   // Return Flight (optional)
-  returnFlightNo          String?
-  returnFlightDepartTime  DateTime?
-  returnFlightArrivalTime DateTime?
-  returnFlight            Flight? @relation("ReturnFlight", fields: [returnFlightNo, returnFlightDepartTime, returnFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
+  ReturnFlightNo          String?
+  ReturnFlightDepartTime  DateTime?
+  ReturnFlightArrivalTime DateTime?
+  ReturnFlight            Flight? @relation("ReturnFlight", fields: [ReturnFlightNo, ReturnFlightDepartTime, ReturnFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
 
   createdAt DateTime @default(now())
 }
