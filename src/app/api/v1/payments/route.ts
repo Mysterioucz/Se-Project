@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         const ticket = await prisma.ticket.findUnique({ where: { TicketID: ticketId } });
         if (!ticket) {
             return NextResponse.json(
-                { error: {code: "TICKET_NOT_FOUND", message: "Ticket not found." } },
+                { error: {code: "TICKET_NOT_FOUND", message:ErrorMessages.NOT_FOUND } },
                 { status: 404}
             );
         }
