@@ -6,9 +6,9 @@ import { nextAuthOptions } from "@/src/lib/auth";
 
 export async function DELETE(
     req: NextRequest,
-    context: { params: { UserAccountID: string; CartID: string } }
+    { params }: { params: { UserAccountID: string; CartID: string } }
 ) {
-    const { UserAccountID, CartID } = context.params;
+    const { UserAccountID, CartID } = params;
 
     try {
         const deletedCart = await prisma.cart.deleteMany({
