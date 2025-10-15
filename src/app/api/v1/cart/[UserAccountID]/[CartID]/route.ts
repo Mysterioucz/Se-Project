@@ -6,37 +6,36 @@ import { nextAuthOptions } from "@/src/lib/auth";
 
 export async function DELETE(
     req: NextRequest,
- { params }: { params: { UserAccountID: string; CartID: number } }
+    context: { params: { UserAccountID: string; CartID: string } }
 ) {
-    const { UserAccountID, CartID } = req.nextUrl.searchParams;
+    const { UserAccountID, CartID } = context.params;
 
     try {
         const deletedCart = await prisma.cart.deleteMany({
-        where: {
-            UserAccountID,
-            ID: Number(CartID),
-        },
-    });
+            where: {
+                UserAccountID,
+                ID: Number(CartID),
+            },
+        });
 
-    if (deletedCart.count === 0) {
+        if (deletedCart.count === 0) {
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    message: ErrorMessages.NOT_FOUND,
+                }),
+                { status: 404 }
+            );
+        }
+
         return new Response(
             JSON.stringify({
-                success: false,
-                message: ErrorMessages.NOT_FOUND,
+                success: true,
             }),
-            { status: 404 }
+            { status: 200 }
         );
-    }
-
-    return new Response(
-        JSON.stringify({
-            success: true,
-        }),
-        { status: 200 }
-    );
-
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return new Response(
             JSON.stringify({
                 success: false,
