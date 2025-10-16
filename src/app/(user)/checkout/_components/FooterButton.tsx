@@ -8,12 +8,15 @@ import { checkoutPaths, isCheckoutPath } from "./helper";
 export default function FooterButton() {
     const pathname = usePathname();
     const router = useRouter();
-    // Fai & Nice might look into this context usage
     const {
         isPaymentValid,
         setIsPaymentValid,
         isContactValid,
         setIsContactValid,
+        isQRmethod,
+        setQRmethod,
+        isQRModalOpen,
+        setQRModalOpen,
     } = useCheckout();
 
     const prefixButtonText = new Map<string, string>([
@@ -39,7 +42,12 @@ export default function FooterButton() {
 
     const handleNextButton = () => {
         if (isCheckoutPath(pathname)) {
-            router.push(checkoutPaths[checkoutPaths.indexOf(pathname) + 1]);
+            if (isQRmethod) {
+                setQRModalOpen(true);
+            }
+            else {
+                router.push(checkoutPaths[checkoutPaths.indexOf(pathname) + 1]);
+            }
         }
     };
 
