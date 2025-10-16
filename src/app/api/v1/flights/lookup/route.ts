@@ -49,10 +49,9 @@ export async function GET(req: NextRequest) {
 
     const responseData = {
       services: {
-        extraBaggageAvailable: flight.ExtraBaggage,
-        seatSelectionAvailable: flight.SeatSelect,
+        list : flight.availableServices
       },
-      ...(flight.SeatSelect && { seats: flight.aircraft?.seats || [] }),
+      // ...(flight.SeatSelect && { seats: flight.aircraft?.seats || [] }),
     };
 
     return new Response(
