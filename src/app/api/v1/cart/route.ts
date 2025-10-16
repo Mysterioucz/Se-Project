@@ -3,121 +3,77 @@ import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { nextAuthOptions } from "@/src/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { z, ZodError } from "zod";
-
-const BodySchema = z.object({
-  ticketId: z.string().min(1, "ticketId is required"),
-  flightType: z.string().min(1), 
-  classType: z.string().min(1),
-});
 
 //need to modify later to work correctly
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { accountId: string } }
-) {
-  const { accountId } = params;
+export async function POST(req: NextRequest) {
+    const session = await getServerSession(nextAuthOptions);
 
-  //Authentication: ensure user is logged in and matches accountId param
-  const session = await getServerSession(nextAuthOptions);
-  if (!session?.user?.id || String(session.user.id) !== accountId) {
-    return NextResponse.json(
-      { error: { message: ErrorMessages.AUTHENTICATION } },
-      { status: 401 }
-    );
-  }
-
-  try {
-    const {ticketId, flightType, classType} = BodySchema.parse(
-      await request.json()
-    );
-
-    //Ensure ticket exists (and fetch flight fields needed for Cart)
-    const ticket = await prisma.ticket.findUnique({
-      where: { TicketID: ticketId },
-      select: {
-        TicketID: true,
-        FlightNo: true,
-        DepartTime: true,
-        ArrivalTime: true,
-      },
-    });
-
-    if (!ticket) {
-      return NextResponse.json(
-        { error: { code: "TICKET_NOT_FOUND", message: "Ticket not found." } },
-        { status: 404 }
-      );
+    if (!session?.user?.id) {
+        return new Response(
+            JSON.stringify({ success: false, message: ErrorMessages.AUTHENTICATION }),
+            { status: 401 }
+        );
     }
 
-    // “Already in cart” check for this user.
-    // Since Cart doesn’t store TicketID in your schema, we treat duplicates
-    // as same user + same flight + same class/flight type.
-    const existing = await prisma.cart.findFirst({
-      where: {
-        UserAccountID: accountId,
-        flightType,
-        classType,
-        departFlightNo: ticket.FlightNo,
-        departFlightDepartTime: ticket.DepartTime,
-        departFlightArrivalTime: ticket.ArrivalTime,
-        // If you also add return flights later, include them here for uniqueness.
-      },
-      select: { id: true },
-    });
+    try {
+        const body = await req.json();
 
-    if (existing) {
-      return NextResponse.json(
-        {
-          error: {
-            code: "ALREADY_IN_CART",
-            message: "This ticket/flight is already in your cart.",
-          },
-        },
-        { status: 409 }
-      );
+        if (!body.flightType || !body.classType || !body.departFlightNo || !body.departFlightDepartTime) {
+            return new Response(
+                JSON.stringify({ success: false, message: ErrorMessages.MISSING_PARAMETER }),
+                { status: 400 }
+            );
+        }
+        
+        // Uniqueness check remains the same
+        const existingCartItem = await prisma.cart.findFirst({
+            where: {
+                UserAccountID: session.user.id,
+                departFlightNo: body.departFlightNo,
+                departFlightDepartTime: new Date(body.departFlightDepartTime),
+                returnFlightNo: body.returnFlightNo || null,
+            }
+        });
+
+        if (existingCartItem) {
+            return new Response(
+                JSON.stringify({ success: false, message: "This flight is already in your cart." }),
+                { status: 409 }
+            );
+        }
+
+        const newCartItem = await prisma.cart.create({
+            data: {
+                flightType: body.flightType,
+                classType: body.classType,
+                UserAccountID: session.user.id,
+                departFlightNo: body.departFlightNo,
+                departFlightDepartTime: new Date(body.departFlightDepartTime),
+                departFlightArrivalTime: new Date(body.departFlightArrivalTime),
+                ...(body.returnFlightNo && { returnFlightNo: body.returnFlightNo }),
+                ...(body.returnFlightDepartTime && { returnFlightDepartTime: new Date(body.returnFlightDepartTime) }),
+                ...(body.returnFlightArrivalTime && { returnFlightArrivalTime: new Date(body.returnFlightArrivalTime) }),
+            },
+        });
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                message: "Flight successfully added to your cart.",
+                data: newCartItem, 
+            }),
+            { status: 201 }
+        );
+
+    } catch (error) {
+        console.error("Error adding item to cart:", error);
+        return new Response(
+            JSON.stringify({ success: false, message: ErrorMessages.SERVER }),
+            { status: 500 }
+        );
     }
-
-    // 5) Create cart row
-    const cart = await prisma.cart.create({
-      data: {
-        UserAccountID: accountId,
-        flightType,
-        classType,
-        // Map ticket’s flight to the required composite fields on Cart
-        departFlightNo: ticket.FlightNo,
-        departFlightDepartTime: ticket.DepartTime,
-        departFlightArrivalTime: ticket.ArrivalTime,
-        // If round-trip is supported, set return* fields from body as needed.
-      },
-      select: {
-        id: true,
-        UserAccountID: true,
-        flightType: true,
-        classType: true,
-        departFlightNo: true,
-        departFlightDepartTime: true,
-        departFlightArrivalTime: true,
-        createdAt: true,
-      },
-    });
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: { cart },
-      },
-      {
-        status: 201,
-        headers: {
-          Location: `/api/v1/cart/${accountId}/${cart.id}`,
-        },
-      }
-    );
-  } catch (error) {
-    console.error(error);
-  }
 }
+
 
 export async function DELETE(req: NextRequest) {
     const session = await getServerSession(nextAuthOptions);
