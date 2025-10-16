@@ -118,7 +118,10 @@ export default function ProfileCard() {
 
                 <div className="flex flex-col gap-[2rem]">
                     <div className="flex flex-col gap-[0.75rem]">
-                        <form className="flex flex-row gap-[3.5rem]">
+                        <form
+                            className="flex flex-row gap-[3.5rem]"
+                            onSubmit={onSubmit}
+                        >
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
                                 <Controller
                                     name="firstName"
@@ -126,11 +129,14 @@ export default function ProfileCard() {
                                     defaultValue={firstName}
                                     render={({ field }) => (
                                         <TextFieldComponent
-                                            {...field} // supplies value, onChange, name, ref (adapted)
                                             label="First Name"
                                             textValue={field.value} // keep for internal sync (optional)
                                             placeHolder={firstName}
                                             disabled={true}
+                                            error={!!errors.firstName}
+                                            helperText={
+                                                errors.firstName?.message
+                                            }
                                             icon={
                                                 <img
                                                     src="/profile-card/fi-sr-pencil.svg"
@@ -138,10 +144,20 @@ export default function ProfileCard() {
                                                     className="w-5 h-5"
                                                 />
                                             }
+                                            //TODO: fix the error handling
+                                            // map your component's onChange payload to field.onChange
+                                            onChange={(v) => {
+                                                // v is { tel, text } from the component; pass only the text to RHF
+                                                const value =
+                                                    (v as any)?.text ?? v;
+                                                field.onChange(value);
+                                            }}
+                                            // when the user submits the inline edit, also update the server
                                             onSubmit={(val) => {
-                                                // field.value is the current value (but field.onChange will be triggered by the component)
-                                                const { text } = val as { text: string };
-                                                updateName(text);
+                                                console.log(errors);
+                                                const submittedText =
+                                                    (val as any)?.text ?? val;
+                                                updateName(submittedText);
                                             }}
                                         />
                                     )}
