@@ -1,13 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import TelPrefix from "./prefix/tel_prefix";
+import { FieldValues, UseFormRegister } from "react-hook-form";
 
 interface Props {
     label?: string;
+    name?: string; // required for form register
     textValue: string;
     telValue?: string;
     placeHolder?: string;
     telForm?: boolean;
+    register?: UseFormRegister<FieldValues>;
     required?: boolean;
     disabled?: boolean; // initial state only
     error?: boolean;
@@ -21,12 +24,15 @@ interface Props {
 type State = "enabled" | "focused" | "hover" | "error" | "disabled";
 
 export default function TextFieldComponent({
+    name,
     label,
     textValue,
     telValue = "+66",
     placeHolder,
     telForm,
     disabled,
+    register,
+    required,
     error,
     helperText,
     icon,
@@ -141,6 +147,7 @@ export default function TextFieldComponent({
 
                 <div className="flex items-center w-full">
                     <input
+                        {...register?.(name ?? "", { required })}
                         type="text"
                         className={`w-full h-full bg-transparent text-lg text-color-gray-400 disabled:text-color-disable-dark outline-none placeholder:text-color-gray-400 disabled:placeholder:text-color-disable-dark ${
                             icon ? "pr-4" : ""

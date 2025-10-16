@@ -5,26 +5,15 @@ import ModalDeleteAccount from "@components/modals/modal_delete_account";
 import ModalSignOut from "@components/modals/modal_sign_out";
 import SelectComponent from "@components/select";
 import TextFieldComponent from "@components/text_field";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { MenuItem } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import z from "zod";
 
 export default function ProfileCard() {
-    const { data: session, update: updateSession } = useSession();
-    // console.log("Session data in ProfileCard:", session);
-    const userEmail = session?.user?.email;
-    const userFirstName = session?.user?.name?.split(" ")[0] ?? "";
-    const userLastName = session?.user?.name?.split(" ")[1] ?? "";
-
-    const [language, setLanguage] = React.useState("");
-    const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
-    const [firstName, setFirstName] = React.useState(userFirstName);
-    const [lastName, setLastName] = React.useState(userLastName);
-
-    const accountId = session?.user?.id;
-
     // Function to update user name via API and refresh session
     async function updateName(
         updateFirstName?: string,
@@ -46,13 +35,7 @@ export default function ProfileCard() {
                 if (data.data.LastName) setLastName(data.data.LastName);
 
                 // Refresh session so session.user.name updates immediately
-                // console.log("Updating session with:", {
-                //     user: {
-                //         name: `${updateFirstName || firstName} ${
-                //             updateLastName || lastName
-                //         }`,
-                //     },
-                // });
+
                 if (
                     data.data.FirstName !== firstName ||
                     data.data.LastName !== lastName
@@ -72,6 +55,46 @@ export default function ProfileCard() {
             console.error("Error updating user:", err);
         }
     }
+
+    const accountSchema = z.object({
+        firstName: z
+            .string()
+            .min(2, "First name must be at least 2 characters")
+            .max(100, "First name must be at most 100 characters")
+            .nonempty("First name is required"),
+        lastName: z
+            .string()
+            .min(2, "Last name must be at least 2 characters")
+            .max(100, "Last name must be at most 100 characters")
+            .nonempty("Last name is required"),
+    });
+
+    type accountData = z.infer<typeof accountSchema>;
+
+    const { data: session, update: updateSession } = useSession();
+    const {
+        register,
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<accountData>({
+        resolver: zodResolver(accountSchema),
+    });
+    const onSubmit = handleSubmit((data) => {
+        updateName(data.firstName, data.lastName);
+    });
+
+    const userEmail = session?.user?.email;
+    const userFirstName = session?.user?.name?.split(" ")[0] ?? "";
+    const userLastName = session?.user?.name?.split(" ")[1] ?? "";
+
+    const [language, setLanguage] = React.useState("");
+    const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+    const [firstName, setFirstName] = React.useState(userFirstName);
+    const [lastName, setLastName] = React.useState(userLastName);
+
+    const accountId = session?.user?.id;
 
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
@@ -95,26 +118,33 @@ export default function ProfileCard() {
 
                 <div className="flex flex-col gap-[2rem]">
                     <div className="flex flex-col gap-[0.75rem]">
-                        <div className="flex flex-row gap-[3.5rem]">
+                        <form className="flex flex-row gap-[3.5rem]">
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <TextFieldComponent
-                                    label="First Name"
-                                    textValue={firstName}
-                                    placeHolder={firstName}
-                                    disabled={true}
-                                    icon={
-                                        <img
-                                            src="/profile-card/fi-sr-pencil.svg"
-                                            alt="toggle"
-                                            className="w-5 h-5"
+                                <Controller
+                                    name="firstName"
+                                    control={control}
+                                    defaultValue={firstName}
+                                    render={({ field }) => (
+                                        <TextFieldComponent
+                                            {...field} // supplies value, onChange, name, ref (adapted)
+                                            label="First Name"
+                                            textValue={field.value} // keep for internal sync (optional)
+                                            placeHolder={firstName}
+                                            disabled={true}
+                                            icon={
+                                                <img
+                                                    src="/profile-card/fi-sr-pencil.svg"
+                                                    alt="toggle"
+                                                    className="w-5 h-5"
+                                                />
+                                            }
+                                            onSubmit={(val) => {
+                                                // field.value is the current value (but field.onChange will be triggered by the component)
+                                                const { text } = val as { text: string };
+                                                updateName(text);
+                                            }}
                                         />
-                                    }
-                                    onSubmit={(val) => {
-                                        const { text } = val as {
-                                            text: string;
-                                        };
-                                        updateName(text); // update first name only
-                                    }}
+                                    )}
                                 />
                             </div>
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
@@ -138,7 +168,7 @@ export default function ProfileCard() {
                                     }}
                                 />
                             </div>
-                        </div>
+                        </form>
 
                         <div className="flex flex-row gap-[3.5rem]">
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
