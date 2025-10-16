@@ -32,8 +32,32 @@ export async function GET(req: NextRequest) {
         },
       },
       select: {
-        availableServices: true
-  
+        availableServices: {
+          select: {
+            service: {
+              select: {
+                ServiceName: true
+              }
+            }
+          }
+        },
+        aircraft: {
+          select : {
+            seats: {
+              // where : {
+              //   IsAvailable: true
+              // },
+              orderBy: {
+                SeatNo: 'asc'
+              },
+              select: {
+                SeatNo: true,
+                SeatType : true,
+                IsAvailable : true
+              }
+            }
+          }
+        }
       },
     });
 
@@ -47,11 +71,11 @@ export async function GET(req: NextRequest) {
             );
     }
 
+    const services = flight.availableServices.map(s => s.service.ServiceName);
+
     const responseData = {
-      services: {
-        list : flight.availableServices
-      },
-      // ...(flight.SeatSelect && { seats: flight.aircraft?.seats || [] }),
+      services,
+      ...(services.includes("SelectSeat") && {availableSeats : flight.aircraft?.seats || []})
     };
 
     return new Response(
