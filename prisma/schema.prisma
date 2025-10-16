@@ -365,6 +365,7 @@ model Payment {
   PaymentEmail      String
   PaymentTelNo     String
   Amount            Float
+  BankName          String?
 
   // Relation
   purchase Purchase?

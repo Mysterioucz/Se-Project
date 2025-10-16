@@ -7,12 +7,40 @@ import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
 
-const CreatePaymentSchema = z.object({
-  ticketId: z.string().min(1, "ticketId is required"),
-  amount: z.number().positive("amount must be > 0"),
-  method: PaymentMethodSchema,
-  status: PaymentStatusSchema.default("PAID")
-});
+export const CreatePaymentSchema = z
+  .object({
+    ticketId: z.string().trim().min(1, "ticketId is required"),
+    amount: z.number().positive("amount must be > 0"),
+    method: PaymentMethodSchema,
+    status: PaymentStatusSchema.default("PAID"),
+
+    paymentEmail: z.email("valid email required"),
+
+    paymentTelNo: z
+      .string()
+      .trim()
+      .min(5, "tel too short")
+      .max(20, "tel too long")
+      .regex(/^[0-9+\-()\s]+$/, "tel format invalid"),
+
+    bankName: z
+      .string()
+      .trim()
+      .min(2, "bankName must be at least 2 characters")
+      .optional()
+      .transform((v) => (v === "" ? undefined : v)),
+  })
+  .superRefine((v, ctx) => {
+    // Require bankName when method is ONLINE_BANKING
+    if (v.method === "ONLINE_BANKING" && !v.bankName) {
+      ctx.addIssue({
+        path: ["bankName"],
+        code: z.ZodIssueCode.custom,
+        message: "bankName is required when method is ONLINE_BANKING",
+      });
+    }
+  });
+
 
 export async function POST(request: NextRequest) {
         //check if the user is already logged in
@@ -28,8 +56,8 @@ export async function POST(request: NextRequest) {
     const accountId = String(session.user.id);
 
     try {
-        const body = CreatePaymentSchema.parse(await request.json());
-        const { ticketId, amount, method, status } = body;
+        const { ticketId, amount, method, status, paymentEmail, paymentTelNo, bankName } =
+      CreatePaymentSchema.parse(await request.json());
 
         //Validate entities (ticket exists, not already purchased)
         const ticket = await prisma.ticket.findUnique({ where: { TicketID: ticketId } });
@@ -59,9 +87,12 @@ export async function POST(request: NextRequest) {
         data: {
           PaymentID: paymentId,
           PaymentDateTime: new Date(),
-          PaymentMethod: method,           //STRING 
-          TransactionStatus: status,       //STRING 
-          Amount: amount,                  //Float
+          PaymentMethod: method,           
+          TransactionStatus: status, 
+          PaymentEmail: paymentEmail,
+          PaymentTelNo: paymentTelNo,      
+          Amount: amount,
+          BankName: method === "ONLINE_BANKING" ? bankName : null,                  
         },
       });
 
@@ -72,15 +103,6 @@ export async function POST(request: NextRequest) {
           UserAccountID: accountId,
         },
       });
-
-      //Update ticket status if payment is successful
-      //need to resolve enum issue concerning TicketStatus later
-      // if (status === "PAID") {
-      //   await tx.ticket.update({
-      //     where: { TicketID: ticketId },
-      //     data: { TicketStatus: "PAID" }, 
-      //   });
-      // }
 
       return { payment, purchase };
     });
@@ -94,12 +116,18 @@ export async function POST(request: NextRequest) {
             dateTime: result.payment.PaymentDateTime,
             method: result.payment.PaymentMethod,
             status: result.payment.TransactionStatus,
+            email: result.payment.PaymentEmail,
+            telNo: result.payment.PaymentTelNo,
             amount: result.payment.Amount,
           },
-          purchase: { ticketId, paymentId: result.payment.PaymentID, userAccountId: accountId },
+          purchase: {
+            ticketId,
+            paymentId: result.payment.PaymentID,
+            userAccountId: accountId,
+          },
         },
       },
-      { status: 201, headers: {Location: `/api/v1/payments/${paymentId}` } }
+      { status: 201, headers: { Location: `/api/v1/payments/${paymentId}` } }
     );
         
     } catch (err: unknown) {
