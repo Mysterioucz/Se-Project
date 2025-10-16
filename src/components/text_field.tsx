@@ -45,9 +45,9 @@ export default function TextFieldComponent({
     icon,
     width = "w-full",
     height,
-    labelFont="!font-bold",
-    labelSize="!text-lg",
-    labelColor="!text-color-primary-900",
+    labelFont = "!font-bold",
+    labelSize = "!text-lg",
+    labelColor = "!text-color-primary-900",
     gap = "gap-3",
     onChange,
     onInput,
@@ -140,7 +140,7 @@ export default function TextFieldComponent({
 
             <div
                 className={`flex items-center ${height} p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] bg-white border-2 ${resolveBorderColor(
-                    state
+                    state,
                 )}`}
                 onFocus={() => handleStateChange("focused")}
                 onMouseEnter={() => handleStateChange("hover")}
