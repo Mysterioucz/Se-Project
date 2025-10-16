@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import TelPrefix from "./prefix/tel_prefix";
 import { FieldValues, UseFormRegister } from "react-hook-form";
+import TelPrefix from "./prefix/tel_prefix";
 
 interface Props {
     label?: string;
@@ -16,6 +16,7 @@ interface Props {
     error?: boolean;
     helperText?: string;
     icon?: React.ReactNode;
+    ref?: React.Ref<HTMLInputElement>;
     onChange?: (value: unknown) => void;
     onInput?: (value: unknown) => void;
     onSubmit?: (value: unknown) => void; // callback to submit value
@@ -31,7 +32,7 @@ export default function TextFieldComponent({
     placeHolder,
     telForm,
     disabled,
-    register,
+    ref,
     required,
     error,
     helperText,
@@ -42,11 +43,11 @@ export default function TextFieldComponent({
 }: Props) {
     // Internal disabled state (toggled by icon)
     const [isDisabledInternal, setIsDisabledInternal] = useState<boolean>(
-        disabled ?? false
+        disabled ?? false,
     );
 
     const [state, setState] = useState<State>(
-        disabled ? "disabled" : error ? "error" : "enabled"
+        disabled ? "disabled" : error ? "error" : "enabled",
     );
 
     const computedDisabled = isDisabledInternal;
@@ -56,10 +57,9 @@ export default function TextFieldComponent({
 
     // Sync text when props change or field toggles
     useEffect(() => {
-        if (!computedDisabled) {
-            setCurrentText(textValue);
-        }
-    }, [textValue, computedDisabled]);
+        // Always sync from prop so parent-driven reverts update the UI
+        setCurrentText(textValue);
+    }, [textValue]);
 
     function handleStateChange(newState: State) {
         if (computedDisabled) setState("disabled");
@@ -128,7 +128,7 @@ export default function TextFieldComponent({
 
             <div
                 className={`flex items-center p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] bg-white border-2 ${resolveBorderColor(
-                    state
+                    state,
                 )}`}
                 onFocus={() => handleStateChange("focused")}
                 onMouseEnter={() => handleStateChange("hover")}
@@ -147,8 +147,8 @@ export default function TextFieldComponent({
 
                 <div className="flex items-center w-full">
                     <input
-                        {...register?.(name ?? "", { required })}
                         type="text"
+                        ref={ref}
                         className={`w-full h-full bg-transparent text-lg text-color-gray-400 disabled:text-color-disable-dark outline-none placeholder:text-color-gray-400 disabled:placeholder:text-color-disable-dark ${
                             icon ? "pr-4" : ""
                         }`}

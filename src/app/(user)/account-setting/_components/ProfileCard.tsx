@@ -55,7 +55,7 @@ export default function ProfileCard() {
             console.error("Error updating user:", err);
         }
     }
-
+    // Example Zod schema for form validation
     const accountSchema = z.object({
         firstName: z
             .string()
@@ -68,31 +68,127 @@ export default function ProfileCard() {
             .max(100, "Last name must be at most 100 characters")
             .nonempty("Last name is required"),
     });
-
+    // Infer the form data type from the schema
     type accountData = z.infer<typeof accountSchema>;
 
     const { data: session, update: updateSession } = useSession();
-    const {
-        register,
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<accountData>({
-        resolver: zodResolver(accountSchema),
-    });
-    const onSubmit = handleSubmit((data) => {
-        updateName(data.firstName, data.lastName);
-    });
 
     const userEmail = session?.user?.email;
     const userFirstName = session?.user?.name?.split(" ")[0] ?? "";
     const userLastName = session?.user?.name?.split(" ")[1] ?? "";
+
+    // Example usage of RHF with Zod
+    const { control, handleSubmit, trigger, setValue } = useForm<accountData>({
+        resolver: zodResolver(accountSchema),
+        defaultValues: { firstName: userFirstName, lastName: userLastName },
+        mode: "onChange",
+    });
+
+    const onSubmit = handleSubmit((data) => {
+        updateName(data.firstName, data.lastName);
+    });
 
     const [language, setLanguage] = React.useState("");
     const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
     const [firstName, setFirstName] = React.useState(userFirstName);
     const [lastName, setLastName] = React.useState(userLastName);
+
+    function firstNameInputField() {
+        return (
+            <div className="flex flex-1 flex-col gap-[0.75rem]">
+                <Controller
+                    name="firstName"
+                    control={control}
+                    defaultValue={firstName}
+                    render={({ field, fieldState }) => (
+                        // Example usage of TextFieldComponent with RHF
+                        <TextFieldComponent
+                            ref={field.ref}
+                            label="First Name"
+                            textValue={field.value} // keep for internal sync (optional)
+                            placeHolder={firstName}
+                            disabled={true}
+                            error={fieldState.invalid}
+                            helperText={fieldState.error?.message}
+                            icon={
+                                <img
+                                    src="/profile-card/fi-sr-pencil.svg"
+                                    alt="toggle"
+                                    className="w-5 h-5"
+                                />
+                            }
+                            // map your component's onChange payload to field.onChange
+                            onChange={(v) => {
+                                // v is { tel, text } from the component; pass only the text to RHF
+                                const value = (v as any)?.text ?? v;
+                                console.log(fieldState.error?.message);
+                                field.onChange(value);
+                            }}
+                            // when the user submits the inline edit, also update the server
+                            onSubmit={async (val) => {
+                                const submittedText = (val as any)?.text ?? val;
+                                const ok = await trigger("firstName");
+                                if (ok) {
+                                    await updateName(submittedText);
+                                } else {
+                                    // revert form value and UI to last known good value
+                                    setValue("firstName", firstName, {
+                                        shouldValidate: false,
+                                        shouldDirty: false,
+                                    });
+                                }
+                            }}
+                        />
+                    )}
+                />
+            </div>
+        );
+    };
+    const lastNameInputField = () => {
+        return (
+            <div className="flex flex-1 flex-col gap-[0.75rem]">
+                <Controller
+                    name="lastName"
+                    control={control}
+                    defaultValue={lastName}
+                    render={({ field, fieldState }) => (
+                        <TextFieldComponent
+                            label="Last Name"
+                            textValue={field.value}
+                            placeHolder={lastName}
+                            disabled={true}
+                            error={fieldState.invalid}
+                            helperText={fieldState.error?.message}
+                            icon={
+                                <img
+                                    src="/profile-card/fi-sr-pencil.svg"
+                                    alt="toggle"
+                                    className="w-5 h-5"
+                                />
+                            }
+                            onChange={(v) => {
+                                const value = (v as any)?.text ?? v;
+                                field.onChange(value);
+                            }}
+                            onSubmit={async (val) => {
+                                const submittedText = (val as any)?.text ?? val;
+                                const ok = await trigger("lastName");
+                                if (ok) {
+                                    await updateName(undefined, submittedText);
+                                } else {
+                                    setValue("lastName", lastName, {
+                                        shouldValidate: false,
+                                        shouldDirty: false,
+                                    });
+                                }
+                            }}
+                        />
+                    )}
+                />
+            </div>
+        );
+    };
 
     const accountId = session?.user?.id;
 
@@ -122,68 +218,8 @@ export default function ProfileCard() {
                             className="flex flex-row gap-[3.5rem]"
                             onSubmit={onSubmit}
                         >
-                            <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <Controller
-                                    name="firstName"
-                                    control={control}
-                                    defaultValue={firstName}
-                                    render={({ field }) => (
-                                        <TextFieldComponent
-                                            label="First Name"
-                                            textValue={field.value} // keep for internal sync (optional)
-                                            placeHolder={firstName}
-                                            disabled={true}
-                                            error={!!errors.firstName}
-                                            helperText={
-                                                errors.firstName?.message
-                                            }
-                                            icon={
-                                                <img
-                                                    src="/profile-card/fi-sr-pencil.svg"
-                                                    alt="toggle"
-                                                    className="w-5 h-5"
-                                                />
-                                            }
-                                            //TODO: fix the error handling
-                                            // map your component's onChange payload to field.onChange
-                                            onChange={(v) => {
-                                                // v is { tel, text } from the component; pass only the text to RHF
-                                                const value =
-                                                    (v as any)?.text ?? v;
-                                                field.onChange(value);
-                                            }}
-                                            // when the user submits the inline edit, also update the server
-                                            onSubmit={(val) => {
-                                                console.log(errors);
-                                                const submittedText =
-                                                    (val as any)?.text ?? val;
-                                                updateName(submittedText);
-                                            }}
-                                        />
-                                    )}
-                                />
-                            </div>
-                            <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <TextFieldComponent
-                                    label="Last Name"
-                                    textValue={lastName}
-                                    placeHolder={lastName}
-                                    disabled={true}
-                                    icon={
-                                        <img
-                                            src="/profile-card/fi-sr-pencil.svg"
-                                            alt="toggle"
-                                            className="w-5 h-5"
-                                        />
-                                    }
-                                    onSubmit={(val) => {
-                                        const { text } = val as {
-                                            text: string;
-                                        };
-                                        updateName(undefined, text); // update last name only
-                                    }}
-                                />
-                            </div>
+                            {firstNameInputField()}
+                            {lastNameInputField()}
                         </form>
 
                         <div className="flex flex-row gap-[3.5rem]">
