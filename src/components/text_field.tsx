@@ -49,7 +49,6 @@ export default function TextFieldComponent({
     labelSize="!text-lg",
     labelColor="!text-color-primary-900",
     gap = "gap-3",
-    required,
     onChange,
     onInput,
     onSubmit,
