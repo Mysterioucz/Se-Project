@@ -32,22 +32,8 @@ export async function GET(req: NextRequest) {
         },
       },
       select: {
-        ExtraBaggage: true,
-        SeatSelect: true,
-        aircraft: {
-          select: {
-            seats: {
-              orderBy: {
-                SeatNo: 'asc',
-              },
-              select: {
-                SeatNo: true,
-                SeatType: true,
-                IsAvailable: true,
-              },
-            },
-          },
-        },
+        availableServices: true
+  
       },
     });
 
