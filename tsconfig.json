@@ -32,6 +32,6 @@
         "**/*.tsx",
         ".next/types/**/*.ts",
         "**/next-auth.d.ts"
-    ],
+, "src/enums/CartType.ts"    ],
     "exclude": ["node_modules"]
 }

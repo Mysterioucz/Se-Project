@@ -1,0 +1,17 @@
+export default async function deleteFromCart(CartID:number, UserAccountID:string) {
+
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/cart/${UserAccountID}`, {
+            method: "DELETE",
+            body: JSON.stringify({ CartID }),
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to delete cart item.`);
+        }
+
+        return await res.json();
+    } catch (err) {
+        console.log("Failed to delete cart item.");
+  }
+}

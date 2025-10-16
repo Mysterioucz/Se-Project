@@ -105,8 +105,6 @@ function Content({ departure, arrival }: BookingInfoProps) {
 
 async function fetchBookingInfo(): Promise<BookingInfoProps> {
     // TODO: Replace with actual API call
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
     // Dummy price data
     const departure: Flight = {
         flightNumber: "AB123",
