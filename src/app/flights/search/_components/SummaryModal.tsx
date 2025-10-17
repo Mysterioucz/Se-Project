@@ -4,6 +4,8 @@ import { Dialog } from "@headlessui/react";
 import { MappedFlightData } from "../helper";
 import SummaryCard from "./SummaryCard";
 import { SelectedValues } from "./search";
+import addToCart from "@/src/lib/addToCart";
+import { useSession } from "next-auth/react";
 
 interface FlightSummaryModalProps {
     isOpen: boolean;
@@ -22,6 +24,7 @@ export default function SummaryModal({
     selectedFlights,
     selectedDates,
 }: FlightSummaryModalProps) {
+    const { data: session } = useSession();
     return (
       <Dialog open={isOpen} onClose={onClose} className="relative z-50">
         {/* Background overlay */}
@@ -57,12 +60,25 @@ export default function SummaryModal({
               {/* Footer */}
               <div className="flex justify-end gap-3">
                 <button
-                  onClick={() => {onClose;}}
+                  onClick={(e) => {
+                    if (!session?.user?.id) {
+                      // Redirect to login if no session
+                      window.location.href = "/login";
+                      return;
+                    }
+
+                    const UserAccountID = session.user.id;
+                    addToCart(selectedFlights, UserAccountID);
+                    onClose();
+                  }}
                   className="px-4 py-2 rounded-lg border border-primary-400 text-primary-400 bg-white hover:bg-gray-100"
                 >
                   Add to Cart
                 </button>
-                <button className="px-4 py-2 rounded-lg bg-primary-400 text-white hover:bg-primary-600" onClick={() => {}}> 
+                <button className="px-4 py-2 rounded-lg bg-primary-400 text-white hover:bg-primary-600" 
+                  onClick={() => {
+                    onClose();
+                  }}> 
                   Book Now
                 </button>
               </div>
