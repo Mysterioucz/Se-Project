@@ -1,5 +1,5 @@
 import prisma from "@/db";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
@@ -164,3 +164,85 @@ export async function DELETE(req: NextRequest) {
   }
 }
 
+export async function POST(req: NextRequest
+) {
+    const session = await getServerSession(nextAuthOptions);
+    const url = new URL(req.url);
+    const UserAccountID = url.pathname.split('/').pop(); 
+    
+
+    if (!session?.user?.id) {
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.AUTHENTICATION },
+            { status: 401 }
+        );
+    }
+
+    const requestedAccountID = UserAccountID;
+    const sessionAccountID = session.user.id;
+
+    if (requestedAccountID !== sessionAccountID) {
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.AUTHENTICATION },
+            { status: 403 } 
+        );
+    }
+
+    try {
+        const body = await req.json();
+
+        if (!body.FlightType || !body.ClassType || !body.DepartFlightNo || !body.DepartFlightDepartTime) {
+            return NextResponse.json(
+                { success: false, message: ErrorMessages.MISSING_PARAMETER },
+                { status: 400 }
+            );
+        }
+        
+        const existingCartItem = await prisma.cart.findFirst({
+            where: {
+                UserAccountID: session.user.id,
+                DepartFlightNo: body.DepartFlightNo,
+                DepartFlightDepartTime: new Date(body.DepartFlightDepartTime),
+                ReturnFlightNo: body.ReturnFlightNo || null,
+            }
+        });
+
+        if (existingCartItem) {
+            return NextResponse.json(
+                { success: false, message: "This flight is already in your cart." },
+                { status: 409 }
+            );
+        }
+
+        const newCartItem = await prisma.cart.create({
+            data: {
+                FlightType: body.FlightType,
+                ClassType: body.ClassType,
+                UserAccountID: session.user.id,
+                DepartFlightNo: body.DepartFlightNo,
+                DepartFlightDepartTime: new Date(body.DepartFlightDepartTime),
+                DepartFlightArrivalTime: new Date(body.DepartFlightArrivalTime),
+                ...(body.ReturnFlightNo && { ReturnFlightNo: body.ReturnFlightNo }),
+                ...(body.ReturnFlightDepartTime && { ReturnFlightDepartTime: new Date(body.ReturnFlightDepartTime) }),
+                ...(body.ReturnFlightArrivalTime && { ReturnFlightArrivalTime: new Date(body.ReturnFlightArrivalTime) }),
+            },
+        });
+
+
+        return NextResponse.json(
+            {
+                success: true,
+                message: "Flight successfully added to your cart.",
+                data: newCartItem, 
+            },
+            { status: 201 }
+        );
+
+    } catch (error) {
+        console.error("Error adding item to cart:", error);
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.SERVER },
+            { status: 500 }
+        )
+    }
+}
