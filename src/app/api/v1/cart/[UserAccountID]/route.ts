@@ -164,10 +164,10 @@ export async function DELETE(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest, 
-  { params }: { params:{ UserAccountID: string } }
+export async function POST(req: NextRequest, context: { params: { UserAccountID: string } }
 ) {
     const session = await getServerSession(nextAuthOptions);
+    const { UserAccountID } = context.params;
 
     if (!session?.user?.id) {
         return NextResponse.json(
@@ -176,7 +176,7 @@ export async function POST(req: NextRequest,
         );
     }
 
-    const requestedAccountID = params.UserAccountID;
+    const requestedAccountID = UserAccountID;
     const sessionAccountID = session.user.id;
 
     if (requestedAccountID !== sessionAccountID) {
