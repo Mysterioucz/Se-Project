@@ -11,7 +11,9 @@ const CreatePaymentSchema = z.object({
   ticketId: z.string().min(1, "ticketId is required"),
   amount: z.number().positive("amount must be > 0"),
   method: PaymentMethodSchema,
-  status: PaymentStatusSchema.default("PAID")
+  status: PaymentStatusSchema.default("PAID"),
+  email: z.string().email("paymentEmail must be a valid email"),
+  telNo: z.string().min(1, "paymentTelNo is required"),
 });
 
 export async function POST(request: NextRequest) {
@@ -29,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = CreatePaymentSchema.parse(await request.json());
-        const { ticketId, amount, method, status } = body;
+        const { ticketId, amount, method, status, email, telNo } = body;
 
         //Validate entities (ticket exists, not already purchased)
         const ticket = await prisma.ticket.findUnique({ where: { TicketID: ticketId } });
@@ -62,6 +64,8 @@ export async function POST(request: NextRequest) {
           PaymentMethod: method,           //STRING 
           TransactionStatus: status,       //STRING 
           Amount: amount,                  //Float
+          PaymentEmail: email,
+          PaymentTelNo: telNo,
         },
       });
 

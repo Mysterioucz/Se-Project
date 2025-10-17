@@ -30,12 +30,12 @@ export interface MappedFlightData {
         depart: {
             time: string;
             airport: string;
-            city: string; // You might need a mapping for cities
+            city: string;
         };
         arrive: {
             time: string;
             airport: string;
-            city: string; // You might need a mapping for cities
+            city: string; 
         };
         duration: string;
         stops: number;
