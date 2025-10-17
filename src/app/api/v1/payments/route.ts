@@ -7,7 +7,7 @@ import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
 
-export const CreatePaymentSchema = z
+const CreatePaymentSchema = z
   .object({
     ticketId: z.string().trim().min(1, "ticketId is required"),
     amount: z.number().positive("amount must be > 0"),
