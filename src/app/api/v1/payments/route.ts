@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
     const accountId = String(session.user.id);
 
     try {
+      
         const { ticketId, amount, method, status, paymentEmail, paymentTelNo, bankName } =
       CreatePaymentSchema.parse(await request.json());
 
@@ -93,6 +94,7 @@ export async function POST(request: NextRequest) {
           PaymentTelNo: paymentTelNo,      
           Amount: amount,
           BankName: method === "ONLINE_BANKING" ? bankName : null,                  
+
         },
       });
 
