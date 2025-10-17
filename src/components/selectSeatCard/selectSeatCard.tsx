@@ -24,7 +24,7 @@ interface SelectSeatCardProps {
 export default function SelectSeatCard({ header, departFrom, departFromFull, arriveAt, arriveAtFull, departTime, arriveTime, duration, date, passengerCount, passengerType, class: seatClass }: SelectSeatCardProps){
     const [selected, setSelected] = useState(false);
 
-    function PassengerName(index: any){
+    function PassengerName({ index }: { index: number }){
         return (
             <div className="flex w-[15.3125rem] h-[3.1875rem] rounded-2xl bg-primary-50">
                 <div className="flex flex-row gap-2 justify-between items-center w-full px-4 py-[0.3125rem]">
@@ -85,7 +85,7 @@ export default function SelectSeatCard({ header, departFrom, departFromFull, arr
                                         <div className="flex flex-col gap-4">
                                             {/* TODO: implement passenger selection to match seat selection */}
                                             {[...Array(passengerCount)].map((_, index) => (
-                                                <PassengerName key={index} />
+                                                <PassengerName key={index} index={index} />
                                             ))}
                                         </div>
                                     </div>
