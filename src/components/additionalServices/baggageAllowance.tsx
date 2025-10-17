@@ -84,6 +84,8 @@ function DepartureAdditionalService({
                             value={selectedOptions[index]}
                             placeholder="Add Baggage"
                             maxChildrenHeight="max-h-[16rem]"
+                            width="w-[10rem]"
+                            height="h-[2.5rem]"
                             onChange={(e) => handleOptionChange(index, e.target.value as string)}
                         >
                             <MenuItem value="Not Included">Not Included</MenuItem>
@@ -162,6 +164,8 @@ function ReturnAdditionalService({
                             value={selectedOptions[index]}
                             placeholder="Add Baggage"
                             maxChildrenHeight="max-h-[16rem]"
+                            width="w-[10rem]"
+                            height="h-[2.5rem]"
                             onChange={(e) => handleOptionChange(index, e.target.value as string)}
                         >
                             <MenuItem value="Not Included">Not Included</MenuItem>
