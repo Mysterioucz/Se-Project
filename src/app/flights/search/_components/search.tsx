@@ -36,6 +36,7 @@ export default function FlightSearchBar({
     selectedEndDate,
     setSelectedStartDate,
     setSelectedEndDate,
+    resetState,
 
     onSearch, // The function to
 }: {
@@ -48,6 +49,7 @@ export default function FlightSearchBar({
     selectedEndDate: Date | null;
     setSelectedStartDate: (date: Date | null) => void;
     setSelectedEndDate: (date: Date | null) => void;
+    resetState: () => void;
 
     onSearch: MouseEventHandler<HTMLButtonElement>;
 }) {
@@ -309,7 +311,10 @@ export default function FlightSearchBar({
                     <button
                         type="button"
                         className="relative flex items-center text-white text-lg bg-primary-400 rounded-sm py-2 border-2 border-primary-400 pl-10 pr-10 --font-sans hover:bg-primary-600"
-                        onClick={onSearch}
+                        onClick={(e) => {
+                            resetState();
+                            onSearch(e);
+                        }}
                     >
                         Search
                     </button>
