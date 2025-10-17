@@ -5,6 +5,7 @@ import { MenuItem } from "@mui/material";
 import { useState } from "react";
 
 interface BaggageAllowanceProps {
+    passengers?: string[];
     departurePlace?: string;
     arrivalPlace?: string;
     hasReturn?: boolean;
@@ -89,11 +90,11 @@ function DepartureAdditionalService({
                             onChange={(e) => handleOptionChange(index, e.target.value as string)}
                         >
                             <MenuItem value="Not Included">Not Included</MenuItem>
-                            <MenuItem value="5kg">+5 kg - ฿240.00</MenuItem>
-                            <MenuItem value="10kg">+10 kg - ฿325.00</MenuItem>
-                            <MenuItem value="15kg">+15 kg - ฿450.00</MenuItem>
-                            <MenuItem value="20kg">+20 kg - ฿490.00</MenuItem>
-                            <MenuItem value="25kg">+25 kg - ฿595.00</MenuItem>
+                            <MenuItem value="+5kg, ฿240.00">+5 kg - ฿240.00</MenuItem>
+                            <MenuItem value="+10kg, ฿325.00">+10 kg - ฿325.00</MenuItem>
+                            <MenuItem value="+15kg, ฿450.00">+15 kg - ฿450.00</MenuItem>
+                            <MenuItem value="+20kg, ฿490.00">+20 kg - ฿490.00</MenuItem>
+                            <MenuItem value="+25kg, ฿595.00">+25 kg - ฿595.00</MenuItem>
                         </SelectComponent>
                     </div>
                 </div>
@@ -169,11 +170,11 @@ function ReturnAdditionalService({
                             onChange={(e) => handleOptionChange(index, e.target.value as string)}
                         >
                             <MenuItem value="Not Included">Not Included</MenuItem>
-                            <MenuItem value="5kg">+5 kg - ฿240.00</MenuItem>
-                            <MenuItem value="10kg">+10 kg - ฿325.00</MenuItem>
-                            <MenuItem value="15kg">+15 kg - ฿450.00</MenuItem>
-                            <MenuItem value="20kg">+20 kg - ฿490.00</MenuItem>
-                            <MenuItem value="25kg">+25 kg - ฿595.00</MenuItem>
+                            <MenuItem value="+5kg, ฿240.00">+5 kg - ฿240.00</MenuItem>
+                            <MenuItem value="+10kg, ฿325.00">+10 kg - ฿325.00</MenuItem>
+                            <MenuItem value="+15kg, ฿450.00">+15 kg - ฿450.00</MenuItem>
+                            <MenuItem value="+20kg, ฿490.00">+20 kg - ฿490.00</MenuItem>
+                            <MenuItem value="+25kg, ฿595.00">+25 kg - ฿595.00</MenuItem>
                         </SelectComponent>
                     </div>
                 </div>
@@ -183,9 +184,10 @@ function ReturnAdditionalService({
 }
 
 export default function BaggageAllowance({
-    departurePlace = "Bangkok",
-    arrivalPlace = "Chiang Mai",
-    hasReturn = true,
+    passengers = [],
+    departurePlace = "DeparturePlace",
+    arrivalPlace = "ArrivalPlace",
+    hasReturn = false,
     onChange,
     initialCheckedDepart,
     initialCheckedReturn,
@@ -193,7 +195,10 @@ export default function BaggageAllowance({
     initialCheckedDepart?: number[];
     initialCheckedReturn?: number[];
 }) {
-    const passengers = ["John Doe", "Jane Smith", "Alice Lee"];
+    const Passengers = passengers.length ? passengers : ["Passenger 1"];
+    const DeparturePlace = departurePlace?.trim() || "DeparturePlace";
+    const ArrivalPlace = arrivalPlace?.trim() || "ArrivalPlace";
+
     const initialCheckedDepartMock = [15, 20, 0];
     const initialCheckedReturnMock = [0, 10, 25];
 
@@ -251,18 +256,18 @@ export default function BaggageAllowance({
             </div>
 
             <DepartureAdditionalService
-                passengers={passengers}
-                departurePlace={departurePlace}
-                arrivalPlace={arrivalPlace}
+                passengers={Passengers}
+                departurePlace={DeparturePlace}
+                arrivalPlace={ArrivalPlace}
                 initialCheckedBaggage={initialDepart}
                 onChange={handleDepartChange}
             />
 
             {hasReturn && (
                 <ReturnAdditionalService
-                passengers={passengers}
-                departurePlace={departurePlace}
-                arrivalPlace={arrivalPlace}
+                passengers={Passengers}
+                departurePlace={DeparturePlace}
+                arrivalPlace={ArrivalPlace}
                 initialCheckedBaggage={initialReturn}
                 onChange={handleReturnChange}
                 />
@@ -270,3 +275,35 @@ export default function BaggageAllowance({
         </div>
     );
 }
+
+
+
+// How to use:
+// "use client";
+
+// import BaggageAllowance from "@/src/components/additionalServices/baggageAllowance";
+
+// export default function Page() {
+//     const passengers = ["John Doe", "Jane Smith", "Alice Lee"];
+//     const initialCheckedDepart = [15, 20, 0]; // kg per passenger
+//     const initialCheckedReturn = [0, 10, 25];
+
+//     const handleBaggageChange = (selections: { depart: string[]; return?: string[] }) => {
+//         console.log("Depart selections:", selections.depart);
+//         if (selections.return) console.log("Return selections:", selections.return);
+//     };
+
+//     return (
+//         <div className="p-8">
+//             <BaggageAllowance
+//                 passengers={passengers}
+//                 departurePlace="Bangkok"
+//                 arrivalPlace="Chiang Mai"
+//                 hasReturn={true}
+//                 initialCheckedDepart={initialCheckedDepart}
+//                 initialCheckedReturn={initialCheckedReturn}
+//                 onChange={handleBaggageChange}
+//             />
+//         </div>
+//     );
+// }
