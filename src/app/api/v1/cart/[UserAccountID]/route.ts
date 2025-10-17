@@ -164,10 +164,12 @@ export async function DELETE(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { UserAccountID: string } }
+export async function POST(req: NextRequest
 ) {
     const session = await getServerSession(nextAuthOptions);
-    const { UserAccountID } = params;
+    const url = new URL(req.url);
+    const UserAccountID = url.pathname.split('/').pop(); 
+    
 
     if (!session?.user?.id) {
         return NextResponse.json(
