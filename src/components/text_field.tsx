@@ -13,6 +13,12 @@ interface Props {
     error?: boolean;
     helperText?: string;
     icon?: React.ReactNode;
+    width?: string; // custom width
+    height?: string; // custom height
+    labelFont?: string; // custom font
+    labelSize?: string; // custom text size
+    labelColor?: string; // custom text color
+    gap?: string; // custom gap between label and textfield
     onChange?: (value: unknown) => void;
     onInput?: (value: unknown) => void;
     onSubmit?: (value: unknown) => void; // callback to submit value
@@ -30,6 +36,13 @@ export default function TextFieldComponent({
     error,
     helperText,
     icon,
+    width = "w-full",
+    height,
+    labelFont="!font-bold",
+    labelSize="!text-lg",
+    labelColor="!text-color-primary-900",
+    gap = "gap-3",
+    required,
     onChange,
     onInput,
     onSubmit,
@@ -113,15 +126,15 @@ export default function TextFieldComponent({
     }
 
     return (
-        <div className="flex flex-col w-full h-fit gap-3">
+        <div className={`flex flex-col ${width} ${gap}`}>
             {label && (
-                <h3 className="!text-lg !font-bold !text-color-primary-900">
+                <h3 className={`${labelFont} ${labelSize} ${labelColor}`}>
                     {label}
                 </h3>
             )}
 
             <div
-                className={`flex items-center p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] bg-white border-2 ${resolveBorderColor(
+                className={`flex items-center ${height} p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] bg-white border-2 ${resolveBorderColor(
                     state
                 )}`}
                 onFocus={() => handleStateChange("focused")}
