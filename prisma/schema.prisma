@@ -142,7 +142,7 @@ model TicketService {
 model Ticket {
   TicketID          String   @id @db.VarChar(50)
   Price             Float //price of ticket
-  ServiceFee        Float //price of all additional services
+  ServiceFee        Float    @default(0) //price of all additional services
   TicketStatus      TicketStatus  @default(BOOKED)
   PassengerName     String
   PassengerLastName String

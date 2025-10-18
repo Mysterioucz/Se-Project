@@ -1,7 +1,6 @@
 import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { NextRequest, NextResponse } from "next/server";
-
 //@desc     Get additional services and seat availability for a specific flight
 //@route    GET /api/v1/flights/lookup?flightNo=...&departTime=...&arrivalTime=...
 //@access   Public
@@ -12,7 +11,6 @@ export async function GET(req: NextRequest) {
     const departTime = searchParams.get('departTime'); // format : 2025-09-27T01:25:20.000Z
     const arrivalTime = searchParams.get('arrivalTime');
      
-
     if (!flightNo || !departTime || !arrivalTime) {
       return new Response(
             JSON.stringify({
@@ -32,22 +30,34 @@ export async function GET(req: NextRequest) {
         },
       },
       select: {
-        ExtraBaggage: true,
-        SeatSelect: true,
-        aircraft: {
+        availableServices: {
           select: {
-            seats: {
-              orderBy: {
-                SeatNo: 'asc',
-              },
+            service: {
               select: {
-                SeatNo: true,
-                SeatType: true,
-                IsAvailable: true,
-              },
-            },
-          },
+                ServiceName: true,
+                Price: true,
+                Description: true,
+              }
+            }
+          }
         },
+        // aircraft: {
+        //   select : {
+        //     seats: {
+        //       // where : {
+        //       //   IsAvailable: true
+        //       // },
+        //       orderBy: {
+        //         SeatNo: 'asc'
+        //       },
+        //       select: {
+        //         SeatNo: true,
+        //         SeatType : true,
+        //         IsAvailable : true
+        //       }
+        //     }
+        //   }
+        // }
       },
     });
 
@@ -61,28 +71,27 @@ export async function GET(req: NextRequest) {
             );
     }
 
+    const services = flight.availableServices.map(s => s.service.ServiceName);
+
     const responseData = {
-      services: {
-        extraBaggageAvailable: flight.ExtraBaggage,
-        seatSelectionAvailable: flight.SeatSelect,
-      },
-      ...(flight.SeatSelect && { seats: flight.aircraft?.seats || [] }),
+      services,
+      // ...(services.includes("SelectSeat") && {availableSeats : flight.aircraft?.seats || []})
     };
 
     return new Response(
-            JSON.stringify({
-                success: true,
-                data: responseData,
-            }),
-            { status: 200 }
-        );
+      JSON.stringify({
+          success: true,
+          data: responseData,
+      }),
+      { status: 200 }
+    );
   } catch (error) {
-        return new Response(
-            JSON.stringify({
-                success: false,
-                message: ErrorMessages.SERVER,
-            }),
-            { status: 500 }
-        );
+    return new Response(
+        JSON.stringify({
+            success: false,
+            message: ErrorMessages.SERVER,
+        }),
+        { status: 500 }
+    );
   }
 }
