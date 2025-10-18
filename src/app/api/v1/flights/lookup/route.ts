@@ -42,41 +42,34 @@ export async function GET(req: NextRequest) {
             }
           }
         },
-        // aircraft: {
-        //   select : {
-        //     seats: {
-        //       // where : {
-        //       //   IsAvailable: true
-        //       // },
-        //       orderBy: {
-        //         SeatNo: 'asc'
-        //       },
-        //       select: {
-        //         SeatNo: true,
-        //         SeatType : true,
-        //         IsAvailable : true
-        //       }
-        //     }
-        //   }
-        // }
+        seats: {
+          where: {
+            IsAvailable: true
+          },
+          select: {
+            SeatNo: true,
+            SeatType: true,
+            IsAvailable: true
+          }
+        }
       },
     });
 
     if (!flight) {
       return new Response(
-                JSON.stringify({
-                    success: false,
-                    error: ErrorMessages.NOT_FOUND,
-                }),
-                { status: 404 }
-            );
+        JSON.stringify({
+            success: false,
+            error: ErrorMessages.NOT_FOUND,
+        }),
+        { status: 404 }
+      );
     }
 
     const services = flight.availableServices.map(s => s.service.ServiceName);
 
     const responseData = {
       services,
-      // ...(services.includes("SelectSeat") && {availableSeats : flight.aircraft?.seats || []})
+      ...(services.includes("Select Seat") && {availableSeats : flight.seats || []})
     };
 
     return new Response(
@@ -88,11 +81,11 @@ export async function GET(req: NextRequest) {
     );
   } catch (error) {
     return new Response(
-        JSON.stringify({
-            success: false,
-            message: ErrorMessages.SERVER,
-        }),
-        { status: 500 }
+      JSON.stringify({
+          success: false,
+          message: ErrorMessages.SERVER,
+      }),
+      { status: 500 }
     );
   }
 }
