@@ -1,5 +1,5 @@
-import CheckoutProgress from "@/src/app/(user)/checkout/_components/CheckoutProgress";
-import FooterButton from "@/src/app/(user)/checkout/_components/FooterButton";
+import CheckoutProgress from "@/src/app/(user)/[cartId]/checkout/_components/CheckoutProgress";
+import FooterButton from "@/src/app/(user)/[cartId]/checkout/_components/FooterButton";
 import Navbar from "@/src/components/Navbar";
 import PriceBreakdownCard, {
     BaggageSummaryProps,

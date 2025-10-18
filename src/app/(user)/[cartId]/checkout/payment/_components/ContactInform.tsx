@@ -1,7 +1,7 @@
 "use client";
 
 import TextFieldComponent from "@components/text_field";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface ContactInformProps {
     onStatusChange: (isValid: boolean) => void;
@@ -12,14 +12,13 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
     const [userContactEmail, setuserContactEmail] = useState("");
     const [userTel, setuserTel] = useState("");
 
-    useEffect(() => {
-        const isEmailFilled = userContactEmail.trim() !== "";
-        const isTelFilled = userTel.trim() !== "";
+    const computeIsReady = (email: string, tel: string) => {
+        const isEmailFilled = email.trim() !== "";
+        const isTelFilled = tel.trim() !== "";
+        return isEmailFilled && isTelFilled;
+    };
 
-        const isReadyToSend = isEmailFilled && isTelFilled;
-
-        onStatusChange(isReadyToSend);
-    }, [userContactEmail, userTel, onStatusChange]);
+    // Notify parent synchronously when fields change via the onSubmit handlers below.
 
     return (
         <div className="flex flex-col gap-[1.5rem] w-full">
@@ -41,6 +40,7 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
                     };
                     // TODO: Handle Contact Email Update
                     setuserContactEmail(text);
+                    onStatusChange(computeIsReady(text, userTel));
                 }}
             />
             <TextFieldComponent
@@ -61,6 +61,7 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
                     };
                     // TODO: Handle Tel Number Update
                     setuserTel(text);
+                    onStatusChange(computeIsReady(userContactEmail, text));
                 }}
             />
         </div>
