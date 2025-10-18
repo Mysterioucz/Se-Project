@@ -120,11 +120,13 @@ export default function Page() {
                 airlineTimeStamp: {
                     airlineName: flight.airlineName,
                     depart: {
+                        date: flight.departureTime,
                         time: flight.departHours,
                         airport: flight.departureAirportID,
                         city: flight.departCity,
                     },
                     arrive: {
+                        date: flight.arrivalTime,
                         time: flight.arrivalHours,
                         airport: flight.arrivalAirportID,
                         city: flight.arrivalCity,
@@ -132,6 +134,10 @@ export default function Page() {
                     duration: flight.duration,
                     stops: flight.transitAmount,
                 },
+                flightNo: flight.flightNo,
+                flightType: selectedValues.flight,
+                classType: selectedValues.class,
+                passengers: passengerCount,
                 priceCabinClass: {
                     price: flight.price,
                     currency: "USD",
