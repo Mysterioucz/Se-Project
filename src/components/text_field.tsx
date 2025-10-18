@@ -29,8 +29,8 @@ interface Props {
     labelColor?: string; // custom text color
     gap?: string; // custom gap between label and textfield
     onChange?: (value: TextFieldValue) => void;
-    onInput?: (value: TextFieldValue ) => void;
-    onSubmit?: (value: TextFieldValue ) => void; // callback to submit value
+    onInput?: (value: TextFieldValue) => void;
+    onSubmit?: (value: TextFieldValue) => void; // callback to submit value
 }
 
 type State = "enabled" | "focused" | "hover" | "error" | "disabled";
@@ -154,7 +154,10 @@ export default function TextFieldComponent({
                 {telForm && (
                     <TelPrefix
                         value={telValue}
-                        onChange={(e) => onChange && onChange({ tel: e.target.value, text: currentText })}
+                        onChange={(e) =>
+                            onChange &&
+                            onChange({ tel: e.target.value, text: currentText })
+                        }
                         disabled={computedDisabled}
                     />
                 )}

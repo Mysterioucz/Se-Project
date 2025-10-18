@@ -4,7 +4,7 @@ import Button from "@components/Button";
 import ModalDeleteAccount from "@components/modals/modal_delete_account";
 import ModalSignOut from "@components/modals/modal_sign_out";
 import SelectComponent from "@components/select";
-import TextFieldComponent, { type TextFieldValue } from "@components/text_field";
+import TextFieldComponent from "@components/text_field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MenuItem } from "@mui/material";
 import { useSession } from "next-auth/react";
@@ -132,9 +132,15 @@ export default function ProfileCard() {
                             onSubmit={async (val) => {
                                 const submittedText = val.text;
                                 const ok = await trigger(name);
-                                console.log("Submitted:", submittedText, "Valid:", ok, "typeof:", typeof submittedText);
                                 if (ok) {
-                                    await updateName(name === "firstName" ? submittedText : undefined, name === "lastName" ? submittedText : undefined);
+                                    await updateName(
+                                        name === "firstName"
+                                            ? submittedText
+                                            : undefined,
+                                        name === "lastName"
+                                            ? submittedText
+                                            : undefined,
+                                    );
                                 } else {
                                     // revert form value and UI to last known good value
                                     setValue(
