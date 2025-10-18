@@ -26,7 +26,6 @@
         "@prisma/adapter-neon": "^6.16.1",
         "@prisma/client": "6.15.0",
         "@tailwindcss/cli": "^4.1.13",
-        "KeyboardArrowDown": "link:@mui\\icons-material\\KeyboardArrowDown",
         "bcrypt": "^6.0.0",
         "eslint-plugin-react-hooks": "^5.2.0",
         "jsonwebtoken": "^9.0.2",
