@@ -20,6 +20,7 @@ export default function PaymentMethods({
     // Avoid useEffect by calling the callbacks from the event handlers below.
 
     const notifyMethodChange = (method: string) => {
+        console.log("Method changed to:", method);
         onQRmethodChange(method === "qr");
     };
 

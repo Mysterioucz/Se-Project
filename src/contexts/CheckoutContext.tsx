@@ -14,12 +14,12 @@ interface Seat {
     returnSeat?: string;
 }
 
-interface BaggageAllowance {
+export interface BaggageAllowance {
     departureBaggage: number; // in kg
     returnBaggage?: number;
 }
 
-interface PassengerData {
+export interface PassengerData {
     givenName: string;
     lastName: string;
     gender: string;
@@ -46,6 +46,10 @@ interface CheckoutPayload {
 type CheckoutContextType = {
     checkoutData: CheckoutPayload;
     updateCheckoutData: (data: Partial<CheckoutPayload>) => void;
+    updatePassengerAt: (
+        index: number,
+        passengerPatch: Partial<PassengerData>,
+    ) => void;
     clearCheckoutData: () => void; // after successful payment
 };
 
@@ -55,8 +59,33 @@ const CheckoutContext = createContext<CheckoutContextType | undefined>(
 
 const CHECKOUT_STORAGE_KEY = "tempCheckout";
 
+const initialPassengerData: PassengerData = {
+    givenName: "",
+    lastName: "",
+    gender: "",
+    dayOfBirth: "",
+    monthOfBirth: "",
+    yearOfBirth: "",
+    nationality: "",
+    passportNo: "",
+    dayOfIssue: "",
+    monthOfIssue: "",
+    yearOfIssue: "",
+    dayOfExpiry: "",
+    monthOfExpiry: "",
+    yearOfExpiry: "",
+    baggageAllowance: {
+        departureBaggage: 0,
+        returnBaggage: 0,
+    },
+    seatSelection: {
+        departureSeat: "",
+        returnSeat: "",
+    },
+};
+
 const initialCheckoutData: CheckoutPayload = {
-    passengerData: [],
+    passengerData: [initialPassengerData],
     payment: {
         isPaymentValid: false,
         isContactValid: false,
@@ -82,6 +111,7 @@ function getInitialCheckoutData(): CheckoutPayload {
     return initialCheckoutData;
 }
 
+
 export function CheckoutProvider({ children }: { children: React.ReactNode }) {
     const [checkoutData, setCheckoutData] = useState<CheckoutPayload>(
         getInitialCheckoutData(),
@@ -103,9 +133,58 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
         setCheckoutData(initialCheckoutData);
     };
 
+    // helper to make an empty PassengerData (you already have `initialPassengerData`)
+    const makeEmptyPassenger = (): PassengerData => ({
+        ...initialPassengerData, // or create a fresh object if needed
+    });
+
+    // ensures list has length > index
+    const ensurePassengerAt = (index: number) => {
+        setCheckoutData((prev) => {
+            const list = [...(prev.passengerData ?? [])];
+            while (list.length <= index) {
+                list.push(makeEmptyPassenger());
+            }
+            const updated = { ...prev, passengerData: list };
+            if (typeof window !== "undefined")
+                localStorage.setItem(
+                    CHECKOUT_STORAGE_KEY,
+                    JSON.stringify(updated),
+                );
+            return updated;
+        });
+    };
+    const updatePassengerAt = (
+        index: number,
+        passengerPatch: Partial<PassengerData>,
+    ) => {
+        setCheckoutData((prev) => {
+            const list = [...(prev.passengerData ?? [])];
+            if (index < 0) {
+                console.warn("updatePassengerAt: index out of range", index);
+                return prev;
+            } else if (index >= list.length) {
+                ensurePassengerAt(index);
+            }
+            list[index] = { ...list[index], ...passengerPatch };
+            const updated = { ...prev, passengerData: list };
+            if (typeof window !== "undefined")
+                localStorage.setItem(
+                    CHECKOUT_STORAGE_KEY,
+                    JSON.stringify(updated),
+                );
+            return updated;
+        });
+    };
+
     return (
         <CheckoutContext.Provider
-            value={{ checkoutData, updateCheckoutData, clearCheckoutData }}
+            value={{
+                checkoutData,
+                updateCheckoutData,
+                clearCheckoutData,
+                updatePassengerAt,
+            }}
         >
             {children}
         </CheckoutContext.Provider>

@@ -27,7 +27,7 @@ export default function CheckoutProgress() {
     const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
 
     function clickNode(stepId: string) {
-        router.push(`${cartId}/checkout/${stepId}`);
+        router.push(`/${cartId}/checkout/${stepId}`);
     }
 
     function nodeContainer(step: (typeof steps)[number], index: number) {
