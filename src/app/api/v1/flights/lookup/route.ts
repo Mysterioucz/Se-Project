@@ -32,22 +32,32 @@ export async function GET(req: NextRequest) {
         },
       },
       select: {
-        ExtraBaggage: true,
-        SeatSelect: true,
-        aircraft: {
+        availableServices: {
           select: {
+            service: {
+              select: {
+                ServiceName: true
+              }
+            }
+          }
+        },
+        aircraft: {
+          select : {
             seats: {
+              // where : {
+              //   IsAvailable: true
+              // },
               orderBy: {
-                SeatNo: 'asc',
+                SeatNo: 'asc'
               },
               select: {
                 SeatNo: true,
-                SeatType: true,
-                IsAvailable: true,
-              },
-            },
-          },
-        },
+                SeatType : true,
+                IsAvailable : true
+              }
+            }
+          }
+        }
       },
     });
 
@@ -61,12 +71,11 @@ export async function GET(req: NextRequest) {
             );
     }
 
+    const services = flight.availableServices.map(s => s.service.ServiceName);
+
     const responseData = {
-      services: {
-        extraBaggageAvailable: flight.ExtraBaggage,
-        seatSelectionAvailable: flight.SeatSelect,
-      },
-      ...(flight.SeatSelect && { seats: flight.aircraft?.seats || [] }),
+      services,
+      ...(services.includes("SelectSeat") && {availableSeats : flight.aircraft?.seats || []})
     };
 
     return new Response(
