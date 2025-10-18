@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import ListChoice from "../list_choice";
 interface Props {
     value: string;
-    onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
+    onChange?: (event: React.ChangeEvent<{ value: string }>) => void;
     disabled?: boolean;
 }
 

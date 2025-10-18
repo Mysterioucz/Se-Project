@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import { FieldValues, UseFormRegister } from "react-hook-form";
 import TelPrefix from "./prefix/tel_prefix";
 
+export interface TextFieldValue {
+    tel: string;
+    text: string;
+}
+
 interface Props {
     label?: string;
     name?: string; // required for form register
@@ -23,9 +28,9 @@ interface Props {
     labelSize?: string; // custom text size
     labelColor?: string; // custom text color
     gap?: string; // custom gap between label and textfield
-    onChange?: (value: unknown) => void;
-    onInput?: (value: unknown) => void;
-    onSubmit?: (value: unknown) => void; // callback to submit value
+    onChange?: (value: TextFieldValue) => void;
+    onInput?: (value: TextFieldValue ) => void;
+    onSubmit?: (value: TextFieldValue ) => void; // callback to submit value
 }
 
 type State = "enabled" | "focused" | "hover" | "error" | "disabled";
@@ -149,10 +154,7 @@ export default function TextFieldComponent({
                 {telForm && (
                     <TelPrefix
                         value={telValue}
-                        onChange={(e) =>
-                            onChange &&
-                            onChange({ tel: e.target.value, text: currentText })
-                        }
+                        onChange={(e) => onChange && onChange({ tel: e.target.value, text: currentText })}
                         disabled={computedDisabled}
                     />
                 )}
@@ -175,7 +177,10 @@ export default function TextFieldComponent({
                                     text: e.target.value,
                                 });
                         }}
-                        onInput={onInput}
+                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                            const value = (e.target as HTMLInputElement).value;
+                            onInput && onInput({ tel: telValue, text: value });
+                        }}
                         onKeyDown={handleKeyDown}
                     />
 
