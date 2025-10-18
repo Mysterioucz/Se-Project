@@ -11,7 +11,7 @@ interface Props {
     maxHeight?: string;
     itemWidth?: string;
     onClick?: () => void;
-    onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
+    onChange?: (event: React.ChangeEvent<{ value: string }>) => void;
 }
 
 export default function ListChoice({
@@ -30,7 +30,7 @@ export default function ListChoice({
                     onChange?.({
                         target: { value: option.value },
                     } as React.ChangeEvent<{
-                        value: unknown;
+                        value: string;
                     }>);
                 }}
                 value={option.value}

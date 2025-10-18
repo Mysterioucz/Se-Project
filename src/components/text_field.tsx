@@ -1,59 +1,70 @@
 "use client";
 import { useEffect, useState } from "react";
+import { FieldValues, UseFormRegister } from "react-hook-form";
 import TelPrefix from "./prefix/tel_prefix";
+
+export interface TextFieldValue {
+    tel: string;
+    text: string;
+}
 
 interface Props {
     label?: string;
+    name?: string; // required for form register
     textValue: string;
     telValue?: string;
     placeHolder?: string;
     telForm?: boolean;
+    register?: UseFormRegister<FieldValues>;
     required?: boolean;
     disabled?: boolean; // initial state only
     error?: boolean;
     helperText?: string;
     icon?: React.ReactNode;
+    ref?: React.Ref<HTMLInputElement>;
     width?: string; // custom width
     height?: string; // custom height
     labelFont?: string; // custom font
     labelSize?: string; // custom text size
     labelColor?: string; // custom text color
     gap?: string; // custom gap between label and textfield
-    onChange?: (value: unknown) => void;
-    onInput?: (value: unknown) => void;
-    onSubmit?: (value: unknown) => void; // callback to submit value
+    onChange?: (value: TextFieldValue) => void;
+    onInput?: (value: TextFieldValue) => void;
+    onSubmit?: (value: TextFieldValue) => void; // callback to submit value
 }
 
 type State = "enabled" | "focused" | "hover" | "error" | "disabled";
 
 export default function TextFieldComponent({
+    name,
     label,
     textValue,
     telValue = "+66",
     placeHolder,
     telForm,
     disabled,
+    ref,
+    required,
     error,
     helperText,
     icon,
     width = "w-full",
     height,
-    labelFont="!font-bold",
-    labelSize="!text-lg",
-    labelColor="!text-color-primary-900",
+    labelFont = "!font-bold",
+    labelSize = "!text-lg",
+    labelColor = "!text-color-primary-900",
     gap = "gap-3",
-    required,
     onChange,
     onInput,
     onSubmit,
 }: Props) {
     // Internal disabled state (toggled by icon)
     const [isDisabledInternal, setIsDisabledInternal] = useState<boolean>(
-        disabled ?? false
+        disabled ?? false,
     );
 
     const [state, setState] = useState<State>(
-        disabled ? "disabled" : error ? "error" : "enabled"
+        disabled ? "disabled" : error ? "error" : "enabled",
     );
 
     const computedDisabled = isDisabledInternal;
@@ -63,10 +74,9 @@ export default function TextFieldComponent({
 
     // Sync text when props change or field toggles
     useEffect(() => {
-        if (!computedDisabled) {
-            setCurrentText(textValue);
-        }
-    }, [textValue, computedDisabled]);
+        // Always sync from prop so parent-driven reverts update the UI
+        setCurrentText(textValue);
+    }, [textValue]);
 
     function handleStateChange(newState: State) {
         if (computedDisabled) setState("disabled");
@@ -135,7 +145,7 @@ export default function TextFieldComponent({
 
             <div
                 className={`flex items-center ${height} p-4 gap-2.5 justify-between text-[1rem] rounded-[0.25rem] bg-white border-2 ${resolveBorderColor(
-                    state
+                    state,
                 )}`}
                 onFocus={() => handleStateChange("focused")}
                 onMouseEnter={() => handleStateChange("hover")}
@@ -155,6 +165,7 @@ export default function TextFieldComponent({
                 <div className="flex items-center w-full">
                     <input
                         type="text"
+                        ref={ref}
                         className={`w-full h-full bg-transparent text-lg text-color-gray-400 disabled:text-color-disable-dark outline-none placeholder:text-color-gray-400 disabled:placeholder:text-color-disable-dark ${
                             icon ? "pr-4" : ""
                         }`}
@@ -169,7 +180,10 @@ export default function TextFieldComponent({
                                     text: e.target.value,
                                 });
                         }}
-                        onInput={onInput}
+                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                            const value = (e.target as HTMLInputElement).value;
+                            onInput && onInput({ tel: telValue, text: value });
+                        }}
                         onKeyDown={handleKeyDown}
                     />
 
