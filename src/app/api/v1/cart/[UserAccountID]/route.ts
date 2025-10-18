@@ -170,7 +170,6 @@ export async function POST(req: NextRequest
     const url = new URL(req.url);
     const UserAccountID = url.pathname.split('/').pop(); 
     
-
     if (!session?.user?.id) {
         return NextResponse.json(
             { success: false, message: ErrorMessages.AUTHENTICATION },
@@ -203,7 +202,10 @@ export async function POST(req: NextRequest
                 UserAccountID: session.user.id,
                 DepartFlightNo: body.DepartFlightNo,
                 DepartFlightDepartTime: new Date(body.DepartFlightDepartTime),
+                DepartFlightArrivalTime: new Date(body.DepartFlightArrivalTime),
                 ReturnFlightNo: body.ReturnFlightNo || null,
+                ReturnFlightDepartTime: new Date(body.ReturnFlightDepartTime) || null,
+                ReturnFlightArrivalTime: new Date(body.ReturnFlightArrivalTime) || null,
             }
         });
 
@@ -216,18 +218,21 @@ export async function POST(req: NextRequest
 
         const newCartItem = await prisma.cart.create({
             data: {
+                UserAccountID: session.user.id,
                 FlightType: body.FlightType,
                 ClassType: body.ClassType,
-                UserAccountID: session.user.id,
+                Adults: body.Adults,
+                Childrens: body.Childrens,
+                Infants: body.Infants,
                 DepartFlightNo: body.DepartFlightNo,
                 DepartFlightDepartTime: new Date(body.DepartFlightDepartTime),
                 DepartFlightArrivalTime: new Date(body.DepartFlightArrivalTime),
                 ...(body.ReturnFlightNo && { ReturnFlightNo: body.ReturnFlightNo }),
                 ...(body.ReturnFlightDepartTime && { ReturnFlightDepartTime: new Date(body.ReturnFlightDepartTime) }),
                 ...(body.ReturnFlightArrivalTime && { ReturnFlightArrivalTime: new Date(body.ReturnFlightArrivalTime) }),
+                Price: body.Price,
             },
         });
-
 
         return NextResponse.json(
             {
@@ -235,7 +240,7 @@ export async function POST(req: NextRequest
                 message: "Flight successfully added to your cart.",
                 data: newCartItem, 
             },
-            { status: 201 }
+            { status: 200 }
         );
 
     } catch (error) {
