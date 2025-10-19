@@ -76,6 +76,8 @@ model Flight {
   TransitAmount      Int
   ExtraBaggage       Boolean @default(false) 
   SeatSelect         Boolean @default(false)
+  FreeCheckedBaggageWeight Int @default(0)
+  FreeCheckedBaggageBags   Int @default(0)
 
   // Relations
   arrivalAirport   Airport       @relation("ArrivalFlights", fields: [ArrivalAirportID], references: [AirportID])
