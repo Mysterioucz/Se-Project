@@ -1,20 +1,24 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import ContactInform from "./_components/ContactInform";
 import PaymentMethods from "./_components/PaymentMethods";
 import QRModal from "./_components/QRModal";
-import Button from "@components/Button";
+import { useCheckout } from "@src/contexts/CheckoutContext"
 
 export default function Page() {
-  const router = useRouter();
+  const {
+    isPaymentValid,
+    setIsPaymentValid,
+    isContactValid,
+    setIsContactValid,
+    isQRmethod,
+    setQRmethod,
+    isQRModalOpen,
+    setQRModalOpen,
+  } = useCheckout();
 
   // TODO: Fetch actual data from backend to check if user fill in all required info
-  const [isPaymentValid, setIsPaymentValid] = useState(false);
-  const [isQRmethod, setQRmethod] = useState(false);
-  const [isContactValid, setIsContactValid] = useState(false);
-  const [isQRModalOpen, setQRModalOpen] = useState(false);
 
   const handlePaymentStatusChange = (isValid: boolean) => {
     setIsPaymentValid(isValid);
@@ -24,21 +28,6 @@ export default function Page() {
   };
   const handleContactStatusChange = (isValid: boolean) => {
     setIsContactValid(isValid);
-  };
-
-  const isFormComplete = isPaymentValid && isContactValid;
-
-  const handleConfirmPayment = () => {
-    if (!isFormComplete) {
-      console.log("User didn't fill in all required info");
-      return;
-    }
-
-    if (isQRmethod) {
-      setQRModalOpen(true);
-    } else {
-      router.push("/payment-success");
-    }
   };
 
   return (
@@ -67,32 +56,6 @@ export default function Page() {
               onStatusChange={handleContactStatusChange}
             />
           </div>
-        </div>
-
-{/* Do NOT delete these comments it's essential for adapt with Footer global component */}
-
-        <div className="flex gap-[1.5rem] h-[3.5rem]">
-          <Button
-            text="Back"
-            align="center"
-            styleType="stroke"
-            size="md"
-            width="w-full"
-            height="h-full"
-            // This will navigate back to the previous page without saving any changes made on the current page
-            onClick={() => router.back()}
-          />
-          <Button
-            text="Confirm Payment"
-            align="center"
-            styleType="fill"
-            size="md"
-            width="w-full"
-            height="h-full"
-            // TODO: Implement layout from fetched data from backend when user fill in wrong info after click Confirm Payment button
-            onClick={handleConfirmPayment}
-            disabled={!isFormComplete}
-          />
         </div>
       </div>
 

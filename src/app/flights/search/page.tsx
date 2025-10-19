@@ -24,9 +24,15 @@ import FlightSearchFunishing from "@/src/app/flights/search/_components/FlightSe
 import Navbar from "@/src/components/Navbar";
 import { CircularProgress } from "@mui/material";
 import Footer from "@/src/components/footer/footer";
+import SummaryModal from "./_components/SummaryModal";
 
 export default function Page() {
     //TODO: Need to refactor the whole page to be stateless and use searchParams instead
+    const [selectedFlightBuffer, setSelectedFlightBuffer] = useState<MappedFlightData[]>([]);
+    const [selectedDateBuffer, setSelectedDateBuffer] = useState<(Date | null)[]>([]);
+    const [isSummaryModalOpen, setSummaryModalOpen] = useState(false);
+    const [swap, setSwap] = useState<boolean>(false);
+
     const [selectedValues, setSelectedValues] =
         useState<SelectedValues>(INIT_SELECTED_VALUES);
     const [passengerCount, setPassengerCount] =
@@ -70,24 +76,30 @@ export default function Page() {
             ); // Base URL for API
             const params = new URLSearchParams();
             // Search
-            params.append(`flightType`, selectedValues.flight);
+            params.append(`flightType`, "One Way");
             params.append(`classType`, selectedValues.class);
             if (selectedValues.leave != `Leaving from?`)
-                params.append(`departureCity`, selectedValues.leave);
+                if (! swap) params.append(`departureCity`, selectedValues.leave);
+                else params.append(`departureCity`, selectedValues.go);
             if (selectedValues.go != `Going to?`)
-                params.append(`arrivalCity`, selectedValues.go);
+                if (! swap) params.append(`arrivalCity`, selectedValues.go);
+                else params.append(`arrivalCity`, selectedValues.leave);
             if (selectedStartDate) {
-                const departDate = selectedStartDate
+                if (swap && selectedEndDate) {
+                    const departDate = selectedEndDate
                     .toISOString()
                     .split("T")[0]; // Convert to 'YYYY-MM-DD'
-                params.append("departDate", departDate);
+                    params.append("departDate", departDate);
+                } else {
+                    const departDate = selectedStartDate
+                    .toISOString()
+                    .split("T")[0]; // Convert to 'YYYY-MM-DD'
+                    params.append("departDate", departDate);
+                }
+                
             }
 
-            if (selectedEndDate) {
-                const returnDate = selectedEndDate.toISOString().split("T")[0]; // Convert to 'YYYY-MM-DD'
-                params.append("returnDate", returnDate);
-            }
-            params.append(`numberOfPassenger`, totalPassenger.toString());
+            params.append(`numberOfPassenger`, totalPassenger.toString());            
             // Filter
             if (selectedAirlines.length > 0)
                 params.append("airlines", selectedAirlines.join(","));
@@ -108,11 +120,13 @@ export default function Page() {
                 airlineTimeStamp: {
                     airlineName: flight.airlineName,
                     depart: {
+                        date: flight.departureTime,
                         time: flight.departHours,
                         airport: flight.departureAirportID,
                         city: flight.departCity,
                     },
                     arrive: {
+                        date: flight.arrivalTime,
                         time: flight.arrivalHours,
                         airport: flight.arrivalAirportID,
                         city: flight.arrivalCity,
@@ -120,6 +134,10 @@ export default function Page() {
                     duration: flight.duration,
                     stops: flight.transitAmount,
                 },
+                flightNo: flight.flightNo,
+                flightType: selectedValues.flight,
+                classType: selectedValues.class,
+                passengers: passengerCount,
                 priceCabinClass: {
                     price: flight.price,
                     currency: "USD",
@@ -133,7 +151,6 @@ export default function Page() {
             }
             setConvertedFlightData(convertedData);
         } catch (err) {
-            // console.log(`Failed to fetch flights' data`, err);
             alert("Failed to fetch flight data. Please try again later.");
             setPageState("empty");
         }
@@ -144,6 +161,12 @@ export default function Page() {
             fetchData();
         }
     }, [sort]);
+
+    useEffect(() => {
+        if (selectedValues.flight !== "One Way") {
+            fetchData();
+        }
+    }, [swap]);
 
     const [HeaderText, setHeaderText] = useState("Select flight informations");
     useEffect(() => {
@@ -161,17 +184,30 @@ export default function Page() {
         }
     }, [pageState, flightState]);
 
-    function handleSelectFlightCard(id: string) {
-        //TODO: handle flight selection state
+    function handleSelectFlightCard(flight: MappedFlightData) {
         if (selectedValues.flight === "One Way") {
-            alert(`You have selected your departing flight.`);
+            selectedFlightBuffer.push(flight);
+            setSelectedFlightBuffer(selectedFlightBuffer);
+            selectedDateBuffer.push(selectedStartDate);
+            setSelectedDateBuffer(selectedDateBuffer);
+            setSummaryModalOpen(true);
             return;
         }
-        if (flightState === "depart") {
+
+        if (selectedValues.flight === "Round Trip" && selectedFlightBuffer.length == 0) {
+            setSwap(true);
+            selectedFlightBuffer.push(flight);
+            setSelectedFlightBuffer(selectedFlightBuffer);
+            selectedDateBuffer.push(selectedStartDate);
+            setSelectedDateBuffer(selectedDateBuffer);
             setFlightState("return");
-            alert(
-                "Departure flight selected. Please select your returning flight."
-            );
+        } else {
+            selectedFlightBuffer.push(flight);
+            setSelectedFlightBuffer(selectedFlightBuffer);
+            selectedDateBuffer.push(selectedStartDate);
+            setSelectedDateBuffer(selectedDateBuffer);
+            setSummaryModalOpen(true);
+            return;
         }
     }
     function renderContent() {
@@ -221,12 +257,20 @@ export default function Page() {
                         id={index.toString()}
                         airlineTimeStamp={flight.airlineTimeStamp}
                         priceCabinClass={flight.priceCabinClass}
-                        onClick={() => handleSelectFlightCard(index.toString())}
+                        onClick={() => handleSelectFlightCard(flight)}
                     />
                 )
             );
         }
     }
+
+    const resetState = () => {
+        setSelectedFlightBuffer([]);
+        setSelectedDateBuffer([]);
+        setSummaryModalOpen(false);
+        setFlightState("depart");
+        setSwap(false);
+    };
 
     return (
         <div
@@ -247,11 +291,24 @@ export default function Page() {
                         setSelectedStartDate={setSelectedStartDate}
                         selectedEndDate={selectedEndDate}
                         setSelectedEndDate={setSelectedEndDate}
+                        resetState={resetState}
                         onSearch={fetchData}
                     />
 
                     <div className="flex w-full gap-4">{renderContent()}</div>
                 </div>
+            </div>
+            <div>
+                <SummaryModal 
+                isOpen={isSummaryModalOpen}
+                onClose={() => {
+                    resetState();
+                }}
+                FlightType={selectedValues.flight}
+                ClassType={selectedValues.class}
+                selectedFlights={selectedFlightBuffer}
+                selectedDates={selectedDateBuffer}
+                />
             </div>
             {pageState === "initial" ? <Footer /> : null}
         </div>

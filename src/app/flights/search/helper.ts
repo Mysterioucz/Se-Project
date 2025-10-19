@@ -10,8 +10,8 @@ export interface FlightData {
     departCity: string;
     arrivalAirportID: string;
     arrivalCity: string;
-    departureTime: string; // "09:30"
-    arrivalTime: string; // "12:00"
+    departureTime: Date; // "09:30"
+    arrivalTime: Date; // "12:00"
     departHours: string;
     arrivalHours: string;
     duration: string; // "2h 30m"
@@ -28,18 +28,24 @@ export interface MappedFlightData {
     airlineTimeStamp: {
         airlineName: string;
         depart: {
+            date: Date;
             time: string;
             airport: string;
-            city: string; // You might need a mapping for cities
+            city: string;
         };
         arrive: {
+            date: Date;
             time: string;
             airport: string;
-            city: string; // You might need a mapping for cities
+            city: string; 
         };
         duration: string;
         stops: number;
     };
+    flightNo: string;
+    passengers: PassengerCount;
+    flightType: string;
+    classType: string;
     priceCabinClass: {
         price: number;
         currency: string;

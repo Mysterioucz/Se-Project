@@ -20,7 +20,7 @@ export default function CartItem({ item, isSelected, onSelect, onRemove } : {
                     onChange={() => onSelect(item.id)}
                 />
                 <div className="ml-2 font-bold text-xl text-white">
-                    {item.FlightType === 'One-way' ? 'One-way' : 'Round-Trip'}: {item.DepartureAirport} to {item.ArrivalAirport}
+                    {item.FlightType === 'One Way' ? 'One-way' : 'Round-Trip'}: {item.DepartureAirport} to {item.ArrivalAirport}
                 </div>
                 </div>
                 <button onClick={() => onRemove(item.id)} className="flex items-center text-lg text-red-600 hover:text-red-800 transition-colors mx-1">
@@ -33,7 +33,7 @@ export default function CartItem({ item, isSelected, onSelect, onRemove } : {
                 <div className="md:col-span-2">
                 <FlightDetail headerText="Depart" departAirport={item.DepartureAirport} arrivalAirport={item.ArrivalAirport} departCity={item.DepartureCity} arrivalCity={item.ArrivalCity} flight={item.Depart} />
 
-                { (item.FlightType == "Round-trip") &&
+                { (item.FlightType == "Round Trip") &&
                     <FlightDetail headerText="Return" departAirport={item.ArrivalAirport} arrivalAirport={item.DepartureAirport} departCity={item.ArrivalCity} arrivalCity={item.DepartureCity} flight={item.Return} />
                 }
                 </div>
