@@ -50,6 +50,9 @@ importers:
       '@tailwindcss/cli':
         specifier: ^4.1.13
         version: 4.1.13
+      KeyboardArrowDown:
+        specifier: link:@mui\icons-material\KeyboardArrowDown
+        version: link:@mui/icons-material/KeyboardArrowDown
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
