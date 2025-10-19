@@ -60,7 +60,6 @@ model Aircraft {
 
   // Relations
   airline Airline      @relation(fields: [AirlineName], references: [AirlineName])
-  seats   Seat[]
   flights Flight[]
   cabins  CabinClass[]
 }
@@ -88,6 +87,7 @@ model Flight {
   departCarts      Cart[] @relation("DepartFlight")
   returnCarts      Cart[] @relation("ReturnFlight")
   availableServices FlightService[]
+  seats   Seat[]
 
   @@id([FlightNo, DepartTime, ArrivalTime])
 }
@@ -142,7 +142,7 @@ model TicketService {
 model Ticket {
   TicketID          String   @id @db.VarChar(50)
   Price             Float //price of ticket
-  ServiceFee        Float //price of all additional services
+  ServiceFee        Float    @default(0) //price of all additional services
   TicketStatus      TicketStatus  @default(BOOKED)
   PassengerName     String
   PassengerLastName String
@@ -159,7 +159,7 @@ model Ticket {
 
   // Relations
   flight               Flight                @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
-  seat                 Seat                  @relation(fields: [AircraftRegNo, SeatNo], references: [AircraftRegNo, SeatNo])
+  seat                 Seat                  @relation(fields: [FlightNo, DepartTime, ArrivalTime, SeatNo], references: [FlightNo, DepartTime, ArrivalTIme, SeatNo])
   purchase             Purchase?
   domesticTicket       Domestic_Ticket?
   internationalTicket  International_Ticket?
@@ -233,16 +233,18 @@ model CabinClass {
 }
 
 model Seat {
-  AircraftRegNo String @db.VarChar(20)
+  FlightNo      String
+  DepartTime    DateTime
+  ArrivalTIme   DateTime
   SeatNo        String @db.VarChar(10)
   SeatType      String
   IsAvailable   Boolean @default(true) //update to false when ticket with seatno is created
 
   // Relations
-  aircraft Aircraft @relation(fields: [AircraftRegNo], references: [AircraftRegNo])
+  flight Flight @relation(fields:[FlightNo, DepartTime, ArrivalTIme], references: [FlightNo, DepartTime, ArrivalTime])
   tickets  Ticket[]
 
-  @@id([AircraftRegNo, SeatNo])
+  @@id([FlightNo, DepartTime, ArrivalTIme, SeatNo])
 }
 
 model Admin {
@@ -365,6 +367,7 @@ model Payment {
   PaymentEmail      String
   PaymentTelNo     String
   Amount            Float
+  BankName          String?
 
   // Relation
   purchase Purchase?

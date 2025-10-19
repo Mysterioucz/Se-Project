@@ -1,11 +1,11 @@
 "use client";
 import { TelArray } from "@data/mockTelPrefix";
-import SmallArrowDown from "../icons/fi-sr-angle-small-down.svg";
 import { useEffect, useRef, useState } from "react";
+import SmallArrowDown from "../icons/fi-sr-angle-small-down.svg";
 import ListChoice from "../list_choice";
 interface Props {
     value: string;
-    onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
+    onChange?: (event: React.ChangeEvent<{ value: string }>) => void;
     disabled?: boolean;
 }
 
