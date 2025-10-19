@@ -7,28 +7,52 @@ import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
 
+const TicketInputSchema = z.object({
+    Price: z.number().positive(),
+    ServiceFee: z.number().optional(),
+    PassengerName: z.string().min(1),
+    PassengerLastName: z.string().min(1),
+    Gender: z.string().min(1),
+    DateOfBirth: z.string().refine((v) => !isNaN(Date.parse(v)), {
+        message: "Invalid date",
+    }),
+    Nationality: z.string().min(1),
+    BaggageChecked: z.number().nonnegative(),
+    BaggageCabin: z.number().nonnegative(),
+    SeatNo: z.string().min(1),
+});
+
 const CreatePaymentSchema = z
     .object({
-        ticketId: z.string().trim().min(1, "ticketId is required"),
-        amount: z.number().positive("amount must be > 0"),
+        AircraftRegNo: z.string().min(1),
+        FlightNo: z.string().min(1),
+        DepartTime: z.string().refine((v) => !isNaN(Date.parse(v)), {
+            message: "Invalid DepartTime",
+        }),
+        ArrivalTime: z.string().refine((v) => !isNaN(Date.parse(v)), {
+            message: "Invalid ArrivalTime",
+        }),
+        Tickets: z.array(TicketInputSchema).min(1, "At least one ticket required"),
+
+        totalAmount: z.number().positive("amount must be > 0"),
         method: PaymentMethodSchema,
         status: PaymentStatusSchema.default("PAID"),
 
         paymentEmail: z.email("valid email required"),
 
         paymentTelNo: z
-        .string()
-        .trim()
-        .min(5, "tel too short")
-        .max(20, "tel too long")
-        .regex(/^[0-9+\-()\s]+$/, "tel format invalid"),
+            .string()
+            .trim()
+            .min(5, "tel too short")
+            .max(20, "tel too long")
+            .regex(/^[0-9+\-()\s]+$/, "tel format invalid"),
 
         bankName: z
-        .string()
-        .trim()
-        .min(2, "bankName must be at least 2 characters")
-        .optional()
-        .transform((v) => (v === "" ? undefined : v)),
+            .string()
+            .trim()
+            .min(2, "bankName must be at least 2 characters")
+            .optional()
+            .transform((v) => (v === "" ? undefined : v)),
     })
     .superRefine((v, ctx) => {
         // Require bankName when method is ONLINE_BANKING
@@ -52,77 +76,140 @@ export async function POST(request: NextRequest) {
     }
 
     // The accountId is securely obtained from the session object.
-    const accountId = String(session.user.id);
+    const UserAccountID = String(session.user.id);
     
     try {
-        const { ticketId, amount, method, status, paymentEmail, paymentTelNo, bankName } = CreatePaymentSchema.parse(await request.json());
-
-        // Validate entities (ticket exists, not already purchased)
-        const ticket = await prisma.ticket.findUnique({ where: { TicketID: ticketId } });
-        if (!ticket) {
-            return NextResponse.json(
-                { error: {code: "TICKET_NOT_FOUND", message:ErrorMessages.NOT_FOUND } },
-                { status: 404}
-            );
-        }
-
-        const existingPurchase = await prisma.purchase.findUnique({
-            where: { TicketID: ticketId }, 
-        });
+        const parsed = CreatePaymentSchema.parse(await request.json());
+        const {
+            AircraftRegNo,
+            FlightNo,
+            DepartTime,
+            ArrivalTime,
+            Tickets,
+            totalAmount,
+            method,
+            status,
+            paymentEmail,
+            paymentTelNo,
+            bankName,
+        } = parsed;
         
-        if (existingPurchase) {
-            return NextResponse.json(
-                { error: { code: "ALREADY_PURCHASED", message: "Ticket already purchased." } },
-                { status: 409 }
-            );
-        }
+        // As the tickets were never created, we don't need this
+        // Validate entities (ticket exists, not already purchased)
+        // const ticket = await prisma.ticket.findUnique({ where: { TicketID: ticketId } });
+        // if (!ticket) {
+        //     return NextResponse.json(
+        //         { error: {code: "TICKET_NOT_FOUND", message:ErrorMessages.NOT_FOUND } },
+        //         { status: 404}
+        //     );
+        // }
 
-        //Create payment and purchase 
+        // const existingPurchase = await prisma.purchase.findUnique({
+        //     where: { TicketID: ticketId }, 
+        // });
+        
+        // if (existingPurchase) {
+        //     return NextResponse.json(
+        //         { error: { code: "ALREADY_PURCHASED", message: "Ticket already purchased." } },
+        //         { status: 409 }
+        //     );
+        // }
+
+        // Create payment and purchase 
         const paymentId = `pay_${crypto.randomUUID()}`;
 
         const result = await prisma.$transaction(async (tx) => {
+            // Create tickets
+            const createdTickets = await Promise.all(
+                Tickets.map((ticket) =>
+                tx.ticket.create({
+                    data: {
+                        Price: ticket.Price,
+                        ServiceFee: ticket.ServiceFee,
+                        PassengerName: ticket.PassengerName,
+                        PassengerLastName: ticket.PassengerLastName,
+                        Gender: ticket.Gender,
+                        DateOfBirth: new Date(ticket.DateOfBirth),
+                        Nationality: ticket.Nationality,
+                        BaggageChecked: ticket.BaggageChecked,
+                        BaggageCabin: ticket.BaggageCabin,
+                        SeatNo: ticket.SeatNo,
+                        AircraftRegNo,
+                        FlightNo,
+                        DepartTime: new Date(DepartTime),
+                        ArrivalTime: new Date(ArrivalTime),
+                    },
+                })
+                )
+            );
+
+            // Decrease available seats
+            await tx.flight.updateMany({
+                where: {
+                FlightNo,
+                DepartTime: new Date(DepartTime),
+                ArrivalTime: new Date(ArrivalTime),
+                },
+                data: {
+                AvailableSeat: {
+                    decrement: Tickets.length,
+                },
+                },
+            });
+
+            // Mark seats unavailable
+            await Promise.all(
+                Tickets.map((ticket) =>
+                tx.seat.updateMany({
+                    where: {
+                    FlightNo,
+                    DepartTime: new Date(DepartTime),
+                    ArrivalTime: new Date(ArrivalTime),
+                    SeatNo: ticket.SeatNo,
+                    },
+                    data: {
+                    IsAvailable: false,
+                    },
+                })
+                )
+            );
+
+            // Create Payment
             const payment = await tx.payment.create({
                 data: {
-                PaymentID: paymentId,
-                PaymentDateTime: new Date(),
-                PaymentMethod: method,           
-                TransactionStatus: status, 
-                PaymentEmail: paymentEmail,
-                PaymentTelNo: paymentTelNo,      
-                Amount: amount,
-                BankName: method === "ONLINE_BANKING" ? bankName : null,                  
-
+                    PaymentID: paymentId,
+                    PaymentDateTime: new Date(),
+                    PaymentMethod: method,           
+                    TransactionStatus: status, 
+                    PaymentEmail: paymentEmail,
+                    PaymentTelNo: paymentTelNo,      
+                    Amount: totalAmount,
+                    BankName: method === "ONLINE_BANKING" ? bankName : null,                  
                 },
             });
 
-            const purchase = await tx.purchase.create({
-                data: {
-                TicketID: ticketId,
-                PaymentID: payment.PaymentID,
-                UserAccountID: accountId,
-                },
-            });
+            // Create purchases for all tickets
+            const purchases = await Promise.all(
+                createdTickets.map((ticket) =>
+                tx.purchase.create({
+                    data: {
+                        TicketID: ticket.TicketID,
+                        PaymentID: payment.PaymentID,
+                        UserAccountID,
+                    },
+                })
+                )
+            );
 
-            return { payment, purchase };
+            return { payment, createdTickets, purchases };
         });
 
         return NextResponse.json({
             success: true,
             data: {
-            payment: {
-                id: result.payment.PaymentID,
-                dateTime: result.payment.PaymentDateTime,
-                method: result.payment.PaymentMethod,
-                status: result.payment.TransactionStatus,
-                email: result.payment.PaymentEmail,
-                telNo: result.payment.PaymentTelNo,
-                amount: result.payment.Amount,
-            },
-            purchase: {
-                ticketId,
-                paymentId: result.payment.PaymentID,
-                userAccountId: accountId,
-            },
+                payment: result.payment,
+                tickets: result.createdTickets,
+                purchases: result.purchases,
             },
         },{ 
             status: 201, 
