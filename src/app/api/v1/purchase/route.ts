@@ -114,14 +114,3 @@ export async function POST(
             }),
             { status: 200 }
         );
-    } catch (error) {
-        console.error(error);
-        return new Response(
-            JSON.stringify({
-                success: false,
-                message: ErrorMessages.SERVER,
-            }),
-            { status: 500 }
-        );
-    }
-}

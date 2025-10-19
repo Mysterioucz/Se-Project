@@ -158,7 +158,6 @@ model Ticket {
   FlightNo          String
   DepartTime        DateTime
   ArrivalTime       DateTime
-  UserAccountID     String
 
   // Relations
   flight               Flight                @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
@@ -169,7 +168,6 @@ model Ticket {
   roundTripTicketPart1 Round_Trip_Ticket?    @relation("RoundTrip1")
   roundTripTicketPart2 Round_Trip_Ticket?    @relation("RoundTrip2")
   bookedServices       TicketService[] //services booked with this ticket
-  account              User                  @relation(fields: [UserAccountID], references: [UserAccountID])
   reports              Report[]
 }
 
@@ -291,7 +289,6 @@ model User {
 
   // Relations
   account           Account       @relation(fields: [UserAccountID], references: [AccountID])
-  tickets           Ticket[]
   telNos            User_Tel_No[]
   assignedFlights   Assigned_To[]
   purchases         Purchase[]
