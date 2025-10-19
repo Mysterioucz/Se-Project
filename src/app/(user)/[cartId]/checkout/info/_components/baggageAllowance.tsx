@@ -1,4 +1,5 @@
 "use client";
+import { useCheckout } from "@/src/contexts/CheckoutContext";
 import SelectComponent from "@components/select";
 import { MenuItem } from "@mui/material";
 import Image from "next/image";
@@ -25,6 +26,27 @@ interface ServiceProps {
     onChange?: (baggageSelections: string[]) => void;
 }
 
+export const baggageOptions = [
+    { label: "Not Included", value: "Not Included" },
+    { label: "+5 kg - ฿240.00", value: "+5kg, ฿240.00" },
+    { label: "+10 kg - ฿325.00", value: "+10kg, ฿325.00" },
+    { label: "+15 kg - ฿450.00", value: "+15kg, ฿450.00" },
+    { label: "+20 kg - ฿490.00", value: "+20kg, ฿490.00" },
+    { label: "+25 kg - ฿595.00", value: "+25kg, ฿595.00" },
+];
+
+async function fetchAdditionalServices() {
+    // Placeholder for fetching additional services if needed
+    const services = await fetch('/api/v1/flights/lookup?flightNo=...&departTime=...&arrivalTime=...');
+    return services.json();
+}
+
+async function getAdditionalServices() {
+    // Placeholder for fetching additional services if needed
+    const services = await fetchAdditionalServices();
+    return services.json();
+}
+
 function DepartureAdditionalService({
     passengers,
     departurePlace,
@@ -32,8 +54,13 @@ function DepartureAdditionalService({
     initialCheckedBaggage,
     onChange,
 }: ServiceProps) {
+    const { checkoutData, updateCheckoutData, cartData } = useCheckout();
+    console.log(cartData);
     const [selectedOptions, setSelectedOptions] = useState<string[]>(
-        Array(passengers.length).fill("Not Included"),
+        checkoutData.passengerData.map((passenger) => {
+            const baggage = passenger.baggageAllowance.departureBaggage;
+            return baggage > 0 ? `1 x ${baggage} kg` : "Not Included";
+        }),
     );
 
     const handleOptionChange = (index: number, value: string) => {

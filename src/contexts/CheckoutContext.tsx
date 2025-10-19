@@ -1,6 +1,8 @@
 "use client";
 
+import { getSession } from "next-auth/react";
 import React, { createContext, useContext, useState } from "react";
+import { Cart } from "../generated/prisma";
 
 interface Payment {
     isPaymentValid: boolean;
@@ -51,6 +53,7 @@ type CheckoutContextType = {
         passengerPatch: Partial<PassengerData>,
     ) => void;
     clearCheckoutData: () => void; // after successful payment
+    cartData: Promise<Cart>;
 };
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(
@@ -94,6 +97,22 @@ const initialCheckoutData: CheckoutPayload = {
     },
 };
 
+async function fetchCartData() {
+    const session = await getSession();
+    const userId = session?.user?.id;
+    const response = await fetch(`/api/v1/cart/${userId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        cache: "no-store",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch cart data");
+    }
+    return response.json();
+}
+
 function getInitialCheckoutData(): CheckoutPayload {
     if (typeof window !== "undefined") {
         const storedData = localStorage.getItem(CHECKOUT_STORAGE_KEY);
@@ -111,11 +130,16 @@ function getInitialCheckoutData(): CheckoutPayload {
     return initialCheckoutData;
 }
 
-
-export function CheckoutProvider({ children }: { children: React.ReactNode }) {
+export function CheckoutProvider({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     const [checkoutData, setCheckoutData] = useState<CheckoutPayload>(
         getInitialCheckoutData(),
     );
+    const cartData = fetchCartData();
+
     const updateCheckoutData = (data: Partial<CheckoutPayload>) => {
         setCheckoutData((prev) => {
             const updatedData = { ...prev, ...data };
@@ -184,6 +208,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
                 updateCheckoutData,
                 clearCheckoutData,
                 updatePassengerAt,
+                cartData
             }}
         >
             {children}

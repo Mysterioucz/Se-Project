@@ -8,16 +8,8 @@ import { checkoutPaths, isCheckoutPath } from "./helper";
 export default function FooterButton() {
     const pathname = usePathname();
     const router = useRouter();
-    const {
-        isPaymentValid,
-        setIsPaymentValid,
-        isContactValid,
-        setIsContactValid,
-        isQRmethod,
-        setQRmethod,
-        isQRModalOpen,
-        setQRModalOpen,
-    } = useCheckout();
+    const { checkoutData, updateCheckoutData } = useCheckout();
+    const { isPaymentValid, isContactValid, isQRmethod } = checkoutData.payment;
 
     const prefixButtonText = new Map<string, string>([
         ["/checkout/info", "Cancel"],
@@ -29,6 +21,17 @@ export default function FooterButton() {
         ["/checkout/seat", "Go to make payment"],
         ["/checkout/payment", "Confirm Payment"],
     ]);
+
+    const setQRModalOpen = (isOpen: boolean) => {
+        // This function would ideally update the QR modal state in the context
+        // but for this snippet, we will leave it as a placeholder.
+        updateCheckoutData({
+            payment: {
+                ...checkoutData.payment,
+                isQRModalOpen: isOpen,
+            },
+        });
+    };
 
     const handleBackButton = () => {
         if (isCheckoutPath(pathname)) {
@@ -44,8 +47,7 @@ export default function FooterButton() {
         if (isCheckoutPath(pathname)) {
             if (isQRmethod) {
                 setQRModalOpen(true);
-            }
-            else {
+            } else {
                 router.push(checkoutPaths[checkoutPaths.indexOf(pathname) + 1]);
             }
         }
