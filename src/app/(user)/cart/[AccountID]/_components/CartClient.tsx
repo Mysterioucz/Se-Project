@@ -18,12 +18,19 @@ export default function CartClient({ initialCartData, AccountID }: { initialCart
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 
     const handleSelectItem = (id:number) => {
-        const newSelectedIds = new Set(selectedIds);
-        if (newSelectedIds.has(id)) {
-            newSelectedIds.delete(id);
-        } else {
-            newSelectedIds.add(id);
+        if (selectedIds.size >= 1 && ! selectedIds.has(id)) {
+            alert("Please select no more than one flight to check out");
+            return;
         }
+
+        const newSelectedIds = new Set(selectedIds);
+
+        if (newSelectedIds.has(id)) {
+            newSelectedIds.delete(id); // unselect if clicked again
+        } else {
+            newSelectedIds.add(id); // select if none selected yet
+        }
+
         setSelectedIds(newSelectedIds);
     };    
 
