@@ -149,8 +149,8 @@ export async function GET(req: NextRequest) {
                             arrivalAirportID: flight.ArrivalAirportID,
                             departCity: departureCity,       // <-- Added
                             arrivalCity: arrivalCity,      // <-- Added
-                            departureTime: flight.DepartTime,
-                            arrivalTime: flight.ArrivalTime,
+                            departureTime: flight.DepartTime, // Date Type
+                            arrivalTime: flight.ArrivalTime, // Date Type
                             departHours,
                             arrivalHours,
                             duration: formattedDuration,

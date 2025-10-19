@@ -5,26 +5,15 @@ import ModalDeleteAccount from "@components/modals/modal_delete_account";
 import ModalSignOut from "@components/modals/modal_sign_out";
 import SelectComponent from "@components/select";
 import TextFieldComponent from "@components/text_field";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { MenuItem } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import z from "zod";
 
 export default function ProfileCard() {
-    const { data: session, update: updateSession } = useSession();
-    // console.log("Session data in ProfileCard:", session);
-    const userEmail = session?.user?.email;
-    const userFirstName = session?.user?.name?.split(" ")[0] ?? "";
-    const userLastName = session?.user?.name?.split(" ")[1] ?? "";
-
-    const [language, setLanguage] = React.useState("");
-    const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
-    const [firstName, setFirstName] = React.useState(userFirstName);
-    const [lastName, setLastName] = React.useState(userLastName);
-
-    const accountId = session?.user?.id;
-
     // Function to update user name via API and refresh session
     async function updateName(
         updateFirstName?: string,
@@ -46,13 +35,7 @@ export default function ProfileCard() {
                 if (data.data.LastName) setLastName(data.data.LastName);
 
                 // Refresh session so session.user.name updates immediately
-                // console.log("Updating session with:", {
-                //     user: {
-                //         name: `${updateFirstName || firstName} ${
-                //             updateLastName || lastName
-                //         }`,
-                //     },
-                // });
+
                 if (
                     data.data.FirstName !== firstName ||
                     data.data.LastName !== lastName
@@ -72,6 +55,114 @@ export default function ProfileCard() {
             console.error("Error updating user:", err);
         }
     }
+    // Example Zod schema for form validation
+    const accountSchema = z.object({
+        firstName: z
+            .string()
+            .min(2, "First name must be at least 2 characters")
+            .max(100, "First name must be at most 100 characters")
+            .nonempty("First name is required"),
+        lastName: z
+            .string()
+            .min(2, "Last name must be at least 2 characters")
+            .max(100, "Last name must be at most 100 characters")
+            .nonempty("Last name is required"),
+    });
+    // Infer the form data type from the schema
+    type accountData = z.infer<typeof accountSchema>;
+
+    const { data: session, update: updateSession } = useSession();
+
+    const userEmail = session?.user?.email;
+    const userFirstName = session?.user?.name?.split(" ")[0] ?? "";
+    const userLastName = session?.user?.name?.split(" ")[1] ?? "";
+
+    // Example usage of RHF with Zod
+    const { control, handleSubmit, trigger, setValue } = useForm<accountData>({
+        resolver: zodResolver(accountSchema),
+        defaultValues: { firstName: userFirstName, lastName: userLastName },
+        mode: "onChange",
+    });
+
+    const onSubmit = handleSubmit((data) => {
+        updateName(data.firstName, data.lastName);
+    });
+
+    const [language, setLanguage] = React.useState("");
+    const [isSignOutModalOpen, setIsSignOutModalOpen] = React.useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+    const [firstName, setFirstName] = React.useState(userFirstName);
+    const [lastName, setLastName] = React.useState(userLastName);
+
+    function InputField(
+        name: "firstName" | "lastName",
+        value: string,
+        placeholder: string,
+        label: string,
+    ) {
+        return (
+            <div className="flex flex-1 flex-col gap-[0.75rem]">
+                <Controller
+                    name={name}
+                    control={control}
+                    defaultValue={value}
+                    render={({ field, fieldState }) => (
+                        // Example usage of TextFieldComponent with RHF
+                        <TextFieldComponent
+                            ref={field.ref}
+                            label={label}
+                            textValue={field.value} // keep for internal sync (optional)
+                            placeHolder={placeholder}
+                            disabled={true}
+                            error={fieldState.invalid}
+                            helperText={fieldState.error?.message}
+                            icon={
+                                <img
+                                    src="/profile-card/fi-sr-pencil.svg"
+                                    alt="toggle"
+                                    className="w-5 h-5"
+                                />
+                            }
+                            // map your component's onChange payload to field.onChange
+                            onChange={(val) => {
+                                // v may be unknown from the component; cast to the expected event shape
+                                field.onChange(val.text);
+                            }}
+                            // when the user submits the inline edit, also update the server
+                            onSubmit={async (val) => {
+                                const submittedText = val.text;
+                                const ok = await trigger(name);
+                                if (ok) {
+                                    await updateName(
+                                        name === "firstName"
+                                            ? submittedText
+                                            : undefined,
+                                        name === "lastName"
+                                            ? submittedText
+                                            : undefined,
+                                    );
+                                } else {
+                                    // revert form value and UI to last known good value
+                                    setValue(
+                                        name,
+                                        name === "firstName"
+                                            ? firstName
+                                            : lastName,
+                                        {
+                                            shouldValidate: false,
+                                            shouldDirty: false,
+                                        },
+                                    );
+                                }
+                            }}
+                        />
+                    )}
+                />
+            </div>
+        );
+    }
+
+    const accountId = session?.user?.id;
 
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
@@ -95,50 +186,23 @@ export default function ProfileCard() {
 
                 <div className="flex flex-col gap-[2rem]">
                     <div className="flex flex-col gap-[0.75rem]">
-                        <div className="flex flex-row gap-[3.5rem]">
-                            <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <TextFieldComponent
-                                    label="First Name"
-                                    textValue={firstName}
-                                    placeHolder={firstName}
-                                    disabled={true}
-                                    icon={
-                                        <img
-                                            src="/profile-card/fi-sr-pencil.svg"
-                                            alt="toggle"
-                                            className="w-5 h-5"
-                                        />
-                                    }
-                                    onSubmit={(val) => {
-                                        const { text } = val as {
-                                            text: string;
-                                        };
-                                        updateName(text); // update first name only
-                                    }}
-                                />
-                            </div>
-                            <div className="flex flex-1 flex-col gap-[0.75rem]">
-                                <TextFieldComponent
-                                    label="Last Name"
-                                    textValue={lastName}
-                                    placeHolder={lastName}
-                                    disabled={true}
-                                    icon={
-                                        <img
-                                            src="/profile-card/fi-sr-pencil.svg"
-                                            alt="toggle"
-                                            className="w-5 h-5"
-                                        />
-                                    }
-                                    onSubmit={(val) => {
-                                        const { text } = val as {
-                                            text: string;
-                                        };
-                                        updateName(undefined, text); // update last name only
-                                    }}
-                                />
-                            </div>
-                        </div>
+                        <form
+                            className="flex flex-row gap-[3.5rem]"
+                            onSubmit={onSubmit}
+                        >
+                            {InputField(
+                                "firstName",
+                                firstName,
+                                "Enter your first name",
+                                "First Name",
+                            )}
+                            {InputField(
+                                "lastName",
+                                lastName,
+                                "Enter your last name",
+                                "Last Name",
+                            )}
+                        </form>
 
                         <div className="flex flex-row gap-[3.5rem]">
                             <div className="flex flex-1 flex-col gap-[0.75rem]">
