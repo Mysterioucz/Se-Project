@@ -43,9 +43,10 @@ export async function GET(req: NextRequest) {
           }
         },
         seats: {
-          where: {
-            IsAvailable: true
-          },
+          // It should retrieve both available and unavailable
+          // where: {
+          //   IsAvailable: true
+          // },
           select: {
             SeatNo: true,
             SeatType: true,

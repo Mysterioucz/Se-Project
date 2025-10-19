@@ -160,7 +160,7 @@ model Ticket {
 
   // Relations
   flight               Flight                @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
-  seat                 Seat                  @relation(fields: [FlightNo, DepartTime, ArrivalTime, SeatNo], references: [FlightNo, DepartTime, ArrivalTIme, SeatNo])
+  seat                 Seat                  @relation(fields: [FlightNo, DepartTime, ArrivalTime, SeatNo], references: [FlightNo, DepartTime, ArrivalTime, SeatNo])
   purchase             Purchase?
   domesticTicket       Domestic_Ticket?
   internationalTicket  International_Ticket?
@@ -238,16 +238,16 @@ model CabinClass {
 model Seat {
   FlightNo      String
   DepartTime    DateTime
-  ArrivalTIme   DateTime
+  ArrivalTime   DateTime
   SeatNo        String @db.VarChar(10)
   SeatType      String
   IsAvailable   Boolean @default(true) //update to false when ticket with seatno is created
 
   // Relations
-  flight Flight @relation(fields:[FlightNo, DepartTime, ArrivalTIme], references: [FlightNo, DepartTime, ArrivalTime])
+  flight Flight @relation(fields:[FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
   tickets  Ticket[]
 
-  @@id([FlightNo, DepartTime, ArrivalTIme, SeatNo])
+  @@id([FlightNo, DepartTime, ArrivalTime, SeatNo])
 }
 
 model Admin {

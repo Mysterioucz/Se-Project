@@ -32,31 +32,70 @@ export async function POST(
     }
 
     try {
-        const createdTickets = await prisma.ticket.createMany({
-            data: Tickets.map((ticket: any) => ({
-                Price: ticket.price,
-                ServiceFee: ticket.ServiceFee,
-                PassengerName: ticket.PassengerName,
-                PassengerLastName: ticket.PassengerLastName,
-                Gender: ticket.Gender,
-                DateOfBirth: new Date(ticket.DateOfBirth),
-                Nationality: ticket.Nationality,
-                BaggageChecked: ticket.BaggageChecked,
-                BaggageCabin: ticket.BaggageCabin,
-                SeatNo: ticket.SeatNo,
-                AircraftRegNo,
+        const createdTickets = await prisma.$transaction(async (tx) => {
+            // Create all tickets
+            const ticketsCreated = await Promise.all(
+                Tickets.map((ticket: any) =>
+                tx.ticket.create({
+                    data: {
+                    Price: ticket.Price,
+                    ServiceFee: ticket.ServiceFee,
+                    PassengerName: ticket.PassengerName,
+                    PassengerLastName: ticket.PassengerLastName,
+                    Gender: ticket.Gender,
+                    DateOfBirth: new Date(ticket.DateOfBirth),
+                    Nationality: ticket.Nationality,
+                    BaggageChecked: ticket.BaggageChecked,
+                    BaggageCabin: ticket.BaggageCabin,
+                    SeatNo: ticket.SeatNo,
+                    AircraftRegNo,
+                    FlightNo,
+                    DepartTime: new Date(DepartTime),
+                    ArrivalTime: new Date(ArrivalTime),
+                    UserAccountID,
+                    },
+                })
+                )
+            );
+
+            // Decrease AvailableSeat in Flight
+            await tx.flight.updateMany({
+                where: {
                 FlightNo,
                 DepartTime: new Date(DepartTime),
                 ArrivalTime: new Date(ArrivalTime),
-                UserAccountID,
-            })),
-        });
+                },
+                data: {
+                AvailableSeat: {
+                    decrement: Tickets.length,
+                },
+                },
+            });
+
+            // Update Seat availability to false
+            await Promise.all(
+                Tickets.map((ticket: any) =>
+                    tx.seat.updateMany({
+                            where: {
+                            FlightNo,
+                            DepartTime: new Date(DepartTime),
+                            ArrivalTime: new Date(ArrivalTime),
+                            SeatNo: ticket.SeatNo,
+                        },
+                        data: {
+                        IsAvailable: false,
+                        },
+                    })
+                )
+            );
+
+            return ticketsCreated;
+            });
 
         return new Response(
             JSON.stringify({
                 success: true,
                 data: {
-                    createdCount: createdTickets.count,
                     createdTickets: createdTickets
                 },
             }),
