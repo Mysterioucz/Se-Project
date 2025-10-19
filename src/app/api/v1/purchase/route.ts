@@ -4,6 +4,19 @@ import { nextAuthOptions } from "@/src/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 
+interface TicketInput {
+    Price: number;
+    ServiceFee?: number;
+    PassengerName: string;
+    PassengerLastName: string;
+    Gender: string;
+    DateOfBirth: string; // string from JSON, will be converted to Date
+    Nationality: string;
+    BaggageChecked: number;
+    BaggageCabin: number;
+    SeatNo: string;
+}
+
 export async function POST(
     req: NextRequest,
 ) {
@@ -35,7 +48,7 @@ export async function POST(
         const createdTickets = await prisma.$transaction(async (tx) => {
             // Create all tickets
             const ticketsCreated = await Promise.all(
-                Tickets.map((ticket: any) =>
+                Tickets.map((ticket: TicketInput) =>
                 tx.ticket.create({
                     data: {
                     Price: ticket.Price,
@@ -74,7 +87,7 @@ export async function POST(
 
             // Update Seat availability to false
             await Promise.all(
-                Tickets.map((ticket: any) =>
+                Tickets.map((ticket: TicketInput) =>
                     tx.seat.updateMany({
                             where: {
                             FlightNo,

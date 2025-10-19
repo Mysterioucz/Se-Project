@@ -1,6 +1,6 @@
 import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 //@desc     Get additional services and seat availability for a specific flight
 //@route    GET /api/v1/flights/lookup?flightNo=...&departTime=...&arrivalTime=...
