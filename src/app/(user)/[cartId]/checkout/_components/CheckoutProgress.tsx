@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const steps = [
@@ -11,6 +11,7 @@ const steps = [
 
 export default function CheckoutProgress() {
     const pathname = usePathname();
+    const cartId = useParams().cartId;
     const [currentStep, setCurrentStep] = useState("info");
 
     useEffect(() => {
@@ -26,7 +27,7 @@ export default function CheckoutProgress() {
     const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
 
     function clickNode(stepId: string) {
-        router.push(`/checkout/${stepId}`);
+        router.push(`/${cartId}/checkout/${stepId}`);
     }
 
     function nodeContainer(step: (typeof steps)[number], index: number) {

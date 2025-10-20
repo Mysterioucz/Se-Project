@@ -1,7 +1,6 @@
 "use client";
 
 import TextFieldComponent from "@components/text_field";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,16 +38,19 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
             userTel: "",
         },
     });
-
-    const values = watch();
-
-    useEffect(() => {
-        onStatusChange(isValid);
-    }, [isValid, onStatusChange]);
-    
     const onSubmit = (data: ContactFormData) => {
         console.log("✅ Valid data:", data);
     };
+
+    const values = watch();
+
+    const computeIsReady = (email: string, tel: string) => {
+        const isEmailFilled = email.trim() !== "";
+        const isTelFilled = tel.trim() !== "";
+        return isEmailFilled && isTelFilled;
+    };
+
+    // Notify parent synchronously when fields change via the onSubmit handlers below.
 
     return (
         <form

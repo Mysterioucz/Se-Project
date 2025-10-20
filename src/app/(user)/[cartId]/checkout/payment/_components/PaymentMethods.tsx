@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BankSelect, { BankOption } from "./BankSelect";
 
 interface PaymentMethodsProps {
@@ -16,19 +16,23 @@ export default function PaymentMethods({
     const [selected, setSelected] = useState("mobile");
     const [bank, setBank] = useState("");
 
-    useEffect(() => {
-        onQRmethodChange(selected === "qr");
-    }, [selected, onQRmethodChange]);
+    // Notify parent of current method and validity synchronously when handlers run.
+    // Avoid useEffect by calling the callbacks from the event handlers below.
 
-    useEffect(() => {
-        let isValid = false;
-        if (selected === "mobile") {
-            isValid = bank !== "";
-        } else if (selected === "qr") {
-            isValid = true;
-        }
-        onStatusChange(isValid);
-    }, [selected, bank, onStatusChange]);
+    const notifyMethodChange = (method: string) => {
+        console.log("Method changed to:", method);
+        onQRmethodChange(method === "qr");
+    };
+
+    const computeIsValid = (method: string, bankValue: string) => {
+        if (method === "mobile") return bankValue !== "";
+        if (method === "qr") return true;
+        return false;
+    };
+
+    const notifyStatusChange = (method: string, bankValue: string) => {
+        onStatusChange(computeIsValid(method, bankValue));
+    };
 
     return (
         <div className="flex flex-col gap-[1.5rem] w-full">
@@ -46,7 +50,12 @@ export default function PaymentMethods({
                         name="payment"
                         value="mobile"
                         checked={selected === "mobile"}
-                        onChange={(e) => setSelected(e.target.value)}
+                        onChange={(e) => {
+                            const v = e.target.value;
+                            setSelected(v);
+                            notifyMethodChange(v);
+                            notifyStatusChange(v, bank);
+                        }}
                         className="w-[1.25rem] h-[1.25rem] accent-[var(--color-primary-500)]"
                     />
                     <span className="text-[1.125rem] font-semibold text-[var(--color-primary-900)]">
@@ -58,9 +67,11 @@ export default function PaymentMethods({
                 {selected === "mobile" && (
                     <BankSelect
                         value={bank}
-                        onChange={(e) =>
-                            setBank((e.target as HTMLInputElement).value)
-                        }
+                        onChange={(e) => {
+                            const val = (e.target as HTMLInputElement).value;
+                            setBank(val);
+                            notifyStatusChange(selected, val);
+                        }}
                         placeholder="Select Bank"
                         renderSelected={(
                             selected: string,
@@ -98,7 +109,12 @@ export default function PaymentMethods({
                         name="payment"
                         value="qr"
                         checked={selected === "qr"}
-                        onChange={(e) => setSelected(e.target.value)}
+                        onChange={(e) => {
+                            const v = e.target.value;
+                            setSelected(v);
+                            notifyMethodChange(v);
+                            notifyStatusChange(v, bank);
+                        }}
                         className="w-[1.25rem] h-[1.25rem] accent-[var(--color-primary-500)]"
                     />
                     <span className="text-[1.125rem] font-semibold text-[var(--color-primary-900)]">
