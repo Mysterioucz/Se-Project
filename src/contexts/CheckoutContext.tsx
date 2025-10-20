@@ -3,6 +3,7 @@
 import { getSession } from "next-auth/react";
 import React, { createContext, useContext, useState } from "react";
 import { Cart } from "../generated/prisma";
+import { useParams } from "next/navigation";
 
 interface Payment {
     isPaymentValid: boolean;
@@ -100,7 +101,8 @@ const initialCheckoutData: CheckoutPayload = {
 async function fetchCartData() {
     const session = await getSession();
     const userId = session?.user?.id;
-    const response = await fetch(`/api/v1/cart/${userId}`, {
+    const cartId = useParams().cartId;
+    const response = await fetch(`/api/v1/cart/${userId}/${cartId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
