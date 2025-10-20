@@ -124,8 +124,9 @@ export async function POST(request: NextRequest) {
                 Tickets.map((ticket) =>
                 tx.ticket.create({
                     data: {
+                        TicketID: `tic_${crypto.randomUUID()}`,
                         Price: ticket.Price,
-                        ServiceFee: ticket.ServiceFee,
+                        ServiceFee: ticket.ServiceFee ?? 0,
                         PassengerName: ticket.PassengerName,
                         PassengerLastName: ticket.PassengerLastName,
                         Gender: ticket.Gender,
@@ -235,4 +236,61 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+}
+
+//GET /api/v1/payments?userId=...
+// GET /api/v1/payments (no auth check)
+
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url);
+  const requestedUserId = url.searchParams.get("userId");
+
+  if (!requestedUserId) {
+    return NextResponse.json(
+      { success: false, message: "Missing userId query parameter" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const payments = await prisma.payment.findMany({
+      where: {
+        purchase: {
+          UserAccountID: requestedUserId,
+        },
+      },
+      orderBy: { PaymentDateTime: "desc" },
+      include: {
+        purchase: true,
+      },
+    });
+
+    const data = payments.map((p) => ({
+      id: p.PaymentID,
+      dateTime: p.PaymentDateTime,
+      method: p.PaymentMethod,
+      status: p.TransactionStatus,
+      email: p.PaymentEmail,
+      telNo: p.PaymentTelNo,
+      bankName: (p).BankName ?? null,
+      amount: p.Amount,
+      purchase: p.purchase
+        ? {
+            ticketId: p.purchase.TicketID,
+            userAccountId: p.purchase.UserAccountID,
+          }
+        : null,
+    }));
+
+    return NextResponse.json(
+      { success: true, data },
+      { status: 200, headers: { "Cache-Control": "no-store" } }
+    );
+  } catch (err: unknown) {
+    console.error("Error fetching payments:", err);
+    return NextResponse.json(
+      { success: false, message: ErrorMessages.SERVER },
+      { status: 500 }
+    );
+  }
 }
