@@ -32,17 +32,17 @@ async function fetchCartData(cartId: number): Promise<Cart> {
     return response.json();
 }
 
-async function fetchFlightLookupByFlightNo(flightNo: string) {
+async function fetchFlightLookup(flightNo: string, departTime: string, arrivalTime: string) {
     const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}&departTime=${encodeURIComponent(
+            departTime
+        )}&arrivalTime=${encodeURIComponent(arrivalTime)}`,
         { cache: "no-store" }
     );
 
     if (!res.ok) throw new Error("Failed to fetch flight info");
-
     const data = await res.json();
     if (!data.success) throw new Error(data.error || "Flight lookup failed");
-
     return data.data.flight;
 }
 
@@ -55,25 +55,23 @@ export async function fetchBookingInfo(cartId: number): Promise<BookingInfoProps
 
     let departureCity = "Departure City Placeholder";
     let arrivalCity = "Arrival City Placeholder";
-    let departureFlightNo = cartData.DepartFlightNo;
 
-    if (cartData.DepartFlightNo) {
+    if (cartData.DepartFlightNo && departStart && departEnd) {
         try {
-            const flightInfoArray = await fetchFlightLookupByFlightNo(cartData.DepartFlightNo);
-
-            if (Array.isArray(flightInfoArray) && flightInfoArray.length > 0) {
-                const f = flightInfoArray[0]; // ใช้ flight ตัวแรก หรือ filter nearest time
-                departureCity = f.DepartureCity || departureCity;
-                arrivalCity = f.ArrivalCity || arrivalCity;
-                departureFlightNo = f.Depart.FlightNo || departureFlightNo;
-            }
+            const flightInfo = await fetchFlightLookup(
+                cartData.DepartFlightNo,
+                departStart.toISOString(),
+                departEnd.toISOString()
+            );
+            departureCity = flightInfo.departureAirport || departureCity;
+            arrivalCity = flightInfo.arrivalAirport || arrivalCity;
         } catch (err) {
             console.warn("Failed to fetch departure flight info:", err);
         }
     }
 
     const departure: Flight = {
-        flightNumber: departureFlightNo,
+        flightNumber: cartData.DepartFlightNo,
         departureCity,
         departureTime: departStart ? departStart.toLocaleTimeString() : "",
         arrivalCity,
@@ -87,24 +85,24 @@ export async function fetchBookingInfo(cartId: number): Promise<BookingInfoProps
     if (cartData.ReturnFlightNo && cartData.ReturnFlightDepartTime && cartData.ReturnFlightArrivalTime) {
         const returnStart = new Date(cartData.ReturnFlightDepartTime);
         const returnEnd = new Date(cartData.ReturnFlightArrivalTime);
+
         let returnDepartureCity = "Arrival City Placeholder";
         let returnArrivalCity = "Departure City Placeholder";
-        let returnFlightNo = cartData.ReturnFlightNo;
 
         try {
-            const flightInfoArray = await fetchFlightLookupByFlightNo(cartData.ReturnFlightNo);
-            if (Array.isArray(flightInfoArray) && flightInfoArray.length > 0) {
-                const f = flightInfoArray[0];
-                returnDepartureCity = f.DepartureCity || returnDepartureCity;
-                returnArrivalCity = f.ArrivalCity || returnArrivalCity;
-                returnFlightNo = f.Depart.FlightNo || returnFlightNo;
-            }
+            const flightInfo = await fetchFlightLookup(
+                cartData.ReturnFlightNo,
+                returnStart.toISOString(),
+                returnEnd.toISOString()
+            );
+            returnDepartureCity = flightInfo.departureAirport || returnDepartureCity;
+            returnArrivalCity = flightInfo.arrivalAirport || returnArrivalCity;
         } catch (err) {
             console.warn("Failed to fetch return flight info:", err);
         }
 
         arrival = {
-            flightNumber: returnFlightNo,
+            flightNumber: cartData.ReturnFlightNo,
             departureCity: returnDepartureCity,
             departureTime: returnStart.toLocaleTimeString(),
             arrivalCity: returnArrivalCity,
@@ -117,7 +115,6 @@ export async function fetchBookingInfo(cartId: number): Promise<BookingInfoProps
     return { departure, arrival };
 }
 
-
 // Helper function
 function calculateDuration(start: Date, end: Date): string {
     const diffMs = end.getTime() - start.getTime();
@@ -125,7 +122,6 @@ function calculateDuration(start: Date, end: Date): string {
     const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
     return `${hours}h ${minutes}m`;
 }
-
 
 export default async function CheckoutLayout({
     children,
