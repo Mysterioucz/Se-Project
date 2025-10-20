@@ -124,8 +124,9 @@ export async function POST(request: NextRequest) {
                 Tickets.map((ticket) =>
                 tx.ticket.create({
                     data: {
+                        TicketID: `tic_${crypto.randomUUID()}`,
                         Price: ticket.Price,
-                        ServiceFee: ticket.ServiceFee,
+                        ServiceFee: ticket.ServiceFee ?? 0,
                         PassengerName: ticket.PassengerName,
                         PassengerLastName: ticket.PassengerLastName,
                         Gender: ticket.Gender,
@@ -271,7 +272,7 @@ export async function GET(req: NextRequest) {
       status: p.TransactionStatus,
       email: p.PaymentEmail,
       telNo: p.PaymentTelNo,
-      bankName: (p as any).BankName ?? null,
+      bankName: (p).BankName ?? null,
       amount: p.Amount,
       purchase: p.purchase
         ? {
