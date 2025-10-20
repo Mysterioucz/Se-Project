@@ -46,15 +46,15 @@ export interface Cart {
     ArrivalCity: string;
     Depart: {
         FlightNo: string;
-        DepartTime: string;
-        ArrivalTime: string;
+        DepartTime: Date;
+        ArrivalTime: Date;
         AirlineName: string;
         Stops: number;
     };
     Return: {
         FlightNo: string;
-        DepartTime: string;
-        ArrivalTime: string;
+        DepartTime: Date;
+        ArrivalTime: Date;
         AirlineName: string;
         Stops: number;
     };
@@ -72,6 +72,7 @@ type CheckoutContextType = {
         index: number,
         passengerPatch: Partial<PassengerData>,
     ) => void;
+    updatePassengerSeatAt: (index: number, seatPatch: Partial<Seat>) => void;
     clearCheckoutData: () => void; // after successful payment
     cartData: Cart;
 };
@@ -182,6 +183,32 @@ export function CheckoutProvider({
         });
     };
 
+    const updatePassengerSeatAt = (index: number, seatPatch: Partial<Seat>) => {
+        setCheckoutData((prev) => {
+            const list = [...(prev.passengerData ?? [])];
+            if (index < 0) {
+                console.warn(
+                    "updatePassengerSeatAt: index out of range",
+                    index,
+                );
+                return prev;
+            } else if (index >= list.length) {
+                ensurePassengerAt(index);
+            }
+            list[index].seatSelection = {
+                ...list[index].seatSelection,
+                ...seatPatch,
+            };
+            const updated = { ...prev, passengerData: list };
+            if (typeof window !== "undefined")
+                localStorage.setItem(
+                    CHECKOUT_STORAGE_KEY,
+                    JSON.stringify(updated),
+                );
+            return updated;
+        });
+    };
+
     return (
         <CheckoutContext.Provider
             value={{
@@ -189,6 +216,7 @@ export function CheckoutProvider({
                 updateCheckoutData,
                 clearCheckoutData,
                 updatePassengerAt,
+                updatePassengerSeatAt,
                 cartData,
             }}
         >

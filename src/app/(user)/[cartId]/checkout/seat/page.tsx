@@ -4,49 +4,50 @@ import { formatToShortDate } from "@/src/app/flights/search/_components/SummaryC
 import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
 import { Cart, useCheckout } from "@/src/contexts/CheckoutContext";
 import { Flight } from "@/src/generated/prisma";
+import { useEffect, useState } from "react";
 import {
     formatToTime,
     getFlightDuration,
 } from "../../../cart/[AccountID]/_components/FlightDetail";
-import { useEffect, useState } from "react";
-import { de } from "zod/v4/locales";
 
 async function fetchFlightData(
     flightNo: string,
-    departureTime: string,
-    arrivalTime: string,
+    departureTime: Date,
+    arrivalTime: Date,
 ): Promise<Flight> {
     const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}&departTime=${departureTime}&arrivalTime=${arrivalTime}`,
     );
-    const data = await response.json();
-    return data.flight as Flight;
+    const res = await response.json();
+    return res.data.flight as Flight;
 }
-
-
 
 export default function Page() {
     const { cartData } = useCheckout();
-    const [departFlight, setDepartFlight] = useState<Flight | undefined>(undefined);
-    const [returnFlight, setReturnFlight] = useState<Flight | undefined>(undefined);
-    
+    const [departFlight, setDepartFlight] = useState<Flight | undefined>(
+        undefined,
+    );
+    const [returnFlight, setReturnFlight] = useState<Flight | undefined>(
+        undefined,
+    );
+
     function departSelectCard(flightData: Flight | undefined, cartData: Cart) {
         if (!flightData) {
             return <div>Loading...</div>;
         }
         return (
             <SelectSeatCard
-                header={flightData.FlightNo}
+                header="Departure"
                 departFrom={flightData.DepartureAirportID}
                 departFromFull=""
                 arriveAt={flightData.ArrivalAirportID}
-                departTime={formatToTime(flightData.DepartTime)}
-                arriveTime={formatToTime(flightData.ArrivalTime)}
+                departTime={formatToTime(cartData.Depart.DepartTime)}
+                arriveTime={formatToTime(cartData.Depart.ArrivalTime)}
                 duration={getFlightDuration(
-                    flightData.DepartTime,
-                    flightData.ArrivalTime,
+                    cartData.Depart.DepartTime,
+                    cartData.Depart.ArrivalTime,
                 )}
-                date={formatToShortDate(flightData.DepartTime)}
+                date={formatToShortDate(cartData.Depart.DepartTime)}
                 passengerCount={
                     cartData.Adults + cartData.Childrens + cartData.Infants
                 }
@@ -83,17 +84,16 @@ export default function Page() {
     }
 
     useEffect(() => {
-       fetchFlightData(
+        fetchFlightData(
             cartData.Depart.FlightNo,
             cartData.Depart.DepartTime,
             cartData.Depart.ArrivalTime,
         ).then((data) => {
             setDepartFlight(data);
+            console.log(data);
         });
 
-        if (
-            cartData.Return
-        ) {
+        if (cartData.Return) {
             fetchFlightData(
                 cartData.Return.FlightNo,
                 cartData.Return.DepartTime,
@@ -103,7 +103,6 @@ export default function Page() {
             });
         }
     }, [cartData]);
-
 
     return (
         <div>

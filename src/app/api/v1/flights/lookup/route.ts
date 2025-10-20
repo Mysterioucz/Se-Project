@@ -1,6 +1,6 @@
 import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 //@desc     Get additional services and seat availability for a specific flight
 //@route    GET /api/v1/flights/lookup?flightNo=...&departTime=...&arrivalTime=...
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
         const arrivalTime = searchParams.get("arrivalTime");
 
         if (!flightNo || !departTime || !arrivalTime) {
-            return new Response(
+            return new NextResponse(
                 JSON.stringify({
                     success: false,
                     error: ErrorMessages.MISSING_PARAMETER,
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
         });
 
         if (!flight) {
-            return new Response(
+            return new NextResponse(
                 JSON.stringify({
                     success: false,
                     error: ErrorMessages.NOT_FOUND,
@@ -82,7 +82,7 @@ export async function GET(req: NextRequest) {
             flight
         };
 
-        return new Response(
+        return new NextResponse(
             JSON.stringify({
                 success: true,
                 data: responseData,
@@ -90,7 +90,7 @@ export async function GET(req: NextRequest) {
             { status: 200 },
         );
     } catch (error) {
-        return new Response(
+        return new NextResponse(
             JSON.stringify({
                 success: false,
                 message: ErrorMessages.SERVER,
