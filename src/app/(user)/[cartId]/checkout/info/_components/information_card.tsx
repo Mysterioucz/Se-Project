@@ -1,11 +1,15 @@
 "use client";
 
-import { PassengerData, useCheckout } from "@/src/contexts/CheckoutContext";
+import {
+    CHECKOUT_STORAGE_KEY,
+    PassengerData,
+    useCheckout,
+} from "@/src/contexts/CheckoutContext";
 import Button from "@components/Button";
 import ListChoice from "@components/list_choice";
 import Select from "@components/select";
 import TextFieldComponent from "@components/text_field";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface InformationCardProps {
     international?: boolean;
@@ -24,7 +28,7 @@ const FYI = {
 };
 
 export default function InformationCard(props: InformationCardProps) {
-    const { checkoutData, updatePassengerAt } = useCheckout();
+    const { updatePassengerAt } = useCheckout();
 
     const [givenName, setGivenName] = useState<string>("");
     const [errorGivenName, setErrorGivenName] = useState<boolean>(false);
@@ -44,6 +48,29 @@ export default function InformationCard(props: InformationCardProps) {
     const [errorIssueDate, setErrorIssueDate] = useState<boolean>(false);
     const [expiryDate, setExpiryDate] = useState<string>("");
     const [errorExpiryDate, setErrorExpiryDate] = useState<boolean>(false);
+
+    // hydrate from localStorage on mount (client-only)
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem(CHECKOUT_STORAGE_KEY);
+            if (!stored) return;
+            const parsed = JSON.parse(stored);
+            const idx = props.passengerIdx ?? 0;
+            const p = parsed?.passengerData?.[idx];
+            if (!p) return;
+            setGivenName(p.givenName ?? "");
+            setLastName(p.lastName ?? "");
+            setGender(p.gender ?? "");
+            setDateOfBirth(p.dateOfBirth ?? "");
+            setNationality(p.nationality ?? "");
+            setPassportNo(p.passportNo ?? "");
+            setIssueDate(p.issueDate ?? "");
+            setExpiryDate(p.expiryDate ?? "");
+        } catch (e) {
+            console.error("failed to hydrate passenger data", e);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleSaveButtonClick = () => {
         if (givenName === "") {
@@ -145,9 +172,7 @@ export default function InformationCard(props: InformationCardProps) {
             givenName: string;
             lastName: string;
             gender: string;
-            dayOfBirth: string;
-            monthOfBirth: string;
-            yearOfBirth: string;
+            dateOfBirth: string;
             nationality: string;
             passportNo?: string;
             dayOfIssue?: string;
@@ -160,9 +185,7 @@ export default function InformationCard(props: InformationCardProps) {
             givenName,
             lastName,
             gender,
-            dayOfBirth,
-            monthOfBirth,
-            yearOfBirth,
+            dateOfBirth,
             nationality,
         };
         if (props.international) {
@@ -189,7 +212,10 @@ export default function InformationCard(props: InformationCardProps) {
             return;
         } else {
             if (props.passengerIdx !== undefined) {
-                updatePassengerAt(props.passengerIdx, info as unknown as PassengerData);
+                updatePassengerAt(
+                    props.passengerIdx,
+                    info as unknown as PassengerData,
+                );
             }
             console.log(info);
         }

@@ -1,9 +1,7 @@
 "use client";
 
-import { getSession } from "next-auth/react";
 import React, { createContext, useContext, useState } from "react";
 import { Cart } from "../generated/prisma";
-import { useParams } from "next/navigation";
 
 interface Payment {
     isPaymentValid: boolean;
@@ -26,17 +24,11 @@ export interface PassengerData {
     givenName: string;
     lastName: string;
     gender: string;
-    dayOfBirth: string;
-    monthOfBirth: string;
-    yearOfBirth: string;
+    dateOfBirth: string;
     nationality: string;
     passportNo: string;
-    dayOfIssue: string;
-    monthOfIssue: string;
-    yearOfIssue: string;
-    dayOfExpiry: string;
-    monthOfExpiry: string;
-    yearOfExpiry: string;
+    issueDate: string;
+    expiryDate: string;
     baggageAllowance: BaggageAllowance; // in kg
     seatSelection: Seat; // Seat No
 }
@@ -54,30 +46,24 @@ type CheckoutContextType = {
         passengerPatch: Partial<PassengerData>,
     ) => void;
     clearCheckoutData: () => void; // after successful payment
-    cartData: Promise<Cart>;
+    cartData: Cart;
 };
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(
     undefined,
 );
 
-const CHECKOUT_STORAGE_KEY = "tempCheckout";
+export const CHECKOUT_STORAGE_KEY = "tempCheckout";
 
 const initialPassengerData: PassengerData = {
     givenName: "",
     lastName: "",
     gender: "",
-    dayOfBirth: "",
-    monthOfBirth: "",
-    yearOfBirth: "",
+    dateOfBirth: "",
     nationality: "",
     passportNo: "",
-    dayOfIssue: "",
-    monthOfIssue: "",
-    yearOfIssue: "",
-    dayOfExpiry: "",
-    monthOfExpiry: "",
-    yearOfExpiry: "",
+    issueDate: "",
+    expiryDate: "",
     baggageAllowance: {
         departureBaggage: 0,
         returnBaggage: 0,
@@ -98,49 +84,16 @@ const initialCheckoutData: CheckoutPayload = {
     },
 };
 
-async function fetchCartData() {
-    const session = await getSession();
-    const userId = session?.user?.id;
-    const cartId = useParams().cartId;
-    const response = await fetch(`/api/v1/cart/${userId}/${cartId}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        cache: "no-store",
-    });
-    if (!response.ok) {
-        throw new Error("Failed to fetch cart data");
-    }
-    return response.json();
-}
-
-function getInitialCheckoutData(): CheckoutPayload {
-    if (typeof window !== "undefined") {
-        const storedData = localStorage.getItem(CHECKOUT_STORAGE_KEY);
-        if (storedData) {
-            try {
-                return JSON.parse(storedData) as CheckoutPayload;
-            } catch (error) {
-                console.error(
-                    "Failed to parse checkout data from localStorage:",
-                    error,
-                );
-            }
-        }
-    }
-    return initialCheckoutData;
-}
-
 export function CheckoutProvider({
     children,
+    cartData,
 }: {
     children: React.ReactNode;
+    cartData: Cart;
 }) {
     const [checkoutData, setCheckoutData] = useState<CheckoutPayload>(
-        getInitialCheckoutData(),
+        initialCheckoutData,
     );
-    const cartData = fetchCartData();
 
     const updateCheckoutData = (data: Partial<CheckoutPayload>) => {
         setCheckoutData((prev) => {
@@ -210,7 +163,7 @@ export function CheckoutProvider({
                 updateCheckoutData,
                 clearCheckoutData,
                 updatePassengerAt,
-                cartData
+                cartData,
             }}
         >
             {children}
