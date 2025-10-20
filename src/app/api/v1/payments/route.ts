@@ -124,9 +124,8 @@ export async function POST(request: NextRequest) {
                 Tickets.map((ticket) =>
                 tx.ticket.create({
                     data: {
-                        TicketID: `tic_${crypto.randomUUID()}`,
                         Price: ticket.Price,
-                        ServiceFee: ticket.ServiceFee ?? 0,
+                        ServiceFee: ticket.ServiceFee,
                         PassengerName: ticket.PassengerName,
                         PassengerLastName: ticket.PassengerLastName,
                         Gender: ticket.Gender,
