@@ -1,0 +1,31 @@
+ServiceID,ServiceName,Price,Description
+1,Select Seat,690,NULL
+2,Extra Baggage,1280,1 kg
+3,Select Seat,1095,NULL
+4,Extra Baggage,1830,3 kg
+5,Select Seat,460,NULL
+6,Extra Baggage,2740,5 kg
+7,Select Seat,1680,NULL
+8,Extra Baggage,1460,2 kg
+9,Select Seat,800,NULL
+10,Extra Baggage,3650,7 kg
+11,Select Seat,1200,NULL
+12,Extra Baggage,2370,4 kg
+13,Extra Baggage,5480,10 kg
+14,Select Seat,550,NULL
+15,Extra Baggage,1550,2.5 kg
+16,Select Seat,2050,NULL
+17,Extra Baggage,3210,6 kg
+18,Select Seat,1440,NULL
+19,Extra Baggage,4380,8 kg
+20,Select Seat,365,NULL
+21,Extra Baggage,2100,3.5 kg
+22,Select Seat,910,NULL
+23,Extra Baggage,4920,9 kg
+24,Select Seat,1830,NULL
+25,Extra Baggage,1100,1.5 kg
+26,Select Seat,620,NULL
+27,Extra Baggage,3360,6.5 kg
+28,Select Seat,1400,NULL
+29,Extra Baggage,6030,12 kg
+30,Select Seat,400,NULL
