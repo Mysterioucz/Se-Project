@@ -9,10 +9,26 @@ export async function GET(
     { params }: { params: Promise<{ UserAccountID: string }> }
 ) {
     const { UserAccountID } = await params;
+    const url = new URL(req.url);
+    const cartIDsParam = url.searchParams.get("CartID");
 
     try {
+        let whereClause: any = { UserAccountID };
+
+        // If ?cartIds=1,2,3 is passed, filter by those IDs too
+        if (cartIDsParam) {
+            const cartIDs = cartIDsParam
+                .split(",")
+                .map(id => Number(id.trim()))
+                .filter(id => !isNaN(id));
+            
+            if (cartIDs.length > 0) {
+                whereClause.ID = { in: cartIDs };
+            }
+        }
+
         const carts = await prisma.cart.findMany({
-            where: { UserAccountID },
+            where: whereClause,
             orderBy: { createdAt: "desc" }
         });
 
