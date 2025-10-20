@@ -15,8 +15,8 @@ interface Seat {
 }
 
 export interface BaggageAllowance {
-    departureBaggage: number; // in kg
-    returnBaggage?: number;
+    departureBaggage: string; // in kg
+    returnBaggage?: string;
 }
 
 export interface PassengerData {
@@ -73,6 +73,10 @@ type CheckoutContextType = {
         passengerPatch: Partial<PassengerData>,
     ) => void;
     updatePassengerSeatAt: (index: number, seatPatch: Partial<Seat>) => void;
+    updateBaggageAt: (
+        index: number,
+        baggagePatch: Partial<BaggageAllowance>,
+    ) => void;
     clearCheckoutData: () => void; // after successful payment
     cartData: Cart;
 };
@@ -93,8 +97,8 @@ const initialPassengerData: PassengerData = {
     issueDate: "",
     expiryDate: "",
     baggageAllowance: {
-        departureBaggage: 0,
-        returnBaggage: 0,
+        departureBaggage: "0",
+        returnBaggage: "0",
     },
     seatSelection: {
         departureSeat: "",
@@ -209,6 +213,32 @@ export function CheckoutProvider({
         });
     };
 
+    const updateBaggageAt = (
+        index: number,
+        baggagePatch: Partial<BaggageAllowance>,
+    ) => {
+        setCheckoutData((prev) => {
+            const list = [...(prev.passengerData ?? [])];
+            if (index < 0) {
+                console.warn("updateBaggageAt: index out of range", index);
+                return prev;
+            } else if (index >= list.length) {
+                ensurePassengerAt(index);
+            }
+            list[index].baggageAllowance = {
+                ...list[index].baggageAllowance,
+                ...baggagePatch,
+            };
+            const updated = { ...prev, passengerData: list };
+            if (typeof window !== "undefined")
+                localStorage.setItem(
+                    CHECKOUT_STORAGE_KEY,
+                    JSON.stringify(updated),
+                );
+            return updated;
+        });
+    };
+
     return (
         <CheckoutContext.Provider
             value={{
@@ -217,6 +247,7 @@ export function CheckoutProvider({
                 clearCheckoutData,
                 updatePassengerAt,
                 updatePassengerSeatAt,
+                updateBaggageAt,
                 cartData,
             }}
         >

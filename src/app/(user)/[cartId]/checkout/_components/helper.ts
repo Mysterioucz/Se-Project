@@ -5,5 +5,10 @@ export const checkoutPaths = [
     "/payment-success"
 ];
 export function isCheckoutPath(path: string) {
-    return checkoutPaths.includes(path);
+    for (const p of checkoutPaths) {
+        if (path.includes(p)) {
+            return true;
+        }
+    }
+    return false;
 }

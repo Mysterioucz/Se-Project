@@ -7,8 +7,8 @@ import PriceBreakdownCard, {
 } from "@/src/components/paymentConfirmation/priceBreakdownCard";
 import { CheckoutProvider } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
-import BookingInfo from "./_components/BookingInfo";
 import { fetchCartData } from "@/src/helper/CheckoutHelper";
+import BookingInfo from "./_components/BookingInfo";
 
 export default async function CheckoutLayout({
     children,
@@ -44,7 +44,7 @@ export default async function CheckoutLayout({
                         />
                     </div>
                 </div>
-                <FooterButton />
+                <FooterButton cartId={cartId} />
             </CheckoutProvider>
         </div>
     );
