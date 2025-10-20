@@ -16,7 +16,7 @@ export interface Flight {
 
 export interface BookingInfoProps {
     departure: Flight;
-    arrival?: Flight;
+    arrival?: Flight | null;
 }
 
 function FlightContent({
@@ -129,8 +129,8 @@ async function fetchBookingInfo(): Promise<BookingInfoProps> {
     return { departure, arrival };
 }
 
-export default async function BookingInfo() {
-    const { departure, arrival } = await fetchBookingInfo(); // This will suspend until the promise resolves
+export default async function BookingInfo({departure, arrival }: BookingInfoProps) {
+     // This will suspend until the promise resolves
     return (
         <div className="flex flex-col gap-6 px-6 py-4 border-2 border-primary-300 rounded-lg w-full">
             <h2 className="font-semibold text-primary-900">

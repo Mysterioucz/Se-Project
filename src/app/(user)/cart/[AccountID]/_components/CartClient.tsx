@@ -109,7 +109,7 @@ export default function CartClient({ initialCartData, AccountID }: { initialCart
 
                 {/* Summary */}
                 <div className="lg:col-span-1 mt-8 lg:mt-0">
-                    <SummaryBox selectedCount={selectedIds.size} totalPrice={totalPrice} />
+                    <SummaryBox selectedCount={selectedIds.size} totalPrice={totalPrice} selectedIds={selectedIds} />
                 </div>
 
             </div>
