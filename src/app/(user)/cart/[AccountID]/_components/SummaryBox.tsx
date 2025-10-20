@@ -1,7 +1,17 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { Cart } from "@/src/enums/Cart";
 
-export default function SummaryBox({selectedCount, totalPrice} : {selectedCount: number, totalPrice: number}) {
+export default function SummaryBox({selectedCount, totalPrice, selectedIds} : {selectedCount: number, totalPrice: number, selectedIds: Set<number>}) {
+    const router = useRouter();
     const isButtonDisabled = (selectedCount == 0);
+
+    const handleNext = () => {
+        if (selectedIds.size !== 1) return;
+
+        const cartId = Array.from(selectedIds)[0];
+        router.push(`/checkout/info?cartId=${cartId}`);
+    };
 
     return (
         <div className="border border-2 border-primary-300 rounded-lg bg-white p-3 text-lg font-bold">
@@ -21,6 +31,7 @@ export default function SummaryBox({selectedCount, totalPrice} : {selectedCount:
 
             <button
             disabled={isButtonDisabled}
+            onClick={handleNext}
             className={`w-full mt-3 py-3 rounded-lg font-bold transition-colors text-lg ${
                 isButtonDisabled
                 ? 'bg-gray-100 cursor-not-allowed text-gray-400'

@@ -26,6 +26,6 @@ export default function ModalDeleteFromCart({ isOpen, onClose, handleDeleteFromC
             variant="criticalwarning"
             preventClose={false}
             disableRightButton={false}
-            />
+        />
     );
 }
