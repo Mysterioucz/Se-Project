@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
+import { Flight } from "@mui/icons-material";
+import { datetimeRegex } from "zod/v3";
 
 const TicketInputSchema = z.object({
     Price: z.number().positive(),
@@ -53,6 +55,15 @@ const CreatePaymentSchema = z
             .min(2, "bankName must be at least 2 characters")
             .optional()
             .transform((v) => (v === "" ? undefined : v)),
+        FlightType: z.string(),
+        DepartFlightNo: z.string(),
+        DepartFlightDepartTime: z.date(),
+        DepartFlightArrivalTime: z.date(),
+        ReturnFlightNo: z.string(),
+        ReturnFlightDepartTime: z.date(),
+        ReturnFlightArrivalTime: z.date(),
+        DepartFlightCabinClass: z.string(),
+        ReturnFlightCabinClass: z.string()
     })
     .superRefine((v, ctx) => {
         // Require bankName when method is ONLINE_BANKING
@@ -92,6 +103,15 @@ export async function POST(request: NextRequest) {
             paymentEmail,
             paymentTelNo,
             bankName,
+            FlightType,
+            DepartFlightNo,
+            DepartFlightDepartTime,
+            DepartFlightArrivalTime,
+            DepartFlightCabinClass,
+            ReturnFlightNo,
+            ReturnFlightDepartTime,
+            ReturnFlightArrivalTime,
+            ReturnFlightCabinClass
         } = parsed;
         
         // As the tickets were never created, we don't need this
@@ -185,7 +205,16 @@ export async function POST(request: NextRequest) {
                     PaymentEmail: paymentEmail,
                     PaymentTelNo: paymentTelNo,      
                     Amount: totalAmount,
-                    BankName: method === "ONLINE_BANKING" ? bankName : null,                  
+                    BankName: method === "ONLINE_BANKING" ? bankName : null,     
+                    FlightType: FlightType,
+                    DepartFlightNo: DepartFlightNo,
+                    DepartFlightDepartTime: DepartFlightDepartTime,
+                    DepartFlightArrivalTime: DepartFlightArrivalTime,
+                    ReturnFlightNo: ReturnFlightNo,
+                    ReturnFlightDepartTime: ReturnFlightDepartTime,
+                    ReturnFlightArrivalTime: ReturnFlightArrivalTime,
+                    DepartFlightCabinClass: DepartFlightCabinClass,
+                    ReurnFlightCabinClass: ReturnFlightCabinClass
                 },
             });
 
@@ -236,61 +265,4 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-}
-
-//GET /api/v1/payments?userId=...
-// GET /api/v1/payments (no auth check)
-
-export async function GET(req: NextRequest) {
-  const url = new URL(req.url);
-  const requestedUserId = url.searchParams.get("userId");
-
-  if (!requestedUserId) {
-    return NextResponse.json(
-      { success: false, message: "Missing userId query parameter" },
-      { status: 400 }
-    );
-  }
-
-  try {
-    const payments = await prisma.payment.findMany({
-      where: {
-        purchase: {
-          UserAccountID: requestedUserId,
-        },
-      },
-      orderBy: { PaymentDateTime: "desc" },
-      include: {
-        purchase: true,
-      },
-    });
-
-    const data = payments.map((p) => ({
-      id: p.PaymentID,
-      dateTime: p.PaymentDateTime,
-      method: p.PaymentMethod,
-      status: p.TransactionStatus,
-      email: p.PaymentEmail,
-      telNo: p.PaymentTelNo,
-      bankName: (p).BankName ?? null,
-      amount: p.Amount,
-      purchase: p.purchase
-        ? {
-            ticketId: p.purchase.TicketID,
-            userAccountId: p.purchase.UserAccountID,
-          }
-        : null,
-    }));
-
-    return NextResponse.json(
-      { success: true, data },
-      { status: 200, headers: { "Cache-Control": "no-store" } }
-    );
-  } catch (err: unknown) {
-    console.error("Error fetching payments:", err);
-    return NextResponse.json(
-      { success: false, message: ErrorMessages.SERVER },
-      { status: 500 }
-    );
-  }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/src/components/Button";
 import FlightDetailSummary from "@/src/components/paymentConfirmation/flightDetailSummary";
 import PassengerInfoSummary from "@/src/components/paymentConfirmation/passengerInfoSummary";
@@ -11,12 +11,80 @@ import { PaymentMethodTypes } from "@/src/enums/PaymentMethodTypes";
 import { FlightTypes } from "@/src/enums/FlightTypes";
 import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
 import { useRouter } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "@/src/lib/auth";
+import { useSession } from "next-auth/react";
+import { Flight, Payment, Purchase } from "@/src/generated/prisma";
+import { formatToShortDate } from "@/src/app/flights/search/_components/SummaryCard";
+import { formatToTime } from "../../cart/[AccountID]/_components/FlightDetail";
+
+export interface ReturnPayment {
+  PaymentID: string;
+  PaymentDateTime: string; // or Date if you convert it
+  PaymentMethod: "ONLINE_BANKING" | "QR_CODE"; // adapt to your enum
+  TransactionStatus: "PENDING" | "PAID" | "FAILED"; // adapt to your enum
+  PaymentEmail: string;
+  PaymentTelNo: string;
+  Amount: number;
+  BankName?: string | null;
+  createdAt: string; // or Date
+  FlightType: string;
+
+  DepartFlightNo: string;
+  DepartFlightDepartTime: string;
+  DepartFlightArrivalTime: string;
+  DepartFlightCabinClass: string;
+  DepartFlight: Flight;
+
+  ReturnFlightNo?: string | null;
+  ReturnFlightDepartTime?: string | null;
+  ReturnFlightArrivalTime?: string | null;
+  ReturnFlightCabinClass?: string | null;
+  ReturnFlight?: Flight | null;
+
+  purchase?: Purchase | null;
+}
 
 export default function Page() {
-    const router = useRouter();
-    // Example flight data
-    const flightType = FlightTypes.ROUND_TRIP;
+    const { data: session, status } = useSession();
+    const [payments, setPayments] = useState<ReturnPayment>();
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        if (status === "authenticated" && session?.user?.id) {
+        const fetchData = async () => {
+            try {
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/${session.user.id}`
+                );
+                const data = await res.json();
+                setPayments(data.data);
+            } catch (err) {
+                console.error("Failed to fetch payments:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+        }
+    }, [status, session]);
+
+    const router = useRouter();
+    const flightType = payments?.FlightType;
+
+    // const ticktes = [
+        
+    // ];
+
+    const paymentDetail = {
+        bookingId: payments?.PaymentID,
+        paymentMethod: payments?.PaymentMethod
+    }
+
+    // const router = useRouter();
+    // Example flight data
+    // const flightType = FlightTypes.ROUND_TRIP;
     // Example ticket data
     const tickets = [
         { type: PassengerTypes.Adult, price: 1000, quantity: 1 },
@@ -30,11 +98,11 @@ export default function Page() {
         checked_baggage_price: 300,
     };
 
-    // Example payment data
-    const paymentDetail = {
-        bookingId: "1763GUG6172",
-        paymentMethod: PaymentMethodTypes.BankTransfer
-    }
+    // // Example payment data
+    // const paymentDetail = {
+    //     bookingId: "1763GUG6172",
+    //     paymentMethod: PaymentMethodTypes.BankTransfer
+    // }
 
     // Example passenger data
     const passengers = [
@@ -59,79 +127,114 @@ export default function Page() {
         }
     ];
 
-    const mockFlightDetail = {
-        flightLeg: FlightLegTypes.DEPARTURE,
-        departurePlace: "Bangkok",
-        arrivalPlace: "London",
-        airline: "Thai Airways",
-        flightNumber: "TG910",
-        cabinClass: "Business",
-        segments: [
-            {
-                Time: "08:30",
-                Date: "2025-11-01",
-                Airport: "BKK",
-                Place: "Bangkok Suvarnabhumi Airport"
-            },
-            {
-                Time: "14:00",
-                Date: "2025-11-01",
-                Airport: "DXB",
-                Place: "Dubai International Airport"
-            },
-            {
-                Time: "16:00",
-                Date: "2025-11-01",
-                Airport: "DXB",
-                Place: "Dubai International Airport"
-            },
-            {
-                Time: "20:30",
-                Date: "2025-11-01",
-                Airport: "LHR",
-                Place: "London Heathrow Airport"
-            }
-        ]
-    };
+    // const mockFlightDetail = {
+    //     flightLeg: FlightLegTypes.DEPARTURE,
+    //     departurePlace: "Bangkok",
+    //     arrivalPlace: "London",
+    //     airline: "Thai Airways",
+    //     flightNumber: "TG910",
+    //     cabinClass: "Business",
+    //     segments: [
+    //         {
+    //             Time: "08:30",
+    //             Date: "2025-11-01",
+    //             Airport: "BKK",
+    //             Place: "Bangkok Suvarnabhumi Airport"
+    //         },
+    //         {
+    //             Time: "14:00",
+    //             Date: "2025-11-01",
+    //             Airport: "DXB",
+    //             Place: "Dubai International Airport"
+    //         },
+    //         {
+    //             Time: "16:00",
+    //             Date: "2025-11-01",
+    //             Airport: "DXB",
+    //             Place: "Dubai International Airport"
+    //         },
+    //         {
+    //             Time: "20:30",
+    //             Date: "2025-11-01",
+    //             Airport: "LHR",
+    //             Place: "London Heathrow Airport"
+    //         }
+    //     ]
+    // };
 
-    const mockReturnFlightDetail = {
-        flightLeg: FlightLegTypes.RETURN,
-        departurePlace: "London",
-        arrivalPlace: "Bangkok",
-        airline: "Thai Airways",
-        flightNumber: "TG911",
-        cabinClass: "Business",
-        segments: [
-            {
-                Time: "10:00",
-                Date: "2025-11-10",
-                Airport: "LHR",
-                Place: "London Heathrow Airport"
-            },
-            {
-                Time: "14:30",
-                Date: "2025-11-10",
-                Airport: "DXB",
-                Place: "Dubai International Airport"
-            },
-            {
-                Time: "16:30",
-                Date: "2025-11-10",
-                Airport: "DXB",
-                Place: "Dubai International Airport"
-            },
-            {
-                Time: "06:00",
-                Date: "2025-11-11",
-                Airport: "BKK",
-                Place: "Bangkok Suvarnabhumi Airport"
-            }
-        ]
-    };
+    // const mockReturnFlightDetail = {
+    //     flightLeg: FlightLegTypes.RETURN,
+    //     departurePlace: "London",
+    //     arrivalPlace: "Bangkok",
+    //     airline: "Thai Airways",
+    //     flightNumber: "TG911",
+    //     cabinClass: "Business",
+    //     segments: [
+    //         {
+    //             Time: "10:00",
+    //             Date: "2025-11-10",
+    //             Airport: "LHR",
+    //             Place: "London Heathrow Airport"
+    //         },
+    //         {
+    //             Time: "14:30",
+    //             Date: "2025-11-10",
+    //             Airport: "DXB",
+    //             Place: "Dubai International Airport"
+    //         },
+    //         {
+    //             Time: "16:30",
+    //             Date: "2025-11-10",
+    //             Airport: "DXB",
+    //             Place: "Dubai International Airport"
+    //         },
+    //         {
+    //             Time: "06:00",
+    //             Date: "2025-11-11",
+    //             Airport: "BKK",
+    //             Place: "Bangkok Suvarnabhumi Airport"
+    //         }
+    //     ]
+    // };
 
-    const mockRoundTripFlights = [
-        mockFlightDetail,
-        mockReturnFlightDetail
+    const RoundTripFlights = [
+        {
+            flightLeg: FlightLegTypes.DEPARTURE,
+            departurePlace: payments?.DepartFlight.DepartureAirportID,
+            arrivalPlace: payments?.DepartFlight.ArrivalAirportID,
+            airline: payments?.DepartFlight.AirlineName,
+            flightNumber: payments?.DepartFlightNo,
+            cabinClass: payments?.DepartFlightCabinClass,
+            segments: [
+                {
+                    Time: formatToTime((payments?.DepartFlight?.DepartTime ?? null)),
+                    Date: formatToShortDate((payments?.DepartFlight?.DepartTime ?? null)),
+                    Airport: payments?.DepartFlight?.DepartureAirportID,
+                },{
+                    Time: formatToTime((payments?.DepartFlight?.ArrivalTime ?? null)),
+                    Date: formatToShortDate((payments?.DepartFlight?.ArrivalTime ?? null)),
+                    Airport: payments?.DepartFlight?.ArrivalAirportID,
+                }
+            ]
+        }, {
+            flightLeg: FlightLegTypes.RETURN,
+            departurePlace: payments?.ReturnFlight?.DepartureAirportID,
+            arrivalPlace: payments?.ReturnFlight?.ArrivalAirportID,
+            airline: payments?.ReturnFlight?.AirlineName,
+            flightNumber: payments?.ReturnFlightNo,
+            cabinClass: payments?.ReturnFlightCabinClass,
+            segments: [
+                {
+                    Time: formatToTime((payments?.ReturnFlight?.DepartTime ?? null)),
+                    Date: formatToShortDate((payments?.ReturnFlight?.DepartTime ?? null)),
+                    Airport: payments?.ReturnFlight?.DepartureAirportID,
+                },{
+                    Time: formatToTime((payments?.ReturnFlight?.ArrivalTime ?? null)),
+                    Date: formatToShortDate((payments?.ReturnFlight?.ArrivalTime ?? null)),
+                    Airport: payments?.ReturnFlight?.ArrivalAirportID,
+                }
+            ]
+        }
     ];
 
     return (
@@ -148,18 +251,18 @@ export default function Page() {
                         </div>
                     </div>
                     
-                    {mockRoundTripFlights.map((flight, index) => (
-                        <FlightDetailSummary
-                            key={index}
-                            flightLeg={flight.flightLeg}
-                            departurePlace={flight.departurePlace}
-                            arrivalPlace={flight.arrivalPlace}
-                            airline={flight.airline}
-                            flightNumber={flight.flightNumber}
-                            cabinClass={flight.cabinClass}
-                            segments={flight.segments}
-                        />
-                    ))}
+                    {/* {RoundTripFlights.map((flight, index) => ( */}
+                        {/* // <FlightDetailSummary */}
+                        {/* //     key={index} */}
+                        {/* //     flightLeg={flight.flightLeg} */}
+                        {/* //     departurePlace={flight.departurePlace} */}
+                        {/* //     arrivalPlace={flight.arrivalPlace} */}
+                        {/* //     airline={flight.airline} */}
+                        {/* //     flightNumber={flight.flightNumber} */}
+                        {/* //     cabinClass={flight.cabinClass} */}
+                        {/* //     segments={flight.segments} */}
+                        {/* // /> */}
+                    {/* // ))} */}
 
                 </div>
 
@@ -172,7 +275,7 @@ export default function Page() {
                         <PassengerInfoSummary key={idx} count={idx + 1} {...p} />
                     ))}
                     <PriceBreakdownCard tickets={tickets} baggage={baggage} />
-                    <PaymentDetailSummary bookingId={paymentDetail.bookingId} paymentMethod={paymentDetail.paymentMethod}/>
+                    {/* <PaymentDetailSummary bookingId={paymentDetail.bookingId} paymentMethod={paymentDetail.paymentMethod}/> */}
                 </div>
             </div>
 
