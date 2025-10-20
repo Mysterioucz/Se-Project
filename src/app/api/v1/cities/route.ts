@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import prisma from "@/db"; // Ensure prisma is correctly set up
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 
