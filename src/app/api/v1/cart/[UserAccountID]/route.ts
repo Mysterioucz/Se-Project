@@ -13,7 +13,10 @@ export async function GET(
     const cartIDsParam = url.searchParams.get("CartID");
 
     try {
-        let whereClause: any = { UserAccountID };
+        const whereClause: {
+            UserAccountID: string;
+            ID?: { in: number[] };
+        } = { UserAccountID };
 
         // If ?cartIds=1,2,3 is passed, filter by those IDs too
         if (cartIDsParam) {
