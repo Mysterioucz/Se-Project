@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
-import { Cart } from "../generated/prisma";
 
 interface Payment {
     isPaymentValid: boolean;
@@ -31,6 +30,34 @@ export interface PassengerData {
     expiryDate: string;
     baggageAllowance: BaggageAllowance; // in kg
     seatSelection: Seat; // Seat No
+}
+
+export interface Cart {
+    id: number;
+    FlightType: string;
+    ClassType: string;
+    Adults: number;
+    Childrens: number;
+    Infants: number;
+    Price: number;
+    DepartureAirport: string;
+    ArrivalAirport: string;
+    DepartureCity: string;
+    ArrivalCity: string;
+    Depart: {
+        FlightNo: string;
+        DepartTime: string;
+        ArrivalTime: string;
+        AirlineName: string;
+        Stops: number;
+    };
+    Return: {
+        FlightNo: string;
+        DepartTime: string;
+        ArrivalTime: string;
+        AirlineName: string;
+        Stops: number;
+    };
 }
 
 interface CheckoutPayload {
@@ -91,9 +118,8 @@ export function CheckoutProvider({
     children: React.ReactNode;
     cartData: Cart;
 }) {
-    const [checkoutData, setCheckoutData] = useState<CheckoutPayload>(
-        initialCheckoutData,
-    );
+    const [checkoutData, setCheckoutData] =
+        useState<CheckoutPayload>(initialCheckoutData);
 
     const updateCheckoutData = (data: Partial<CheckoutPayload>) => {
         setCheckoutData((prev) => {
