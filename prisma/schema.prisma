@@ -17,10 +17,9 @@ datasource db {
 
 //enums
 enum TicketStatus {
-  BOOKED
+  SCHEDULED
   CANCELLED
-  CHECKED_IN
-  COMPLETED
+  DEPARTED
 }
 
 //models
@@ -76,6 +75,8 @@ model Flight {
   TransitAmount      Int
   ExtraBaggage       Boolean @default(false) 
   SeatSelect         Boolean @default(false)
+  FreeCheckedBaggageWeight Int @default(0)
+  FreeCheckedBaggageBags   Int @default(0)
 
   // Relations
   arrivalAirport   Airport       @relation("ArrivalFlights", fields: [ArrivalAirportID], references: [AirportID])
@@ -140,10 +141,10 @@ model TicketService {
 
 
 model Ticket {
-  TicketID          String   @id @db.VarChar(50)
+  TicketID          String @id @db.VarChar(50) @default(uuid())
   Price             Float //price of ticket
   ServiceFee        Float    @default(0) //price of all additional services
-  TicketStatus      TicketStatus  @default(BOOKED)
+  TicketStatus      TicketStatus  @default(SCHEDULED)
   PassengerName     String
   PassengerLastName String
   Gender            String
@@ -159,7 +160,7 @@ model Ticket {
 
   // Relations
   flight               Flight                @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
-  seat                 Seat                  @relation(fields: [FlightNo, DepartTime, ArrivalTime, SeatNo], references: [FlightNo, DepartTime, ArrivalTIme, SeatNo])
+  seat                 Seat                  @relation(fields: [FlightNo, DepartTime, ArrivalTime, SeatNo], references: [FlightNo, DepartTime, ArrivalTime, SeatNo])
   purchase             Purchase?
   domesticTicket       Domestic_Ticket?
   internationalTicket  International_Ticket?
@@ -235,16 +236,16 @@ model CabinClass {
 model Seat {
   FlightNo      String
   DepartTime    DateTime
-  ArrivalTIme   DateTime
+  ArrivalTime   DateTime
   SeatNo        String @db.VarChar(10)
   SeatType      String
   IsAvailable   Boolean @default(true) //update to false when ticket with seatno is created
 
   // Relations
-  flight Flight @relation(fields:[FlightNo, DepartTime, ArrivalTIme], references: [FlightNo, DepartTime, ArrivalTime])
+  flight Flight @relation(fields:[FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
   tickets  Ticket[]
 
-  @@id([FlightNo, DepartTime, ArrivalTIme, SeatNo])
+  @@id([FlightNo, DepartTime, ArrivalTime, SeatNo])
 }
 
 model Admin {
@@ -304,7 +305,7 @@ model User_Tel_No {
 model Report {
   ReportID          String  @id @db.VarChar(50)
   ReportDescription String
-  BookingID         String
+  PaymentID         String
   Attachment        String?
   UserAccountID     String  @db.VarChar(50) // The user who created the report
   AdminAccountID    String  @db.VarChar(50) // The admin handling the report
@@ -314,6 +315,8 @@ model Report {
 
   // Relations
   creator Report_To @relation("CreatedReports", fields: [UserAccountID, AdminAccountID], references: [UserAccountID, AdminAccountID])
+  // ticket  Ticket    @relation(fields: [TicketID], references: [TicketID])
+  purchase  Purchase  @relation(fields: [PaymentID], references: [PaymentID])
 }
 
 // --- Ticket Specialization Models ---
@@ -357,6 +360,7 @@ model Purchase {
   user    User    @relation(fields: [UserAccountID], references: [UserAccountID])
 
   @@id([TicketID, PaymentID])
+  reports       Report[]
 }
 
 model Payment {
