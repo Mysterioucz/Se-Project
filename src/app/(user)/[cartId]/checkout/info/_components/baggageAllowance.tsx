@@ -37,18 +37,21 @@ interface ServiceProps {
     baggageOptions: Array<ServiceType>;
 }
 
+export type fetchedServiceType = {
+    service: ServiceType;
+};
 
 export async function fetchAdditionalServices(
     flightNo: string,
     departureTime: Date,
     arrivalTime: Date,
-) {
+): Promise<fetchedServiceType[]> {
     // Placeholder for fetching additional services if needed
     const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}&departTime=${departureTime}&arrivalTime=${arrivalTime}`,
     );
     const res = await response.json();
-    return res.data.flight.availableServices;
+    return res.data.flight.availableServices as fetchedServiceType[];
 }
 
 function AdditionalServiceSection({
@@ -188,7 +191,9 @@ export default function BaggageAllowance({
     // Sync passengers when passengersData prop changes
     useEffect(() => {
         const passengerNames =
-            passengersData?.map((p) => p.givenName.trim() + " " + p.lastName.trim()) || [];
+            passengersData?.map(
+                (p) => p.givenName.trim() + " " + p.lastName.trim(),
+            ) || [];
         setPassengers(passengerNames);
     }, [passengersData]);
 
@@ -207,7 +212,7 @@ export default function BaggageAllowance({
             }
         };
 
-        fetchServices().then((data: ServiceType[]) => {
+        fetchServices().then((data: fetchedServiceType[]) => {
             // Add safety check for data
             if (!data || !Array.isArray(data)) {
                 console.warn("Invalid data received:", data);
@@ -215,7 +220,7 @@ export default function BaggageAllowance({
             }
 
             const baggageData = data
-                .map((item: any) => item.service) // Extract the nested service object
+                .map((item) => item.service) // Extract the nested service object
                 .filter((service: ServiceType) => {
                     // Add safety check for service and ServiceName
                     if (!service || !service.ServiceName) {
