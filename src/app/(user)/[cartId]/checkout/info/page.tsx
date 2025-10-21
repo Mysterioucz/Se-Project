@@ -14,7 +14,7 @@ export default function Page() {
         <div className="flex flex-col w-full h-fit gap-6">
             <span className="text-[3rem] font-bold">{cardTitle[0]}</span>
             {Array.from({ length: totalPassengers }, (_, i) => (
-                <InformationCard passengerIdx={i} key={i} />
+                <InformationCard passengerNum={i+1} key={i} />
             ))}
             <span className="text-[3rem] font-bold">{cardTitle[1]}</span>
             <BaggageAllowance />

@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
             ...(services.includes("Select Seat") && {
                 availableSeats: flight.seats || [],
             }),
-            flight
+            flight,
         };
 
         return new NextResponse(

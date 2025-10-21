@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 interface InformationCardProps {
     international?: boolean;
-    passengerIdx?: number;
+    passengerNum?: number;
 }
 
 const genderOptions = [{ value: "Male" }, { value: "Female" }];
@@ -55,7 +55,7 @@ export default function InformationCard(props: InformationCardProps) {
             const stored = localStorage.getItem(CHECKOUT_STORAGE_KEY);
             if (!stored) return;
             const parsed = JSON.parse(stored);
-            const idx = props.passengerIdx ?? 0;
+            const idx = (props.passengerNum ?? 1) - 1;
             const p = parsed?.passengerData?.[idx];
             if (!p) return;
             setGivenName(p.givenName ?? "");
@@ -211,9 +211,9 @@ export default function InformationCard(props: InformationCardProps) {
             console.log("Please fix the errors before saving.");
             return;
         } else {
-            if (props.passengerIdx !== undefined) {
+            if (props.passengerNum !== undefined) {
                 updatePassengerAt(
-                    props.passengerIdx,
+                    props.passengerNum - 1,
                     info as unknown as PassengerData,
                 );
             }
@@ -225,7 +225,7 @@ export default function InformationCard(props: InformationCardProps) {
         <div className="flex flex-col w-[44.625rem] p-6 gap-8 rounded-lg bg-primary-50">
             {/* Header */}
             <p className="!font-bold !text-[2rem] !text-primary-900">
-                Passenger {props.passengerIdx} Info
+                Passenger {props.passengerNum} Info
             </p>
             {/* Content */}
             <div className="flex flex-row gap-2">

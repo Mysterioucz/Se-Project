@@ -188,7 +188,6 @@ export async function POST(req: NextRequest
     const session = await getServerSession(nextAuthOptions);
     const url = new URL(req.url);
     const UserAccountID = url.pathname.split('/').pop(); 
-    
     if (!session?.user?.id) {
         return NextResponse.json(
             { success: false, message: ErrorMessages.AUTHENTICATION },

@@ -7,7 +7,7 @@ import {
 } from "@/src/app/(user)/cart/[AccountID]/_components/FlightDetail";
 import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
 import { Cart } from "@/src/contexts/CheckoutContext";
-import { Flight } from "@/src/generated/prisma";
+import { Flight } from "@/src/helper/CheckoutHelper";
 
 interface props {
     flightData: Flight;
