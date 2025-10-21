@@ -10,7 +10,7 @@ import {
     getFlightDuration,
 } from "../../../cart/[AccountID]/_components/FlightDetail";
 
-export async function fetchFlightData(
+async function fetchFlightData(
     flightNo: string,
     departureTime: Date,
     arrivalTime: Date,

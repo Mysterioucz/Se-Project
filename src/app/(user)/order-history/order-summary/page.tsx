@@ -171,8 +171,8 @@ export default function Page() {
                     {passengers.map((p, idx) => (
                         <PassengerInfoSummary key={idx} count={idx + 1} {...p} />
                     ))}
-                    <PriceBreakdownCard tickets={tickets} baggage={baggage} />
-                    <PaymentDetailSummary bookingId={paymentDetail.bookingId} paymentMethod={paymentDetail.paymentMethod}/>
+                    <PriceBreakdownCard tickets={tickets} />
+                    <PaymentDetailSummary bookingId={paymentDetail.bookingId} paymentMethod={paymentDetail.paymentMethod} />
                 </div>
             </div>
 
