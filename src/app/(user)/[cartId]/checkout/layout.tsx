@@ -49,13 +49,6 @@ export default async function CheckoutLayout({
         },
     ].filter((t) => t.quantity > 0);
 
-    // Baggage pricing is not stored on Cart in schema; default to free / zero values
-    const baggage: BaggageSummaryProps = {
-        personal_item_price: 0,
-        carry_on_item_price: 0,
-        checked_baggage_price: 0,
-    };
-
     return (
         <div className="flex flex-col min-h-screen gap-8 pb-8 items-center">
             <Navbar />
@@ -67,7 +60,6 @@ export default async function CheckoutLayout({
                         <BookingInfo />
                         <PriceBreakdownCard
                             tickets={tickets}
-                            baggage={baggage}
                         />
                     </div>
                 </div>
