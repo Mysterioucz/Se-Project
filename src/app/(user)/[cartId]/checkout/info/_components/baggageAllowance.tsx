@@ -1,13 +1,12 @@
 "use client";
 import {
-    Cart,
     useCheckout,
     type BaggageAllowance,
 } from "@/src/contexts/CheckoutContext";
 import SelectComponent from "@components/select";
 import { MenuItem } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface BaggageAllowanceProps {
     passengers?: string[];
@@ -27,23 +26,21 @@ interface ServiceProps {
     departurePlace: string;
     arrivalPlace: string;
     initialCheckedBaggage: number[];
-    onChange?: (baggageSelections: string[]) => void;
-    updateBaggageAt: (
+    onChange?: (baggageSelections: ServiceType[]) => void;
+    updateBaggageAt?: (
         index: number,
         baggagePatch: Partial<BaggageAllowance>,
     ) => void;
+    baggageOptions: Array<ServiceType>;
 }
 
-export const baggageOptions = [
-    { label: "Not Included", value: "Not Included" },
-    { label: "+5 kg - ฿240.00", value: "+5kg, ฿240.00" },
-    { label: "+10 kg - ฿325.00", value: "+10kg, ฿325.00" },
-    { label: "+15 kg - ฿450.00", value: "+15kg, ฿450.00" },
-    { label: "+20 kg - ฿490.00", value: "+20kg, ฿490.00" },
-    { label: "+25 kg - ฿595.00", value: "+25kg, ฿595.00" },
-];
+interface ServiceType {
+    ServiceName: string;
+    Price: number;
+    Description: string;
+}
 
-async function fetchAdditionalServices(
+export async function fetchAdditionalServices(
     flightNo: string,
     departureTime: Date,
     arrivalTime: Date,
@@ -53,139 +50,49 @@ async function fetchAdditionalServices(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}&departTime=${departureTime}&arrivalTime=${arrivalTime}`,
     );
     const res = await response.json();
-    return res.data.availableServices;
+    return res.data.flight.availableServices;
 }
 
-async function getAdditionalServices(cartData: Cart) {
-    // Placeholder for fetching additional services if needed
-    const services = await fetchAdditionalServices(
-        cartData.Depart.FlightNo,
-        cartData.Depart.DepartTime,
-        cartData.Depart.ArrivalTime,
-    );
-    return services;
-}
-
-function DepartureAdditionalService({
-    passengers,
-    departurePlace,
-    arrivalPlace,
-    initialCheckedBaggage,
-    onChange,
-}: ServiceProps) {
-    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-
-    const handleOptionChange = (index: number, value: string) => {
-        const updated = [...selectedOptions];
-        updated[index] = value;
-        setSelectedOptions(updated);
-        onChange?.(updated);
-    };
-
-    return (
-        <div className="flex flex-col p-0 m-0">
-            <div className="flex p-[0.25rem] items-center gap-[0.5rem] self-stretch rounded-[0.25rem] bg-white">
-                <div className="flex p-[0.25rem] justify-center items-center rounded-[0.25rem] bg-primary-300">
-                    <div className="text-white font-sarabun text-[0.75rem] not-italic font-normal leading-[1.2]">
-                        Depart
-                    </div>
-                </div>
-
-                <div className="text-primary-300 font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
-                    {departurePlace} ⇒ {arrivalPlace}
-                </div>
-            </div>
-
-            {passengers.map((name, index) => (
-                <div
-                    key={index}
-                    className="flex items-start gap-[1rem] self-stretch"
-                >
-                    <div className="flex w-[9.688rem] flex-col justify-center items-center self-stretch py-[1rem]">
-                        <div className="text-black font-sarabun text-[1rem] not-italic font-normal leading-[1.2]">
-                            {name}
-                        </div>
-                    </div>
-
-                    <div className="flex w-[9.688rem] flex-col justify-center items-center self-stretch py-[1rem]">
-                        <div className="text-black text-center font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
-                            1 piece, 7 kg including carry-on baggage
-                        </div>
-                    </div>
-
-                    <div className="flex w-[9.688rem] flex-col justify-center items-center self-stretch py-[1rem]">
-                        <div className="text-black text-center font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
-                            1 piece, 7 kg including personal items
-                        </div>
-                    </div>
-
-                    <div className="flex w-[9.625rem] flex-col justify-center items-center py-0 px-[0.5rem] gap-[0.5rem] py-[1rem]">
-                        <div className="text-black text-center font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
-                            {(initialCheckedBaggage[index] ?? 0) > 0
-                                ? `1 x ${initialCheckedBaggage[index]} kg`
-                                : "Not Included"}
-                        </div>
-
-                        <SelectComponent
-                            labelId={`baggage-select-label-${index}`}
-                            id={`baggage-select-${index}`}
-                            value={selectedOptions[index]}
-                            placeholder="Add Baggage"
-                            maxChildrenHeight="max-h-[16rem]"
-                            width="w-[10rem]"
-                            height="h-[2.5rem]"
-                            onChange={(e) =>
-                                handleOptionChange(
-                                    index,
-                                    e.target.value as string,
-                                )
-                            }
-                        >
-                            {baggageOptions.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                           
-                        </SelectComponent>
-                    </div>
-                </div>
-            ))}
-        </div>
-    );
-}
-
-function ReturnAdditionalService({
+function AdditionalServiceSection({
     passengers,
     departurePlace,
     arrivalPlace,
     initialCheckedBaggage,
     onChange,
     updateBaggageAt,
-}: ServiceProps) {
-    const [selectedOptions, setSelectedOptions] = useState<string[]>(
-        Array(passengers.length).fill("Not Included"),
-    );
+    baggageOptions,
+    type = "depart",
+}: ServiceProps & { type?: "depart" | "return" }) {
+    const [selectedOptions, setSelectedOptions] = useState<ServiceType[]>([]);
 
-    const handleOptionChange = (index: number, value: string) => {
+    const handleOptionChange = (index: number, value: ServiceType) => {
         const updated = [...selectedOptions];
         updated[index] = value;
         setSelectedOptions(updated);
-        updateBaggageAt(index, { departureBaggage: value });
+
+        // Only call updateBaggageAt for return flights
+        if (type === "return" && updateBaggageAt) {
+            updateBaggageAt(index, { departureBaggage: value.Description });
+        }
 
         onChange?.(updated);
     };
 
+    const isReturn = type === "return";
+    const from = isReturn ? arrivalPlace : departurePlace;
+    const to = isReturn ? departurePlace : arrivalPlace;
+
     return (
-        <div className="flex flex-col p-0 m-0 mt-4">
+        <div className={`flex flex-col p-0 m-0 ${isReturn ? "mt-4" : ""}`}>
             <div className="flex p-[0.25rem] items-center gap-[0.5rem] self-stretch rounded-[0.25rem] bg-white">
                 <div className="flex p-[0.25rem] justify-center items-center rounded-[0.25rem] bg-primary-300">
                     <div className="text-white font-sarabun text-[0.75rem] not-italic font-normal leading-[1.2]">
-                        Return
+                        {isReturn ? "Return" : "Depart"}
                     </div>
                 </div>
+
                 <div className="text-primary-300 font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
-                    {arrivalPlace} ⇒ {departurePlace}
+                    {from} ⇒ {to}
                 </div>
             </div>
 
@@ -212,7 +119,7 @@ function ReturnAdditionalService({
                         </div>
                     </div>
 
-                    <div className="flex w-[9.625rem] flex-col justify-center items-center py-0 px-[0.5rem] gap-[0.5rem] py-[1rem]">
+                    <div className="flex w-[9.625rem] flex-col justify-center items-center px-[0.5rem] gap-[0.5rem] py-[1rem]">
                         <div className="text-black text-center font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
                             {(initialCheckedBaggage[index] ?? 0) > 0
                                 ? `1 x ${initialCheckedBaggage[index]} kg`
@@ -220,9 +127,9 @@ function ReturnAdditionalService({
                         </div>
 
                         <SelectComponent
-                            labelId={`return-baggage-select-label-${index}`}
-                            id={`return-baggage-select-${index}`}
-                            value={selectedOptions[index]}
+                            labelId={`${type}-baggage-select-label-${index}`}
+                            id={`${type}-baggage-select-${index}`}
+                            value={selectedOptions[index]?.Description || ""}
                             placeholder="Add Baggage"
                             maxChildrenHeight="max-h-[16rem]"
                             width="w-[10rem]"
@@ -230,16 +137,16 @@ function ReturnAdditionalService({
                             onChange={(e) =>
                                 handleOptionChange(
                                     index,
-                                    e.target.value as string,
+                                    e.target.value as ServiceType,
                                 )
                             }
                         >
                             {baggageOptions.map((option) => (
                                 <MenuItem
-                                    key={option.value}
-                                    value={option.value}
+                                    key={option.Description}
+                                    value={option.Description}
                                 >
-                                    {option.label}
+                                    {option.Description + " - $" + option.Price}
                                 </MenuItem>
                             ))}
                         </SelectComponent>
@@ -265,11 +172,59 @@ export default function BaggageAllowance({
     const Passengers = passengers.length ? passengers : ["Passenger 1"];
     const DeparturePlace = departurePlace?.trim() || "DeparturePlace";
     const ArrivalPlace = arrivalPlace?.trim() || "ArrivalPlace";
-
+    const [baggageOptions, setBaggageOptions] = useState<Array<ServiceType>>(
+        [],
+    );
     const { checkoutData, cartData } = useCheckout();
-    // const options = getAdditionalServices(cartData);
-    // console.log("Additional Services Options:", options);
 
+    console.log("Current baggageOptions state:", baggageOptions);
+
+    useEffect(() => {
+        const fetchServices = async () => {
+            try {
+                return await fetchAdditionalServices(
+                    cartData.Depart.FlightNo,
+                    cartData.Depart.DepartTime,
+                    cartData.Depart.ArrivalTime,
+                );
+            } catch (error) {
+                console.error("Error fetching additional services:", error);
+                return [];
+            }
+        };
+        fetchServices().then((data: ServiceType[]) => {
+
+            // Add safety check for data
+            if (!data || !Array.isArray(data)) {
+                console.warn("Invalid data received:", data);
+                return;
+            }
+
+            const baggageData = data
+                .map((item: any) => item.service) // Extract the nested service object
+                .filter((service: ServiceType) => {
+
+                    // Add safety check for service and ServiceName
+                    if (!service || !service.ServiceName) {
+                        return false;
+                    }
+
+                    const matches =
+                        service.ServiceName.toLowerCase().includes("baggage");
+                    return matches;
+                });
+
+            if (baggageData.length > 0) {
+                setBaggageOptions(baggageData);
+            } else {
+                console.warn("No baggage services found after filtering!");
+            }
+        });
+    }, [
+        cartData.Depart.FlightNo,
+        cartData.Depart.DepartTime,
+        cartData.Depart.ArrivalTime,
+    ]);
     const initialCheckedDepartMock = [15, 20, 0];
     const initialCheckedReturnMock = [0, 10, 25];
 
@@ -287,26 +242,38 @@ export default function BaggageAllowance({
         initialCheckedReturnMock,
     );
 
-    const [departSelections, setDepartSelections] = useState<string[]>(
-        Array(passengers.length).fill("Not Included"),
-    );
-    const [returnSelections, setReturnSelections] = useState<string[]>(
-        Array(passengers.length).fill("Not Included"),
-    );
+    const [departSelections, setDepartSelections] = useState<ServiceType[]>([]);
+    const [returnSelections, setReturnSelections] = useState<ServiceType[]>([]);
     const { updateBaggageAt } = useCheckout();
 
-    const handleDepartChange = (selections: string[]) => {
+    const handleDepartChange = (selections: ServiceType[]) => {
         setDepartSelections(selections);
+        const selectionStrings = selections.map(
+            (s) => s?.Description || "Not Included",
+        );
         onChange?.(
             hasReturn
-                ? { depart: selections, return: returnSelections }
-                : { depart: selections },
+                ? {
+                      depart: selectionStrings,
+                      return: returnSelections.map(
+                          (s) => s?.Description || "Not Included",
+                      ),
+                  }
+                : { depart: selectionStrings },
         );
     };
 
-    const handleReturnChange = (selections: string[]) => {
+    const handleReturnChange = (selections: ServiceType[]) => {
         setReturnSelections(selections);
-        onChange?.({ depart: departSelections, return: selections });
+        const selectionStrings = selections.map(
+            (s) => s?.Description || "Not Included",
+        );
+        onChange?.({
+            depart: departSelections.map(
+                (s) => s?.Description || "Not Included",
+            ),
+            return: selectionStrings,
+        });
     };
 
     return (
@@ -357,23 +324,27 @@ export default function BaggageAllowance({
                 </div>
             </div>
 
-            <DepartureAdditionalService
+            <AdditionalServiceSection
                 passengers={Passengers}
                 departurePlace={DeparturePlace}
                 arrivalPlace={ArrivalPlace}
                 initialCheckedBaggage={initialDepart}
                 onChange={handleDepartChange}
                 updateBaggageAt={updateBaggageAt}
+                baggageOptions={baggageOptions}
+                type="depart"
             />
 
             {hasReturn && (
-                <ReturnAdditionalService
+                <AdditionalServiceSection
                     passengers={Passengers}
                     departurePlace={DeparturePlace}
                     arrivalPlace={ArrivalPlace}
                     initialCheckedBaggage={initialReturn}
                     onChange={handleReturnChange}
                     updateBaggageAt={updateBaggageAt}
+                    baggageOptions={baggageOptions}
+                    type="return"
                 />
             )}
         </div>

@@ -39,4 +39,3 @@ export async function fetchCartData(cartId: number): Promise<Cart> {
     return data;
 }
 
-
