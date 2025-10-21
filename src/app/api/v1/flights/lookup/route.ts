@@ -33,13 +33,7 @@ export async function GET(req: NextRequest) {
             select: {
                 availableServices: {
                     select: {
-                        service: {
-                            select: {
-                                ServiceName: true,
-                                Price: true,
-                                Description: true,
-                            },
-                        },
+                        service: true,
                     },
                 },
                 seats: {

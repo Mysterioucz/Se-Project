@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface Payment {
     isPaymentValid: boolean;
@@ -9,14 +9,21 @@ interface Payment {
     isQRModalOpen: boolean;
 }
 
+export interface ServiceType {
+    ServiceID: string;
+    ServiceName: string;
+    Price: number;
+    Description: string;
+}
+
 interface Seat {
     departureSeat: string; // Seat No
     returnSeat?: string;
 }
 
 export interface BaggageAllowance {
-    departureBaggage: string; // in kg
-    returnBaggage?: string;
+    departureBaggage: ServiceType;
+    returnBaggage?: ServiceType;
 }
 
 export interface PassengerData {
@@ -87,6 +94,21 @@ const CheckoutContext = createContext<CheckoutContextType | undefined>(
 
 export const CHECKOUT_STORAGE_KEY = "tempCheckout";
 
+const initialBaggageAllowance: BaggageAllowance = {
+    departureBaggage: {
+        ServiceID: "",
+        ServiceName: "",
+        Price: 0,
+        Description: "",
+    },
+    returnBaggage: {
+        ServiceID: "",
+        ServiceName: "",
+        Price: 0,
+        Description: "",
+    },
+};
+
 const initialPassengerData: PassengerData = {
     givenName: "",
     lastName: "",
@@ -96,10 +118,7 @@ const initialPassengerData: PassengerData = {
     passportNo: "",
     issueDate: "",
     expiryDate: "",
-    baggageAllowance: {
-        departureBaggage: "0",
-        returnBaggage: "0",
-    },
+    baggageAllowance: initialBaggageAllowance,
     seatSelection: {
         departureSeat: "",
         returnSeat: "",
@@ -125,6 +144,24 @@ export function CheckoutProvider({
 }) {
     const [checkoutData, setCheckoutData] =
         useState<CheckoutPayload>(initialCheckoutData);
+
+    // Load from localStorage after mount (client-side only)
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const stored = localStorage.getItem(CHECKOUT_STORAGE_KEY);
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    setCheckoutData(parsed);
+                } catch (e) {
+                    console.error(
+                        "Failed to parse checkout data from storage",
+                        e,
+                    );
+                }
+            }
+        }
+    }, []);
 
     const updateCheckoutData = (data: Partial<CheckoutPayload>) => {
         setCheckoutData((prev) => {

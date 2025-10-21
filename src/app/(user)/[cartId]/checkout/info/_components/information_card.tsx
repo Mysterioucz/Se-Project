@@ -1,10 +1,6 @@
 "use client";
 
-import {
-    CHECKOUT_STORAGE_KEY,
-    PassengerData,
-    useCheckout,
-} from "@/src/contexts/CheckoutContext";
+import { PassengerData, useCheckout } from "@/src/contexts/CheckoutContext";
 import Button from "@components/Button";
 import ListChoice from "@components/list_choice";
 import Select from "@components/select";
@@ -14,6 +10,7 @@ import { useEffect, useState } from "react";
 interface InformationCardProps {
     international?: boolean;
     passengerNum?: number;
+    passengerData?: PassengerData;
 }
 
 const genderOptions = [{ value: "Male" }, { value: "Female" }];
@@ -27,50 +24,59 @@ const FYI = {
         "Please enter your birthdate, passport issue date, passport expiry date in the format DD/MM/YYYY (e.g., 05/09/2000, Year in CE).",
 };
 
-export default function InformationCard(props: InformationCardProps) {
+export default function InformationCard({
+    international,
+    passengerNum,
+    passengerData,
+}: InformationCardProps) {
     const { updatePassengerAt } = useCheckout();
 
-    const [givenName, setGivenName] = useState<string>("");
+    const [givenName, setGivenName] = useState<string>(
+        passengerData?.givenName || "",
+    );
     const [errorGivenName, setErrorGivenName] = useState<boolean>(false);
-    const [lastName, setLastName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>(
+        passengerData?.lastName || "",
+    );
     const [errorLastName, setErrorLastName] = useState<boolean>(false);
 
-    const [gender, setGender] = useState<string>("");
+    const [gender, setGender] = useState<string>(passengerData?.gender || "");
     const [errorGender, setErrorGender] = useState<boolean>(false);
-    const [dateOfBirth, setDateOfBirth] = useState<string>("");
+    const [dateOfBirth, setDateOfBirth] = useState<string>(
+        passengerData?.dateOfBirth || "",
+    );
     const [errorDateOfBirth, setErrorDateOfBirth] = useState<boolean>(false);
-    const [nationality, setNationality] = useState<string>("");
+    const [nationality, setNationality] = useState<string>(
+        passengerData?.nationality || "",
+    );
     const [errorNationality, setErrorNationality] = useState<boolean>(false);
 
-    const [passportNo, setPassportNo] = useState<string>("");
+    const [passportNo, setPassportNo] = useState<string>(
+        passengerData?.passportNo || "",
+    );
     const [errorPassportNo, setErrorPassportNo] = useState<boolean>(false);
-    const [issueDate, setIssueDate] = useState<string>("");
+    const [issueDate, setIssueDate] = useState<string>(
+        passengerData?.issueDate || "",
+    );
     const [errorIssueDate, setErrorIssueDate] = useState<boolean>(false);
-    const [expiryDate, setExpiryDate] = useState<string>("");
+    const [expiryDate, setExpiryDate] = useState<string>(
+        passengerData?.expiryDate || "",
+    );
     const [errorExpiryDate, setErrorExpiryDate] = useState<boolean>(false);
 
-    // hydrate from localStorage on mount (client-only)
+    // Sync local state when passengerData prop changes (from context)
     useEffect(() => {
-        try {
-            const stored = localStorage.getItem(CHECKOUT_STORAGE_KEY);
-            if (!stored) return;
-            const parsed = JSON.parse(stored);
-            const idx = (props.passengerNum ?? 1) - 1;
-            const p = parsed?.passengerData?.[idx];
-            if (!p) return;
-            setGivenName(p.givenName ?? "");
-            setLastName(p.lastName ?? "");
-            setGender(p.gender ?? "");
-            setDateOfBirth(p.dateOfBirth ?? "");
-            setNationality(p.nationality ?? "");
-            setPassportNo(p.passportNo ?? "");
-            setIssueDate(p.issueDate ?? "");
-            setExpiryDate(p.expiryDate ?? "");
-        } catch (e) {
-            console.error("failed to hydrate passenger data", e);
+        if (passengerData) {
+            setGivenName(passengerData.givenName || "");
+            setLastName(passengerData.lastName || "");
+            setGender(passengerData.gender || "");
+            setDateOfBirth(passengerData.dateOfBirth || "");
+            setNationality(passengerData.nationality || "");
+            setPassportNo(passengerData.passportNo || "");
+            setIssueDate(passengerData.issueDate || "");
+            setExpiryDate(passengerData.expiryDate || "");
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [passengerData]);
 
     const handleSaveButtonClick = () => {
         if (givenName === "") {
@@ -109,7 +115,7 @@ export default function InformationCard(props: InformationCardProps) {
             setErrorNationality(false);
         }
 
-        if (props.international) {
+        if (international) {
             if (passportNo === "") {
                 // TODO: send error
                 console.log("Passport no is empty");
@@ -143,7 +149,7 @@ export default function InformationCard(props: InformationCardProps) {
         } else {
             setErrorDateOfBirth(false);
         }
-        if (props.international) {
+        if (international) {
             if (
                 isNaN(
                     Date.parse(`${yearOfIssue}-${monthOfIssue}-${dayOfIssue}`),
@@ -188,7 +194,7 @@ export default function InformationCard(props: InformationCardProps) {
             dateOfBirth,
             nationality,
         };
-        if (props.international) {
+        if (international) {
             info.passportNo = passportNo;
             info.dayOfIssue = dayOfIssue;
             info.monthOfIssue = monthOfIssue;
@@ -211,9 +217,9 @@ export default function InformationCard(props: InformationCardProps) {
             console.log("Please fix the errors before saving.");
             return;
         } else {
-            if (props.passengerNum !== undefined) {
+            if (passengerNum !== undefined) {
                 updatePassengerAt(
-                    props.passengerNum - 1,
+                    passengerNum - 1,
                     info as unknown as PassengerData,
                 );
             }
@@ -225,7 +231,7 @@ export default function InformationCard(props: InformationCardProps) {
         <div className="flex flex-col w-[44.625rem] p-6 gap-8 rounded-lg bg-primary-50">
             {/* Header */}
             <p className="!font-bold !text-[2rem] !text-primary-900">
-                Passenger {props.passengerNum} Info
+                Passenger {passengerNum} Info
             </p>
             {/* Content */}
             <div className="flex flex-row gap-2">
@@ -348,7 +354,7 @@ export default function InformationCard(props: InformationCardProps) {
                 </div>
             </div>
             {/* Only show for international flights */}
-            {props.international && (
+            {international && (
                 <div className="flex flex-col gap-2">
                     <p className="!text-[1rem] !text-primary-600">
                         Passport Info
@@ -421,7 +427,7 @@ export default function InformationCard(props: InformationCardProps) {
             <div className="flex flex-col gap-1">
                 <p className="!text-[0.875rem] !text-primary-600">- {FYI[1]}</p>
                 <p className="!text-[0.875rem] !text-primary-600">
-                    - {props.international ? FYI.international : FYI.domestic}
+                    - {international ? FYI.international : FYI.domestic}
                 </p>
                 <p className="!text-[0.875rem] !text-primary-600">- {FYI[2]}</p>
             </div>

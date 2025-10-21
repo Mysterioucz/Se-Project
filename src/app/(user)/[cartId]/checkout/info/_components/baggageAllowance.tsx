@@ -1,5 +1,7 @@
 "use client";
 import {
+    PassengerData,
+    ServiceType,
     useCheckout,
     type BaggageAllowance,
 } from "@/src/contexts/CheckoutContext";
@@ -17,6 +19,7 @@ interface BaggageAllowanceProps {
         depart: string[];
         return?: string[];
     }) => void;
+    passengersData?: PassengerData[];
     initialCheckedDepart?: number[];
     initialCheckedReturn?: number[];
 }
@@ -34,11 +37,6 @@ interface ServiceProps {
     baggageOptions: Array<ServiceType>;
 }
 
-interface ServiceType {
-    ServiceName: string;
-    Price: number;
-    Description: string;
-}
 
 export async function fetchAdditionalServices(
     flightNo: string,
@@ -66,13 +64,17 @@ function AdditionalServiceSection({
     const [selectedOptions, setSelectedOptions] = useState<ServiceType[]>([]);
 
     const handleOptionChange = (index: number, value: ServiceType) => {
+        console.log("Selected option for index", index, ":", value);
         const updated = [...selectedOptions];
         updated[index] = value;
         setSelectedOptions(updated);
 
-        // Only call updateBaggageAt for return flights
-        if (type === "return" && updateBaggageAt) {
-            updateBaggageAt(index, { departureBaggage: value.Description });
+        if (updateBaggageAt) {
+            if (type === "return") {
+                updateBaggageAt(index, { returnBaggage: value });
+            } else if (type === "depart") {
+                updateBaggageAt(index, { departureBaggage: value });
+            }
         }
 
         onChange?.(updated);
@@ -102,7 +104,7 @@ function AdditionalServiceSection({
                     className="flex items-start gap-[1rem] self-stretch"
                 >
                     <div className="flex w-[9.688rem] flex-col justify-center items-center self-stretch py-[1rem]">
-                        <div className="text-black font-sarabun text-[1rem] not-italic font-normal leading-[1.2]">
+                        <div className="text-black font-sarabun text-[1rem] not-italic font-normal leading-[1.2] text-nowrap">
                             {name}
                         </div>
                     </div>
@@ -134,12 +136,18 @@ function AdditionalServiceSection({
                             maxChildrenHeight="max-h-[16rem]"
                             width="w-[10rem]"
                             height="h-[2.5rem]"
-                            onChange={(e) =>
-                                handleOptionChange(
-                                    index,
-                                    e.target.value as ServiceType,
-                                )
-                            }
+                            onChange={(e) => {
+                                const selectedDescription = e.target
+                                    .value as string;
+                                const selectedOption = baggageOptions.find(
+                                    (option) =>
+                                        option.Description ===
+                                        selectedDescription,
+                                );
+                                if (selectedOption) {
+                                    handleOptionChange(index, selectedOption);
+                                }
+                            }}
                         >
                             {baggageOptions.map((option) => (
                                 <MenuItem
@@ -158,27 +166,33 @@ function AdditionalServiceSection({
 }
 
 export default function BaggageAllowance({
-    passengers = [],
     departurePlace = "DeparturePlace",
     arrivalPlace = "ArrivalPlace",
     hasReturn = false,
     onChange,
+    passengersData,
     initialCheckedDepart,
     initialCheckedReturn,
 }: BaggageAllowanceProps & {
     initialCheckedDepart?: number[];
     initialCheckedReturn?: number[];
 }) {
-    const Passengers = passengers.length ? passengers : ["Passenger 1"];
+    const [Passengers, setPassengers] = useState<string[]>([]);
     const DeparturePlace = departurePlace?.trim() || "DeparturePlace";
     const ArrivalPlace = arrivalPlace?.trim() || "ArrivalPlace";
     const [baggageOptions, setBaggageOptions] = useState<Array<ServiceType>>(
         [],
     );
-    const { checkoutData, cartData } = useCheckout();
+    const { cartData } = useCheckout();
 
-    console.log("Current baggageOptions state:", baggageOptions);
+    // Sync passengers when passengersData prop changes
+    useEffect(() => {
+        const passengerNames =
+            passengersData?.map((p) => p.givenName.trim() + " " + p.lastName.trim()) || [];
+        setPassengers(passengerNames);
+    }, [passengersData]);
 
+    // Fetch baggage services
     useEffect(() => {
         const fetchServices = async () => {
             try {
@@ -192,8 +206,8 @@ export default function BaggageAllowance({
                 return [];
             }
         };
-        fetchServices().then((data: ServiceType[]) => {
 
+        fetchServices().then((data: ServiceType[]) => {
             // Add safety check for data
             if (!data || !Array.isArray(data)) {
                 console.warn("Invalid data received:", data);
@@ -203,7 +217,6 @@ export default function BaggageAllowance({
             const baggageData = data
                 .map((item: any) => item.service) // Extract the nested service object
                 .filter((service: ServiceType) => {
-
                     // Add safety check for service and ServiceName
                     if (!service || !service.ServiceName) {
                         return false;
@@ -229,7 +242,7 @@ export default function BaggageAllowance({
     const initialCheckedReturnMock = [0, 10, 25];
 
     const makeInitial = (arr?: number[], fallback?: number[]) =>
-        Array.from({ length: passengers.length }, (_, i) =>
+        Array.from({ length: Passengers.length }, (_, i) =>
             arr && arr[i] != null ? arr[i] : fallback ? (fallback[i] ?? 0) : 0,
         );
 
@@ -350,33 +363,3 @@ export default function BaggageAllowance({
         </div>
     );
 }
-
-// How to use:
-// "use client";
-
-// import BaggageAllowance from "@/src/components/additionalServices/baggageAllowance";
-
-// export default function Page() {
-//     const passengers = ["John Doe", "Jane Smith", "Alice Lee"];
-//     const initialCheckedDepart = [15, 20, 0]; // kg per passenger
-//     const initialCheckedReturn = [0, 10, 25];
-
-//     const handleBaggageChange = (selections: { depart: string[]; return?: string[] }) => {
-//         console.log("Depart selections:", selections.depart);
-//         if (selections.return) console.log("Return selections:", selections.return);
-//     };
-
-//     return (
-//         <div className="p-8">
-//             <BaggageAllowance
-//                 passengers={passengers}
-//                 departurePlace="Bangkok"
-//                 arrivalPlace="Chiang Mai"
-//                 hasReturn={true}
-//                 initialCheckedDepart={initialCheckedDepart}
-//                 initialCheckedReturn={initialCheckedReturn}
-//                 onChange={handleBaggageChange}
-//             />
-//         </div>
-//     );
-// }
