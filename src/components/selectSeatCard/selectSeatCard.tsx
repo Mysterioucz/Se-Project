@@ -1,5 +1,6 @@
 "use client";
 
+import { CHECKOUT_STORAGE_KEY, useCheckout } from "@/src/contexts/CheckoutContext";
 import Button from "@components/Button";
 import { FiSrPlane, FlightCardDivider } from "@components/icons/module";
 import { useState } from "react";
@@ -19,6 +20,18 @@ interface SelectSeatCardProps {
     seatClass: string;
 }
 
+function getPassengerData() {
+    if (window !== undefined) {
+        const storedData = localStorage.getItem(CHECKOUT_STORAGE_KEY);
+        if (storedData) {
+            const checkoutData = JSON.parse(storedData);
+            const passengerData = checkoutData.passengerData;
+            return passengerData;
+        }
+    }
+    return null;
+}
+
 export default function SelectSeatCard({
     header,
     departFrom,
@@ -33,18 +46,106 @@ export default function SelectSeatCard({
     passengerType,
     seatClass,
 }: SelectSeatCardProps) {
+    const {updatePassengerSeatAt} = useCheckout();
     const [selected, setSelected] = useState(false);
+    const [selectedPassengers, setSelectedPassengers] = useState<number>(0);
+    const passengerData = getPassengerData();
+    const passengerSeatArr = useState<string[]>(
+        Array(passengerCount).fill(""),
+    )[0];
+    const [curSeat, setCurSeat] = useState("");
 
-    function PassengerName({ index }: { index: number }) {
+    function handlePassengerClick(index: number) {
+        setSelectedPassengers((prev) => {
+            if (prev === index) {
+                return -1; // Deselect if already selected
+            }
+            return index;
+        });
+    }
+
+    function handleSeatClick(seat: string) {
+        return () => {
+            if (selectedPassengers === -1) {
+                alert("Please select a passenger first.");
+                return;
+            }
+            // Check if seat is already taken
+            if (passengerSeatArr.includes(seat) && curSeat !== seat) {
+                alert("Seat already taken. Please select another seat.");
+                return;
+            }
+            // Assign seat to selected passenger
+            passengerSeatArr[selectedPassengers] = seat;
+            setCurSeat(seat);
+        };
+    }
+
+    function randomeAvailableSeat(): string {
+        const rows = 10;
+        const cols = 6; // A-F
+        let seat = "";
+        while (true) {
+            const row = Math.floor(Math.random() * rows) + 1;
+            const col = String.fromCharCode(65 + Math.floor(Math.random() * cols)); // 65 = 'A'
+            seat = `${row}${col}`;
+            if (!passengerSeatArr.includes(seat)) {
+                break;
+            }
+        }
+        return seat;
+    }
+
+    function handleConfirm() {
+        for(let i = 0; i < passengerCount; i++) {
+            if(header === "Departure") {
+                updatePassengerSeatAt(i, {
+                    departureSeat:
+                        passengerSeatArr[i] === ""
+                            ? randomeAvailableSeat()
+                            : passengerSeatArr[i],
+                });
+            }else if(header === "Return") {
+                updatePassengerSeatAt(i, {
+                    returnSeat:
+                        passengerSeatArr[i] === ""
+                            ? randomeAvailableSeat()
+                            : passengerSeatArr[i],
+                });
+            }
+        }
+    }
+
+    
+
+    function PassengerName({
+        index,
+        onClick,
+    }: {
+        index: number;
+        onClick: () => void;
+    }) {
         return (
-            <div className="flex w-[15.3125rem] h-[3.1875rem] rounded-2xl bg-primary-50">
+            <div
+                className={`flex w-[15.3125rem] h-[3.1875rem] rounded-2xl bg-primary-50 ${selectedPassengers === index ? "ring-2 ring-primary-400" : ""}`}
+                onClick={onClick}
+            >
                 <div className="flex flex-row gap-2 justify-between items-center w-full px-4 py-[0.3125rem]">
-                    <div className="flex min-w-8 h-8 p-[0.4375rem] rounded-lg bg-disable-main">
+                    <div
+                        className={`flex min-w-8 h-8 items-center justify-center p-[0.4375rem] rounded-lg ${passengerSeatArr[index] ? "bg-primary-300" : "bg-disable-main"}`}
+                    >
                         {/* TODO: implement passenger selection */}
+                        <p className="!text-[0.875rem] !text-common-white">
+                            {passengerSeatArr[index]
+                                ? passengerSeatArr[index]
+                                : "-"}
+                        </p>
                     </div>
                     <div className="w-[11.125rem] h-[2rem] rounded-lg p-[0.4375rem] bg-primary-100 items-center">
                         <p className="!text-[0.875rem] !text-primary-400">
-                            Passenger Name
+                            {passengerData[index]?.givenName +
+                                " " +
+                                passengerData[index]?.lastName}
                         </p>
                     </div>
                 </div>
@@ -79,7 +180,10 @@ export default function SelectSeatCard({
                                                     // Seat
                                                     <div
                                                         key={colIndex}
-                                                        className="min-w-8 min-h-8 p-[0.3125rem] bg-white rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary-100"
+                                                        className={`${curSeat === `${colIndex + 1}${letter}` ? "ring-2 ring-primary-400" : ""} min-w-8 min-h-8 p-[0.3125rem] ${passengerSeatArr.includes(`${colIndex + 1}${letter}`) && curSeat !== `${colIndex + 1}${letter}` ? "bg-gray-100" : "bg-white"} rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary-100`}
+                                                        onClick={handleSeatClick(
+                                                            `${colIndex + 1}${letter}`,
+                                                        )}
                                                     >
                                                         <p className="!text-[0.875rem] !text-primary-600 -rotate-90">
                                                             {colIndex + 1}
@@ -111,7 +215,11 @@ export default function SelectSeatCard({
                         <div className="flex flex-col gap-4">
                             {/* TODO: implement passenger selection to match seat selection */}
                             {[...Array(passengerCount)].map((_, index) => (
-                                <PassengerName key={index} index={index} />
+                                <PassengerName
+                                    key={index}
+                                    index={index}
+                                    onClick={() => handlePassengerClick(index)}
+                                />
                             ))}
                         </div>
                     </div>
@@ -119,6 +227,7 @@ export default function SelectSeatCard({
                         text="Confirm"
                         height="h-[2.0625rem]"
                         width="w-[45.875rem]"
+                        onClick={handleConfirm}
                     />
                 </div>
             </div>

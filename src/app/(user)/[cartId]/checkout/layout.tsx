@@ -7,29 +7,8 @@ import PriceBreakdownCard, {
 } from "@/src/components/paymentConfirmation/priceBreakdownCard";
 import { CheckoutProvider } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
-import { Cart } from "@/src/generated/prisma/wasm";
-import { nextAuthOptions } from "@/src/lib/auth";
-import { getServerSession } from "next-auth";
+import { fetchCartData } from "@/src/helper/CheckoutHelper";
 import BookingInfo from "./_components/BookingInfo";
-
-async function fetchCartData(cartId: number): Promise<Cart> {
-    const session = await getServerSession(nextAuthOptions);
-    const userId = session?.user?.id;
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/cart/${userId}?CartID=${cartId}`,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            cache: "no-store",
-        },
-    );
-    if (!response.ok) {
-        throw new Error("Failed to fetch cart data");
-    }
-    return response.json();
-}
 
 export default async function CheckoutLayout({
     children,
@@ -65,7 +44,7 @@ export default async function CheckoutLayout({
                         />
                     </div>
                 </div>
-                <FooterButton />
+                <FooterButton cartId={cartId} />
             </CheckoutProvider>
         </div>
     );

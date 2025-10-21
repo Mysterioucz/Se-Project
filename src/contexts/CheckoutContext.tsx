@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
-import { Cart } from "../generated/prisma";
 
 interface Payment {
     isPaymentValid: boolean;
@@ -16,8 +15,8 @@ interface Seat {
 }
 
 export interface BaggageAllowance {
-    departureBaggage: number; // in kg
-    returnBaggage?: number;
+    departureBaggage: string; // in kg
+    returnBaggage?: string;
 }
 
 export interface PassengerData {
@@ -33,6 +32,34 @@ export interface PassengerData {
     seatSelection: Seat; // Seat No
 }
 
+export interface Cart {
+    id: number;
+    FlightType: string;
+    ClassType: string;
+    Adults: number;
+    Childrens: number;
+    Infants: number;
+    Price: number;
+    DepartureAirport: string;
+    ArrivalAirport: string;
+    DepartureCity: string;
+    ArrivalCity: string;
+    Depart: {
+        FlightNo: string;
+        DepartTime: Date;
+        ArrivalTime: Date;
+        AirlineName: string;
+        Stops: number;
+    };
+    Return: {
+        FlightNo: string;
+        DepartTime: Date;
+        ArrivalTime: Date;
+        AirlineName: string;
+        Stops: number;
+    };
+}
+
 interface CheckoutPayload {
     passengerData: PassengerData[];
     payment: Payment;
@@ -44,6 +71,11 @@ type CheckoutContextType = {
     updatePassengerAt: (
         index: number,
         passengerPatch: Partial<PassengerData>,
+    ) => void;
+    updatePassengerSeatAt: (index: number, seatPatch: Partial<Seat>) => void;
+    updateBaggageAt: (
+        index: number,
+        baggagePatch: Partial<BaggageAllowance>,
     ) => void;
     clearCheckoutData: () => void; // after successful payment
     cartData: Cart;
@@ -65,8 +97,8 @@ const initialPassengerData: PassengerData = {
     issueDate: "",
     expiryDate: "",
     baggageAllowance: {
-        departureBaggage: 0,
-        returnBaggage: 0,
+        departureBaggage: "0",
+        returnBaggage: "0",
     },
     seatSelection: {
         departureSeat: "",
@@ -91,9 +123,8 @@ export function CheckoutProvider({
     children: React.ReactNode;
     cartData: Cart;
 }) {
-    const [checkoutData, setCheckoutData] = useState<CheckoutPayload>(
-        initialCheckoutData,
-    );
+    const [checkoutData, setCheckoutData] =
+        useState<CheckoutPayload>(initialCheckoutData);
 
     const updateCheckoutData = (data: Partial<CheckoutPayload>) => {
         setCheckoutData((prev) => {
@@ -156,6 +187,58 @@ export function CheckoutProvider({
         });
     };
 
+    const updatePassengerSeatAt = (index: number, seatPatch: Partial<Seat>) => {
+        setCheckoutData((prev) => {
+            const list = [...(prev.passengerData ?? [])];
+            if (index < 0) {
+                console.warn(
+                    "updatePassengerSeatAt: index out of range",
+                    index,
+                );
+                return prev;
+            } else if (index >= list.length) {
+                ensurePassengerAt(index);
+            }
+            list[index].seatSelection = {
+                ...list[index].seatSelection,
+                ...seatPatch,
+            };
+            const updated = { ...prev, passengerData: list };
+            if (typeof window !== "undefined")
+                localStorage.setItem(
+                    CHECKOUT_STORAGE_KEY,
+                    JSON.stringify(updated),
+                );
+            return updated;
+        });
+    };
+
+    const updateBaggageAt = (
+        index: number,
+        baggagePatch: Partial<BaggageAllowance>,
+    ) => {
+        setCheckoutData((prev) => {
+            const list = [...(prev.passengerData ?? [])];
+            if (index < 0) {
+                console.warn("updateBaggageAt: index out of range", index);
+                return prev;
+            } else if (index >= list.length) {
+                ensurePassengerAt(index);
+            }
+            list[index].baggageAllowance = {
+                ...list[index].baggageAllowance,
+                ...baggagePatch,
+            };
+            const updated = { ...prev, passengerData: list };
+            if (typeof window !== "undefined")
+                localStorage.setItem(
+                    CHECKOUT_STORAGE_KEY,
+                    JSON.stringify(updated),
+                );
+            return updated;
+        });
+    };
+
     return (
         <CheckoutContext.Provider
             value={{
@@ -163,6 +246,8 @@ export function CheckoutProvider({
                 updateCheckoutData,
                 clearCheckoutData,
                 updatePassengerAt,
+                updatePassengerSeatAt,
+                updateBaggageAt,
                 cartData,
             }}
         >

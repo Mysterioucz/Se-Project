@@ -1,5 +1,9 @@
 "use client";
-import { useCheckout } from "@/src/contexts/CheckoutContext";
+import {
+    Cart,
+    useCheckout,
+    type BaggageAllowance,
+} from "@/src/contexts/CheckoutContext";
 import SelectComponent from "@components/select";
 import { MenuItem } from "@mui/material";
 import Image from "next/image";
@@ -24,6 +28,10 @@ interface ServiceProps {
     arrivalPlace: string;
     initialCheckedBaggage: number[];
     onChange?: (baggageSelections: string[]) => void;
+    updateBaggageAt: (
+        index: number,
+        baggagePatch: Partial<BaggageAllowance>,
+    ) => void;
 }
 
 export const baggageOptions = [
@@ -35,16 +43,27 @@ export const baggageOptions = [
     { label: "+25 kg - ฿595.00", value: "+25kg, ฿595.00" },
 ];
 
-async function fetchAdditionalServices() {
+async function fetchAdditionalServices(
+    flightNo: string,
+    departureTime: Date,
+    arrivalTime: Date,
+) {
     // Placeholder for fetching additional services if needed
-    const services = await fetch('/api/v1/flights/lookup?flightNo=...&departTime=...&arrivalTime=...');
-    return services.json();
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}&departTime=${departureTime}&arrivalTime=${arrivalTime}`,
+    );
+    const res = await response.json();
+    return res.data.availableServices;
 }
 
-async function getAdditionalServices() {
+async function getAdditionalServices(cartData: Cart) {
     // Placeholder for fetching additional services if needed
-    const services = await fetchAdditionalServices();
-    return services.json();
+    const services = await fetchAdditionalServices(
+        cartData.Depart.FlightNo,
+        cartData.Depart.DepartTime,
+        cartData.Depart.ArrivalTime,
+    );
+    return services;
 }
 
 function DepartureAdditionalService({
@@ -54,14 +73,7 @@ function DepartureAdditionalService({
     initialCheckedBaggage,
     onChange,
 }: ServiceProps) {
-    const { checkoutData, updateCheckoutData, cartData } = useCheckout();
-    console.log(cartData);
-    const [selectedOptions, setSelectedOptions] = useState<string[]>(
-        checkoutData.passengerData.map((passenger) => {
-            const baggage = passenger.baggageAllowance.departureBaggage;
-            return baggage > 0 ? `1 x ${baggage} kg` : "Not Included";
-        }),
-    );
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
     const handleOptionChange = (index: number, value: string) => {
         const updated = [...selectedOptions];
@@ -129,24 +141,12 @@ function DepartureAdditionalService({
                                 )
                             }
                         >
-                            <MenuItem value="Not Included">
-                                Not Included
-                            </MenuItem>
-                            <MenuItem value="+5kg, ฿240.00">
-                                +5 kg - ฿240.00
-                            </MenuItem>
-                            <MenuItem value="+10kg, ฿325.00">
-                                +10 kg - ฿325.00
-                            </MenuItem>
-                            <MenuItem value="+15kg, ฿450.00">
-                                +15 kg - ฿450.00
-                            </MenuItem>
-                            <MenuItem value="+20kg, ฿490.00">
-                                +20 kg - ฿490.00
-                            </MenuItem>
-                            <MenuItem value="+25kg, ฿595.00">
-                                +25 kg - ฿595.00
-                            </MenuItem>
+                            {baggageOptions.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                           
                         </SelectComponent>
                     </div>
                 </div>
@@ -161,6 +161,7 @@ function ReturnAdditionalService({
     arrivalPlace,
     initialCheckedBaggage,
     onChange,
+    updateBaggageAt,
 }: ServiceProps) {
     const [selectedOptions, setSelectedOptions] = useState<string[]>(
         Array(passengers.length).fill("Not Included"),
@@ -170,6 +171,8 @@ function ReturnAdditionalService({
         const updated = [...selectedOptions];
         updated[index] = value;
         setSelectedOptions(updated);
+        updateBaggageAt(index, { departureBaggage: value });
+
         onChange?.(updated);
     };
 
@@ -231,24 +234,14 @@ function ReturnAdditionalService({
                                 )
                             }
                         >
-                            <MenuItem value="Not Included">
-                                Not Included
-                            </MenuItem>
-                            <MenuItem value="+5kg, ฿240.00">
-                                +5 kg - ฿240.00
-                            </MenuItem>
-                            <MenuItem value="+10kg, ฿325.00">
-                                +10 kg - ฿325.00
-                            </MenuItem>
-                            <MenuItem value="+15kg, ฿450.00">
-                                +15 kg - ฿450.00
-                            </MenuItem>
-                            <MenuItem value="+20kg, ฿490.00">
-                                +20 kg - ฿490.00
-                            </MenuItem>
-                            <MenuItem value="+25kg, ฿595.00">
-                                +25 kg - ฿595.00
-                            </MenuItem>
+                            {baggageOptions.map((option) => (
+                                <MenuItem
+                                    key={option.value}
+                                    value={option.value}
+                                >
+                                    {option.label}
+                                </MenuItem>
+                            ))}
                         </SelectComponent>
                     </div>
                 </div>
@@ -273,6 +266,10 @@ export default function BaggageAllowance({
     const DeparturePlace = departurePlace?.trim() || "DeparturePlace";
     const ArrivalPlace = arrivalPlace?.trim() || "ArrivalPlace";
 
+    const { checkoutData, cartData } = useCheckout();
+    // const options = getAdditionalServices(cartData);
+    // console.log("Additional Services Options:", options);
+
     const initialCheckedDepartMock = [15, 20, 0];
     const initialCheckedReturnMock = [0, 10, 25];
 
@@ -296,6 +293,7 @@ export default function BaggageAllowance({
     const [returnSelections, setReturnSelections] = useState<string[]>(
         Array(passengers.length).fill("Not Included"),
     );
+    const { updateBaggageAt } = useCheckout();
 
     const handleDepartChange = (selections: string[]) => {
         setDepartSelections(selections);
@@ -365,6 +363,7 @@ export default function BaggageAllowance({
                 arrivalPlace={ArrivalPlace}
                 initialCheckedBaggage={initialDepart}
                 onChange={handleDepartChange}
+                updateBaggageAt={updateBaggageAt}
             />
 
             {hasReturn && (
@@ -374,6 +373,7 @@ export default function BaggageAllowance({
                     arrivalPlace={ArrivalPlace}
                     initialCheckedBaggage={initialReturn}
                     onChange={handleReturnChange}
+                    updateBaggageAt={updateBaggageAt}
                 />
             )}
         </div>

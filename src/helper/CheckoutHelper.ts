@@ -1,0 +1,24 @@
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "../lib/auth";
+import { Cart } from "../contexts/CheckoutContext";
+
+export async function fetchCartData(cartId: number): Promise<Cart> {
+    const session = await getServerSession(nextAuthOptions);
+    const userId = session?.user?.id;
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/cart/${userId}?CartID=${cartId}`,
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cache: "no-store",
+        },
+    );
+    if (!response.ok) {
+        throw new Error("Failed to fetch cart data");
+    }
+    const res = await response.json();
+    const data = res.data[0] as Cart;
+    return data;
+}
