@@ -4,23 +4,12 @@ import { formatToShortDate } from "@/src/app/flights/search/_components/SummaryC
 import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
 import { Cart, useCheckout } from "@/src/contexts/CheckoutContext";
 import { Flight } from "@/src/generated/prisma";
+import { fetchFlightData } from "@/src/helper/CheckoutHelper";
 import { useEffect, useState } from "react";
 import {
     formatToTime,
     getFlightDuration,
 } from "../../../cart/[AccountID]/_components/FlightDetail";
-
-async function fetchFlightData(
-    flightNo: string,
-    departureTime: Date,
-    arrivalTime: Date,
-): Promise<Flight> {
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}&departTime=${departureTime}&arrivalTime=${arrivalTime}`,
-    );
-    const res = await response.json();
-    return res.data.flight as Flight;
-}
 
 export default function Page() {
     const { cartData } = useCheckout();

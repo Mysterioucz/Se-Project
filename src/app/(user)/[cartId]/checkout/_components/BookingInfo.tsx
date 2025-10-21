@@ -3,7 +3,6 @@ import {
     TimeForwardIcon,
     TwoWayArrowIcon,
 } from "@/src/components/icons/module";
-
 export interface Flight {
     flightNumber: string;
     departureCity: string;

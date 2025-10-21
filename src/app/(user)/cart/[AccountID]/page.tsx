@@ -32,5 +32,5 @@ export default async function CartPage({ params }: PageProps) {
     const res = await getCart(AccountID);
     const cartData = res.data;
 
-    return <CartClient initialCartData={cartData} AccountID={sessionAccountID} />;
+    return <CartClient initialCartData={cartData} AccountID={sessionAccountID}/>;
 }
