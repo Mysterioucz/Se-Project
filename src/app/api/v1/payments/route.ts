@@ -232,7 +232,7 @@ export async function POST(request: NextRequest) {
         }
     
       return NextResponse.json(
-        { success: false, message: ErrorMessages.SERVER},
+        { success: false, message: ErrorMessages.SERVER, details: err},
         { status: 500 }
       );
     }

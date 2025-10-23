@@ -22,7 +22,15 @@ interface QRModalProps {
 }
 
 function extractOnlyNumbers(input: string): number {
-    return parseInt(input.replace(/\D/g, ""), 10);
+    const res = input.replace(/\D/g, "");
+    if (res === "") return 0;
+    return parseInt(res, 10);
+}
+
+function str2DateTime(dateStr: string): Date {
+    // Assuming dateStr is in the format "DD/MM/YY" or similar ISO format
+    const [day, month, year] = dateStr.split("/").map(Number);
+    return new Date(year + 2000, month - 1, day);
 }
 
 async function postPaymentCompletion(
@@ -52,7 +60,7 @@ async function postPaymentCompletion(
         PassengerName: passenger.givenName,
         PassengerLastName: passenger.lastName,
         Gender: passenger.gender,
-        DateOfBirth: passenger.dateOfBirth, // Should be in ISO format or parseable date string
+        DateOfBirth: str2DateTime(passenger.dateOfBirth), // Should be in ISO format or parseable date string
         Nationality: passenger.nationality,
         BaggageChecked: extractOnlyNumbers(
             passenger.baggageAllowance.departureBaggage.Description,
@@ -67,7 +75,7 @@ async function postPaymentCompletion(
         ArrivalTime: departFlight.ArrivalTime,
         Tickets: tickets,
         totalAmount: totalAmount,
-        method: paymentData.isQRmethod ? "MOBILE_BANKING" : "ONLINE_BANKING",
+        method: paymentData.isQRmethod ? "QR_CODE" : "ONLINE_BANKING",
         status: "PAID",
         paymentEmail: paymentData.email,
         paymentTelNo: paymentData.telNo,
@@ -98,7 +106,7 @@ export default function QRModal({ open, onClose }: QRModalProps) {
     const [amount, setAmount] = useState<number>(0);
     const { checkoutData, cartData, departFlight, returnFlight } =
         useCheckout();
-    
+
     const handlePaymentComplete = async () => {
         const res = await postPaymentCompletion(
             checkoutData!,
