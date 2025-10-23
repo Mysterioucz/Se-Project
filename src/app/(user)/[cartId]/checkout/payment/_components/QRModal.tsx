@@ -21,8 +21,8 @@ interface QRModalProps {
     onClose: () => void;
 }
 
-function extractOnlyNumbers(input: string): string {
-    return input.replace(/\D/g, "");
+function extractOnlyNumbers(input: string): number {
+    return parseInt(input.replace(/\D/g, ""), 10);
 }
 
 async function postPaymentCompletion(
@@ -60,12 +60,11 @@ async function postPaymentCompletion(
         BaggageCabin: 7, // Default or from passenger data if available
         SeatNo: passenger.seatSelection.departureSeat,
     }));
-
     const payload = {
         AircraftRegNo: departFlight.AircraftRegNo,
         FlightNo: departFlight.FlightNo,
-        DepartTime: departFlight.DepartTime.toISOString(),
-        ArrivalTime: departFlight.ArrivalTime.toISOString(),
+        DepartTime: departFlight.DepartTime,
+        ArrivalTime: departFlight.ArrivalTime,
         Tickets: tickets,
         totalAmount: totalAmount,
         method: paymentData.isQRmethod ? "MOBILE_BANKING" : "ONLINE_BANKING",
@@ -99,7 +98,7 @@ export default function QRModal({ open, onClose }: QRModalProps) {
     const [amount, setAmount] = useState<number>(0);
     const { checkoutData, cartData, departFlight, returnFlight } =
         useCheckout();
-
+    
     const handlePaymentComplete = async () => {
         const res = await postPaymentCompletion(
             checkoutData!,

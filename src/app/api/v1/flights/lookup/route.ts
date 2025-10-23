@@ -31,6 +31,11 @@ export async function GET(req: NextRequest) {
                 },
             },
             select: {
+                AircraftRegNo: true,
+                FlightNo: true,
+                DepartTime: true,
+                ArrivalTime: true,
+                AirlineName: true,
                 availableServices: {
                     select: {
                         service: true,
