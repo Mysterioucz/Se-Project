@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { Flight } from "../helper/CheckoutHelper";
 
 interface Payment {
     isPaymentValid: boolean;
@@ -91,6 +92,8 @@ type CheckoutContextType = {
     ) => void;
     clearCheckoutData: () => void; // after successful payment
     cartData: Cart;
+    departFlight: Flight;
+    returnFlight?: Flight;
 };
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(
@@ -148,9 +151,13 @@ const initialCheckoutData: CheckoutPayload = {
 export function CheckoutProvider({
     children,
     cartData,
+    departFlight,
+    returnFlight,
 }: {
     children: React.ReactNode;
     cartData: Cart;
+    departFlight: Flight;
+    returnFlight?: Flight;
 }) {
     const [checkoutData, setCheckoutData] =
         useState<CheckoutPayload>(initialCheckoutData);
@@ -301,6 +308,8 @@ export function CheckoutProvider({
                 updatePassengerSeatAt,
                 updateBaggageAt,
                 cartData,
+                departFlight,
+                returnFlight,
             }}
         >
             {children}

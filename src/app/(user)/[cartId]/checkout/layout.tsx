@@ -2,12 +2,11 @@ import CheckoutProgress from "@/src/app/(user)/[cartId]/checkout/_components/Che
 import FooterButton from "@/src/app/(user)/[cartId]/checkout/_components/FooterButton";
 import Navbar from "@/src/components/Navbar";
 import PriceBreakdownCard, {
-    BaggageSummaryProps,
     TicketSummaryProps,
 } from "@/src/components/paymentConfirmation/priceBreakdownCard";
 import { CheckoutProvider } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
-import { fetchCartData } from "@/src/helper/CheckoutHelper";
+import { fetchCartData, fetchFlightData } from "@/src/helper/CheckoutHelper";
 import BookingInfo from "./_components/BookingInfo";
 
 export default async function CheckoutLayout({
@@ -19,6 +18,19 @@ export default async function CheckoutLayout({
 }) {
     const { cartId } = await params;
     const cartData = await fetchCartData(Number(cartId));
+    const departData = await fetchFlightData(
+        cartData.Depart.FlightNo,
+        cartData.Depart.DepartTime,
+        cartData.Depart.ArrivalTime,
+    );
+    let returnData = undefined;
+    if (cartData.Return) {
+        returnData = await fetchFlightData(
+            cartData.Return.FlightNo,
+            cartData.Return.DepartTime,
+            cartData.Return.ArrivalTime,
+        );
+    }
 
     // Map cartData to ticket & baggage props expected by PriceBreakdownCard
     const adultCount = cartData?.Adults ?? 0;
@@ -53,14 +65,16 @@ export default async function CheckoutLayout({
         <div className="flex flex-col min-h-screen gap-8 pb-8 items-center">
             <Navbar />
             <CheckoutProgress />
-            <CheckoutProvider cartData={cartData}>
+            <CheckoutProvider
+                cartData={cartData}
+                departFlight={departData}
+                returnFlight={returnData}
+            >
                 <div className="flex w-full px-32 gap-32">
                     <div className="flex w-full">{children}</div>
                     <div className="flex flex-col w-full gap-10 max-w-[21.25rem]">
                         <BookingInfo />
-                        <PriceBreakdownCard
-                            tickets={tickets}
-                        />
+                        <PriceBreakdownCard tickets={tickets} />
                     </div>
                 </div>
                 <FooterButton cartId={cartId} />

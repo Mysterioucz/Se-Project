@@ -17,8 +17,8 @@ const TicketInputSchema = z.object({
         message: "Invalid date",
     }),
     Nationality: z.string().min(1),
-    BaggageChecked: z.number().nonnegative(),
-    BaggageCabin: z.number().nonnegative(),
+    BaggageChecked: z.number().nonnegative().default(10),
+    BaggageCabin: z.number().nonnegative().default(7),
     SeatNo: z.string().min(1),
 });
 

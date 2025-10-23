@@ -16,6 +16,10 @@ interface QRModalProps {
     onClose: () => void;
 }
 
+function postPaymentCompletion() {
+    
+}
+
 export default function QRModal({ open, onClose }: QRModalProps) {
     const router = useRouter();
     const [amount, setAmount] = useState<number>(0);

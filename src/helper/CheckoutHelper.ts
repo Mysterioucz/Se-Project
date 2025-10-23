@@ -39,3 +39,14 @@ export async function fetchCartData(cartId: number): Promise<Cart> {
     return data;
 }
 
+export async function fetchFlightData(
+    flightNo: string,
+    departureTime: Date,
+    arrivalTime: Date,
+): Promise<Flight> {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}&departTime=${departureTime}&arrivalTime=${arrivalTime}`,
+    );
+    const res = await response.json();
+    return res.data.flight as Flight;
+}
