@@ -23,7 +23,7 @@ export default function Page() {
         updateCheckoutData({
             payment: {
                 ...(checkoutData?.payment ?? {}),
-                isQRmethod: true,
+                isQRmethod: isQR,
             },
         });
     };

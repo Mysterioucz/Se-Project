@@ -226,7 +226,7 @@ export function CheckoutProvider({
 
     const updatePassengerSeatAt = (index: number, seatPatch: Partial<Seat>) => {
         setCheckoutData((prev) => {
-            const list = [...(prev.passengerData ?? [])];
+            const list = prev.passengerData;
             if (index < 0) {
                 console.warn(
                     "updatePassengerSeatAt: index out of range",
@@ -236,10 +236,15 @@ export function CheckoutProvider({
             } else if (index >= list.length) {
                 ensurePassengerAt(index);
             }
-            list[index].seatSelection = {
-                ...list[index].seatSelection,
-                ...seatPatch,
-            };
+            try{
+                list[index].seatSelection = {
+                    ...list[index].seatSelection,
+                    ...seatPatch,
+                };
+            }catch(e){
+                console.error("Failed to update seat selection", e);
+                console.log("passengerData", prev.passengerData);
+            }
             const updated = { ...prev, passengerData: list };
             if (typeof window !== "undefined")
                 localStorage.setItem(

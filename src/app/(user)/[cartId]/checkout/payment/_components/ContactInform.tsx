@@ -1,9 +1,10 @@
 "use client";
 
 import TextFieldComponent from "@components/text_field";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 interface ContactInformProps {
     onStatusChange: (isValid: boolean) => void;
@@ -26,37 +27,27 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function ContactInform({ onStatusChange }: ContactInformProps) {
     const {
-        register,
-        handleSubmit,
         watch,
         formState: { errors, isValid },
         setValue,
     } = useForm<ContactFormData>({
         resolver: zodResolver(contactSchema),
+        mode: "onChange", // validate on every change
         defaultValues: {
             userContactEmail: "",
             userTel: "",
         },
     });
-    const onSubmit = (data: ContactFormData) => {
-        console.log("✅ Valid data:", data);
-    };
+
+    // Notify parent whenever validation state changes
+    useEffect(() => {
+        onStatusChange(isValid);
+    }, [isValid]);
 
     const values = watch();
 
-    const computeIsReady = (email: string, tel: string) => {
-        const isEmailFilled = email.trim() !== "";
-        const isTelFilled = tel.trim() !== "";
-        return isEmailFilled && isTelFilled;
-    };
-
-    // Notify parent synchronously when fields change via the onSubmit handlers below.
-
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-[1.5rem] w-full"
-        >
+        <form className="flex flex-col gap-[1.5rem] w-full">
             {/* EMAIL FIELD */}
             <div className="flex flex-col gap-1">
                 <TextFieldComponent
@@ -73,7 +64,9 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
                     }
                     onSubmit={(val) => {
                         const { text } = val as { text: string };
-                        setValue("userContactEmail", text, { shouldValidate: true });
+                        setValue("userContactEmail", text, {
+                            shouldValidate: true,
+                        });
                     }}
                 />
                 {errors.userContactEmail && (
@@ -103,7 +96,9 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
                     }}
                 />
                 {errors.userTel && (
-                    <p className="text-error-main text-sm">{errors.userTel.message}</p>
+                    <p className="text-error-main text-sm">
+                        {errors.userTel.message}
+                    </p>
                 )}
             </div>
         </form>
