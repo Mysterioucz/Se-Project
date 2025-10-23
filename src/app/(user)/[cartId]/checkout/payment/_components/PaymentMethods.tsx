@@ -2,27 +2,17 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import BankSelect, { BankOption } from "./BankSelect";
+import BankSelect, { BankOption, defaultBank } from "./BankSelect";
 
 interface PaymentMethodsProps {
-    onStatusChange: (isValid: boolean) => void;
-    onQRmethodChange: (isQR: boolean) => void;
+    onStatusChange: (isValid: boolean, isQR: boolean, bankName: string) => void;
 }
 
 export default function PaymentMethods({
     onStatusChange,
-    onQRmethodChange,
 }: PaymentMethodsProps) {
     const [selected, setSelected] = useState("mobile");
     const [bank, setBank] = useState("");
-
-    // Notify parent of current method and validity synchronously when handlers run.
-    // Avoid useEffect by calling the callbacks from the event handlers below.
-
-    const notifyMethodChange = (method: string) => {
-        console.log("Method changed to:", method);
-        onQRmethodChange(method === "qr");
-    };
 
     const computeIsValid = (method: string, bankValue: string) => {
         if (method === "mobile") return bankValue !== "";
@@ -31,7 +21,11 @@ export default function PaymentMethods({
     };
 
     const notifyStatusChange = (method: string, bankValue: string) => {
-        onStatusChange(computeIsValid(method, bankValue));
+        onStatusChange(
+            computeIsValid(method, bankValue),
+            method.trim() === "qr",
+            method.trim() === "mobile" ? bankValue : defaultBank,
+        );
     };
 
     return (
@@ -53,7 +47,6 @@ export default function PaymentMethods({
                         onChange={(e) => {
                             const v = e.target.value;
                             setSelected(v);
-                            notifyMethodChange(v);
                             notifyStatusChange(v, bank);
                         }}
                         className="w-[1.25rem] h-[1.25rem] accent-[var(--color-primary-500)]"
@@ -112,7 +105,6 @@ export default function PaymentMethods({
                         onChange={(e) => {
                             const v = e.target.value;
                             setSelected(v);
-                            notifyMethodChange(v);
                             notifyStatusChange(v, bank);
                         }}
                         className="w-[1.25rem] h-[1.25rem] accent-[var(--color-primary-500)]"

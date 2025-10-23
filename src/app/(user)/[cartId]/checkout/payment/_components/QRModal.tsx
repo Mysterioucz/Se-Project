@@ -1,5 +1,11 @@
 "use client";
 
+import {
+    Cart,
+    CheckoutPayload,
+    useCheckout,
+} from "@/src/contexts/CheckoutContext";
+import { Flight } from "@/src/helper/CheckoutHelper";
 import Button from "@components/Button";
 import {
     Dialog,
@@ -15,26 +21,120 @@ interface QRModalProps {
     onClose: () => void;
 }
 
+function extractOnlyNumbers(input: string): number {
+    const res = input.replace(/\D/g, "");
+    if (res === "") return 0;
+    return parseInt(res, 10);
+}
+
+function str2DateTime(dateStr: string): Date {
+    // Assuming dateStr is in the format "DD/MM/YY" or similar ISO format
+    const [day, month, year] = dateStr.split("/").map(Number);
+    return new Date(year + 2000, month - 1, day);
+}
+
+async function postPaymentCompletion(
+    checkoutData: CheckoutPayload,
+    cartData: Cart,
+    departFlight: Flight,
+    returnFlight?: Flight,
+) {
+    const passengerData = checkoutData?.passengerData;
+    const paymentData = checkoutData?.payment;
+
+    // Calculate total amount (base price + service fees for all passengers)
+    const totalAmount = passengerData.reduce((sum, passenger) => {
+        const departureBaggageFee =
+            passenger.baggageAllowance.departureBaggage.Price || 0;
+        const returnBaggageFee =
+            passenger.baggageAllowance.returnBaggage?.Price || 0;
+        return sum + cartData.Price + departureBaggageFee + returnBaggageFee;
+    }, 0);
+
+    // Map passenger data to ticket format expected by API
+    const tickets = passengerData.map((passenger) => ({
+        Price: cartData.Price,
+        ServiceFee:
+            (passenger.baggageAllowance.departureBaggage.Price || 0) +
+            (passenger.baggageAllowance.returnBaggage?.Price || 0),
+        PassengerName: passenger.givenName,
+        PassengerLastName: passenger.lastName,
+        Gender: passenger.gender,
+        DateOfBirth: str2DateTime(passenger.dateOfBirth), // Should be in ISO format or parseable date string
+        Nationality: passenger.nationality,
+        BaggageChecked: extractOnlyNumbers(
+            passenger.baggageAllowance.departureBaggage.Description,
+        ), // Default or from passenger data if available
+        BaggageCabin: 7, // Default or from passenger data if available
+        SeatNo: passenger.seatSelection.departureSeat,
+    }));
+    const payload = {
+        AircraftRegNo: departFlight.AircraftRegNo,
+        FlightNo: departFlight.FlightNo,
+        DepartTime: departFlight.DepartTime,
+        ArrivalTime: departFlight.ArrivalTime,
+        Tickets: tickets,
+        totalAmount: totalAmount,
+        method: paymentData.isQRmethod ? "QR_CODE" : "ONLINE_BANKING",
+        status: "PAID",
+        paymentEmail: paymentData.email,
+        paymentTelNo: paymentData.telNo,
+        bankName: paymentData.bankName,
+    };
+
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Payment failed");
+    }
+
+    return await response.json();
+}
+
 export default function QRModal({ open, onClose }: QRModalProps) {
     const router = useRouter();
     const [amount, setAmount] = useState<number>(0);
+    const { checkoutData, cartData, departFlight, returnFlight } =
+        useCheckout();
 
+    const handlePaymentComplete = async () => {
+        const res = await postPaymentCompletion(
+            checkoutData!,
+            cartData,
+            departFlight,
+            returnFlight,
+        );
+        if (res.success) {
+            router.push(`/payment/success/${res.data.paymentId}`);
+        }
+    };
     useEffect(() => {
         if (!open) return;
-
-        async function fetchAmount() {
-            try {
-                // TODO: Fetch actual amount from backend
-                // const res = await fetch("/api/payment/amount");
-                // const data = await res.json();
-                // setAmount(data.amount);
-                setAmount(1234.56); // Mock amount for demonstration
-            } catch (err) {
-                console.error("Failed to fetch amount", err);
-            }
-        }
-
-        fetchAmount();
+        // Calculate total amount (base price + service fees for all passengers)
+        const totalAmount =
+            checkoutData?.passengerData.reduce((sum, passenger) => {
+                const departureBaggageFee =
+                    passenger.baggageAllowance.departureBaggage.Price || 0;
+                const returnBaggageFee =
+                    passenger.baggageAllowance.returnBaggage?.Price || 0;
+                return (
+                    sum +
+                    cartData.Price +
+                    departureBaggageFee +
+                    returnBaggageFee
+                );
+            }, 0) || 0;
+        setAmount(totalAmount);
     }, [open]);
 
     return (
@@ -110,7 +210,7 @@ export default function QRModal({ open, onClose }: QRModalProps) {
                     size="md"
                     width="w-full"
                     height="h-full"
-                    onClick={() => router.push("/payment-success")}
+                    onClick={handlePaymentComplete}
                 />
             </DialogActions>
         </Dialog>

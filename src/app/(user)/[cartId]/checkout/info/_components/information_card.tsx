@@ -1,19 +1,23 @@
 "use client";
 
 import {
-    CHECKOUT_STORAGE_KEY,
+    initialBaggageAllowance,
+    initialSeatSelection,
     PassengerData,
     useCheckout,
 } from "@/src/contexts/CheckoutContext";
-import Button from "@components/Button";
 import ListChoice from "@components/list_choice";
 import Select from "@components/select";
 import TextFieldComponent from "@components/text_field";
-import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface InformationCardProps {
     international?: boolean;
-    passengerIdx?: number;
+    passengerNum?: number;
+    passengerData?: PassengerData;
 }
 
 const genderOptions = [{ value: "Male" }, { value: "Female" }];
@@ -27,392 +31,428 @@ const FYI = {
         "Please enter your birthdate, passport issue date, passport expiry date in the format DD/MM/YYYY (e.g., 05/09/2000, Year in CE).",
 };
 
-export default function InformationCard(props: InformationCardProps) {
-    const { updatePassengerAt } = useCheckout();
+// Base schema for domestic flights
+const basePassengerSchema = z.object({
+    givenName: z.string().min(1, "Given name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    gender: z.string().min(1, "Gender is required"),
+    dateOfBirth: z
+        .string()
+        .min(1, "Date of birth is required")
+        .regex(/^\d{2}\/\d{2}\/\d{4}$/, "Date must be in DD/MM/YYYY format")
+        .refine((date) => {
+            const [day, month, year] = date.split("/");
+            return !isNaN(Date.parse(`${year}-${month}-${day}`));
+        }, "Invalid date"),
+    nationality: z.string().min(1, "Nationality is required"),
+});
 
-    const [givenName, setGivenName] = useState<string>("");
-    const [errorGivenName, setErrorGivenName] = useState<boolean>(false);
-    const [lastName, setLastName] = useState<string>("");
-    const [errorLastName, setErrorLastName] = useState<boolean>(false);
+// Extended schema for international flights
+const internationalPassengerSchema = basePassengerSchema.extend({
+    passportNo: z.string().min(1, "Passport number is required"),
+    issueDate: z
+        .string()
+        .min(1, "Issue date is required")
+        .regex(/^\d{2}\/\d{2}\/\d{4}$/, "Date must be in DD/MM/YYYY format")
+        .refine((date) => {
+            const [day, month, year] = date.split("/");
+            return !isNaN(Date.parse(`${year}-${month}-${day}`));
+        }, "Invalid date"),
+    expiryDate: z
+        .string()
+        .min(1, "Expiry date is required")
+        .regex(/^\d{2}\/\d{2}\/\d{4}$/, "Date must be in DD/MM/YYYY format")
+        .refine((date) => {
+            const [day, month, year] = date.split("/");
+            return !isNaN(Date.parse(`${year}-${month}-${day}`));
+        }, "Invalid date"),
+});
 
-    const [gender, setGender] = useState<string>("");
-    const [errorGender, setErrorGender] = useState<boolean>(false);
-    const [dateOfBirth, setDateOfBirth] = useState<string>("");
-    const [errorDateOfBirth, setErrorDateOfBirth] = useState<boolean>(false);
-    const [nationality, setNationality] = useState<string>("");
-    const [errorNationality, setErrorNationality] = useState<boolean>(false);
+type PassengerFormData = z.infer<typeof basePassengerSchema> & {
+    passportNo?: string;
+    issueDate?: string;
+    expiryDate?: string;
+};
 
-    const [passportNo, setPassportNo] = useState<string>("");
-    const [errorPassportNo, setErrorPassportNo] = useState<boolean>(false);
-    const [issueDate, setIssueDate] = useState<string>("");
-    const [errorIssueDate, setErrorIssueDate] = useState<boolean>(false);
-    const [expiryDate, setExpiryDate] = useState<string>("");
-    const [errorExpiryDate, setErrorExpiryDate] = useState<boolean>(false);
+export default function InformationCard({
+    international,
+    passengerNum,
+    passengerData,
+}: InformationCardProps) {
+    const { updatePassengerAt, updateCheckoutData, checkoutData } =
+        useCheckout();
 
-    // hydrate from localStorage on mount (client-only)
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        watch,
+        formState: { errors, isValid },
+    } = useForm<PassengerFormData>({
+        resolver: zodResolver(
+            international ? internationalPassengerSchema : basePassengerSchema,
+        ),
+        mode: "onChange",
+        defaultValues: {
+            givenName: passengerData?.givenName || "",
+            lastName: passengerData?.lastName || "",
+            gender: passengerData?.gender || "",
+            dateOfBirth: passengerData?.dateOfBirth || "",
+            nationality: passengerData?.nationality || "",
+            passportNo: passengerData?.passportNo || "",
+            issueDate: passengerData?.issueDate || "",
+            expiryDate: passengerData?.expiryDate || "",
+        },
+    });
+
+    // Sync form values when passengerData prop changes
     useEffect(() => {
-        try {
-            const stored = localStorage.getItem(CHECKOUT_STORAGE_KEY);
-            if (!stored) return;
-            const parsed = JSON.parse(stored);
-            const idx = props.passengerIdx ?? 0;
-            const p = parsed?.passengerData?.[idx];
-            if (!p) return;
-            setGivenName(p.givenName ?? "");
-            setLastName(p.lastName ?? "");
-            setGender(p.gender ?? "");
-            setDateOfBirth(p.dateOfBirth ?? "");
-            setNationality(p.nationality ?? "");
-            setPassportNo(p.passportNo ?? "");
-            setIssueDate(p.issueDate ?? "");
-            setExpiryDate(p.expiryDate ?? "");
-        } catch (e) {
-            console.error("failed to hydrate passenger data", e);
+        if (passengerData) {
+            setValue("givenName", passengerData.givenName || "");
+            setValue("lastName", passengerData.lastName || "");
+            setValue("gender", passengerData.gender || "");
+            setValue("dateOfBirth", passengerData.dateOfBirth || "");
+            setValue("nationality", passengerData.nationality || "");
+            setValue("passportNo", passengerData.passportNo || "");
+            setValue("issueDate", passengerData.issueDate || "");
+            setValue("expiryDate", passengerData.expiryDate || "");
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [passengerData, setValue]);
 
-    const handleSaveButtonClick = () => {
-        if (givenName === "") {
-            // TODO: send error
-            console.log("Given name is empty");
-            setErrorGivenName(true);
-        } else {
-            setErrorGivenName(false);
+    useEffect(() => {
+        if (isValid) {
+            const prevValid = checkoutData.info?.isValid || false;
+            if (passengerNum === 1) {
+                updateCheckoutData({
+                    info: {
+                        isValid: isValid,
+                    },
+                });
+            } else {
+                updateCheckoutData({
+                    info: {
+                        isValid: prevValid && isValid,
+                    },
+                });
+            }
         }
-        if (lastName === "") {
-            // TODO: send error
-            console.log("Last name is empty");
-            setErrorLastName(true);
-        } else {
-            setErrorLastName(false);
-        }
-        if (gender === "") {
-            // TODO: send error
-            console.log("Gender is empty");
-            setErrorGender(true);
-        } else {
-            setErrorGender(false);
-        }
-        if (dateOfBirth === "") {
-            // TODO: send error
-            console.log("Date of birth is empty");
-            setErrorDateOfBirth(true);
-        } else {
-            setErrorDateOfBirth(false);
-        }
-        if (nationality === "") {
-            // TODO: send error
-            console.log("Nationality is empty");
-            setErrorNationality(true);
-        } else {
-            setErrorNationality(false);
-        }
+    }, [isValid]);
 
-        if (props.international) {
-            if (passportNo === "") {
-                // TODO: send error
-                console.log("Passport no is empty");
-                setErrorPassportNo(true);
-            } else {
-                setErrorPassportNo(false);
-            }
-            if (issueDate === "") {
-                // TODO: send error
-                console.log("Issue date is empty");
-                setErrorIssueDate(true);
-            } else {
-                setErrorIssueDate(false);
-            }
-            if (expiryDate === "") {
-                // TODO: send error
-                console.log("Expiry date is empty");
-                setErrorExpiryDate(true);
-            } else {
-                setErrorExpiryDate(false);
-            }
-        }
-
-        const [dayOfBirth, monthOfBirth, yearOfBirth] = dateOfBirth.split("/");
-        const [dayOfIssue, monthOfIssue, yearOfIssue] = issueDate.split("/");
-        const [dayOfExpiry, monthOfExpiry, yearOfExpiry] =
-            expiryDate.split("/");
-        if (isNaN(Date.parse(`${yearOfBirth}-${monthOfBirth}-${dayOfBirth}`))) {
-            console.log("Invalid date of birth");
-            setErrorDateOfBirth(true);
-        } else {
-            setErrorDateOfBirth(false);
-        }
-        if (props.international) {
-            if (
-                isNaN(
-                    Date.parse(`${yearOfIssue}-${monthOfIssue}-${dayOfIssue}`),
-                )
-            ) {
-                console.log("Invalid issue date");
-                setErrorIssueDate(true);
-            } else {
-                setErrorIssueDate(false);
-            }
-            if (
-                isNaN(
-                    Date.parse(
-                        `${yearOfExpiry}-${monthOfExpiry}-${dayOfExpiry}`,
-                    ),
-                )
-            ) {
-                console.log("Invalid expiry date");
-                setErrorExpiryDate(true);
-            } else {
-                setErrorExpiryDate(false);
-            }
-        }
-
-        const info: {
-            givenName: string;
-            lastName: string;
-            gender: string;
-            dateOfBirth: string;
-            nationality: string;
-            passportNo?: string;
-            dayOfIssue?: string;
-            monthOfIssue?: string;
-            yearOfIssue?: string;
-            dayOfExpiry?: string;
-            monthOfExpiry?: string;
-            yearOfExpiry?: string;
-        } = {
-            givenName,
-            lastName,
-            gender,
-            dateOfBirth,
-            nationality,
+    const onSubmit = (data: PassengerFormData) => {
+        const passengerData: PassengerData = {
+            ...data,
+            baggageAllowance: initialBaggageAllowance,
+            seatSelection: initialSeatSelection,
         };
-        if (props.international) {
-            info.passportNo = passportNo;
-            info.dayOfIssue = dayOfIssue;
-            info.monthOfIssue = monthOfIssue;
-            info.yearOfIssue = yearOfIssue;
-            info.dayOfExpiry = dayOfExpiry;
-            info.monthOfExpiry = monthOfExpiry;
-            info.yearOfExpiry = yearOfExpiry;
+        if (passengerNum !== undefined) {
+            updatePassengerAt(passengerNum - 1, passengerData);
         }
-
-        if (
-            errorGivenName ||
-            errorLastName ||
-            errorGender ||
-            errorDateOfBirth ||
-            errorNationality ||
-            errorPassportNo ||
-            errorIssueDate ||
-            errorExpiryDate
-        ) {
-            console.log("Please fix the errors before saving.");
-            return;
-        } else {
-            if (props.passengerIdx !== undefined) {
-                updatePassengerAt(
-                    props.passengerIdx,
-                    info as unknown as PassengerData,
-                );
-            }
-            console.log(info);
-        }
+        console.log("Passenger data saved:", data);
     };
 
     return (
-        <div className="flex flex-col w-[44.625rem] p-6 gap-8 rounded-lg bg-primary-50">
+        <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col w-[44.625rem] p-6 gap-8 rounded-lg bg-primary-50"
+        >
             {/* Header */}
             <p className="!font-bold !text-[2rem] !text-primary-900">
-                Passenger {props.passengerIdx} Info
+                Passenger {passengerNum} Info
             </p>
             {/* Content */}
             <div className="flex flex-row gap-2">
-                <TextFieldComponent
-                    label="Given names*"
-                    placeHolder="Enter your given names"
-                    textValue={givenName}
-                    width="w-[20.5625rem]"
-                    height="h-[3.1875rem]"
-                    labelFont="!font-normal"
-                    labelSize="!text-[1rem]"
-                    gap="gap-1"
-                    error={errorGivenName}
-                    onChange={(value) => {
-                        const upper =
-                            value !== null &&
-                            typeof value === "object" &&
-                            "text" in value
-                                ? (value.text as string).toUpperCase()
-                                : String(value ?? "").toUpperCase();
-                        setGivenName(upper);
-                    }}
+                <Controller
+                    name="givenName"
+                    control={control}
+                    render={({ field }) => (
+                        <div className="flex flex-col gap-1">
+                            <TextFieldComponent
+                                label="Given names*"
+                                placeHolder="Enter your given names"
+                                textValue={field.value}
+                                width="w-[20.5625rem]"
+                                height="h-[3.1875rem]"
+                                labelFont="!font-normal"
+                                labelSize="!text-[1rem]"
+                                gap="gap-1"
+                                error={!!errors.givenName}
+                                onChange={(value) => {
+                                    const upper =
+                                        value !== null &&
+                                        typeof value === "object" &&
+                                        "text" in value
+                                            ? (
+                                                  value.text as string
+                                              ).toUpperCase()
+                                            : String(value ?? "").toUpperCase();
+                                    field.onChange(upper);
+                                }}
+                            />
+                            {errors.givenName && (
+                                <p className="text-error-main text-sm">
+                                    {errors.givenName.message}
+                                </p>
+                            )}
+                        </div>
+                    )}
                 />
-                <TextFieldComponent
-                    label="Lastname*"
-                    placeHolder="Enter your lastname"
-                    textValue={lastName}
-                    width="w-[20.5625rem]"
-                    height="h-[3.1875rem]"
-                    labelFont="!font-normal"
-                    labelSize="!text-[1rem]"
-                    gap="gap-1"
-                    error={errorLastName}
-                    onChange={(value) => {
-                        const upper =
-                            value !== null &&
-                            typeof value === "object" &&
-                            "text" in value
-                                ? (value.text as string).toUpperCase()
-                                : String(value ?? "").toUpperCase();
-                        setLastName(upper);
-                    }}
+                <Controller
+                    name="lastName"
+                    control={control}
+                    render={({ field }) => (
+                        <div className="flex flex-col gap-1">
+                            <TextFieldComponent
+                                label="Lastname*"
+                                placeHolder="Enter your lastname"
+                                textValue={field.value}
+                                width="w-[20.5625rem]"
+                                height="h-[3.1875rem]"
+                                labelFont="!font-normal"
+                                labelSize="!text-[1rem]"
+                                gap="gap-1"
+                                error={!!errors.lastName}
+                                onChange={(value) => {
+                                    const upper =
+                                        value !== null &&
+                                        typeof value === "object" &&
+                                        "text" in value
+                                            ? (
+                                                  value.text as string
+                                              ).toUpperCase()
+                                            : String(value ?? "").toUpperCase();
+                                    field.onChange(upper);
+                                }}
+                            />
+                            {errors.lastName && (
+                                <p className="text-error-main text-sm">
+                                    {errors.lastName.message}
+                                </p>
+                            )}
+                        </div>
+                    )}
                 />
             </div>
             {/* Personal Information */}
             <div className="flex flex-row gap-2">
                 {/* gender */}
-                <div className="flex flex-col gap-1">
-                    <p className="!text-[1rem] !text-primary-900">
-                        Gender on ID*
-                    </p>
-                    <Select
-                        labelId="gender-label"
-                        id="gender"
-                        value={gender}
-                        placeholder="Select your gender"
-                        width="w-[13.5625rem]"
-                        height="h-[3.1875rem]"
-                        error={errorGender}
-                    >
-                        <ListChoice
-                            maxHeight="max-h-[5.375rem]"
-                            options={genderOptions}
-                            onChange={(event) =>
-                                setGender(event.target.value as string)
-                            }
-                        />
-                    </Select>
-                </div>
+                <Controller
+                    name="gender"
+                    control={control}
+                    render={({ field }) => (
+                        <div className="flex flex-col gap-1">
+                            <p className="!text-[1rem] !text-primary-900">
+                                Gender on ID*
+                            </p>
+                            <Select
+                                labelId="gender-label"
+                                id="gender"
+                                value={field.value}
+                                placeholder="Select your gender"
+                                width="w-[13.5625rem]"
+                                height="h-[3.1875rem]"
+                                error={!!errors.gender}
+                            >
+                                <ListChoice
+                                    maxHeight="max-h-[5.375rem]"
+                                    options={genderOptions}
+                                    onChange={(event) =>
+                                        field.onChange(
+                                            event.target.value as string,
+                                        )
+                                    }
+                                />
+                            </Select>
+                            {errors.gender && (
+                                <p className="text-error-main text-sm">
+                                    {errors.gender.message}
+                                </p>
+                            )}
+                        </div>
+                    )}
+                />
                 {/* Date of Birth */}
-                <TextFieldComponent
-                    label="Date of Birth*"
-                    placeHolder="DD/MM/YYYY"
-                    textValue={dateOfBirth}
-                    width="w-[13.5625rem]"
-                    height="h-[3.1875rem]"
-                    labelFont="!font-normal"
-                    labelSize="!text-[1rem]"
-                    gap="gap-1"
-                    error={errorDateOfBirth}
-                    onChange={(value) => {
-                        const input =
-                            value !== null &&
-                            typeof value === "object" &&
-                            "text" in value
-                                ? (value.text as string)
-                                : String(value ?? "");
-                        setDateOfBirth(input);
-                    }}
+                <Controller
+                    name="dateOfBirth"
+                    control={control}
+                    render={({ field }) => (
+                        <div className="flex flex-col gap-1">
+                            <TextFieldComponent
+                                label="Date of Birth*"
+                                placeHolder="DD/MM/YYYY"
+                                textValue={field.value}
+                                width="w-[13.5625rem]"
+                                height="h-[3.1875rem]"
+                                labelFont="!font-normal"
+                                labelSize="!text-[1rem]"
+                                gap="gap-1"
+                                error={!!errors.dateOfBirth}
+                                onChange={(value) => {
+                                    const input =
+                                        value !== null &&
+                                        typeof value === "object" &&
+                                        "text" in value
+                                            ? (value.text as string)
+                                            : String(value ?? "");
+                                    field.onChange(input);
+                                }}
+                            />
+                            {errors.dateOfBirth && (
+                                <p className="text-error-main text-sm">
+                                    {errors.dateOfBirth.message}
+                                </p>
+                            )}
+                        </div>
+                    )}
                 />
                 {/* Nationality */}
-                <div className="flex flex-col gap-1">
-                    <p className="!text-[1rem] !text-primary-900">
-                        Nationality*
-                    </p>
-                    <Select
-                        labelId="nationality-label"
-                        id="nationality"
-                        value={nationality}
-                        placeholder="Select your nationality"
-                        width="w-[13.5625rem]"
-                        height="h-[3.1875rem]"
-                        error={errorNationality}
-                    >
-                        <ListChoice
-                            maxHeight="max-h-[191px]"
-                            options={[
-                                { value: "Thailand" },
-                                { value: "United States" },
-                                { value: "China" },
-                                { value: "Japan" },
-                                { value: "India" },
-                                // ... add more countries as needed
-                            ]}
-                            onChange={(event) => {
-                                setNationality(event.target.value as string);
-                            }}
-                        />
-                    </Select>
-                </div>
+                <Controller
+                    name="nationality"
+                    control={control}
+                    render={({ field }) => (
+                        <div className="flex flex-col gap-1">
+                            <p className="!text-[1rem] !text-primary-900">
+                                Nationality*
+                            </p>
+                            <Select
+                                labelId="nationality-label"
+                                id="nationality"
+                                value={field.value}
+                                placeholder="Select your nationality"
+                                width="w-[13.5625rem]"
+                                height="h-[3.1875rem]"
+                                error={!!errors.nationality}
+                            >
+                                <ListChoice
+                                    maxHeight="max-h-[191px]"
+                                    options={[
+                                        { value: "Thailand" },
+                                        { value: "United States" },
+                                        { value: "China" },
+                                        { value: "Japan" },
+                                        { value: "India" },
+                                        // ... add more countries as needed
+                                    ]}
+                                    onChange={(event) => {
+                                        field.onChange(
+                                            event.target.value as string,
+                                        );
+                                    }}
+                                />
+                            </Select>
+                            {errors.nationality && (
+                                <p className="text-error-main text-sm">
+                                    {errors.nationality.message}
+                                </p>
+                            )}
+                        </div>
+                    )}
+                />
             </div>
             {/* Only show for international flights */}
-            {props.international && (
+            {international && (
                 <div className="flex flex-col gap-2">
                     <p className="!text-[1rem] !text-primary-600">
                         Passport Info
                     </p>
                     <div className="flex flex-row gap-2">
-                        <TextFieldComponent
-                            label="Passport No.*"
-                            placeHolder="Enter your passport no."
-                            textValue={passportNo}
-                            width="w-[13.5625rem]"
-                            height="h-[3.1875rem]"
-                            labelFont="!font-normal"
-                            labelSize="!text-[1rem]"
-                            gap="gap-1"
-                            error={errorPassportNo}
-                            onChange={(value) => {
-                                const input =
-                                    value !== null &&
-                                    typeof value === "object" &&
-                                    "text" in value
-                                        ? (value.text as string)
-                                        : String(value ?? "");
-                                setPassportNo(input);
-                            }}
+                        <Controller
+                            name="passportNo"
+                            control={control}
+                            render={({ field }) => (
+                                <div className="flex flex-col gap-1">
+                                    <TextFieldComponent
+                                        label="Passport No.*"
+                                        placeHolder="Enter your passport no."
+                                        textValue={field.value || ""}
+                                        width="w-[13.5625rem]"
+                                        height="h-[3.1875rem]"
+                                        labelFont="!font-normal"
+                                        labelSize="!text-[1rem]"
+                                        gap="gap-1"
+                                        error={!!errors.passportNo}
+                                        onChange={(value) => {
+                                            const input =
+                                                value !== null &&
+                                                typeof value === "object" &&
+                                                "text" in value
+                                                    ? (value.text as string)
+                                                    : String(value ?? "");
+                                            field.onChange(input);
+                                        }}
+                                    />
+                                    {errors.passportNo && (
+                                        <p className="text-error-main text-sm">
+                                            {errors.passportNo.message}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
                         />
-                        <TextFieldComponent
-                            label="Issue Date*"
-                            placeHolder="DD/MM/YYYY"
-                            textValue={issueDate}
-                            width="w-[13.5625rem]"
-                            height="h-[3.1875rem]"
-                            labelFont="!font-normal"
-                            labelSize="!text-[1rem]"
-                            gap="gap-1"
-                            error={errorIssueDate}
-                            onChange={(value) => {
-                                const input =
-                                    value !== null &&
-                                    typeof value === "object" &&
-                                    "text" in value
-                                        ? (value.text as string)
-                                        : String(value ?? "");
-                                setIssueDate(input);
-                            }}
+                        <Controller
+                            name="issueDate"
+                            control={control}
+                            render={({ field }) => (
+                                <div className="flex flex-col gap-1">
+                                    <TextFieldComponent
+                                        label="Issue Date*"
+                                        placeHolder="DD/MM/YYYY"
+                                        textValue={field.value || ""}
+                                        width="w-[13.5625rem]"
+                                        height="h-[3.1875rem]"
+                                        labelFont="!font-normal"
+                                        labelSize="!text-[1rem]"
+                                        gap="gap-1"
+                                        error={!!errors.issueDate}
+                                        onChange={(value) => {
+                                            const input =
+                                                value !== null &&
+                                                typeof value === "object" &&
+                                                "text" in value
+                                                    ? (value.text as string)
+                                                    : String(value ?? "");
+                                            field.onChange(input);
+                                        }}
+                                    />
+                                    {errors.issueDate && (
+                                        <p className="text-error-main text-sm">
+                                            {errors.issueDate.message}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
                         />
-                        <TextFieldComponent
-                            label="Expiry Date*"
-                            placeHolder="DD/MM/YYYY"
-                            textValue={expiryDate}
-                            width="w-[13.5625rem]"
-                            height="h-[3.1875rem]"
-                            labelFont="!font-normal"
-                            labelSize="!text-[1rem]"
-                            gap="gap-1"
-                            error={errorExpiryDate}
-                            onChange={(value) => {
-                                const input =
-                                    value !== null &&
-                                    typeof value === "object" &&
-                                    "text" in value
-                                        ? (value.text as string)
-                                        : String(value ?? "");
-                                setExpiryDate(input);
-                            }}
+                        <Controller
+                            name="expiryDate"
+                            control={control}
+                            render={({ field }) => (
+                                <div className="flex flex-col gap-1">
+                                    <TextFieldComponent
+                                        label="Expiry Date*"
+                                        placeHolder="DD/MM/YYYY"
+                                        textValue={field.value || ""}
+                                        width="w-[13.5625rem]"
+                                        height="h-[3.1875rem]"
+                                        labelFont="!font-normal"
+                                        labelSize="!text-[1rem]"
+                                        gap="gap-1"
+                                        error={!!errors.expiryDate}
+                                        onChange={(value) => {
+                                            const input =
+                                                value !== null &&
+                                                typeof value === "object" &&
+                                                "text" in value
+                                                    ? (value.text as string)
+                                                    : String(value ?? "");
+                                            field.onChange(input);
+                                        }}
+                                    />
+                                    {errors.expiryDate && (
+                                        <p className="text-error-main text-sm">
+                                            {errors.expiryDate.message}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
                         />
                     </div>
                 </div>
@@ -421,18 +461,17 @@ export default function InformationCard(props: InformationCardProps) {
             <div className="flex flex-col gap-1">
                 <p className="!text-[0.875rem] !text-primary-600">- {FYI[1]}</p>
                 <p className="!text-[0.875rem] !text-primary-600">
-                    - {props.international ? FYI.international : FYI.domestic}
+                    - {international ? FYI.international : FYI.domestic}
                 </p>
                 <p className="!text-[0.875rem] !text-primary-600">- {FYI[2]}</p>
             </div>
             {/* Footer */}
-            <Button
-                text="Save"
-                width="w-full"
-                height="h-[2.1875rem]"
-                size="md"
-                onClick={handleSaveButtonClick}
-            />
-        </div>
+            <button
+                type="submit"
+                className="w-full h-[2.1875rem] bg-primary-500 text-white rounded-lg font-semibold hover:bg-primary-600 transition-colors"
+            >
+                Save
+            </button>
+        </form>
     );
 }

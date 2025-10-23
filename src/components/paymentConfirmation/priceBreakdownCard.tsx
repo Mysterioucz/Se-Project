@@ -1,9 +1,19 @@
+"use client";
+
+import { ServiceType, useCheckout } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
+import { useEffect, useState } from "react";
 
 export interface TicketSummaryProps {
     type: PassengerTypes;
-    price: number;   // price per ticket
+    price: number; // price per ticket
     quantity: number;
+}
+
+export interface BaggageSummaryProps {
+    personal_item_price: number;
+    carry_on_item_price: number;
+    checked_baggage_price: number;
 }
 
 function TicketSummary({ type, price, quantity }: TicketSummaryProps) {
@@ -28,15 +38,14 @@ function TicketSummary({ type, price, quantity }: TicketSummaryProps) {
     );
 }
 
-export interface BaggageSummaryProps {
-    personal_item_price: number;
-    carry_on_item_price: number;
-    checked_baggage_price: number;
-}
+function BaggageSummary({
+    personal_item_price,
+    carry_on_item_price,
+    checked_baggage_price,
+}: BaggageSummaryProps) {
+    const formatPrice = (price: number) =>
+        price === 0 ? "Free" : `฿ ${price.toFixed(2)}`;
 
-function BaggageSummary({personal_item_price, carry_on_item_price, checked_baggage_price}: BaggageSummaryProps) {
-    const formatPrice = (price: number) => (price === 0 ? "Free" : `฿ ${price.toFixed(2)}`);
-    
     return (
         <div className="grid h-[5.688rem] pl-3 gap-y-2 gap-x-8 self-stretch grid-rows-3 grid-cols-2">
             <div className="text-gray-500 font-sarabun text-sm font-normal leading-[1.2] row-start-1 row-span-1 col-start-1 col-span-1">
@@ -63,11 +72,43 @@ function BaggageSummary({personal_item_price, carry_on_item_price, checked_bagga
 
 interface PriceBreakdownCardProps {
     tickets: TicketSummaryProps[];
-    baggage: BaggageSummaryProps;
 }
 
-export default function PriceBreakdownCard({ tickets, baggage }: PriceBreakdownCardProps) {
-    const totalPrice = tickets.reduce((sum, t) => sum + t.price * t.quantity, 0) + baggage.personal_item_price + baggage.carry_on_item_price + baggage.checked_baggage_price;
+export default function PriceBreakdownCard({
+    tickets,
+}: PriceBreakdownCardProps) {
+    const [totalPrice, setTotalPrice] = useState<number>(0);
+    const [totalBaggagePrice, setTotalBaggagePrice] = useState<number>(0);
+    const [baggage, setBaggage] = useState<ServiceType[]>([]);
+    const { checkoutData } = useCheckout();
+
+    useEffect(() => {
+        // Calculate total ticket price
+        const ticketTotal = tickets.reduce(
+            (sum, t) => sum + t.price * t.quantity,
+            0,
+        );
+
+        // Calculate total baggage price
+        const baggageTotal = checkoutData.passengerData?.reduce(
+            (sum, p) =>
+                sum +
+                (p.baggageAllowance.departureBaggage?.Price || 0) +
+                (p.baggageAllowance.returnBaggage?.Price || 0),
+            0,
+        ) || 0;
+        setTotalBaggagePrice(baggageTotal);
+        setTotalPrice(ticketTotal + baggageTotal);
+
+        // Extract baggage details for summary
+        const baggageDetails: ServiceType[] = checkoutData.passengerData?.flatMap(
+            (p) => [
+                p.baggageAllowance.departureBaggage,
+                p.baggageAllowance.returnBaggage,
+            ].filter((b): b is ServiceType => b !== undefined),
+        ) || [];
+        setBaggage(baggageDetails);
+    }, [tickets, checkoutData.passengerData?.length]);
 
     return (
         <div className="flex flex-col items-start self-stretch gap-[1rem] p-[1rem_1.5rem] rounded-[0.5rem] border-[0.125rem] border-primary-300 bg-white">
@@ -101,7 +142,11 @@ export default function PriceBreakdownCard({ tickets, baggage }: PriceBreakdownC
                         </div>
 
                         {/* Baggage Summary Components */}
-                        <BaggageSummary {...baggage} />
+                        <BaggageSummary
+                            personal_item_price={0}
+                            carry_on_item_price={0}
+                            checked_baggage_price={totalBaggagePrice}
+                        />
                     </div>
                 </div>
             </div>

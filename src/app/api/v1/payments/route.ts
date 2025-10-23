@@ -17,8 +17,8 @@ const TicketInputSchema = z.object({
         message: "Invalid date",
     }),
     Nationality: z.string().min(1),
-    BaggageChecked: z.number().nonnegative(),
-    BaggageCabin: z.number().nonnegative(),
+    BaggageChecked: z.number().nonnegative().default(10),
+    BaggageCabin: z.number().nonnegative().default(7),
     SeatNo: z.string().min(1),
 });
 
@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
     
     try {
         const parsed = CreatePaymentSchema.parse(await request.json());
+        console.log("Parsed payment data:", parsed);
         const {
             AircraftRegNo,
             FlightNo,
@@ -231,7 +232,7 @@ export async function POST(request: NextRequest) {
         }
     
       return NextResponse.json(
-        { success: false, message: ErrorMessages.SERVER},
+        { success: false, message: ErrorMessages.SERVER, details: err},
         { status: 500 }
       );
     }

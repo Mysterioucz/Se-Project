@@ -1,12 +1,27 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Flight } from "../helper/CheckoutHelper";
 
 interface Payment {
     isPaymentValid: boolean;
     isContactValid: boolean;
     isQRmethod: boolean;
     isQRModalOpen: boolean;
+    email: string;
+    telNo: string;
+    bankName: string;
+}
+
+interface Info {
+    isValid: boolean;
+}
+
+export interface ServiceType {
+    ServiceID: string;
+    ServiceName: string;
+    Price: number;
+    Description: string;
 }
 
 interface Seat {
@@ -15,8 +30,8 @@ interface Seat {
 }
 
 export interface BaggageAllowance {
-    departureBaggage: string; // in kg
-    returnBaggage?: string;
+    departureBaggage: ServiceType;
+    returnBaggage?: ServiceType;
 }
 
 export interface PassengerData {
@@ -25,9 +40,9 @@ export interface PassengerData {
     gender: string;
     dateOfBirth: string;
     nationality: string;
-    passportNo: string;
-    issueDate: string;
-    expiryDate: string;
+    passportNo?: string;
+    issueDate?: string;
+    expiryDate?: string;
     baggageAllowance: BaggageAllowance; // in kg
     seatSelection: Seat; // Seat No
 }
@@ -59,10 +74,10 @@ export interface Cart {
         Stops: number;
     };
 }
-
-interface CheckoutPayload {
+export interface CheckoutPayload {
     passengerData: PassengerData[];
     payment: Payment;
+    info: Info;
 }
 
 type CheckoutContextType = {
@@ -79,6 +94,8 @@ type CheckoutContextType = {
     ) => void;
     clearCheckoutData: () => void; // after successful payment
     cartData: Cart;
+    departFlight: Flight;
+    returnFlight?: Flight;
 };
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(
@@ -86,6 +103,26 @@ const CheckoutContext = createContext<CheckoutContextType | undefined>(
 );
 
 export const CHECKOUT_STORAGE_KEY = "tempCheckout";
+
+export const initialBaggageAllowance: BaggageAllowance = {
+    departureBaggage: {
+        ServiceID: "",
+        ServiceName: "",
+        Price: 0,
+        Description: "",
+    },
+    returnBaggage: {
+        ServiceID: "",
+        ServiceName: "",
+        Price: 0,
+        Description: "",
+    },
+};
+
+export const initialSeatSelection: Seat = {
+    departureSeat: "",
+    returnSeat: "",
+};
 
 const initialPassengerData: PassengerData = {
     givenName: "",
@@ -96,14 +133,8 @@ const initialPassengerData: PassengerData = {
     passportNo: "",
     issueDate: "",
     expiryDate: "",
-    baggageAllowance: {
-        departureBaggage: "0",
-        returnBaggage: "0",
-    },
-    seatSelection: {
-        departureSeat: "",
-        returnSeat: "",
-    },
+    baggageAllowance: initialBaggageAllowance,
+    seatSelection: initialSeatSelection,
 };
 
 const initialCheckoutData: CheckoutPayload = {
@@ -113,18 +144,46 @@ const initialCheckoutData: CheckoutPayload = {
         isContactValid: false,
         isQRmethod: false,
         isQRModalOpen: false,
+        email: "",
+        telNo: "",
+        bankName: "",
+    },
+    info: {
+        isValid: false,
     },
 };
 
 export function CheckoutProvider({
     children,
     cartData,
+    departFlight,
+    returnFlight,
 }: {
     children: React.ReactNode;
     cartData: Cart;
+    departFlight: Flight;
+    returnFlight?: Flight;
 }) {
     const [checkoutData, setCheckoutData] =
         useState<CheckoutPayload>(initialCheckoutData);
+
+    // Load from localStorage after mount (client-side only)
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const stored = localStorage.getItem(CHECKOUT_STORAGE_KEY);
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    setCheckoutData(parsed);
+                } catch (e) {
+                    console.error(
+                        "Failed to parse checkout data from storage",
+                        e,
+                    );
+                }
+            }
+        }
+    }, []);
 
     const updateCheckoutData = (data: Partial<CheckoutPayload>) => {
         setCheckoutData((prev) => {
@@ -189,7 +248,7 @@ export function CheckoutProvider({
 
     const updatePassengerSeatAt = (index: number, seatPatch: Partial<Seat>) => {
         setCheckoutData((prev) => {
-            const list = [...(prev.passengerData ?? [])];
+            const list = prev.passengerData;
             if (index < 0) {
                 console.warn(
                     "updatePassengerSeatAt: index out of range",
@@ -199,10 +258,15 @@ export function CheckoutProvider({
             } else if (index >= list.length) {
                 ensurePassengerAt(index);
             }
-            list[index].seatSelection = {
-                ...list[index].seatSelection,
-                ...seatPatch,
-            };
+            try {
+                list[index].seatSelection = {
+                    ...list[index].seatSelection,
+                    ...seatPatch,
+                };
+            } catch (e) {
+                console.error("Failed to update seat selection", e);
+                console.log("passengerData", prev.passengerData);
+            }
             const updated = { ...prev, passengerData: list };
             if (typeof window !== "undefined")
                 localStorage.setItem(
@@ -249,6 +313,8 @@ export function CheckoutProvider({
                 updatePassengerSeatAt,
                 updateBaggageAt,
                 cartData,
+                departFlight,
+                returnFlight,
             }}
         >
             {children}

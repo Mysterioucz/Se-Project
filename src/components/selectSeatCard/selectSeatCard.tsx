@@ -1,6 +1,10 @@
 "use client";
 
-import { CHECKOUT_STORAGE_KEY, useCheckout } from "@/src/contexts/CheckoutContext";
+import {
+    CHECKOUT_STORAGE_KEY,
+    PassengerData,
+    useCheckout,
+} from "@/src/contexts/CheckoutContext";
 import Button from "@components/Button";
 import { FiSrPlane, FlightCardDivider } from "@components/icons/module";
 import { useState } from "react";
@@ -46,20 +50,22 @@ export default function SelectSeatCard({
     passengerType,
     seatClass,
 }: SelectSeatCardProps) {
-    const {updatePassengerSeatAt} = useCheckout();
+    const { updatePassengerSeatAt } = useCheckout();
     const [selected, setSelected] = useState(false);
     const [selectedPassengers, setSelectedPassengers] = useState<number>(0);
-    const passengerData = getPassengerData();
-    const passengerSeatArr = useState<string[]>(
-        Array(passengerCount).fill(""),
+    const passengerData: PassengerData[] = getPassengerData();
+    const passengerSeatArr: string[] = useState<string[]>(
+        passengerData.map((pass) => header === "Departure" ? pass.seatSelection.departureSeat || "" : pass.seatSelection.returnSeat || ""),
     )[0];
     const [curSeat, setCurSeat] = useState("");
 
     function handlePassengerClick(index: number) {
         setSelectedPassengers((prev) => {
             if (prev === index) {
+                setCurSeat("");
                 return -1; // Deselect if already selected
             }
+            setCurSeat(passengerSeatArr[index]);
             return index;
         });
     }
@@ -87,7 +93,9 @@ export default function SelectSeatCard({
         let seat = "";
         while (true) {
             const row = Math.floor(Math.random() * rows) + 1;
-            const col = String.fromCharCode(65 + Math.floor(Math.random() * cols)); // 65 = 'A'
+            const col = String.fromCharCode(
+                65 + Math.floor(Math.random() * cols),
+            ); // 65 = 'A'
             seat = `${row}${col}`;
             if (!passengerSeatArr.includes(seat)) {
                 break;
@@ -97,15 +105,15 @@ export default function SelectSeatCard({
     }
 
     function handleConfirm() {
-        for(let i = 0; i < passengerCount; i++) {
-            if(header === "Departure") {
+        for (let i = 0; i < passengerCount; i++) {
+            if (header === "Departure") {
                 updatePassengerSeatAt(i, {
                     departureSeat:
                         passengerSeatArr[i] === ""
                             ? randomeAvailableSeat()
                             : passengerSeatArr[i],
                 });
-            }else if(header === "Return") {
+            } else if (header === "Return") {
                 updatePassengerSeatAt(i, {
                     returnSeat:
                         passengerSeatArr[i] === ""
@@ -115,8 +123,6 @@ export default function SelectSeatCard({
             }
         }
     }
-
-    
 
     function PassengerName({
         index,

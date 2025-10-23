@@ -31,15 +31,14 @@ export async function GET(req: NextRequest) {
                 },
             },
             select: {
+                AircraftRegNo: true,
+                FlightNo: true,
+                DepartTime: true,
+                ArrivalTime: true,
+                AirlineName: true,
                 availableServices: {
                     select: {
-                        service: {
-                            select: {
-                                ServiceName: true,
-                                Price: true,
-                                Description: true,
-                            },
-                        },
+                        service: true,
                     },
                 },
                 seats: {
@@ -79,7 +78,7 @@ export async function GET(req: NextRequest) {
             ...(services.includes("Select Seat") && {
                 availableSeats: flight.seats || [],
             }),
-            flight
+            flight,
         };
 
         return new NextResponse(

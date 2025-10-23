@@ -1,7 +1,7 @@
 "use client";
 
 import { useCheckout } from "@src/contexts/CheckoutContext";
-import ContactInform from "./_components/ContactInform";
+import ContactInform, { ContactFormData } from "./_components/ContactInform";
 import PaymentMethods from "./_components/PaymentMethods";
 import QRModal from "./_components/QRModal";
 
@@ -10,28 +10,26 @@ export default function Page() {
 
     // TODO: Fetch actual data from backend to check if user fill in all required info
 
-    const handlePaymentStatusChange = (isValid: boolean) => {
+    const handlePaymentStatusChange = (isValid: boolean, isQR: boolean, bankName: string) => {
         updateCheckoutData({
             payment: {
                 ...(checkoutData?.payment ?? {}),
                 isPaymentValid: isValid,
+                isQRmethod: isQR,
+                bankName: bankName,
             },
         });
     };
-    const handleQRmethodChange = (isQR: boolean) => {
-        console.log("QR method selected:", isQR);
-        updateCheckoutData({
-            payment: {
-                ...(checkoutData?.payment ?? {}),
-                isQRmethod: true,
-            },
-        });
-    };
-    const handleContactStatusChange = (isValid: boolean) => {
+    const handleContactStatusChange = (
+        isValid: boolean,
+        values: ContactFormData,
+    ) => {
         updateCheckoutData({
             payment: {
                 ...(checkoutData?.payment ?? {}),
                 isContactValid: isValid,
+                email: isValid ? values.userContactEmail : "",
+                telNo: isValid ? values.userTel : "",
             },
         });
     };
@@ -60,7 +58,6 @@ export default function Page() {
                         </div>
                         <PaymentMethods
                             onStatusChange={handlePaymentStatusChange}
-                            onQRmethodChange={handleQRmethodChange}
                         />
                     </div>
 

@@ -1,6 +1,22 @@
 import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "../lib/auth";
 import { Cart } from "../contexts/CheckoutContext";
+import { nextAuthOptions } from "../lib/auth";
+
+export type Flight = {
+    FlightNo: string;
+    DepartTime: Date;
+    ArrivalTime: Date;
+    ArrivalAirportID: string;
+    DepartureAirportID: string;
+    AirlineName: string;
+    AircraftRegNo: string;
+    AvailableSeat: number;
+    TransitAmount: number;
+    ExtraBaggage: boolean;
+    SeatSelect: boolean;
+    FreeCheckedBaggageWeight: number;
+    FreeCheckedBaggageBags: number;
+};
 
 export async function fetchCartData(cartId: number): Promise<Cart> {
     const session = await getServerSession(nextAuthOptions);
@@ -21,4 +37,16 @@ export async function fetchCartData(cartId: number): Promise<Cart> {
     const res = await response.json();
     const data = res.data[0] as Cart;
     return data;
+}
+
+export async function fetchFlightData(
+    flightNo: string,
+    departureTime: Date,
+    arrivalTime: Date,
+): Promise<Flight> {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}&departTime=${departureTime}&arrivalTime=${arrivalTime}`,
+    );
+    const res = await response.json();
+    return res.data.flight as Flight;
 }

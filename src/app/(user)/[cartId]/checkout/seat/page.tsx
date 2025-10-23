@@ -3,33 +3,15 @@
 import { formatToShortDate } from "@/src/app/flights/search/_components/SummaryCard";
 import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
 import { Cart, useCheckout } from "@/src/contexts/CheckoutContext";
-import { Flight } from "@/src/generated/prisma";
-import { useEffect, useState } from "react";
+import { Flight } from "@/src/helper/CheckoutHelper";
+import { useState } from "react";
 import {
     formatToTime,
     getFlightDuration,
 } from "../../../cart/[AccountID]/_components/FlightDetail";
 
-async function fetchFlightData(
-    flightNo: string,
-    departureTime: Date,
-    arrivalTime: Date,
-): Promise<Flight> {
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights/lookup?flightNo=${flightNo}&departTime=${departureTime}&arrivalTime=${arrivalTime}`,
-    );
-    const res = await response.json();
-    return res.data.flight as Flight;
-}
-
 export default function Page() {
-    const { cartData } = useCheckout();
-    const [departFlight, setDepartFlight] = useState<Flight | undefined>(
-        undefined,
-    );
-    const [returnFlight, setReturnFlight] = useState<Flight | undefined>(
-        undefined,
-    );
+    const { cartData, departFlight, returnFlight } = useCheckout();
 
     function departSelectCard(flightData: Flight | undefined, cartData: Cart) {
         if (!flightData) {
@@ -82,27 +64,6 @@ export default function Page() {
             />
         );
     }
-
-    useEffect(() => {
-        fetchFlightData(
-            cartData.Depart.FlightNo,
-            cartData.Depart.DepartTime,
-            cartData.Depart.ArrivalTime,
-        ).then((data) => {
-            setDepartFlight(data);
-            console.log(data);
-        });
-
-        if (cartData.Return) {
-            fetchFlightData(
-                cartData.Return.FlightNo,
-                cartData.Return.DepartTime,
-                cartData.Return.ArrivalTime,
-            ).then((data) => {
-                setReturnFlight(data);
-            });
-        }
-    }, [cartData]);
 
     return (
         <div>
