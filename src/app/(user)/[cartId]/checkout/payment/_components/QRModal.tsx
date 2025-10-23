@@ -1,6 +1,11 @@
 "use client";
 
-import { useCheckout } from "@/src/contexts/CheckoutContext";
+import {
+    Cart,
+    CheckoutPayload,
+    useCheckout,
+} from "@/src/contexts/CheckoutContext";
+import { Flight } from "@/src/helper/CheckoutHelper";
 import Button from "@components/Button";
 import {
     Dialog,
@@ -16,18 +21,85 @@ interface QRModalProps {
     onClose: () => void;
 }
 
-function postPaymentCompletion() {
-    
+function extractOnlyNumbers(input: string): string {
+    return input.replace(/\D/g, "");
+}
+
+async function postPaymentCompletion(
+    checkoutData: CheckoutPayload,
+    cartData: Cart,
+    departFlight: Flight,
+    returnFlight?: Flight,
+) {
+    const passengerData = checkoutData?.passengerData;
+    const paymentData = checkoutData?.payment;
+
+    // Calculate total amount (base price + service fees for all passengers)
+    const totalAmount = passengerData.reduce((sum, passenger) => {
+        const departureBaggageFee =
+            passenger.baggageAllowance.departureBaggage.Price || 0;
+        const returnBaggageFee =
+            passenger.baggageAllowance.returnBaggage?.Price || 0;
+        return sum + cartData.Price + departureBaggageFee + returnBaggageFee;
+    }, 0);
+
+    // Map passenger data to ticket format expected by API
+    const tickets = passengerData.map((passenger) => ({
+        Price: cartData.Price,
+        ServiceFee:
+            (passenger.baggageAllowance.departureBaggage.Price || 0) +
+            (passenger.baggageAllowance.returnBaggage?.Price || 0),
+        PassengerName: passenger.givenName,
+        PassengerLastName: passenger.lastName,
+        Gender: passenger.gender,
+        DateOfBirth: passenger.dateOfBirth, // Should be in ISO format or parseable date string
+        Nationality: passenger.nationality,
+        BaggageChecked: extractOnlyNumbers(
+            passenger.baggageAllowance.departureBaggage.Description,
+        ), // Default or from passenger data if available
+        BaggageCabin: 7, // Default or from passenger data if available
+        SeatNo: passenger.seatSelection.departureSeat,
+    }));
+
+    const payload = {
+        AircraftRegNo: departFlight.AircraftRegNo,
+        FlightNo: departFlight.FlightNo,
+        DepartTime: departFlight.DepartTime.toISOString(),
+        ArrivalTime: departFlight.ArrivalTime.toISOString(),
+        Tickets: tickets,
+        totalAmount: totalAmount,
+        method: paymentData.isQRmethod ? "MOBILE_BANKING" : "ONLINE_BANKING",
+        status: "PAID",
+        paymentEmail: paymentData.email, // TODO: Get from contact form in checkoutData
+        paymentTelNo: paymentData.telNo, // TODO: Get from contact form in checkoutData
+        bankName: "", // TODO: Get selected bank name
+    };
+
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Payment failed");
+    }
+
+    return await response.json();
 }
 
 export default function QRModal({ open, onClose }: QRModalProps) {
     const router = useRouter();
     const [amount, setAmount] = useState<number>(0);
-    const {checkoutData} = useCheckout();
+    const { checkoutData } = useCheckout();
 
-    const handlePaymentComplete = () => {
-
-    }
+    const handlePaymentComplete = () => {};
     useEffect(() => {
         if (!open) return;
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCheckout } from "@src/contexts/CheckoutContext";
-import ContactInform from "./_components/ContactInform";
+import ContactInform, { ContactFormData } from "./_components/ContactInform";
 import PaymentMethods from "./_components/PaymentMethods";
 import QRModal from "./_components/QRModal";
 
@@ -19,11 +19,16 @@ export default function Page() {
             },
         });
     };
-    const handleContactStatusChange = (isValid: boolean) => {
+    const handleContactStatusChange = (
+        isValid: boolean,
+        values: ContactFormData,
+    ) => {
         updateCheckoutData({
             payment: {
                 ...(checkoutData?.payment ?? {}),
                 isContactValid: isValid,
+                email: isValid ? values.userContactEmail : "",
+                telNo: isValid ? values.userTel : "",
             },
         });
     };

@@ -8,6 +8,8 @@ interface Payment {
     isContactValid: boolean;
     isQRmethod: boolean;
     isQRModalOpen: boolean;
+    email?: string;
+    telNo?: string;
 }
 
 interface Info {
@@ -71,8 +73,7 @@ export interface Cart {
         Stops: number;
     };
 }
-
-interface CheckoutPayload {
+export interface CheckoutPayload {
     passengerData: PassengerData[];
     payment: Payment;
     info: Info;
@@ -142,6 +143,8 @@ const initialCheckoutData: CheckoutPayload = {
         isContactValid: false,
         isQRmethod: false,
         isQRModalOpen: false,
+        email: "",
+        telNo: "",
     },
     info: {
         isValid: false,

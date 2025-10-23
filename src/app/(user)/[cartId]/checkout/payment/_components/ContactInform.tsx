@@ -1,5 +1,6 @@
 "use client";
 
+import { useCheckout } from "@/src/contexts/CheckoutContext";
 import TextFieldComponent from "@components/text_field";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -7,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 interface ContactInformProps {
-    onStatusChange: (isValid: boolean) => void;
+    onStatusChange: (isValid: boolean, values: ContactFormData) => void;
 }
 
 const contactSchema = z.object({
@@ -23,9 +24,10 @@ const contactSchema = z.object({
         .max(10, "Phone number should be at most 10 digits"),
 });
 
-type ContactFormData = z.infer<typeof contactSchema>;
+export type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function ContactInform({ onStatusChange }: ContactInformProps) {
+    const { checkoutData, updateCheckoutData } = useCheckout();
     const {
         watch,
         formState: { errors, isValid },
@@ -34,17 +36,17 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
         resolver: zodResolver(contactSchema),
         mode: "onChange", // validate on every change
         defaultValues: {
-            userContactEmail: "",
-            userTel: "",
+            userContactEmail: checkoutData.payment.email || "",
+            userTel: checkoutData.payment.telNo || "",
         },
     });
+    const values = watch();
 
     // Notify parent whenever validation state changes
     useEffect(() => {
-        onStatusChange(isValid);
+        const val = watch();
+        onStatusChange(isValid, val);
     }, [isValid]);
-
-    const values = watch();
 
     return (
         <form className="flex flex-col gap-[1.5rem] w-full">
