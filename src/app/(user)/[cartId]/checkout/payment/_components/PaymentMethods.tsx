@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import BankSelect, { BankOption } from "./BankSelect";
+import BankSelect, { BankOption, defaultBank } from "./BankSelect";
 
 interface PaymentMethodsProps {
-    onStatusChange: (isValid: boolean, isQR: boolean) => void;
+    onStatusChange: (isValid: boolean, isQR: boolean, bankName: string) => void;
 }
 
 export default function PaymentMethods({
@@ -24,6 +24,7 @@ export default function PaymentMethods({
         onStatusChange(
             computeIsValid(method, bankValue),
             method.trim() === "qr",
+            method.trim() === "mobile" ? bankValue : defaultBank,
         );
     };
 

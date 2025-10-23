@@ -10,12 +10,13 @@ export default function Page() {
 
     // TODO: Fetch actual data from backend to check if user fill in all required info
 
-    const handlePaymentStatusChange = (isValid: boolean, isQR: boolean) => {
+    const handlePaymentStatusChange = (isValid: boolean, isQR: boolean, bankName: string) => {
         updateCheckoutData({
             payment: {
                 ...(checkoutData?.payment ?? {}),
                 isPaymentValid: isValid,
                 isQRmethod: isQR,
+                bankName: bankName,
             },
         });
     };

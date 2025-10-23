@@ -8,8 +8,9 @@ interface Payment {
     isContactValid: boolean;
     isQRmethod: boolean;
     isQRModalOpen: boolean;
-    email?: string;
-    telNo?: string;
+    email: string;
+    telNo: string;
+    bankName: string;
 }
 
 interface Info {
@@ -145,6 +146,7 @@ const initialCheckoutData: CheckoutPayload = {
         isQRModalOpen: false,
         email: "",
         telNo: "",
+        bankName: "",
     },
     info: {
         isValid: false,

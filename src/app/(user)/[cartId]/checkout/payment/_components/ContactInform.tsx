@@ -27,7 +27,7 @@ const contactSchema = z.object({
 export type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function ContactInform({ onStatusChange }: ContactInformProps) {
-    const { checkoutData, updateCheckoutData } = useCheckout();
+    const { checkoutData } = useCheckout();
     const {
         watch,
         formState: { errors, isValid },

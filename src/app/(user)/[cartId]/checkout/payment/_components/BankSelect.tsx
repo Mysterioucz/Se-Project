@@ -20,7 +20,9 @@ interface BankSelectProps {
     error?: boolean;
 }
 
-const defaultBanks: BankOption[] = [
+export const defaultBank = "Siam Commercial Bank";
+
+const Banks: BankOption[] = [
     {
         value: "Kasikorn Bank",
         label: "Kasikorn Bank",
@@ -46,7 +48,7 @@ const defaultBanks: BankOption[] = [
 export default function BankSelect({
     value,
     onChange,
-    options = defaultBanks,
+    options = Banks,
     placeholder = "Select Bank",
     renderSelected,
     disabled = false,
