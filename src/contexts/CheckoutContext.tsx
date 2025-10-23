@@ -9,6 +9,10 @@ interface Payment {
     isQRModalOpen: boolean;
 }
 
+interface Info {
+    isValid: boolean;
+}
+
 export interface ServiceType {
     ServiceID: string;
     ServiceName: string;
@@ -70,6 +74,7 @@ export interface Cart {
 interface CheckoutPayload {
     passengerData: PassengerData[];
     payment: Payment;
+    info: Info;
 }
 
 type CheckoutContextType = {
@@ -132,6 +137,9 @@ const initialCheckoutData: CheckoutPayload = {
         isContactValid: false,
         isQRmethod: false,
         isQRModalOpen: false,
+    },
+    info: {
+        isValid: false,
     },
 };
 
@@ -236,12 +244,12 @@ export function CheckoutProvider({
             } else if (index >= list.length) {
                 ensurePassengerAt(index);
             }
-            try{
+            try {
                 list[index].seatSelection = {
                     ...list[index].seatSelection,
                     ...seatPatch,
                 };
-            }catch(e){
+            } catch (e) {
                 console.error("Failed to update seat selection", e);
                 console.log("passengerData", prev.passengerData);
             }
