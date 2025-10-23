@@ -36,9 +36,9 @@ export interface PassengerData {
     gender: string;
     dateOfBirth: string;
     nationality: string;
-    passportNo: string;
-    issueDate: string;
-    expiryDate: string;
+    passportNo?: string;
+    issueDate?: string;
+    expiryDate?: string;
     baggageAllowance: BaggageAllowance; // in kg
     seatSelection: Seat; // Seat No
 }
@@ -99,7 +99,7 @@ const CheckoutContext = createContext<CheckoutContextType | undefined>(
 
 export const CHECKOUT_STORAGE_KEY = "tempCheckout";
 
-const initialBaggageAllowance: BaggageAllowance = {
+export const initialBaggageAllowance: BaggageAllowance = {
     departureBaggage: {
         ServiceID: "",
         ServiceName: "",
@@ -114,6 +114,11 @@ const initialBaggageAllowance: BaggageAllowance = {
     },
 };
 
+export const initialSeatSelection: Seat = {
+    departureSeat: "",
+    returnSeat: "",
+};
+
 const initialPassengerData: PassengerData = {
     givenName: "",
     lastName: "",
@@ -124,10 +129,7 @@ const initialPassengerData: PassengerData = {
     issueDate: "",
     expiryDate: "",
     baggageAllowance: initialBaggageAllowance,
-    seatSelection: {
-        departureSeat: "",
-        returnSeat: "",
-    },
+    seatSelection: initialSeatSelection,
 };
 
 const initialCheckoutData: CheckoutPayload = {

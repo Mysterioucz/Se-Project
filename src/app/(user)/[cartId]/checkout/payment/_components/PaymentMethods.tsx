@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import BankSelect, { BankOption } from "./BankSelect";
+import { useCheckout } from "@/src/contexts/CheckoutContext";
 
 interface PaymentMethodsProps {
     onStatusChange: (isValid: boolean) => void;
@@ -16,12 +17,8 @@ export default function PaymentMethods({
     const [selected, setSelected] = useState("mobile");
     const [bank, setBank] = useState("");
 
-    // Notify parent of current method and validity synchronously when handlers run.
-    // Avoid useEffect by calling the callbacks from the event handlers below.
-
     const notifyMethodChange = (method: string) => {
-        console.log("Method changed to:", method);
-        onQRmethodChange(method === "qr");
+        onQRmethodChange(method.trim() === "qr");
     };
 
     const computeIsValid = (method: string, bankValue: string) => {

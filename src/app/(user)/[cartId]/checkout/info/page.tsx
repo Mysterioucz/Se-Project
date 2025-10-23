@@ -8,7 +8,6 @@ export default function Page() {
     const cardTitle = ["Who's traveling?", "Baggage Allowance"];
     const { checkoutData,cartData } = useCheckout();
     const passengerData = checkoutData.passengerData || [];
-    console.log("Passenger Data in Page:", passengerData);  
     const totalPassengers =
         cartData.Adults + cartData.Childrens + cartData.Infants;
 

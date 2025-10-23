@@ -108,7 +108,7 @@ export default function PriceBreakdownCard({
             ].filter((b): b is ServiceType => b !== undefined),
         ) || [];
         setBaggage(baggageDetails);
-    }, [tickets, checkoutData.passengerData]);
+    }, [tickets, checkoutData.passengerData?.length]);
 
     return (
         <div className="flex flex-col items-start self-stretch gap-[1rem] p-[1rem_1.5rem] rounded-[0.5rem] border-[0.125rem] border-primary-300 bg-white">

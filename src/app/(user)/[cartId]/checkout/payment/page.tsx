@@ -19,7 +19,7 @@ export default function Page() {
         });
     };
     const handleQRmethodChange = (isQR: boolean) => {
-        console.log("QR method selected:", isQR);
+        console.log("QR method changed to:", isQR);
         updateCheckoutData({
             payment: {
                 ...(checkoutData?.payment ?? {}),

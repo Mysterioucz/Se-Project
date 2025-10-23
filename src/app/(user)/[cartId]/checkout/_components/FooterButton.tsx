@@ -51,12 +51,22 @@ export default function FooterButton({ cartId }: { cartId: string }) {
             if (isQRmethod) {
                 setQRModalOpen(true);
             } else {
+                const nextIdx = checkoutPaths.indexOf(pathname) + 1;
                 router.push(
                     `/${cartId}` +
-                        checkoutPaths[checkoutPaths.indexOf(pathname) + 1],
+                        checkoutPaths[nextIdx],
                 );
             }
         }
+    };
+
+    const resolveDisabledState = () => {
+        if (pathname === `/checkout/payment`) {
+            return !(isPaymentValid && isContactValid);
+        } else if (pathname === `/checkout/info`) {
+            return !checkoutData.info?.isValid;
+        }
+        return false;
     };
 
     const resolvePrefixButtonText = () => {
@@ -80,10 +90,7 @@ export default function FooterButton({ cartId }: { cartId: string }) {
                 text={resolveSuffixButtonText()}
                 width="w-full"
                 onClick={handleNextButton}
-                disabled={
-                    !(isPaymentValid && isContactValid) &&
-                    pathname === `/checkout/payment`
-                }
+                disabled={resolveDisabledState()}
             />
         </div>
     );
