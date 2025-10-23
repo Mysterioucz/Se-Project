@@ -1,5 +1,6 @@
 "use client";
 
+import { useCheckout } from "@/src/contexts/CheckoutContext";
 import Button from "@components/Button";
 import {
     Dialog,
@@ -18,7 +19,11 @@ interface QRModalProps {
 export default function QRModal({ open, onClose }: QRModalProps) {
     const router = useRouter();
     const [amount, setAmount] = useState<number>(0);
+    const {checkoutData} = useCheckout();
 
+    const handlePaymentComplete = () => {
+
+    }
     useEffect(() => {
         if (!open) return;
 

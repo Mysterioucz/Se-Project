@@ -10,19 +10,11 @@ export default function Page() {
 
     // TODO: Fetch actual data from backend to check if user fill in all required info
 
-    const handlePaymentStatusChange = (isValid: boolean) => {
+    const handlePaymentStatusChange = (isValid: boolean, isQR: boolean) => {
         updateCheckoutData({
             payment: {
                 ...(checkoutData?.payment ?? {}),
                 isPaymentValid: isValid,
-            },
-        });
-    };
-    const handleQRmethodChange = (isQR: boolean) => {
-        console.log("QR method changed to:", isQR);
-        updateCheckoutData({
-            payment: {
-                ...(checkoutData?.payment ?? {}),
                 isQRmethod: isQR,
             },
         });
@@ -60,7 +52,6 @@ export default function Page() {
                         </div>
                         <PaymentMethods
                             onStatusChange={handlePaymentStatusChange}
-                            onQRmethodChange={handleQRmethodChange}
                         />
                     </div>
 
