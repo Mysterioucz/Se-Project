@@ -31,7 +31,7 @@ jobs:
         working-directory: ./
 
       - name: Run lint
-        run: pnpm exec es lint .
+        run: pnpm lint
         working-directory: ./
 
       # - name: Run tests
