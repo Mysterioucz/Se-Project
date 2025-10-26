@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export default withAuth(
     // `withAuth` will run before the custom middleware
     // The protected paths you specified in the `config` will be checked here
-    async function proxy(req: NextRequest) {
+    async function middleware(req: NextRequest) {
         const pathname = req.nextUrl.pathname;
         const response = NextResponse.next();
         response.headers.set("x-pathname", pathname);
