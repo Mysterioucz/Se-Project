@@ -42,3 +42,11 @@
 # backend generated files
 **/src/generated/prisma
 **/.setup_done
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
