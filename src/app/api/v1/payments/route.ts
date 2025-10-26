@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db";
-import { z } from "zod";
-import crypto from "crypto";
-import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
+import { nextAuthOptions } from "@/src/lib/auth";
+import { randomUUID } from "crypto";
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 const TicketInputSchema = z.object({
     Price: z.number().positive(),
@@ -32,7 +32,9 @@ const CreatePaymentSchema = z
         ArrivalTime: z.string().refine((v) => !isNaN(Date.parse(v)), {
             message: "Invalid ArrivalTime",
         }),
-        Tickets: z.array(TicketInputSchema).min(1, "At least one ticket required"),
+        Tickets: z
+            .array(TicketInputSchema)
+            .min(1, "At least one ticket required"),
 
         totalAmount: z.number().positive("amount must be > 0"),
         method: PaymentMethodSchema,
@@ -57,11 +59,11 @@ const CreatePaymentSchema = z
     .superRefine((v, ctx) => {
         // Require bankName when method is ONLINE_BANKING
         if (v.method === "ONLINE_BANKING" && !v.bankName) {
-        ctx.addIssue({
-            path: ["bankName"],
-            code: z.ZodIssueCode.custom,
-            message: "bankName is required when method is ONLINE_BANKING",
-        });
+            ctx.addIssue({
+                path: ["bankName"],
+                code: z.ZodIssueCode.custom,
+                message: "bankName is required when method is ONLINE_BANKING",
+            });
         }
     });
 
@@ -71,13 +73,13 @@ export async function POST(request: NextRequest) {
     if (!session?.user?.id) {
         return NextResponse.json(
             { error: { message: ErrorMessages.AUTHENTICATION } },
-            { status: 401 }
+            { status: 401 },
         );
     }
 
     // The accountId is securely obtained from the session object.
     const UserAccountID = String(session.user.id);
-    
+
     try {
         const parsed = CreatePaymentSchema.parse(await request.json());
         console.log("Parsed payment data:", parsed);
@@ -94,147 +96,133 @@ export async function POST(request: NextRequest) {
             paymentTelNo,
             bankName,
         } = parsed;
-        
-        // As the tickets were never created, we don't need this
-        // Validate entities (ticket exists, not already purchased)
-        // const ticket = await prisma.ticket.findUnique({ where: { TicketID: ticketId } });
-        // if (!ticket) {
-        //     return NextResponse.json(
-        //         { error: {code: "TICKET_NOT_FOUND", message:ErrorMessages.NOT_FOUND } },
-        //         { status: 404}
-        //     );
-        // }
 
-        // const existingPurchase = await prisma.purchase.findUnique({
-        //     where: { TicketID: ticketId }, 
-        // });
-        
-        // if (existingPurchase) {
-        //     return NextResponse.json(
-        //         { error: { code: "ALREADY_PURCHASED", message: "Ticket already purchased." } },
-        //         { status: 409 }
-        //     );
-        // }
+        // Create payment and purchase
+        const paymentId = `pay_${randomUUID()}`;
 
-        // Create payment and purchase 
-        const paymentId = `pay_${crypto.randomUUID()}`;
+        const result = await prisma.$transaction(
+            async (tx) => {
+                // Create tickets
+                const createdTickets = await Promise.all(
+                    Tickets.map((ticket) =>
+                        tx.ticket.create({
+                            data: {
+                                Price: ticket.Price,
+                                ServiceFee: ticket.ServiceFee,
+                                PassengerName: ticket.PassengerName,
+                                PassengerLastName: ticket.PassengerLastName,
+                                Gender: ticket.Gender,
+                                DateOfBirth: new Date(ticket.DateOfBirth),
+                                Nationality: ticket.Nationality,
+                                BaggageChecked: ticket.BaggageChecked,
+                                BaggageCabin: ticket.BaggageCabin,
+                                SeatNo: ticket.SeatNo,
+                                AircraftRegNo,
+                                FlightNo,
+                                DepartTime: new Date(DepartTime),
+                                ArrivalTime: new Date(ArrivalTime),
+                            },
+                        }),
+                    ),
+                );
 
-        const result = await prisma.$transaction(async (tx) => {
-            // Create tickets
-            const createdTickets = await Promise.all(
-                Tickets.map((ticket) =>
-                tx.ticket.create({
-                    data: {
-                        Price: ticket.Price,
-                        ServiceFee: ticket.ServiceFee,
-                        PassengerName: ticket.PassengerName,
-                        PassengerLastName: ticket.PassengerLastName,
-                        Gender: ticket.Gender,
-                        DateOfBirth: new Date(ticket.DateOfBirth),
-                        Nationality: ticket.Nationality,
-                        BaggageChecked: ticket.BaggageChecked,
-                        BaggageCabin: ticket.BaggageCabin,
-                        SeatNo: ticket.SeatNo,
-                        AircraftRegNo,
+                // Decrease available seats
+                await tx.flight.updateMany({
+                    where: {
                         FlightNo,
                         DepartTime: new Date(DepartTime),
                         ArrivalTime: new Date(ArrivalTime),
                     },
-                })
-                )
-            );
-
-            // Decrease available seats
-            await tx.flight.updateMany({
-                where: {
-                FlightNo,
-                DepartTime: new Date(DepartTime),
-                ArrivalTime: new Date(ArrivalTime),
-                },
-                data: {
-                AvailableSeat: {
-                    decrement: Tickets.length,
-                },
-                },
-            });
-
-            // Mark seats unavailable
-            await Promise.all(
-                Tickets.map((ticket) =>
-                tx.seat.updateMany({
-                    where: {
-                    FlightNo,
-                    DepartTime: new Date(DepartTime),
-                    ArrivalTime: new Date(ArrivalTime),
-                    SeatNo: ticket.SeatNo,
-                    },
                     data: {
-                    IsAvailable: false,
+                        AvailableSeat: {
+                            decrement: Tickets.length,
+                        },
                     },
-                })
-                )
-            );
+                });
 
-            // Create Payment
-            const payment = await tx.payment.create({
-                data: {
-                    PaymentID: paymentId,
-                    PaymentDateTime: new Date(),
-                    PaymentMethod: method,           
-                    TransactionStatus: status, 
-                    PaymentEmail: paymentEmail,
-                    PaymentTelNo: paymentTelNo,      
-                    Amount: totalAmount,
-                    BankName: method === "ONLINE_BANKING" ? bankName : null,                  
-                },
-            });
+                // Mark seats unavailable
+                await Promise.all(
+                    Tickets.map((ticket) =>
+                        tx.seat.updateMany({
+                            where: {
+                                FlightNo,
+                                DepartTime: new Date(DepartTime),
+                                ArrivalTime: new Date(ArrivalTime),
+                                SeatNo: ticket.SeatNo,
+                            },
+                            data: {
+                                IsAvailable: false,
+                            },
+                        }),
+                    ),
+                );
 
-            // Create purchases for all tickets
-            const purchases = await Promise.all(
-                createdTickets.map((ticket) =>
-                tx.purchase.create({
+                // Create Payment
+                const payment = await tx.payment.create({
                     data: {
-                        TicketID: ticket.TicketID,
-                        PaymentID: payment.PaymentID,
-                        UserAccountID,
+                        PaymentID: paymentId,
+                        PaymentDateTime: new Date(),
+                        PaymentMethod: method,
+                        TransactionStatus: status,
+                        PaymentEmail: paymentEmail,
+                        PaymentTelNo: paymentTelNo,
+                        Amount: totalAmount,
+                        BankName: method === "ONLINE_BANKING" ? bankName : null,
                     },
-                })
-                )
-            );
+                });
 
-            return { payment, createdTickets, purchases };
-        });
+                // Create purchases for all tickets
+                const purchases = await Promise.all(
+                    createdTickets.map((ticket) =>
+                        tx.purchase.create({
+                            data: {
+                                TicketID: ticket.TicketID,
+                                PaymentID: payment.PaymentID,
+                                UserAccountID,
+                            },
+                        }),
+                    ),
+                );
 
-        return NextResponse.json({
-            success: true,
-            data: {
-                payment: result.payment,
-                tickets: result.createdTickets,
-                purchases: result.purchases,
+                return { payment, createdTickets, purchases };
             },
-        },{ 
-            status: 201, 
-            headers: { 
-                Location: `/api/v1/payments/${paymentId}` 
-            } 
-        });
+            {
+                timeout: 10000,
+            },
+        );
 
+        return NextResponse.json(
+            {
+                success: true,
+                data: {
+                    payment: result.payment,
+                    tickets: result.createdTickets,
+                    purchases: result.purchases,
+                },
+            },
+            {
+                status: 201,
+                headers: {
+                    Location: `/api/v1/payments/${paymentId}`,
+                },
+            },
+        );
     } catch (err: unknown) {
         if (err instanceof z.ZodError) {
-          return NextResponse.json(
-            {
-              success: false,
-              message: "Validation error",
-              details: err.issues,
-            },
-            { status: 400 }
-          );
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Validation error",
+                    details: err.issues,
+                },
+                { status: 400 },
+            );
         }
-    
-      return NextResponse.json(
-        { success: false, message: ErrorMessages.SERVER, details: err},
-        { status: 500 }
-      );
+
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.SERVER, details: err },
+            { status: 500 },
+        );
     }
 }
 
@@ -242,55 +230,55 @@ export async function POST(request: NextRequest) {
 // GET /api/v1/payments (no auth check)
 
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url);
-  const requestedUserId = url.searchParams.get("userId");
+    const url = new URL(req.url);
+    const requestedUserId = url.searchParams.get("userId");
 
-  if (!requestedUserId) {
-    return NextResponse.json(
-      { success: false, message: "Missing userId query parameter" },
-      { status: 400 }
-    );
-  }
+    if (!requestedUserId) {
+        return NextResponse.json(
+            { success: false, message: "Missing userId query parameter" },
+            { status: 400 },
+        );
+    }
 
-  try {
-    const payments = await prisma.payment.findMany({
-      where: {
-        purchase: {
-          UserAccountID: requestedUserId,
-        },
-      },
-      orderBy: { PaymentDateTime: "desc" },
-      include: {
-        purchase: true,
-      },
-    });
+    try {
+        const payments = await prisma.payment.findMany({
+            where: {
+                purchase: {
+                    UserAccountID: requestedUserId,
+                },
+            },
+            orderBy: { PaymentDateTime: "desc" },
+            include: {
+                purchase: true,
+            },
+        });
 
-    const data = payments.map((p) => ({
-      id: p.PaymentID,
-      dateTime: p.PaymentDateTime,
-      method: p.PaymentMethod,
-      status: p.TransactionStatus,
-      email: p.PaymentEmail,
-      telNo: p.PaymentTelNo,
-      bankName: (p).BankName ?? null,
-      amount: p.Amount,
-      purchase: p.purchase
-        ? {
-            ticketId: p.purchase.TicketID,
-            userAccountId: p.purchase.UserAccountID,
-          }
-        : null,
-    }));
+        const data = payments.map((p) => ({
+            id: p.PaymentID,
+            dateTime: p.PaymentDateTime,
+            method: p.PaymentMethod,
+            status: p.TransactionStatus,
+            email: p.PaymentEmail,
+            telNo: p.PaymentTelNo,
+            bankName: p.BankName ?? null,
+            amount: p.Amount,
+            purchase: p.purchase
+                ? {
+                      ticketId: p.purchase.TicketID,
+                      userAccountId: p.purchase.UserAccountID,
+                  }
+                : null,
+        }));
 
-    return NextResponse.json(
-      { success: true, data },
-      { status: 200, headers: { "Cache-Control": "no-store" } }
-    );
-  } catch (err: unknown) {
-    console.error("Error fetching payments:", err);
-    return NextResponse.json(
-      { success: false, message: ErrorMessages.SERVER },
-      { status: 500 }
-    );
-  }
+        return NextResponse.json(
+            { success: true, data },
+            { status: 200, headers: { "Cache-Control": "no-store" } },
+        );
+    } catch (err: unknown) {
+        console.error("Error fetching payments:", err);
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.SERVER },
+            { status: 500 },
+        );
+    }
 }
