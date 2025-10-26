@@ -1,12 +1,114 @@
 import prisma from "@/db";
-import { NextRequest } from "next/server";
-import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
+import { nextAuthOptions } from "@/src/lib/auth";
+import { getServerSession } from "next-auth";
+import { NextRequest } from "next/server";
 
+/**
+ * @swagger
+ * /api/v1/account/{accountId}:
+ *   get:
+ *     summary: Get account details
+ *     description: Retrieve account information (requires authentication)
+ *     tags:
+ *       - Account
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: accountId
+ *         in: path
+ *         description: Account ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved account
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     AccountID:
+ *                       type: string
+ *                     Email:
+ *                       type: string
+ *                     FirstName:
+ *                       type: string
+ *                     LastName:
+ *                       type: string
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ *   put:
+ *     summary: Update account
+ *     description: Update account first name and/or last name (requires authentication)
+ *     tags:
+ *       - Account
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: accountId
+ *         in: path
+ *         description: Account ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               updateFirstName:
+ *                 type: string
+ *                 example: John
+ *               updateLastName:
+ *                 type: string
+ *                 example: Doe
+ *     responses:
+ *       200:
+ *         description: Account updated successfully
+ *       400:
+ *         description: Missing parameters
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ *   delete:
+ *     summary: Delete account
+ *     description: Delete account and all related data (requires authentication)
+ *     tags:
+ *       - Account
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: accountId
+ *         in: path
+ *         description: Account ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Account deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Account not found
+ *       500:
+ *         description: Server error
+ */
 export async function PUT(
     req: NextRequest,
-    { params }: { params: Promise<{ accountId: string }> }
+    { params }: { params: Promise<{ accountId: string }> },
 ) {
     const { accountId } = await params;
     const { updateFirstName, updateLastName } = await req.json();
@@ -19,7 +121,7 @@ export async function PUT(
                 success: false,
                 message: ErrorMessages.PERMISSION,
             }),
-            { status: 401 }
+            { status: 401 },
         );
     }
 
@@ -29,7 +131,7 @@ export async function PUT(
                 success: false,
                 message: ErrorMessages.MISSING_PARAMETER,
             }),
-            { status: 400 }
+            { status: 400 },
         );
     }
 
@@ -52,7 +154,7 @@ export async function PUT(
                     LastName: updatedUser.LastName,
                 },
             }),
-            { status: 200 }
+            { status: 200 },
         );
     } catch (error) {
         console.error(error);
@@ -61,14 +163,14 @@ export async function PUT(
                 success: false,
                 message: ErrorMessages.SERVER,
             }),
-            { status: 500 }
+            { status: 500 },
         );
     }
 }
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: Promise<{ accountId: string }> }
+    { params }: { params: Promise<{ accountId: string }> },
 ) {
     const { accountId } = await params;
 
@@ -80,7 +182,7 @@ export async function GET(
                 success: false,
                 message: ErrorMessages.PERMISSION,
             }),
-            { status: 401 }
+            { status: 401 },
         );
     }
 
@@ -101,23 +203,23 @@ export async function GET(
                     LastName: acc?.LastName,
                 },
             }),
-            { status: 200 }
+            { status: 200 },
         );
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return new Response(
             JSON.stringify({
                 success: false,
                 message: ErrorMessages.SERVER,
             }),
-            { status: 500 }
+            { status: 500 },
         );
     }
 }
 
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: Promise<{ accountId: string }> }
+    { params }: { params: Promise<{ accountId: string }> },
 ) {
     const { accountId } = await params;
 
@@ -129,7 +231,7 @@ export async function DELETE(
                 success: false,
                 message: ErrorMessages.PERMISSION,
             }),
-            { status: 401 }
+            { status: 401 },
         );
     }
 
@@ -147,7 +249,7 @@ export async function DELETE(
                     success: false,
                     message: ErrorMessages.ACCOUNT_NOT_FOUND,
                 }),
-                { status: 404 }
+                { status: 404 },
             );
         }
 
@@ -232,7 +334,7 @@ export async function DELETE(
                 success: true,
                 message: "Account and related data are deleted successfully",
             }),
-            { status: 200 }
+            { status: 200 },
         );
     } catch (error) {
         console.error(error);
@@ -241,7 +343,7 @@ export async function DELETE(
                 success: false,
                 message: ErrorMessages.SERVER,
             }),
-            { status: 500 }
+            { status: 500 },
         );
     }
 }

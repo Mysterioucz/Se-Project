@@ -2,9 +2,92 @@ import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { NextRequest, NextResponse } from "next/server";
 
-//@desc     Get additional services and seat availability for a specific flight
-//@route    GET /api/v1/flights/lookup?flightNo=...&departTime=...&arrivalTime=...
-//@access   Public
+/**
+ * @swagger
+ * /api/v1/flights/lookup:
+ *   get:
+ *     summary: Get flight details with services and seats
+ *     description: Retrieve additional services and seat availability for a specific flight
+ *     tags:
+ *       - Flights
+ *     parameters:
+ *       - name: flightNo
+ *         in: query
+ *         description: Flight number
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: TG123
+ *       - name: departTime
+ *         in: query
+ *         description: Departure time in ISO 8601 format
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *           example: 2025-09-27T01:25:20.000Z
+ *       - name: arrivalTime
+ *         in: query
+ *         description: Arrival time in ISO 8601 format
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *           example: 2025-09-27T03:45:20.000Z
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved flight details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     services:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       example: ["Select Seat", "Extra Baggage"]
+ *                     availableSeats:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           SeatNo:
+ *                             type: string
+ *                           SeatType:
+ *                             type: string
+ *                           IsAvailable:
+ *                             type: boolean
+ *                     flight:
+ *                       type: object
+ *                       properties:
+ *                         FlightNo:
+ *                           type: string
+ *                         DepartTime:
+ *                           type: string
+ *                           format: date-time
+ *                         ArrivalTime:
+ *                           type: string
+ *                           format: date-time
+ *                         AirlineName:
+ *                           type: string
+ *                         DepartureAirportID:
+ *                           type: string
+ *                         ArrivalAirportID:
+ *                           type: string
+ *       400:
+ *         description: Missing required parameters
+ *       404:
+ *         description: Flight not found
+ *       500:
+ *         description: Server error
+ */
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = req.nextUrl;

@@ -2,6 +2,156 @@ import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { NextRequest } from "next/server";
 
+/**
+ * @swagger
+ * /api/v1/flights:
+ *   get:
+ *     summary: Search for flights
+ *     description: Search for one-way or round-trip flights based on departure city, arrival city, and dates. Supports filtering by airlines, time ranges, and sorting.
+ *     tags:
+ *       - Flights
+ *     parameters:
+ *       - name: flightType
+ *         in: query
+ *         description: Type of flight (One Way or Round Trip)
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum: [One Way, Round Trip]
+ *           default: One Way
+ *       - name: classType
+ *         in: query
+ *         description: Cabin class type
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example: Economy
+ *       - name: departureCity
+ *         in: query
+ *         description: Departure city name
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Bangkok
+ *       - name: arrivalCity
+ *         in: query
+ *         description: Arrival city name
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: Chiang Mai
+ *       - name: departDate
+ *         in: query
+ *         description: Departure date (YYYY-MM-DD format)
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-27
+ *       - name: returnDate
+ *         in: query
+ *         description: Return date (YYYY-MM-DD format, required for Round Trip)
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date
+ *           example: 2025-10-30
+ *       - name: numberOfPassenger
+ *         in: query
+ *         description: Number of passengers
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *       - name: airlines
+ *         in: query
+ *         description: Filter by airline names (comma-separated)
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example: Thai Airways,Bangkok Airways
+ *       - name: departureTimeRange
+ *         in: query
+ *         description: Departure time range in hours (comma-separated, e.g., "6,12" for 6 AM to 12 PM)
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example: 6,12
+ *       - name: arrivalTimeRange
+ *         in: query
+ *         description: Arrival time range in hours (comma-separated)
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example: 14,18
+ *       - name: sortBy
+ *         in: query
+ *         description: Sort results by price, duration, or stops
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum: [price, duration, stops]
+ *           default: price
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved flights
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       airlineName:
+ *                         type: string
+ *                       flightNo:
+ *                         type: string
+ *                       departureAirportID:
+ *                         type: string
+ *                       arrivalAirportID:
+ *                         type: string
+ *                       departCity:
+ *                         type: string
+ *                       arrivalCity:
+ *                         type: string
+ *                       departureTime:
+ *                         type: string
+ *                         format: date-time
+ *                       arrivalTime:
+ *                         type: string
+ *                         format: date-time
+ *                       departHours:
+ *                         type: string
+ *                       arrivalHours:
+ *                         type: string
+ *                       duration:
+ *                         type: string
+ *                       durationInMinutes:
+ *                         type: number
+ *                       cabinClass:
+ *                         type: string
+ *                       price:
+ *                         type: number
+ *                       aircraftModel:
+ *                         type: string
+ *                       seatCapacity:
+ *                         type: integer
+ *                       transitAmount:
+ *                         type: integer
+ *       400:
+ *         description: Missing required parameters
+ *       404:
+ *         description: No flights found
+ *       500:
+ *         description: Server error
+ */
 export async function GET(req: NextRequest) {
     const { searchParams } = req.nextUrl;
 
@@ -14,7 +164,7 @@ export async function GET(req: NextRequest) {
     const returnDate = searchParams.get("returnDate");
     const numberOfPassenger = parseInt(
         searchParams.get("numberOfPassenger") ?? "1",
-        10
+        10,
     );
 
     // Parameters for Filter and Sort
@@ -41,7 +191,7 @@ export async function GET(req: NextRequest) {
                 success: false,
                 error: ErrorMessages.MISSING_PARAMETER,
             }),
-            { status: 400 }
+            { status: 400 },
         );
     }
 
@@ -70,19 +220,23 @@ export async function GET(req: NextRequest) {
                     success: false,
                     error: ErrorMessages.NOT_FOUND,
                 }),
-                { status: 404 }
+                { status: 404 },
             );
         }
 
         // Extract AirportIDs from the results
-        const departureAirportIDs = departureAirports.map((airport) => airport.AirportID);
-        const arrivalAirportIDs = arrivalAirports.map((airport) => airport.AirportID);
+        const departureAirportIDs = departureAirports.map(
+            (airport) => airport.AirportID,
+        );
+        const arrivalAirportIDs = arrivalAirports.map(
+            (airport) => airport.AirportID,
+        );
 
         // Helper function to find flights
         const findFlights = async (
             departAirports: string[],
             arriveAirports: string[],
-            date: string
+            date: string,
         ) => {
             const searchDate = new Date(date);
             const startOfDay = new Date(searchDate.setUTCHours(0, 0, 0, 0));
@@ -99,9 +253,10 @@ export async function GET(req: NextRequest) {
                     AvailableSeat: {
                         gte: numberOfPassenger,
                     },
-                    ...(airlines && airlines.length > 0 && {
-                        AirlineName: { in: airlines },
-                    }),
+                    ...(airlines &&
+                        airlines.length > 0 && {
+                            AirlineName: { in: airlines },
+                        }),
                 },
                 include: {
                     aircraft: true,
@@ -129,8 +284,10 @@ export async function GET(req: NextRequest) {
                     for (const cabinClass of cabinClasses) {
                         const departureTime = new Date(flight.DepartTime);
                         const arrivalTime = new Date(flight.ArrivalTime);
-                        const durationInMilliseconds = arrivalTime.getTime() - departureTime.getTime();
-                        const durationInMinutes = durationInMilliseconds / 1000 / 60;
+                        const durationInMilliseconds =
+                            arrivalTime.getTime() - departureTime.getTime();
+                        const durationInMinutes =
+                            durationInMilliseconds / 1000 / 60;
 
                         // Format duration as "Xh Ym"
                         const hours = Math.floor(durationInMinutes / 60);
@@ -138,7 +295,8 @@ export async function GET(req: NextRequest) {
                         const formattedDuration = `${hours}h ${minutes}m`;
 
                         // Format departHours and arrivalHours as "HH:mm"
-                        const padZero = (num: number) => num.toString().padStart(2, "0");
+                        const padZero = (num: number) =>
+                            num.toString().padStart(2, "0");
                         const departHours = `${padZero(departureTime.getUTCHours())}:${padZero(departureTime.getUTCMinutes())}`;
                         const arrivalHours = `${padZero(arrivalTime.getUTCHours())}:${padZero(arrivalTime.getUTCMinutes())}`;
 
@@ -147,8 +305,8 @@ export async function GET(req: NextRequest) {
                             flightNo: flight.FlightNo,
                             departureAirportID: flight.DepartureAirportID,
                             arrivalAirportID: flight.ArrivalAirportID,
-                            departCity: departureCity,       // <-- Added
-                            arrivalCity: arrivalCity,      // <-- Added
+                            departCity: departureCity, // <-- Added
+                            arrivalCity: arrivalCity, // <-- Added
                             departureTime: flight.DepartTime, // Date Type
                             arrivalTime: flight.ArrivalTime, // Date Type
                             departHours,
@@ -171,7 +329,7 @@ export async function GET(req: NextRequest) {
         let departingFlights = await findFlights(
             departureAirportIDs,
             arrivalAirportIDs,
-            departDate
+            departDate,
         );
         let returningFlights: FlightWithAircraft[] = [];
 
@@ -197,7 +355,7 @@ export async function GET(req: NextRequest) {
             returningFlights = await findFlights(
                 arrivalAirportIDs,
                 departureAirportIDs,
-                returnDate
+                returnDate,
             );
 
             if (departureTimeRange && departureTimeRange.length === 2) {
@@ -220,12 +378,10 @@ export async function GET(req: NextRequest) {
             }
         }
 
-        const formattedDepartingFlights = await formatFlightData(
-            departingFlights
-        );
-        const formattedReturningFlights = await formatFlightData(
-            returningFlights
-        );
+        const formattedDepartingFlights =
+            await formatFlightData(departingFlights);
+        const formattedReturningFlights =
+            await formatFlightData(returningFlights);
 
         const combinedFlights = [
             ...formattedDepartingFlights,
@@ -235,20 +391,22 @@ export async function GET(req: NextRequest) {
         switch (sortBy) {
             case "price":
                 combinedFlights.sort(
-                    (a, b) => (a.price ?? Infinity) - (b.price ?? Infinity)
+                    (a, b) => (a.price ?? Infinity) - (b.price ?? Infinity),
                 );
                 break;
             case "duration":
-                combinedFlights.sort((a, b) => a.durationInMinutes - b.durationInMinutes);
+                combinedFlights.sort(
+                    (a, b) => a.durationInMinutes - b.durationInMinutes,
+                );
                 break;
             case "stops":
                 combinedFlights.sort(
-                    (a, b) => a.transitAmount - b.transitAmount
+                    (a, b) => a.transitAmount - b.transitAmount,
                 );
                 break;
             default:
                 combinedFlights.sort(
-                    (a, b) => (a.price ?? Infinity) - (b.price ?? Infinity)
+                    (a, b) => (a.price ?? Infinity) - (b.price ?? Infinity),
                 );
                 break;
         }
@@ -258,7 +416,7 @@ export async function GET(req: NextRequest) {
                 success: true,
                 data: combinedFlights,
             }),
-            { status: 200 }
+            { status: 200 },
         );
     } catch (error) {
         console.error(error);
@@ -267,7 +425,7 @@ export async function GET(req: NextRequest) {
                 success: false,
                 message: ErrorMessages.SERVER,
             }),
-            { status: 500 }
+            { status: 500 },
         );
     }
 }
