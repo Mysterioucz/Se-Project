@@ -187,6 +187,7 @@ export async function POST(request: NextRequest) {
                 return { payment, createdTickets, purchases };
             },
             {
+                maxWait: 5000,
                 timeout: 10000,
             },
         );

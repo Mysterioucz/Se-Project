@@ -48,14 +48,11 @@ export default function FooterButton({ cartId }: { cartId: string }) {
 
     const handleNextButton = () => {
         if (isCheckoutPath(pathname)) {
-            if (isQRmethod) {
+            if (pathname === `/checkout/payment` && isQRmethod) {
                 setQRModalOpen(true);
             } else {
                 const nextIdx = checkoutPaths.indexOf(pathname) + 1;
-                router.push(
-                    `/${cartId}` +
-                        checkoutPaths[nextIdx],
-                );
+                router.push(`/${cartId}` + checkoutPaths[nextIdx]);
             }
         }
     };
