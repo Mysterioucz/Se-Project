@@ -8,7 +8,10 @@ const nextConfig: NextConfig = {
                 source: "/api/:path*",
                 headers: [
                     { key: "Access-Control-Allow-Credentials", value: "true" },
-                    { key: "Access-Control-Allow-Origin", value: "http://localhost:3000" },
+                    {
+                        key: "Access-Control-Allow-Origin",
+                        value: "http://localhost:3000",
+                    },
                     {
                         key: "Access-Control-Allow-Methods",
                         value: "GET,DELETE,PATCH,POST,PUT",
@@ -42,9 +45,6 @@ const nextConfig: NextConfig = {
                 as: "*.ts",
             },
         },
-    },
-    eslint: {
-        dirs: ["src/app", "src/components", "src/lib"], // Only run ESLint on the 'apps' and 'utils' directories during production builds (next build)
     },
 
     serverExternalPackages: ["@prisma/client", "bcrypt"],
