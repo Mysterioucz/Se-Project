@@ -90,25 +90,27 @@ export default function PriceBreakdownCard({
         );
 
         // Calculate total baggage price
-        const baggageTotal = checkoutData.passengerData?.reduce(
-            (sum, p) =>
-                sum +
-                (p.baggageAllowance.departureBaggage?.Price || 0) +
-                (p.baggageAllowance.returnBaggage?.Price || 0),
-            0,
-        ) || 0;
+        const baggageTotal =
+            checkoutData.passengerData?.reduce(
+                (sum, p) =>
+                    sum +
+                    (p.baggageAllowance.departureBaggage?.Price || 0) +
+                    (p.baggageAllowance.returnBaggage?.Price || 0),
+                0,
+            ) || 0;
         setTotalBaggagePrice(baggageTotal);
         setTotalPrice(ticketTotal + baggageTotal);
 
         // Extract baggage details for summary
-        const baggageDetails: ServiceType[] = checkoutData.passengerData?.flatMap(
-            (p) => [
-                p.baggageAllowance.departureBaggage,
-                p.baggageAllowance.returnBaggage,
-            ].filter((b): b is ServiceType => b !== undefined),
-        ) || [];
+        const baggageDetails: ServiceType[] =
+            checkoutData.passengerData?.flatMap((p) =>
+                [
+                    p.baggageAllowance.departureBaggage,
+                    p.baggageAllowance.returnBaggage,
+                ].filter((b): b is ServiceType => b !== undefined),
+            ) || [];
         setBaggage(baggageDetails);
-    }, [tickets, checkoutData.passengerData?.length]);
+    }, [tickets, checkoutData.passengerData]);
 
     return (
         <div className="flex flex-col items-start self-stretch gap-[1rem] p-[1rem_1.5rem] rounded-[0.5rem] border-[0.125rem] border-primary-300 bg-white">

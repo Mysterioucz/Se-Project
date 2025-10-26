@@ -14,7 +14,7 @@ export default async function CheckoutLayout({
     params,
 }: {
     children: React.ReactNode;
-    params: { cartId: string };
+    params: Promise<{ cartId: string }>;
 }) {
     const { cartId } = await params;
     const cartData = await fetchCartData(Number(cartId));
