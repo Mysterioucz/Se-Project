@@ -36,8 +36,23 @@ import { NextRequest } from "next/server";
  *                         type: string
  *                       Country:
  *                         type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 - AirportID: "BKK"
+ *                   AirportName: "Suvarnabhumi Airport"
+ *                   City: "Bangkok"
+ *                   Country: "Thailand"
+ *                 - AirportID: "DMK"
+ *                   AirportName: "Don Mueang International Airport"
+ *                   City: "Bangkok"
+ *                   Country: "Thailand"
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Internal server error. Please try again later."
  *   post:
  *     summary: Create a new airport
  *     description: Create a new airport (requires authentication)
@@ -72,12 +87,34 @@ import { NextRequest } from "next/server";
  *     responses:
  *       200:
  *         description: Airport created successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 AirportID: "BKK"
+ *                 AirportName: "Suvarnabhumi Airport"
+ *                 City: "Bangkok"
+ *                 Country: "Thailand"
  *       400:
  *         description: Missing required parameters
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Missing required parameters. Please check your request."
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "You do not have permission to perform this action."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Internal server error. Please try again later."
  */
 export const GET = async () => {
     try {

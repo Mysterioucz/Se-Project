@@ -81,12 +81,48 @@ import { NextRequest, NextResponse } from "next/server";
  *                           type: string
  *                         ArrivalAirportID:
  *                           type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 services:
+ *                   - "Select Seat"
+ *                   - "Extra Baggage"
+ *                 availableSeats:
+ *                   - SeatNo: "1A"
+ *                     SeatType: "Window"
+ *                     IsAvailable: true
+ *                   - SeatNo: "1B"
+ *                     SeatType: "Middle"
+ *                     IsAvailable: false
+ *                 flight:
+ *                   AircraftRegNo: "HS-TGW"
+ *                   FlightNo: "TG123"
+ *                   DepartTime: "2025-09-27T01:25:20.000Z"
+ *                   ArrivalTime: "2025-09-27T03:45:20.000Z"
+ *                   AirlineName: "Thai Airways"
+ *                   DepartureAirportID: "BKK"
+ *                   ArrivalAirportID: "CNX"
  *       400:
  *         description: Missing required parameters
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               error: "Missing required parameters. Please check your request."
  *       404:
  *         description: Flight not found
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               error: "The requested resource could not be found."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  */
 export async function GET(req: NextRequest) {
     try {

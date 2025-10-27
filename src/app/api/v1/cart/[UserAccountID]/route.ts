@@ -40,8 +40,39 @@ import { NextRequest, NextResponse } from "next/server";
  *                   type: array
  *                   items:
  *                     type: object
+ *             example:
+ *               success: true
+ *               data:
+ *                 - id: 1
+ *                   FlightType: "Round Trip"
+ *                   ClassType: "Economy"
+ *                   Adults: 2
+ *                   Childrens: 0
+ *                   Infants: 0
+ *                   Price: 5000
+ *                   DepartureAirport: "BKK"
+ *                   ArrivalAirport: "CNX"
+ *                   DepartureCity: "Bangkok"
+ *                   ArrivalCity: "Chiang Mai"
+ *                   Depart:
+ *                     FlightNo: "TG123"
+ *                     DepartTime: "2025-10-27T08:00:00.000Z"
+ *                     ArrivalTime: "2025-10-27T09:30:00.000Z"
+ *                     AirlineName: "Thai Airways"
+ *                     Stops: 0
+ *                   Return:
+ *                     FlightNo: "TG124"
+ *                     DepartTime: "2025-10-30T10:00:00.000Z"
+ *                     ArrivalTime: "2025-10-30T11:30:00.000Z"
+ *                     AirlineName: "Thai Airways"
+ *                     Stops: 0
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  *   post:
  *     summary: Add flight to cart
  *     description: Add a new flight to the user's cart (requires authentication)
@@ -101,16 +132,52 @@ import { NextRequest, NextResponse } from "next/server";
  *     responses:
  *       200:
  *         description: Flight added to cart successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 id: 1
+ *                 UserAccountID: "123e4567-e89b-12d3-a456-426614174000"
+ *                 FlightType: "One Way"
+ *                 ClassType: "Economy"
+ *                 Adults: 1
+ *                 Price: 2500
  *       400:
  *         description: Missing parameters or validation error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Missing required parameters. Please check your request."
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Authentication required. Please log in."
  *       403:
  *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "You do not have permission to perform this action."
  *       409:
  *         description: Flight already in cart
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "This item is already in the cart."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  *   delete:
  *     summary: Remove flight from cart
  *     description: Delete a specific cart item
@@ -138,12 +205,32 @@ import { NextRequest, NextResponse } from "next/server";
  *     responses:
  *       200:
  *         description: Cart item deleted successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "Cart item deleted successfully"
  *       400:
  *         description: Missing CartID
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Missing required parameters. Please check your request."
  *       404:
  *         description: Cart item not found
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "The requested resource could not be found."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  */
 export async function GET(
     req: NextRequest,

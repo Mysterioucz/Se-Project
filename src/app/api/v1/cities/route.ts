@@ -29,10 +29,26 @@ import { NextResponse } from "next/server";
  *                       City:
  *                         type: string
  *                         example: Bangkok
+ *             example:
+ *               success: true
+ *               data:
+ *                 - City: "Bangkok"
+ *                 - City: "Chiang Mai"
+ *                 - City: "Phuket"
  *       404:
  *         description: No cities found
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "The requested resource could not be found."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  */
 export async function GET() {
     try {

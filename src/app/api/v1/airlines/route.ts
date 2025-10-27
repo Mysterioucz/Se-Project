@@ -29,10 +29,26 @@ import { NextResponse } from "next/server";
  *                       AirlineName:
  *                         type: string
  *                         example: Thai Airways
+ *             example:
+ *               success: true
+ *               data:
+ *                 - AirlineName: "Thai Airways"
+ *                 - AirlineName: "Bangkok Airways"
+ *                 - AirlineName: "Air Asia"
  *       404:
  *         description: No airlines found
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "The requested resource could not be found."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  */
 export async function GET() {
     try {

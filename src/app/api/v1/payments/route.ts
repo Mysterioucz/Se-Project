@@ -142,12 +142,60 @@ import { z } from "zod";
  *                       type: array
  *                       items:
  *                         type: object
+ *             example:
+ *               success: true
+ *               data:
+ *                 payment:
+ *                   PaymentID: "pay_550e8400-e29b-41d4-a716-446655440000"
+ *                   PaymentDateTime: "2024-12-01T10:00:00.000Z"
+ *                   PaymentMethod: "CREDIT_CARD"
+ *                   TransactionStatus: "PAID"
+ *                   PaymentEmail: "user@example.com"
+ *                   PaymentTelNo: "+66812345678"
+ *                   Amount: 10000
+ *                   BankName: null
+ *                 tickets:
+ *                   - TicketID: 1
+ *                     Price: 5000
+ *                     ServiceFee: 200
+ *                     PassengerName: "John"
+ *                     PassengerLastName: "Doe"
+ *                     Gender: "Male"
+ *                     DateOfBirth: "1990-01-01T00:00:00.000Z"
+ *                     Nationality: "Thai"
+ *                     BaggageChecked: 20
+ *                     BaggageCabin: 7
+ *                     SeatNo: "12A"
+ *                     FlightNo: "TG101"
+ *                 purchases:
+ *                   - TicketID: 1
+ *                     PaymentID: "pay_550e8400-e29b-41d4-a716-446655440000"
+ *                     UserAccountID: "123e4567-e89b-12d3-a456-426614174000"
  *       400:
  *         description: Validation error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Validation error"
+ *               details:
+ *                 - code: "invalid_type"
+ *                   message: "Required"
+ *                   path: ["FlightNo"]
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               error:
+ *                 message: "Authentication required. Please log in."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  *   get:
  *     summary: Get user payments
  *     description: Retrieve payment history for a specific user
@@ -202,10 +250,34 @@ import { z } from "zod";
  *                             type: string
  *                           userAccountId:
  *                             type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 - id: "pay_550e8400-e29b-41d4-a716-446655440000"
+ *                   dateTime: "2024-12-01T10:00:00.000Z"
+ *                   method: "CREDIT_CARD"
+ *                   status: "PAID"
+ *                   email: "user@example.com"
+ *                   telNo: "+66812345678"
+ *                   bankName: null
+ *                   amount: 10000
+ *                   purchase:
+ *                     ticketId: 1
+ *                     userAccountId: "123e4567-e89b-12d3-a456-426614174000"
  *       400:
  *         description: Missing userId parameter
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Missing userId query parameter"
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  */
 const TicketInputSchema = z.object({
     Price: z.number().positive(),

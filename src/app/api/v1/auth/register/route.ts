@@ -58,10 +58,25 @@ import { NextRequest } from "next/server";
  *                       type: string
  *                     LastName:
  *                       type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 AccountID: "123e4567-e89b-12d3-a456-426614174000"
+ *                 Email: "user@example.com"
+ *                 FirstName: "John"
+ *                 LastName: "Doe"
  *       400:
  *         description: Missing required parameters
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Missing required parameters. Please check your request."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Internal server error. Please try again later."
  */
 export async function POST(req: NextRequest) {
     const { Email, Password, FirstName, LastName } = await req.json();

@@ -66,10 +66,40 @@ import { NextRequest, NextResponse } from "next/server";
  *                       ReturnFlight:
  *                         type: object
  *                         nullable: true
+ *             example:
+ *               success: true
+ *               data:
+ *                 - id: 1
+ *                   FlightType: "Round Trip"
+ *                   ClassType: "Economy"
+ *                   Adults: 2
+ *                   Childrens: 0
+ *                   Infants: 0
+ *                   Price: 5000
+ *                   DepartFlight:
+ *                     FlightNo: "TG123"
+ *                     DepartTime: "2025-10-27T08:00:00.000Z"
+ *                     ArrivalTime: "2025-10-27T09:30:00.000Z"
+ *                     AirlineName: "Thai Airways"
+ *                   ReturnFlight:
+ *                     FlightNo: "TG124"
+ *                     DepartTime: "2025-10-30T10:00:00.000Z"
+ *                     ArrivalTime: "2025-10-30T11:30:00.000Z"
+ *                     AirlineName: "Thai Airways"
  *       400:
  *         description: Missing required parameters
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Missing required parameters. Please check your request."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  */
 export async function GET(
     req: NextRequest,

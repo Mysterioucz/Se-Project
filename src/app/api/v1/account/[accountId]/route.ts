@@ -42,10 +42,27 @@ import { NextRequest } from "next/server";
  *                       type: string
  *                     LastName:
  *                       type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 AccountID: "123e4567-e89b-12d3-a456-426614174000"
+ *                 Email: "john.doe@example.com"
+ *                 FirstName: "John"
+ *                 LastName: "Doe"
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "You do not have permission to perform this action."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  *   put:
  *     summary: Update account
  *     description: Update account first name and/or last name (requires authentication)
@@ -76,12 +93,34 @@ import { NextRequest } from "next/server";
  *     responses:
  *       200:
  *         description: Account updated successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 FirstName: "John"
+ *                 LastName: "Doe"
  *       400:
  *         description: Missing parameters
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Missing required parameters. Please check your request."
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "You do not have permission to perform this action."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  *   delete:
  *     summary: Delete account
  *     description: Delete account and all related data (requires authentication)
@@ -99,12 +138,32 @@ import { NextRequest } from "next/server";
  *     responses:
  *       200:
  *         description: Account deleted successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "Account and related data are deleted successfully"
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "You do not have permission to perform this action."
  *       404:
  *         description: Account not found
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Account not found."
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
  */
 export async function PUT(
     req: NextRequest,
