@@ -3,9 +3,81 @@ import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import bcrypt from "bcrypt";
 import { NextRequest } from "next/server";
 
-//@desc     Register account
-//@route    POST /api/v1/auth/register
-//@access   Public
+/**
+ * @swagger
+ * /api/v1/auth/register:
+ *   post:
+ *     summary: Register new account
+ *     description: Create a new user account with email and password
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - Email
+ *               - Password
+ *               - FirstName
+ *               - LastName
+ *             properties:
+ *               Email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               Password:
+ *                 type: string
+ *                 format: password
+ *                 example: SecurePass123
+ *               FirstName:
+ *                 type: string
+ *                 example: John
+ *               LastName:
+ *                 type: string
+ *                 example: Doe
+ *     responses:
+ *       200:
+ *         description: Account created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     AccountID:
+ *                       type: string
+ *                     Email:
+ *                       type: string
+ *                     FirstName:
+ *                       type: string
+ *                     LastName:
+ *                       type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 AccountID: "123e4567-e89b-12d3-a456-426614174000"
+ *                 Email: "user@example.com"
+ *                 FirstName: "John"
+ *                 LastName: "Doe"
+ *       400:
+ *         description: Missing required parameters
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Missing required parameters. Please check your request."
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Internal server error. Please try again later."
+ */
 export async function POST(req: NextRequest) {
     const { Email, Password, FirstName, LastName } = await req.json();
     if (!Password || !FirstName || !LastName || !Email) {
@@ -13,7 +85,7 @@ export async function POST(req: NextRequest) {
             JSON.stringify({
                 message: ErrorMessages.MISSING_PARAMETER,
             }),
-            { status: 400 }
+            { status: 400 },
         );
     }
     try {
@@ -41,14 +113,14 @@ export async function POST(req: NextRequest) {
                 success: true,
                 data: newAccount,
             }),
-            { status: 200 }
+            { status: 200 },
         );
     } catch (error) {
         return new Response(
             JSON.stringify({
                 message: ErrorMessages.SERVER,
             }),
-            { status: 500 }
+            { status: 500 },
         );
     }
 }
