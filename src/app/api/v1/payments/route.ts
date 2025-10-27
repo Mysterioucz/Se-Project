@@ -7,6 +7,278 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+/**
+ * @swagger
+ * /api/v1/payments:
+ *   post:
+ *     summary: Create payment and tickets
+ *     description: Create payment transaction, generate tickets, and mark seats as unavailable (requires authentication)
+ *     tags:
+ *       - Payments
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - AircraftRegNo
+ *               - FlightNo
+ *               - DepartTime
+ *               - ArrivalTime
+ *               - Tickets
+ *               - totalAmount
+ *               - method
+ *               - paymentEmail
+ *               - paymentTelNo
+ *             properties:
+ *               AircraftRegNo:
+ *                 type: string
+ *                 example: TG-001
+ *               FlightNo:
+ *                 type: string
+ *                 example: TG101
+ *               DepartTime:
+ *                 type: string
+ *                 format: date-time
+ *                 example: 2024-12-01T10:00:00Z
+ *               ArrivalTime:
+ *                 type: string
+ *                 format: date-time
+ *                 example: 2024-12-01T14:00:00Z
+ *               Tickets:
+ *                 type: array
+ *                 minItems: 1
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - Price
+ *                     - PassengerName
+ *                     - PassengerLastName
+ *                     - Gender
+ *                     - DateOfBirth
+ *                     - Nationality
+ *                     - SeatNo
+ *                   properties:
+ *                     Price:
+ *                       type: number
+ *                       example: 5000
+ *                     ServiceFee:
+ *                       type: number
+ *                       example: 200
+ *                     PassengerName:
+ *                       type: string
+ *                       example: John
+ *                     PassengerLastName:
+ *                       type: string
+ *                       example: Doe
+ *                     Gender:
+ *                       type: string
+ *                       example: Male
+ *                     DateOfBirth:
+ *                       type: string
+ *                       format: date
+ *                       example: 1990-01-01
+ *                     Nationality:
+ *                       type: string
+ *                       example: Thai
+ *                     BaggageChecked:
+ *                       type: number
+ *                       default: 10
+ *                       example: 20
+ *                     BaggageCabin:
+ *                       type: number
+ *                       default: 7
+ *                       example: 7
+ *                     SeatNo:
+ *                       type: string
+ *                       example: 12A
+ *               totalAmount:
+ *                 type: number
+ *                 example: 10000
+ *               method:
+ *                 type: string
+ *                 enum: [CREDIT_CARD, DEBIT_CARD, ONLINE_BANKING]
+ *                 example: CREDIT_CARD
+ *               status:
+ *                 type: string
+ *                 enum: [PAID, PENDING, FAILED]
+ *                 default: PAID
+ *                 example: PAID
+ *               paymentEmail:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *               paymentTelNo:
+ *                 type: string
+ *                 pattern: ^[0-9+\-()\s]+$
+ *                 example: +66812345678
+ *               bankName:
+ *                 type: string
+ *                 description: Required when method is ONLINE_BANKING
+ *                 example: Bangkok Bank
+ *     responses:
+ *       201:
+ *         description: Payment created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     payment:
+ *                       type: object
+ *                     tickets:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                     purchases:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *             example:
+ *               success: true
+ *               data:
+ *                 payment:
+ *                   PaymentID: "pay_550e8400-e29b-41d4-a716-446655440000"
+ *                   PaymentDateTime: "2024-12-01T10:00:00.000Z"
+ *                   PaymentMethod: "CREDIT_CARD"
+ *                   TransactionStatus: "PAID"
+ *                   PaymentEmail: "user@example.com"
+ *                   PaymentTelNo: "+66812345678"
+ *                   Amount: 10000
+ *                   BankName: null
+ *                 tickets:
+ *                   - TicketID: 1
+ *                     Price: 5000
+ *                     ServiceFee: 200
+ *                     PassengerName: "John"
+ *                     PassengerLastName: "Doe"
+ *                     Gender: "Male"
+ *                     DateOfBirth: "1990-01-01T00:00:00.000Z"
+ *                     Nationality: "Thai"
+ *                     BaggageChecked: 20
+ *                     BaggageCabin: 7
+ *                     SeatNo: "12A"
+ *                     FlightNo: "TG101"
+ *                 purchases:
+ *                   - TicketID: 1
+ *                     PaymentID: "pay_550e8400-e29b-41d4-a716-446655440000"
+ *                     UserAccountID: "123e4567-e89b-12d3-a456-426614174000"
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Validation error"
+ *               details:
+ *                 - code: "invalid_type"
+ *                   message: "Required"
+ *                   path: ["FlightNo"]
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               error:
+ *                 message: "Authentication required. Please log in."
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
+ *   get:
+ *     summary: Get user payments
+ *     description: Retrieve payment history for a specific user
+ *     tags:
+ *       - Payments
+ *     parameters:
+ *       - name: userId
+ *         in: query
+ *         description: User account ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: acc_123456
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved payments
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       dateTime:
+ *                         type: string
+ *                         format: date-time
+ *                       method:
+ *                         type: string
+ *                       status:
+ *                         type: string
+ *                       email:
+ *                         type: string
+ *                       telNo:
+ *                         type: string
+ *                       bankName:
+ *                         type: string
+ *                         nullable: true
+ *                       amount:
+ *                         type: number
+ *                       purchase:
+ *                         type: object
+ *                         nullable: true
+ *                         properties:
+ *                           ticketId:
+ *                             type: string
+ *                           userAccountId:
+ *                             type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 - id: "pay_550e8400-e29b-41d4-a716-446655440000"
+ *                   dateTime: "2024-12-01T10:00:00.000Z"
+ *                   method: "CREDIT_CARD"
+ *                   status: "PAID"
+ *                   email: "user@example.com"
+ *                   telNo: "+66812345678"
+ *                   bankName: null
+ *                   amount: 10000
+ *                   purchase:
+ *                     ticketId: 1
+ *                     userAccountId: "123e4567-e89b-12d3-a456-426614174000"
+ *       400:
+ *         description: Missing userId parameter
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Missing userId query parameter"
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Internal server error. Please try again later."
+ */
 const TicketInputSchema = z.object({
     Price: z.number().positive(),
     ServiceFee: z.number().optional(),

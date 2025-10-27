@@ -4,9 +4,118 @@ import { nextAuthOptions } from "@/src/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 
-//@desc     Get airports
-//@route    GET /api/v1/airports
-//@access   Public
+/**
+ * @swagger
+ * /api/v1/airports:
+ *   get:
+ *     summary: Get all airports
+ *     description: Retrieve a list of all airports
+ *     tags:
+ *       - Airports
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved airports
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       AirportID:
+ *                         type: string
+ *                       AirportName:
+ *                         type: string
+ *                       City:
+ *                         type: string
+ *                       Country:
+ *                         type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 - AirportID: "BKK"
+ *                   AirportName: "Suvarnabhumi Airport"
+ *                   City: "Bangkok"
+ *                   Country: "Thailand"
+ *                 - AirportID: "DMK"
+ *                   AirportName: "Don Mueang International Airport"
+ *                   City: "Bangkok"
+ *                   Country: "Thailand"
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Internal server error. Please try again later."
+ *   post:
+ *     summary: Create a new airport
+ *     description: Create a new airport (requires authentication)
+ *     tags:
+ *       - Airports
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - AirportID
+ *               - AirportName
+ *               - City
+ *               - Country
+ *             properties:
+ *               AirportID:
+ *                 type: string
+ *                 example: BKK
+ *               AirportName:
+ *                 type: string
+ *                 example: Suvarnabhumi Airport
+ *               City:
+ *                 type: string
+ *                 example: Bangkok
+ *               Country:
+ *                 type: string
+ *                 example: Thailand
+ *     responses:
+ *       200:
+ *         description: Airport created successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 AirportID: "BKK"
+ *                 AirportName: "Suvarnabhumi Airport"
+ *                 City: "Bangkok"
+ *                 Country: "Thailand"
+ *       400:
+ *         description: Missing required parameters
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Missing required parameters. Please check your request."
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "You do not have permission to perform this action."
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Internal server error. Please try again later."
+ */
 export const GET = async () => {
     try {
         const airports = await prisma.airport.findMany();
@@ -25,9 +134,6 @@ export const GET = async () => {
     }
 };
 
-//@desc     Create an airport
-//@route    POST /api/v1/airports
-//@access   Private
 export const POST = async (req: NextRequest) => {
     const session = await getServerSession(nextAuthOptions);
     if (!session) {
