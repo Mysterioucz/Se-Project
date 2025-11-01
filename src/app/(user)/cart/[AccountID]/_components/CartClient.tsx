@@ -5,7 +5,7 @@ import deleteFromCart from "@/src/lib/deleteFromCart";
 import ShoppingCart from "@mui/icons-material/ShoppingCart";
 import React, { useMemo, useState } from "react";
 import { CartType } from "../../../../../enums/CartType";
-import CartItem from "./CartItem";
+import BookingItem from "@/src/components/booking/BookingItem";
 import ModalDeleteFromCart from "./ModalDeleteFromCart";
 import SummaryBox from "./SummaryBox";
 
@@ -81,7 +81,7 @@ export default function CartClient({
                     <div className="lg:col-span-3 bg-primary-50 rounded-lg p-3">
                         {cartItems.length > 0 ? (
                             cartItems.map((item: CartType) => (
-                                <CartItem
+                                <BookingItem
                                     key={item.id}
                                     item={item}
                                     isSelected={selectedIds === item.id}
