@@ -87,6 +87,8 @@ model Flight {
   tickets          Ticket[]
   departCarts      Cart[] @relation("DepartFlight")
   returnCarts      Cart[] @relation("ReturnFlight")
+  departBooked      Payment[] @relation("DepartFlight")
+  returnBooked      Payment[] @relation("ReturnFlight")
   availableServices FlightService[]
   seats   Seat[]
 
@@ -369,9 +371,26 @@ model Payment {
   PaymentMethod     String
   TransactionStatus String
   PaymentEmail      String
-  PaymentTelNo     String
+  PaymentTelNo      String
   Amount            Float
   BankName          String?
+  Adults            Int
+  Childrens         Int
+  Infants           Int
+  FlightType        String
+  ClassType         String
+
+  // Depart Flight (always required)
+  DepartFlightNo          String
+  DepartFlightDepartTime  DateTime
+  DepartFlightArrivalTime DateTime
+  DepartFlight            Flight @relation("DepartFlight", fields: [DepartFlightNo, DepartFlightDepartTime, DepartFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
+
+  // Return Flight (optional)
+  ReturnFlightNo          String?
+  ReturnFlightDepartTime  DateTime?
+  ReturnFlightArrivalTime DateTime?
+  ReturnFlight            Flight? @relation("ReturnFlight", fields: [ReturnFlightNo, ReturnFlightDepartTime, ReturnFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
 
   // Relation
   purchase Purchase?
