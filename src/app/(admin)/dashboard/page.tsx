@@ -1,6 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import AdminNavBar from "./_components/AdminNavBar";
+import ReportManagement from "./_components/ReportManagement";
 
 export default function Page() {
     const { data: session, status } = useSession();
@@ -12,6 +13,7 @@ export default function Page() {
                 <div className="text-primary-900 font-sarabun text-[48px] font-bold leading-[120%] not-italic">
                     Welcome Back, {displayName}
                 </div>
+                <ReportManagement />
             </div>
         </div>
     );
