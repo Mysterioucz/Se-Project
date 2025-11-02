@@ -3,6 +3,7 @@ import { MenuItem } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import Image from "next/image";
 import { useState } from "react";
+import ReportFrame from "./ReportFrame";
 
 export default function ReportManagement() {
     const [priority, setPriority] = useState("");
@@ -118,8 +119,10 @@ export default function ReportManagement() {
                         <div className="flex flex-col justify-center items-center w-[5.625rem] h-[3.125rem] py-[0.5rem]"></div>
                     </div>
 
-
-                    {/* children */}
+                    {/* reports */}
+                    <ReportFrame />
+                    <ReportFrame />
+                    <ReportFrame />
                 </div>
             </div>
         </div>

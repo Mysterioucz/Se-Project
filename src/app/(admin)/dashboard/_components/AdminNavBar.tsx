@@ -25,7 +25,6 @@ export default function AdminNavBar() {
                 {status === "authenticated" ? (
                     <Link href={"/account-setting"}>
                         <Button
-                            //TODO: change to display name when the problem of editing profile name resolved
                             text={"Profile"}
                             styleType="stroke"
                             size="md"
