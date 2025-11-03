@@ -1,3 +1,6 @@
+import ReportPiorityMarker from "./ReportPriorityMarker";
+import ReportStatusMarker from "./ReportStatusMarker";
+
 export default function ReportFrame() {
     return (
         <div className="flex items-start gap-[0.5rem] self-stretch">
@@ -10,12 +13,12 @@ export default function ReportFrame() {
 
             {/* Priority Level */}
             <div className="flex flex-col justify-center items-center w-[9.875rem] h-[3.125rem] py-[0.5rem]">
-
+                <ReportPiorityMarker priority="high" />
             </div>
 
             {/* Status */}
             <div className="flex flex-col justify-center items-center w-[9.875rem] h-[3.125rem] py-[0.5rem]">
-
+                <ReportStatusMarker status="cancelled" />
             </div>
 
             {/* Problem Type */}

@@ -12,7 +12,7 @@ export default function AdminNavBar() {
     return (
         <nav className="bg-primary-400 flex items-center w-full justify-between py-[0.5rem] px-[2rem] sticky top-0 z-99">
             {/* Navigate to main page */}
-            <Link href="/">
+            <Link href="/dashboard">
                 <Image
                     src={"/logo/logo_nobg_white.svg"}
                     alt="White Logo"
@@ -23,7 +23,7 @@ export default function AdminNavBar() {
             </Link>
             <div className="flex items-center gap-[2rem]">                
                 {status === "authenticated" ? (
-                    <Link href={"/account-setting"}>
+                    <Link href={"/dashboard"}>
                         <Button
                             text={"Profile"}
                             styleType="stroke"
