@@ -120,9 +120,27 @@ export default function ReportManagement() {
                     </div>
 
                     {/* reports */}
-                    <ReportFrame />
-                    <ReportFrame />
-                    <ReportFrame />
+                    <ReportFrame 
+                        priority="normal"
+                        status="opened"
+                        problemType="Network Issue"
+                        submitted="2025-08-06 19:32:10"
+                        lastUpdate="2025-08-11 08:30:09"
+                    />
+                    <ReportFrame 
+                        priority="high"
+                        status="in progress"
+                        problemType="Software Bug"
+                        submitted="2025-08-07 10:15:45"
+                        lastUpdate="2025-08-12 14:22:30"
+                    />
+                    <ReportFrame 
+                        priority="normal"
+                        status="resolved"
+                        problemType="Hardware Failure"
+                        submitted="2025-08-08 08:50:20"
+                        lastUpdate="2025-08-13 09:10:15"
+                    />
                 </div>
             </div>
         </div>
