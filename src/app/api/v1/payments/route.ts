@@ -285,25 +285,21 @@ const TicketInputSchema = z.object({
     PassengerName: z.string().min(1),
     PassengerLastName: z.string().min(1),
     Gender: z.string().min(1),
-    DateOfBirth: z.string().refine((v) => !isNaN(Date.parse(v)), {
+    DateOfBirth: z.string().refine((v) => !isNaN(Date .parse(v)), {
         message: "Invalid date",
     }),
     Nationality: z.string().min(1),
     BaggageChecked: z.number().nonnegative().default(10),
     BaggageCabin: z.number().nonnegative().default(7),
     SeatNo: z.string().min(1),
+    AircraftRegNo: z.string().min(1),
+    FlightNo: z.string().min(1),
+    DepartTime: z.coerce.date(),
+    ArrivalTime: z.coerce.date(),
 });
 
 const CreatePaymentSchema = z
     .object({
-        AircraftRegNo: z.string().min(1),
-        FlightNo: z.string().min(1),
-        DepartTime: z.string().refine((v) => !isNaN(Date.parse(v)), {
-            message: "Invalid DepartTime",
-        }),
-        ArrivalTime: z.string().refine((v) => !isNaN(Date.parse(v)), {
-            message: "Invalid ArrivalTime",
-        }),
         Tickets: z
             .array(TicketInputSchema)
             .min(1, "At least one ticket required"),
@@ -327,6 +323,18 @@ const CreatePaymentSchema = z
             .min(2, "bankName must be at least 2 characters")
             .optional()
             .transform((v) => (v === "" ? undefined : v)),
+
+        Adults: z.number(),
+        Childrens: z.number(),
+        Infants: z.number(),
+        FlightType: z.string(),
+        ClassType: z.string(),
+        DepartFlightNo: z.string(),
+        DepartFlightDepartTime: z.coerce.date(),
+        DepartFlightArrivalTime: z.coerce.date(),
+        ReturnFlightNo: z.string(),
+        ReturnFlightDepartTime: z.coerce.date(),
+        ReturnFlightArrivalTime: z.coerce.date(),
     })
     .superRefine((v, ctx) => {
         // Require bankName when method is ONLINE_BANKING
@@ -356,10 +364,6 @@ export async function POST(request: NextRequest) {
         const parsed = CreatePaymentSchema.parse(await request.json());
         console.log("Parsed payment data:", parsed);
         const {
-            AircraftRegNo,
-            FlightNo,
-            DepartTime,
-            ArrivalTime,
             Tickets,
             totalAmount,
             method,
@@ -367,6 +371,17 @@ export async function POST(request: NextRequest) {
             paymentEmail,
             paymentTelNo,
             bankName,
+            Adults,
+            Childrens,
+            Infants,
+            FlightType,
+            ClassType,
+            DepartFlightNo,
+            DepartFlightDepartTime,
+            DepartFlightArrivalTime,
+            ReturnFlightNo,
+            ReturnFlightDepartTime,
+            ReturnFlightArrivalTime
         } = parsed;
 
         // Create payment and purchase
@@ -376,8 +391,9 @@ export async function POST(request: NextRequest) {
             async (tx) => {
                 // Create tickets
                 const createdTickets = await Promise.all(
-                    Tickets.map((ticket) =>
-                        tx.ticket.create({
+                    Tickets.map(async (ticket) => {
+                        // Create the ticket
+                        const created = await tx.ticket.create({
                             data: {
                                 Price: ticket.Price,
                                 ServiceFee: ticket.ServiceFee,
@@ -389,44 +405,42 @@ export async function POST(request: NextRequest) {
                                 BaggageChecked: ticket.BaggageChecked,
                                 BaggageCabin: ticket.BaggageCabin,
                                 SeatNo: ticket.SeatNo,
-                                AircraftRegNo,
-                                FlightNo,
-                                DepartTime: new Date(DepartTime),
-                                ArrivalTime: new Date(ArrivalTime),
+                                AircraftRegNo: ticket.AircraftRegNo,
+                                FlightNo: ticket.FlightNo,
+                                DepartTime: new Date(ticket.DepartTime),
+                                ArrivalTime: new Date(ticket.ArrivalTime),
                             },
-                        }),
-                    ),
-                );
+                        });
 
-                // Decrease available seats
-                await tx.flight.updateMany({
-                    where: {
-                        FlightNo,
-                        DepartTime: new Date(DepartTime),
-                        ArrivalTime: new Date(ArrivalTime),
-                    },
-                    data: {
-                        AvailableSeat: {
-                            decrement: Tickets.length,
-                        },
-                    },
-                });
-
-                // Mark seats unavailable
-                await Promise.all(
-                    Tickets.map((ticket) =>
-                        tx.seat.updateMany({
+                        // Decrease available seats
+                        await tx.flight.updateMany({
                             where: {
-                                FlightNo,
-                                DepartTime: new Date(DepartTime),
-                                ArrivalTime: new Date(ArrivalTime),
+                                FlightNo: ticket.FlightNo,
+                                DepartTime: new Date(ticket.DepartTime),
+                                ArrivalTime: new Date(ticket.ArrivalTime),
+                            },
+                            data: {
+                                AvailableSeat: {
+                                    decrement: 1,
+                                },
+                            },
+                        });
+
+                        // Marks seat unavailable
+                        await tx.seat.updateMany({
+                            where: {
+                                FlightNo: ticket.FlightNo,
+                                DepartTime: new Date(ticket.DepartTime),
+                                ArrivalTime: new Date(ticket.ArrivalTime),
                                 SeatNo: ticket.SeatNo,
                             },
                             data: {
                                 IsAvailable: false,
                             },
-                        }),
-                    ),
+                        })
+
+                        return created;
+                    })
                 );
 
                 // Create Payment
@@ -440,6 +454,17 @@ export async function POST(request: NextRequest) {
                         PaymentTelNo: paymentTelNo,
                         Amount: totalAmount,
                         BankName: method === "ONLINE_BANKING" ? bankName : null,
+                        Adults: Adults,
+                        Childrens: Childrens,
+                        Infants: Infants,
+                        FlightType: FlightType,
+                        ClassType: ClassType,
+                        DepartFlightNo: DepartFlightNo,
+                        DepartFlightDepartTime: DepartFlightDepartTime,
+                        DepartFlightArrivalTime: DepartFlightArrivalTime,
+                        ReturnFlightNo: ReturnFlightNo,
+                        ReturnFlightDepartTime: ReturnFlightDepartTime,
+                        ReturnFlightArrivalTime: ReturnFlightArrivalTime,
                     },
                 });
 
@@ -501,14 +526,13 @@ export async function POST(request: NextRequest) {
 
 //GET /api/v1/payments?userId=...
 // GET /api/v1/payments (no auth check)
-
 export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const requestedUserId = url.searchParams.get("userId");
 
     if (!requestedUserId) {
         return NextResponse.json(
-            { success: false, message: "Missing userId query parameter" },
+            { success: false, message: ErrorMessages.MISSING_PARAMETER },
             { status: 400 },
         );
     }
