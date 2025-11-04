@@ -87,6 +87,8 @@ model Flight {
   tickets          Ticket[]
   departCarts      Cart[] @relation("DepartFlight")
   returnCarts      Cart[] @relation("ReturnFlight")
+  departBooked      Payment[] @relation("DepartFlight")
+  returnBooked      Payment[] @relation("ReturnFlight")
   availableServices FlightService[]
   seats   Seat[]
 
@@ -305,7 +307,7 @@ model User_Tel_No {
 model Report {
   ReportID          String  @id @db.VarChar(50)
   ReportDescription String
-  PaymentID         String
+  PaymentID         String  @unique
   Attachment        String?
   UserAccountID     String  @db.VarChar(50) // The user who created the report
   AdminAccountID    String  @db.VarChar(50) // The admin handling the report
@@ -316,7 +318,7 @@ model Report {
   // Relations
   creator Report_To @relation("CreatedReports", fields: [UserAccountID, AdminAccountID], references: [UserAccountID, AdminAccountID])
   // ticket  Ticket    @relation(fields: [TicketID], references: [TicketID])
-  purchase  Purchase  @relation(fields: [PaymentID], references: [PaymentID])
+  payment Payment   @relation(fields: [PaymentID], references: [PaymentID])
 }
 
 // --- Ticket Specialization Models ---
@@ -350,8 +352,8 @@ model Round_Trip_Ticket {
 // --- Transaction Models ---
 
 model Purchase {
-  TicketID      String @unique @db.VarChar(50)
-  PaymentID     String @unique @db.VarChar(50)
+  TicketID      String @db.VarChar(50) @unique
+  PaymentID     String @db.VarChar(50)
   UserAccountID String @db.VarChar(50)
 
   // Relations
@@ -360,7 +362,6 @@ model Purchase {
   user    User    @relation(fields: [UserAccountID], references: [UserAccountID])
 
   @@id([TicketID, PaymentID])
-  reports       Report[]
 }
 
 model Payment {
@@ -369,12 +370,30 @@ model Payment {
   PaymentMethod     String
   TransactionStatus String
   PaymentEmail      String
-  PaymentTelNo     String
+  PaymentTelNo      String
   Amount            Float
   BankName          String?
+  Adults            Int
+  Childrens         Int
+  Infants           Int
+  FlightType        String
+  ClassType         String
+
+  // Depart Flight (always required)
+  DepartFlightNo          String
+  DepartFlightDepartTime  DateTime
+  DepartFlightArrivalTime DateTime
+  DepartFlight            Flight @relation("DepartFlight", fields: [DepartFlightNo, DepartFlightDepartTime, DepartFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
+
+  // Return Flight (optional)
+  ReturnFlightNo          String?
+  ReturnFlightDepartTime  DateTime?
+  ReturnFlightArrivalTime DateTime?
+  ReturnFlight            Flight? @relation("ReturnFlight", fields: [ReturnFlightNo, ReturnFlightDepartTime, ReturnFlightArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
 
   // Relation
-  purchase Purchase?
+  purchase Purchase[]
+  report   Report?
 }
 
 model Airline_Tel_No {
