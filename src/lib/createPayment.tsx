@@ -70,10 +70,7 @@ export async function createPayment(paymentData: CreatePaymentInput) {
             throw new Error("Failed to complete transaction.");
         }
 
-        return data as {
-            success: boolean;
-            payment: any;
-        };
+        return data;
     } catch (err) {
         console.log("Failed to complete transaction.");
     }
