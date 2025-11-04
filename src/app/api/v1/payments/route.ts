@@ -285,7 +285,7 @@ const TicketInputSchema = z.object({
     PassengerName: z.string().min(1),
     PassengerLastName: z.string().min(1),
     Gender: z.string().min(1),
-    DateOfBirth: z.string().refine((v) => !isNaN(Date .parse(v)), {
+    DateOfBirth: z.string().refine((v) => !isNaN(Date.parse(v)), {
         message: "Invalid date",
     }),
     Nationality: z.string().min(1),
@@ -332,9 +332,9 @@ const CreatePaymentSchema = z
         DepartFlightNo: z.string(),
         DepartFlightDepartTime: z.coerce.date(),
         DepartFlightArrivalTime: z.coerce.date(),
-        ReturnFlightNo: z.string(),
-        ReturnFlightDepartTime: z.coerce.date(),
-        ReturnFlightArrivalTime: z.coerce.date(),
+        ReturnFlightNo: z.string().optional(),
+        ReturnFlightDepartTime: z.coerce.date().optional(),
+        ReturnFlightArrivalTime: z.coerce.date().optional(),
     })
     .superRefine((v, ctx) => {
         // Require bankName when method is ONLINE_BANKING
@@ -381,7 +381,7 @@ export async function POST(request: NextRequest) {
             DepartFlightArrivalTime,
             ReturnFlightNo,
             ReturnFlightDepartTime,
-            ReturnFlightArrivalTime
+            ReturnFlightArrivalTime,
         } = parsed;
 
         // Create payment and purchase
@@ -437,10 +437,10 @@ export async function POST(request: NextRequest) {
                             data: {
                                 IsAvailable: false,
                             },
-                        })
+                        });
 
                         return created;
-                    })
+                    }),
                 );
 
                 // Create Payment

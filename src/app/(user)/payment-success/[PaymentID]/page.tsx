@@ -2,12 +2,13 @@
 
 import Button from "@components/Button";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
     const router = useRouter();
-
+    const params = useParams();
+    const PaymentID = params.PaymentID;
     const [bookingID, setBookingID] = useState<string>();
     const [PaymentMethods, setPaymentMethods] = useState<string>();
     const [paymentAmount, setPaymentAmount] = useState<number>();

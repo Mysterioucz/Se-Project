@@ -27,10 +27,11 @@ function extractOnlyNumbers(input: string): number {
     return parseInt(res, 10);
 }
 
-function str2DateTime(dateStr: string): Date {
-    // Assuming dateStr is in the format "DD/MM/YY" or similar ISO format
+function str2DateTime(dateStr: string): string {
+    // Convert "DD/MM/YYYY" to ISO format "YYYY-MM-DDTHH:mm:ssZ"
     const [day, month, year] = dateStr.split("/").map(Number);
-    return new Date(year + 2000, month - 1, day);
+    const date = new Date(year, month - 1, day);
+    return date.toISOString();
 }
 
 async function postPaymentCompletion(
@@ -51,35 +52,72 @@ async function postPaymentCompletion(
         return sum + cartData.Price + departureBaggageFee + returnBaggageFee;
     }, 0);
 
-    // Map passenger data to ticket format expected by API
-    const tickets = passengerData.map((passenger) => ({
+    // Helper to convert Date or string to ISO string
+    const toISOString = (date: Date | string): string => {
+        return typeof date === "string" ? date : date.toISOString();
+    };
+
+    // Create tickets array - for round trip, create tickets for both depart and return flights
+    const departTickets = passengerData.map((passenger) => ({
         Price: cartData.Price,
-        ServiceFee:
-            (passenger.baggageAllowance.departureBaggage.Price || 0) +
-            (passenger.baggageAllowance.returnBaggage?.Price || 0),
+        ServiceFee: passenger.baggageAllowance.departureBaggage.Price || 0,
         PassengerName: passenger.givenName,
         PassengerLastName: passenger.lastName,
         Gender: passenger.gender,
-        DateOfBirth: str2DateTime(passenger.dateOfBirth), // Should be in ISO format or parseable date string
+        DateOfBirth: str2DateTime(passenger.dateOfBirth),
         Nationality: passenger.nationality,
         BaggageChecked: extractOnlyNumbers(
             passenger.baggageAllowance.departureBaggage.Description,
-        ), // Default or from passenger data if available
-        BaggageCabin: 7, // Default or from passenger data if available
+        ),
+        BaggageCabin: 7,
         SeatNo: passenger.seatSelection.departureSeat,
-    }));
-    const payload = {
         AircraftRegNo: departFlight.AircraftRegNo,
         FlightNo: departFlight.FlightNo,
-        DepartTime: departFlight.DepartTime,
-        ArrivalTime: departFlight.ArrivalTime,
-        Tickets: tickets,
+        DepartTime: toISOString(departFlight.DepartTime),
+        ArrivalTime: toISOString(departFlight.ArrivalTime),
+    }));
+
+    const returnTickets = returnFlight
+        ? passengerData.map((passenger) => ({
+              Price: cartData.Price,
+              ServiceFee: passenger.baggageAllowance.returnBaggage?.Price || 0,
+              PassengerName: passenger.givenName,
+              PassengerLastName: passenger.lastName,
+              Gender: passenger.gender,
+              DateOfBirth: str2DateTime(passenger.dateOfBirth),
+              Nationality: passenger.nationality,
+              BaggageChecked: extractOnlyNumbers(
+                  passenger.baggageAllowance.returnBaggage?.Description || "",
+              ),
+              BaggageCabin: 7,
+              SeatNo: passenger.seatSelection.returnSeat || "",
+              AircraftRegNo: returnFlight.AircraftRegNo,
+              FlightNo: returnFlight.FlightNo,
+              DepartTime: toISOString(returnFlight.DepartTime),
+              ArrivalTime: toISOString(returnFlight.ArrivalTime),
+          }))
+        : [];
+
+    const payload = {
+        Tickets: [...departTickets, ...returnTickets],
         totalAmount: totalAmount,
         method: paymentData.isQRmethod ? "QR_CODE" : "ONLINE_BANKING",
-        status: "PAID",
         paymentEmail: paymentData.email,
         paymentTelNo: paymentData.telNo,
         bankName: paymentData.bankName,
+        Adults: cartData.Adults,
+        Childrens: cartData.Childrens,
+        Infants: cartData.Infants,
+        FlightType: cartData.FlightType,
+        ClassType: cartData.ClassType,
+        DepartFlightNo: departFlight.FlightNo,
+        DepartFlightDepartTime: toISOString(departFlight.DepartTime),
+        DepartFlightArrivalTime: toISOString(departFlight.ArrivalTime),
+        ...(returnFlight && {
+            ReturnFlightNo: returnFlight.FlightNo,
+            ReturnFlightDepartTime: toISOString(returnFlight.DepartTime),
+            ReturnFlightArrivalTime: toISOString(returnFlight.ArrivalTime),
+        }),
     };
 
     const response = await fetch(
@@ -115,7 +153,8 @@ export default function QRModal({ open, onClose }: QRModalProps) {
             returnFlight,
         );
         if (res.success) {
-            router.push(`/payment/success/${res.data.paymentId}`);
+            console.log(res);
+            router.push(`/payment-success/${res.data.payment.PaymentID}`);
         }
     };
     useEffect(() => {
