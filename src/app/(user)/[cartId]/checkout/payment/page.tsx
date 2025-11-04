@@ -8,8 +8,6 @@ import QRModal from "./_components/QRModal";
 export default function Page() {
     const { checkoutData, updateCheckoutData } = useCheckout();
 
-    // TODO: Fetch actual data from backend to check if user fill in all required info
-
     const handlePaymentStatusChange = (isValid: boolean, isQR: boolean, bankName: string) => {
         updateCheckoutData({
             payment: {
