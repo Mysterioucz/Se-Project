@@ -378,6 +378,8 @@ model Payment {
   Infants           Int
   FlightType        String
   ClassType         String
+  
+  CreatedAt         DateTime @default(now())
 
   // Depart Flight (always required)
   DepartFlightNo          String
