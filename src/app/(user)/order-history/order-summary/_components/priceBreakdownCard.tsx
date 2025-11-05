@@ -14,6 +14,7 @@ export interface BaggageSummaryProps {
     personal_item_price: number;
     carry_on_item_price: number;
     checked_baggage_price: number;
+    services_fee: number;
 }
 
 function TicketSummary({ type, price, quantity }: TicketSummaryProps) {
@@ -42,6 +43,7 @@ function BaggageSummary({
     personal_item_price,
     carry_on_item_price,
     checked_baggage_price,
+    services_fee
 }: BaggageSummaryProps) {
     const formatPrice = (price: number) =>
         price === 0 ? "Free" : `฿ ${price.toFixed(2)}`;
@@ -54,7 +56,7 @@ function BaggageSummary({
             <div className="row-start-1 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-sm font-normal leading-[1.2]">
                 {formatPrice(personal_item_price)}
             </div>
-            <div className="text-gray-500 font-sarabun text-sm font-normal leading-[1.2] row-start-2 row-span-1 col-start-1 col-span-1">
+            {/* <div className="text-gray-500 font-sarabun text-sm font-normal leading-[1.2] row-start-2 row-span-1 col-start-1 col-span-1">
                 Carry-on Baggage
             </div>
             <div className="row-start-2 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-sm font-normal leading-[1.2]">
@@ -62,20 +64,29 @@ function BaggageSummary({
             </div>
             <div className="text-gray-500 font-sarabun text-sm font-normal leading-[1.2] row-start-3 row-span-1 col-start-1 col-span-1">
                 Checked Baggage
+            </div> */}
+
+            <div className="text-gray-500 font-sarabun text-sm font-normal leading-[1.2] row-start-2 row-span-1 col-start-1 col-span-1">
+                Services Fee
             </div>
-            <div className="row-start-3 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-sm font-normal leading-[1.2]">
+            <div className="row-start-2 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-sm font-normal leading-[1.2]">
+                {formatPrice(services_fee)}
+            </div>
+
+            {/* <div className="row-start-3 row-span-1 col-start-2 col-span-1 justify-self-end text-gray-500 text-right font-sarabun text-sm font-normal leading-[1.2]">
                 ฿ {checked_baggage_price.toFixed(2)}
-            </div>
+            </div> */}
         </div>
     );
 }
 
 interface PriceBreakdownCardProps {
     tickets: TicketSummaryProps[];
+    servicesFee: number;
 }
 
 export default function PriceBreakdownCard({
-    tickets,
+    tickets, servicesFee
 }: PriceBreakdownCardProps) {
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [totalBaggagePrice, setTotalBaggagePrice] = useState<number>(0);
@@ -91,14 +102,16 @@ export default function PriceBreakdownCard({
 
         // Calculate total baggage price
         const baggageTotal =
-            checkoutData.passengerData?.reduce(
-                (sum, p) =>
-                    sum +
-                    (p.baggageAllowance.departureBaggage?.Price || 0) +
-                    (p.baggageAllowance.returnBaggage?.Price || 0),
-                0,
-            ) || 0;
-        setTotalBaggagePrice(baggageTotal);
+            // checkoutData.passengerData?.reduce(
+            //     (sum, p) =>
+            //         sum +
+            //         (p.baggageAllowance.departureBaggage?.Price || 0) +
+            //         (p.baggageAllowance.returnBaggage?.Price || 0),
+            //     0,
+            // ) || 0;
+        servicesFee
+        // setTotalBaggagePrice(baggageTotal);
+        setTotalBaggagePrice(servicesFee);
         setTotalPrice(ticketTotal + baggageTotal);
 
         // Extract baggage details for summary
@@ -148,6 +161,7 @@ export default function PriceBreakdownCard({
                             personal_item_price={0}
                             carry_on_item_price={0}
                             checked_baggage_price={totalBaggagePrice}
+                            services_fee={servicesFee}
                         />
                     </div>
                 </div>

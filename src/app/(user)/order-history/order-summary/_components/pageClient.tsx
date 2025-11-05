@@ -73,17 +73,14 @@ export default function PageClient(
 ) {
     const flightType = data.payment.FlightType;
 
-    // Example ticket data
     const tickets = [
-        { type: PassengerTypes.Adult, price: 1000, quantity: 1 },
-        { type: PassengerTypes.Child, price: 700, quantity: 2 },
+        { type: PassengerTypes.Adult, price: data.tickets[0].Price, quantity: data.payment.Adults },
+        { type: PassengerTypes.Child, price: data.tickets[0].Price, quantity: data.payment.Childrens },
+        { type: PassengerTypes.Infant, price: data.tickets[0].Price, quantity: data.payment.Infants}
     ];
-    //Eample bagge
-    const baggage = {
-        personal_item_price: 0,
-        carry_on_item_price: 200,
-        checked_baggage_price: 300,
-    };
+    const servicesFee = data.tickets.reduce((total, ticket) => {
+        return total + (ticket.ServiceFee || 0);
+    }, 0);
 
     let paymentDetail = {
         bookingId: data.payment.PaymentID,
@@ -204,7 +201,7 @@ export default function PageClient(
                     {passengers.map((p, idx) => (
                         <PassengerInfoSummary key={idx} count={idx + 1} {...p} />
                     ))}
-                    <PriceBreakdownCard tickets={tickets} />
+                    <PriceBreakdownCard tickets={tickets} servicesFee={servicesFee} />
                     <PaymentDetailSummary bookingId={paymentDetail.bookingId} paymentMethod={paymentDetail.paymentMethod} />
                 </div>
             </div>
