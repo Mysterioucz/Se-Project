@@ -75,7 +75,6 @@ export default function PageClient(
     const flightType = data.payment.FlightType;
 
     // Example ticket data
-
     const tickets = [
         { type: PassengerTypes.Adult, price: 1000, quantity: 1 },
         { type: PassengerTypes.Child, price: 700, quantity: 2 },
@@ -108,6 +107,38 @@ export default function PageClient(
         PassportNo: ticket.PassportNo ?? null,
         PassportExpiryDate: formatDateLocal(ticket.PassportExpiry ?? null)
     }));
+
+    const flightDetail = {
+        flightLeg: FlightLegTypes.DEPARTURE,
+        departurePlace: data.payment.DepartFlight.departureAirport.City,
+        arrivalPlace: data.payment.DepartFlight.arrivalAirport.City,
+        airline: data.payment.DepartFlight.Airline,
+        flightNumber: data.payment.DepartFlight.FlightNo,
+        cabinClass: data.payment.ClassType,
+        segments: [
+            {
+
+            }, {
+
+            }
+        ]
+    }
+
+    const returnFlight = {
+        flightLeg: FlightLegTypes.RETURN,
+        departurePlace: data.payment.ReturnFlight?.departureAirport.City,
+        arrivalPlace: data.payment.ReturnFlight?.arrivalAirport.City,
+        airline: data.payment.ReturnFlight?.Airline,
+        flightNumber: data.payment.ReturnFlight?.FlightNo,
+        cabinClass: data.payment.ClassType,
+        segments: [
+            {
+
+            }, {
+
+            }
+        ]
+    }
 
     const mockFlightDetail = {
         flightLeg: FlightLegTypes.DEPARTURE,
