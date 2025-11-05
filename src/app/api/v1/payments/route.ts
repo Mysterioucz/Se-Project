@@ -589,12 +589,29 @@ export async function GET(req: NextRequest) {
             where: {
                 PaymentID: latestPayment.PaymentID,
             },
-            select: {
-                TicketID: true,
+            include: {
+                ticket: {
+                    select: {
+                        TicketID: true,
+                        Price: true,
+                        ServiceFee: true,
+                        TicketStatus: true,
+                        PassengerName: true,
+                        PassengerLastName: true,
+                        Gender: true,
+                        DateOfBirth: true,
+                        Nationality: true,
+                        SeatNo: true,
+                        BaggageChecked: true,
+                        BaggageCabin: true,
+                    }
+                }
             },
         });
 
-        const tickets = purchases.map((p) => p.TicketID);
+        const tickets = purchases.map((p) => {
+            return p.ticket
+        });
 
         const paymentData = {
             PaymentID: latestPayment.PaymentID,
