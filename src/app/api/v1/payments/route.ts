@@ -298,7 +298,8 @@ const TicketInputSchema = z.object({
     FlightNo: z.string().min(1),
     DepartTime: z.coerce.date(),
     ArrivalTime: z.coerce.date(),
-    // Passport
+    PassportNo: z.string().optional(),
+    PassportExpiry: z.coerce.date().optional()
 });
 
 const CreatePaymentSchema = z
