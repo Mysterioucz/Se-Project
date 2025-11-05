@@ -82,11 +82,11 @@ function BaggageSummary({
 
 interface PriceBreakdownCardProps {
     tickets: TicketSummaryProps[];
-    servicesFee: number;
+    servicesFee?: number;
 }
 
 export default function PriceBreakdownCard({
-    tickets, servicesFee
+    tickets, servicesFee = 0
 }: PriceBreakdownCardProps) {
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [totalBaggagePrice, setTotalBaggagePrice] = useState<number>(0);
