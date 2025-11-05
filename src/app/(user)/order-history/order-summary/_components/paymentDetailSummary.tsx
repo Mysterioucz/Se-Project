@@ -2,7 +2,7 @@ import { PaymentMethodTypes } from "@/src/enums/PaymentMethodTypes";
 
 interface PaymentDetailSummaryProps {
     bookingId: string;
-    paymentMethod: String;
+    paymentMethod: string;
 }
 
 export default function PaymentDetailSummary({ bookingId, paymentMethod }: PaymentDetailSummaryProps) {
