@@ -572,8 +572,18 @@ export async function GET(req: NextRequest) {
             },
             include: {
                 purchase: true,
-                DepartFlight: true,
-                ReturnFlight: true,
+                DepartFlight: {
+                    include: {
+                        departureAirport: true,
+                        arrivalAirport: true,
+                    }
+                },
+                ReturnFlight: {
+                    include: {
+                        departureAirport: true,
+                        arrivalAirport: true,
+                    }
+                },
             },
         });
 

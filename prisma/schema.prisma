@@ -314,30 +314,14 @@ model Report {
   AccountID             String
   TelNo             String
   PassengerName     String
+  PassportNo     String?
+  IssuedCountry  String?
+  PassportExpiry DateTime?
 
   // Relations
   creator Report_To @relation("CreatedReports", fields: [UserAccountID, AdminAccountID], references: [UserAccountID, AdminAccountID])
   // ticket  Ticket    @relation(fields: [TicketID], references: [TicketID])
   payment Payment   @relation(fields: [PaymentID], references: [PaymentID])
-}
-
-// --- Ticket Specialization Models ---
-
-model Domestic_Ticket {
-  TicketID String @id @db.VarChar(50)
-
-  // Relation
-  ticket Ticket @relation(fields: [TicketID], references: [TicketID])
-}
-
-model International_Ticket {
-  TicketID       String   @id @db.VarChar(50)
-  PassportNo     String
-  IssuedCountry  String
-  PassportExpiry DateTime
-
-  // Relation
-  ticket Ticket @relation(fields: [TicketID], references: [TicketID])
 }
 
 model Round_Trip_Ticket {

@@ -1,4 +1,4 @@
 export enum PaymentMethodTypes {
-    QRCode = "QR Code",
-    BankTransfer = "Online Banking",
+    QR_CODE = "QR Code",
+    ONLINE_BANKING = "Online Banking",
 }

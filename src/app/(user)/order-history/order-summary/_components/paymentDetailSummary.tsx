@@ -2,7 +2,7 @@ import { PaymentMethodTypes } from "@/src/enums/PaymentMethodTypes";
 
 interface PaymentDetailSummaryProps {
     bookingId: string;
-    paymentMethod: PaymentMethodTypes;
+    paymentMethod: String;
 }
 
 export default function PaymentDetailSummary({ bookingId, paymentMethod }: PaymentDetailSummaryProps) {
@@ -14,11 +14,11 @@ export default function PaymentDetailSummary({ bookingId, paymentMethod }: Payme
             <div className="flex flex-col justify-center items-start gap-2 text-left pl-6">
                 <span className="font-sarabun text-[1rem] leading-[120%]">
                     <span className="font-bold text-primary-600">Booking ID : </span>
-                    <span className="font-normal text-primary-800"> {bookingId}</span>
+                    <span className="font-normal text-primary-800">{bookingId}</span>
                 </span>
                 <span className="font-sarabun text-[1rem] leading-[120%]">
                     <span className="font-bold text-primary-600">Payment Method : </span>
-                    <span className="font-normal text-primary-800"> {paymentMethod}</span>
+                    <span className="font-normal text-primary-800">{paymentMethod}</span>
                 </span>
             </div>
         </div>
