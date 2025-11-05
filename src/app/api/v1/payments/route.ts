@@ -2,10 +2,12 @@ import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
 import { nextAuthOptions } from "@/src/lib/auth";
+import { AdUnits } from "@mui/icons-material";
 import { randomUUID } from "crypto";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { late } from "zod/v3";
 
 /**
  * @swagger
@@ -537,38 +539,91 @@ export async function GET(req: NextRequest) {
         );
     }
 
+    const session = await getServerSession(nextAuthOptions);
+    if (!session?.user?.id) {
+        return NextResponse.json(
+            { error: { message: ErrorMessages.AUTHENTICATION } },
+            { status: 401 },
+        );
+    }
+
+    // The accountId is securely obtained from the session object.
+    const UserAccountID = String(session.user.id);
+
+    if (requestedUserId != UserAccountID) {
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.PERMISSION },
+            { status: 400 },
+        );
+    }
+
     try {
-        const payments = await prisma.payment.findMany({
+        // 1. Find the latest payment
+        const latestPayment = await prisma.payment.findFirst({
             where: {
                 purchase: {
-                    UserAccountID: requestedUserId,
+                    some: {
+                        UserAccountID: UserAccountID,
+                    }
                 },
             },
-            orderBy: { PaymentDateTime: "desc" },
+            orderBy: {
+                CreatedAt: "desc", // Assuming payment table has CreatedAt
+            },
             include: {
                 purchase: true,
+                DepartFlight: true,
+                ReturnFlight: true,
             },
         });
 
-        const data = payments.map((p) => ({
-            id: p.PaymentID,
-            dateTime: p.PaymentDateTime,
-            method: p.PaymentMethod,
-            status: p.TransactionStatus,
-            email: p.PaymentEmail,
-            telNo: p.PaymentTelNo,
-            bankName: p.BankName ?? null,
-            amount: p.Amount,
-            purchase: p.purchase
-                ? {
-                      ticketId: p.purchase.TicketID,
-                      userAccountId: p.purchase.UserAccountID,
-                  }
-                : null,
-        }));
+        if (!latestPayment) {
+            return NextResponse.json(
+                { success: true, data: { payment: null, tickets: [] } },
+                { status: 200, headers: { "Cache-Control": "no-store" } },
+            );
+        }
+
+        // 2. Find all purchases that use this payment ID
+        const purchases = await prisma.purchase.findMany({
+            where: {
+                PaymentID: latestPayment.PaymentID,
+            },
+            select: {
+                TicketID: true,
+            },
+        });
+
+        const tickets = purchases.map((p) => p.TicketID);
+
+        const paymentData = {
+            PaymentID: latestPayment.PaymentID,
+            PaymentDateTime: latestPayment.PaymentDateTime,
+            PaymentMethod: latestPayment.PaymentMethod,
+            TransactionStatus: latestPayment.TransactionStatus,
+            PaymentEmail: latestPayment.PaymentEmail,
+            PaymentTelNo: latestPayment.PaymentTelNo,
+            BankName: latestPayment.BankName ?? null,
+            Amount: latestPayment.Amount,
+            CreatedAt: latestPayment.CreatedAt,
+            Adults: latestPayment.Adults,
+            Childrens: latestPayment.Childrens,
+            Infants: latestPayment.Infants,
+            ClassType: latestPayment.ClassType,
+            FlightType: latestPayment.FlightType,
+            
+            DepartFlight: latestPayment.DepartFlight,
+            ReturnFlight: latestPayment.ReturnFlight?? null
+        };
 
         return NextResponse.json(
-            { success: true, data },
+            {
+                success: true,
+                data: {
+                    payment: paymentData,
+                    tickets,
+                },
+            },
             { status: 200, headers: { "Cache-Control": "no-store" } },
         );
     } catch (err: unknown) {
