@@ -8,7 +8,7 @@ import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { redirect } from "next/navigation";
 import formatDateLocal from "@/src/lib/formatDateLocal";
-import { formatToShortDate, formatToTime } from "../../../cart/[AccountID]/_components/FlightDetail";
+import { formatToTime } from "../../../cart/[AccountID]/_components/FlightDetail";
 
 export interface Airport {
     AirportID: string;
@@ -30,7 +30,7 @@ export interface Flight {
 export interface PaymentData {
     PaymentID: string;
     PaymentDateTime: string;
-    PaymentMethod: String;
+    PaymentMethod: string;
     TransactionStatus: string;
     PaymentEmail: string;
     PaymentTelNo: string;
@@ -82,15 +82,9 @@ export default function PageClient(
         return total + (ticket.ServiceFee || 0);
     }, 0);
 
-    let paymentDetail = {
-        bookingId: data.payment.PaymentID,
+    const paymentDetail = {
+        bookingId: (data.payment.PaymentID === "QR_CODE" ? "QR Code" : "Online Banking"),
         paymentMethod: data.payment.PaymentMethod
-    }
-
-    if (paymentDetail.paymentMethod === "QR_CODE") {
-        paymentDetail.paymentMethod = "QR Code";
-    } else {
-        paymentDetail.paymentMethod = "Online Banking"
     }
 
     const passengers = data.tickets.map((ticket) => ({
