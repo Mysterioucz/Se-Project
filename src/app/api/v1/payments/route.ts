@@ -336,9 +336,9 @@ const CreatePaymentSchema = z
         DepartFlightNo: z.string(),
         DepartFlightDepartTime: z.coerce.date(),
         DepartFlightArrivalTime: z.coerce.date(),
-        ReturnFlightNo: z.string(),
-        ReturnFlightDepartTime: z.coerce.date(),
-        ReturnFlightArrivalTime: z.coerce.date(),
+        ReturnFlightNo: z.string().optional(),
+        ReturnFlightDepartTime: z.coerce.date().optional(),
+        ReturnFlightArrivalTime: z.coerce.date().optional(),
     })
     .superRefine((v, ctx) => {
         // Require bankName when method is ONLINE_BANKING

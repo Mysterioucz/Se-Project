@@ -32,22 +32,3 @@ export default async function Page({ params }: PageProps) {
 
     return <PageClient data={data} UserAccountID={sessionAccountID}/>;
 }
-
-
-
-// "use client";
-
-// import React, { useEffect } from "react";
-// import Button from "@/src/components/Button";
-// import FlightDetailSummary from "@/src/components/paymentConfirmation/flightDetailSummary";
-// import PassengerInfoSummary from "@/src/components/paymentConfirmation/passengerInfoSummary";
-// import PaymentDetailSummary from "@/src/components/paymentConfirmation/paymentDetailSummary";
-// import PriceBreakdownCard from "@/src/components/paymentConfirmation/priceBreakdownCard";
-// import { PassengerTypes } from "@/src/enums/PassengerTypes";
-// import { PaymentMethodTypes } from "@/src/enums/PaymentMethodTypes";
-// import { FlightTypes } from "@/src/enums/FlightTypes";
-// import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
-// import { redirect, useRouter } from "next/navigation";
-// import { ErrorMessages } from "@/src/enums/ErrorMessages";
-// import { nextAuthOptions } from "@/src/lib/auth";
-// import { getServerSession } from "next-auth";

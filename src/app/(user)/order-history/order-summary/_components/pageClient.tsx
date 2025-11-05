@@ -6,13 +6,12 @@ import PaymentDetailSummary from "@/src/app/(user)/order-history/order-summary/_
 import PriceBreakdownCard from "@/src/app/(user)/order-history/order-summary/_components/priceBreakdownCard";
 import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
-import { PaymentMethodTypes } from "@/src/enums/PaymentMethodTypes";
 import { redirect } from "next/navigation";
-import { Router, useRouter } from "next/router";
 import formatDateLocal from "@/src/lib/formatDateLocal";
+import { formatToShortDate, formatToTime } from "../../../cart/[AccountID]/_components/FlightDetail";
 
 export interface Airport {
-    AirportCode: string;
+    AirportID: string;
     AirportName: string;
     City: string;
     Country: string;
@@ -22,7 +21,7 @@ export interface Flight {
     FlightNo: string;
     DepartTime: string;      // ISO string from Date
     ArrivalTime: string;     // ISO string from Date
-    Airline: string;
+    AirlineName: string;
     Aircraft?: string | null;
     departureAirport: Airport;
     arrivalAirport: Airport;
@@ -112,107 +111,49 @@ export default function PageClient(
         flightLeg: FlightLegTypes.DEPARTURE,
         departurePlace: data.payment.DepartFlight.departureAirport.City,
         arrivalPlace: data.payment.DepartFlight.arrivalAirport.City,
-        airline: data.payment.DepartFlight.Airline,
+        airline: data.payment.DepartFlight.AirlineName,
         flightNumber: data.payment.DepartFlight.FlightNo,
         cabinClass: data.payment.ClassType,
         segments: [
             {
-
+                Time: formatToTime(new Date(data.payment.DepartFlight.DepartTime)),
+                Date: formatDateLocal(data.payment.DepartFlight.DepartTime),
+                Airport: data.payment.DepartFlight.departureAirport.AirportID,
+                Place: data.payment.DepartFlight.departureAirport.AirportName
             }, {
-
+                Time: formatToTime(new Date(data.payment.DepartFlight.ArrivalTime)),
+                Date: formatDateLocal(data.payment.DepartFlight.ArrivalTime),
+                Airport: data.payment.DepartFlight.arrivalAirport.AirportID,
+                Place: data.payment.DepartFlight.arrivalAirport.AirportName
             }
         ]
     }
 
-    const returnFlight = {
+    const returnFlightDetail = {
         flightLeg: FlightLegTypes.RETURN,
         departurePlace: data.payment.ReturnFlight?.departureAirport.City,
         arrivalPlace: data.payment.ReturnFlight?.arrivalAirport.City,
-        airline: data.payment.ReturnFlight?.Airline,
+        airline: data.payment.ReturnFlight?.AirlineName,
         flightNumber: data.payment.ReturnFlight?.FlightNo,
         cabinClass: data.payment.ClassType,
         segments: [
             {
-
+                Time: formatToTime(new Date(data.payment.ReturnFlight?.DepartTime ?? "2025-12-25T00:00:00.0000Z")),
+                Date: formatDateLocal(data.payment.ReturnFlight?.DepartTime ?? ""),
+                Airport: (data.payment.ReturnFlight?.departureAirport.AirportID ?? ""),
+                Place: (data.payment.ReturnFlight?.departureAirport.AirportName ?? "")
             }, {
-
+                Time: formatToTime(new Date(data.payment.ReturnFlight?.ArrivalTime ?? "2025-12-25T00:00:00.0000Z")),
+                Date: formatDateLocal(data.payment.ReturnFlight?.ArrivalTime ?? ""),
+                Airport: (data.payment.ReturnFlight?.arrivalAirport.AirportID ?? ""),
+                Place: (data.payment.ReturnFlight?.arrivalAirport.AirportName ?? "")
             }
         ]
     }
 
-    const mockFlightDetail = {
-        flightLeg: FlightLegTypes.DEPARTURE,
-        departurePlace: "Bangkok",
-        arrivalPlace: "London",
-        airline: "Thai Airways",
-        flightNumber: "TG910",
-        cabinClass: "Business",
-        segments: [
-            {
-                Time: "08:30",
-                Date: "2025-11-01",
-                Airport: "BKK",
-                Place: "Bangkok Suvarnabhumi Airport"
-            },
-            {
-                Time: "14:00",
-                Date: "2025-11-01",
-                Airport: "DXB",
-                Place: "Dubai International Airport"
-            },
-            {
-                Time: "16:00",
-                Date: "2025-11-01",
-                Airport: "DXB",
-                Place: "Dubai International Airport"
-            },
-            {
-                Time: "20:30",
-                Date: "2025-11-01",
-                Airport: "LHR",
-                Place: "London Heathrow Airport"
-            }
-        ]
-    };
-
-    const mockReturnFlightDetail = {
-        flightLeg: FlightLegTypes.RETURN,
-        departurePlace: "London",
-        arrivalPlace: "Bangkok",
-        airline: "Thai Airways",
-        flightNumber: "TG911",
-        cabinClass: "Business",
-        segments: [
-            {
-                Time: "10:00",
-                Date: "2025-11-10",
-                Airport: "LHR",
-                Place: "London Heathrow Airport"
-            },
-            {
-                Time: "14:30",
-                Date: "2025-11-10",
-                Airport: "DXB",
-                Place: "Dubai International Airport"
-            },
-            {
-                Time: "16:30",
-                Date: "2025-11-10",
-                Airport: "DXB",
-                Place: "Dubai International Airport"
-            },
-            {
-                Time: "06:00",
-                Date: "2025-11-11",
-                Airport: "BKK",
-                Place: "Bangkok Suvarnabhumi Airport"
-            }
-        ]
-    };
-
-    const mockRoundTripFlights = [
-        mockFlightDetail,
-        mockReturnFlightDetail
+    const RoundTripFlights = [
+        flightDetail,
+        returnFlightDetail
     ];
 
     return (
@@ -229,18 +170,29 @@ export default function PageClient(
                         </div>
                     </div>
                     
-                    {mockRoundTripFlights.map((flight, index) => (
+                    {(flightType === "Round Trip") && RoundTripFlights.map((flight, index) => (
                         <FlightDetailSummary
                             key={index}
                             flightLeg={flight.flightLeg}
-                            departurePlace={flight.departurePlace}
-                            arrivalPlace={flight.arrivalPlace}
-                            airline={flight.airline}
-                            flightNumber={flight.flightNumber}
+                            departurePlace={flight.departurePlace ?? ""}
+                            arrivalPlace={flight.arrivalPlace ?? ""}
+                            airline={flight.airline ?? ""}
+                            flightNumber={flight.flightNumber ?? ""}
                             cabinClass={flight.cabinClass}
                             segments={flight.segments}
                         />
                     ))}
+                    {(flightType === "One Way") &&
+                        <FlightDetailSummary
+                            flightLeg={flightDetail.flightLeg}
+                            departurePlace={flightDetail.departurePlace ?? ""}
+                            arrivalPlace={flightDetail.arrivalPlace ?? ""}
+                            airline={flightDetail.airline ?? ""}
+                            flightNumber={flightDetail.flightNumber ?? ""}
+                            cabinClass={flightDetail.cabinClass}
+                            segments={flightDetail.segments}
+                        />
+                    }
 
                 </div>
 
