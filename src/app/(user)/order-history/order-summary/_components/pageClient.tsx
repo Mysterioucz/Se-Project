@@ -60,6 +60,8 @@ export interface Ticket {
     SeatNo: string;
     BaggageChecked?: string | null;
     BaggageCabin?: string | null;
+    PassportNo?: string | null;
+    PassportExpiry?: string | null;
 }
 
 export interface PaymentsApiResponse {
@@ -95,7 +97,7 @@ export default function PageClient(
     } else {
         paymentDetail.paymentMethod = "Online Banking"
     }
-    
+
     const passengers = data.tickets.map((ticket) => ({
         GivenName: ticket.PassengerName,
         LastName: ticket.PassengerLastName,
@@ -103,6 +105,8 @@ export default function PageClient(
         Birthdate: formatDateLocal(ticket.DateOfBirth),
         Nationality: ticket.Nationality,
         SeatNo: ticket.SeatNo,
+        PassportNo: ticket.PassportNo ?? null,
+        PassportExpiryDate: formatDateLocal(ticket.PassportExpiry ?? null)
     }));
 
     const mockFlightDetail = {
@@ -190,7 +194,7 @@ export default function PageClient(
                 <div className="flex flex-col items-start gap-[0.625rem] w-[35rem] p-[1rem]">
                     <div className="flex items-start self-stretch px-4 py-2 rounded-md bg-primary-50">
                         <div className="font-sarabun text-[1.2rem] font-semibold leading-[120%] text-primary-900 m-0">
-                            Type Trip : {flightType}
+                            Trip Type : {flightType}
                         </div>
                     </div>
                     

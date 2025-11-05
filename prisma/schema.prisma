@@ -160,12 +160,13 @@ model Ticket {
   DepartTime        DateTime
   ArrivalTime       DateTime
 
+  PassportNo     String?
+  PassportExpiry DateTime?
+
   // Relations
   flight               Flight                @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
   seat                 Seat                  @relation(fields: [FlightNo, DepartTime, ArrivalTime, SeatNo], references: [FlightNo, DepartTime, ArrivalTime, SeatNo])
   purchase             Purchase?
-  domesticTicket       Domestic_Ticket?
-  internationalTicket  International_Ticket?
   roundTripTicketPart1 Round_Trip_Ticket?    @relation("RoundTrip1")
   roundTripTicketPart2 Round_Trip_Ticket?    @relation("RoundTrip2")
   bookedServices       TicketService[] //services booked with this ticket
@@ -314,9 +315,6 @@ model Report {
   AccountID             String
   TelNo             String
   PassengerName     String
-  PassportNo     String?
-  IssuedCountry  String?
-  PassportExpiry DateTime?
 
   // Relations
   creator Report_To @relation("CreatedReports", fields: [UserAccountID, AdminAccountID], references: [UserAccountID, AdminAccountID])

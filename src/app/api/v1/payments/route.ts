@@ -298,6 +298,7 @@ const TicketInputSchema = z.object({
     FlightNo: z.string().min(1),
     DepartTime: z.coerce.date(),
     ArrivalTime: z.coerce.date(),
+    // Passport
 });
 
 const CreatePaymentSchema = z
@@ -411,6 +412,7 @@ export async function POST(request: NextRequest) {
                                 FlightNo: ticket.FlightNo,
                                 DepartTime: new Date(ticket.DepartTime),
                                 ArrivalTime: new Date(ticket.ArrivalTime),
+                                PassportNo: ticket.PassportNo
                             },
                         });
 
@@ -614,6 +616,8 @@ export async function GET(req: NextRequest) {
                         SeatNo: true,
                         BaggageChecked: true,
                         BaggageCabin: true,
+                        PassportNo: true,
+                        PassportExpiry: true,
                     }
                 }
             },

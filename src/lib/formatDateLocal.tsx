@@ -1,4 +1,5 @@
-export default function formatDateLocal(isoString: string): string {
+export default function formatDateLocal(isoString: string | null): string {
+    if (! isoString) return "";
     const date = new Date(isoString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
