@@ -1,13 +1,17 @@
 import { expect, test } from "@playwright/test";
+import dotenv from "dotenv";
 
-const USER_EMAIL = "usertest@gmail.com";
-const USER_PASS = "Thisisuser001";
+// Load variables from .env file into process.env
+dotenv.config();
+
+const USER_EMAIL = process.env.USER_EMAIL ?? "";
+const USER_PASS = process.env.USER_PASS ?? "";
 // TODO: Add Admin email & password from backend
-const ADMIN_EMAIL = "123@gmail.com";
-const ADMIN_PASS = "1234";
-const loginUrl = "http://localhost:3000/login";
-const flightsearchUrl = "http://localhost:3000/flights/search";
-const admindashboardUrl = "http://localhost:3000/dashboard";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "";
+const ADMIN_PASS = process.env.ADMIN_PASS ?? "";
+const loginUrl = process.env.LOGIN_URL ?? "";
+const flightsearchUrl = process.env.FLIGHTSEARCH_URL ?? "";
+const admindashboardUrl = process.env.ADMINDASHBOARD_URL ?? "";
 
 test.describe("Login Flow", () => {
     test("TC1: Render Login page successfully", async ({ page }) => {
