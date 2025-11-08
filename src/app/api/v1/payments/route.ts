@@ -2,10 +2,12 @@ import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
 import { nextAuthOptions } from "@/src/lib/auth";
+import { AdUnits } from "@mui/icons-material";
 import { randomUUID } from "crypto";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { late } from "zod/v3";
 
 /**
  * @swagger
@@ -296,6 +298,8 @@ const TicketInputSchema = z.object({
     FlightNo: z.string().min(1),
     DepartTime: z.coerce.date(),
     ArrivalTime: z.coerce.date(),
+    PassportNo: z.string().optional(),
+    PassportExpiry: z.coerce.date().optional()
 });
 
 const CreatePaymentSchema = z
@@ -332,9 +336,9 @@ const CreatePaymentSchema = z
         DepartFlightNo: z.string(),
         DepartFlightDepartTime: z.coerce.date(),
         DepartFlightArrivalTime: z.coerce.date(),
-        ReturnFlightNo: z.string(),
-        ReturnFlightDepartTime: z.coerce.date(),
-        ReturnFlightArrivalTime: z.coerce.date(),
+        ReturnFlightNo: z.string().optional(),
+        ReturnFlightDepartTime: z.coerce.date().optional(),
+        ReturnFlightArrivalTime: z.coerce.date().optional(),
     })
     .superRefine((v, ctx) => {
         // Require bankName when method is ONLINE_BANKING
@@ -409,6 +413,7 @@ export async function POST(request: NextRequest) {
                                 FlightNo: ticket.FlightNo,
                                 DepartTime: new Date(ticket.DepartTime),
                                 ArrivalTime: new Date(ticket.ArrivalTime),
+                                PassportNo: ticket.PassportNo
                             },
                         });
 
@@ -524,58 +529,140 @@ export async function POST(request: NextRequest) {
     }
 }
 
-// //GET /api/v1/payments?userId=...
-// // GET /api/v1/payments (no auth check)
-// export async function GET(req: NextRequest) {
-//     const url = new URL(req.url);
-//     const requestedUserId = url.searchParams.get("userId");
+//GET /api/v1/payments?userId=...
+// GET /api/v1/payments (no auth check)
+export async function GET(req: NextRequest) {
+    const url = new URL(req.url);
+    const requestedUserId = url.searchParams.get("userId");
 
-//     if (!requestedUserId) {
-//         return NextResponse.json(
-//             { success: false, message: ErrorMessages.MISSING_PARAMETER },
-//             { status: 400 },
-//         );
-//     }
+    if (!requestedUserId) {
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.MISSING_PARAMETER },
+            { status: 400 },
+        );
+    }
 
-//     try {
-//         const payments = await prisma.payment.findMany({
-//             where: {
-//                 purchase: {
-//                     UserAccountID: requestedUserId,
-//                 },
-//             },
-//             orderBy: { PaymentDateTime: "desc" },
-//             include: {
-//                 purchase: true,
-//             },
-//         });
+    const session = await getServerSession(nextAuthOptions);
+    if (!session?.user?.id) {
+        return NextResponse.json(
+            { error: { message: ErrorMessages.AUTHENTICATION } },
+            { status: 401 },
+        );
+    }
 
-//         const data = payments.map((p) => ({
-//             id: p.PaymentID,
-//             dateTime: p.PaymentDateTime,
-//             method: p.PaymentMethod,
-//             status: p.TransactionStatus,
-//             email: p.PaymentEmail,
-//             telNo: p.PaymentTelNo,
-//             bankName: p.BankName ?? null,
-//             amount: p.Amount,
-//             purchase: p.purchase
-//                 ? {
-//                       ticketId: p.purchase.TicketID,
-//                       userAccountId: p.purchase.UserAccountID,
-//                   }
-//                 : null,
-//         }));
+    // The accountId is securely obtained from the session object.
+    const UserAccountID = String(session.user.id);
 
-//         return NextResponse.json(
-//             { success: true, data },
-//             { status: 200, headers: { "Cache-Control": "no-store" } },
-//         );
-//     } catch (err: unknown) {
-//         console.error("Error fetching payments:", err);
-//         return NextResponse.json(
-//             { success: false, message: ErrorMessages.SERVER },
-//             { status: 500 },
-//         );
-//     }
-// }
+    if (requestedUserId != UserAccountID) {
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.PERMISSION },
+            { status: 400 },
+        );
+    }
+
+    try {
+        // 1. Find the latest payment
+        const latestPayment = await prisma.payment.findFirst({
+            where: {
+                purchase: {
+                    some: {
+                        UserAccountID: UserAccountID,
+                    }
+                },
+            },
+            orderBy: {
+                CreatedAt: "desc", // Assuming payment table has CreatedAt
+            },
+            include: {
+                purchase: true,
+                DepartFlight: {
+                    include: {
+                        departureAirport: true,
+                        arrivalAirport: true,
+                    }
+                },
+                ReturnFlight: {
+                    include: {
+                        departureAirport: true,
+                        arrivalAirport: true,
+                    }
+                },
+            },
+        });
+
+        if (!latestPayment) {
+            return NextResponse.json(
+                { success: true, data: { payment: null, tickets: [] } },
+                { status: 200, headers: { "Cache-Control": "no-store" } },
+            );
+        }
+
+        // 2. Find all purchases that use this payment ID
+        const purchases = await prisma.purchase.findMany({
+            where: {
+                PaymentID: latestPayment.PaymentID,
+            },
+            include: {
+                ticket: {
+                    select: {
+                        TicketID: true,
+                        Price: true,
+                        ServiceFee: true,
+                        TicketStatus: true,
+                        PassengerName: true,
+                        PassengerLastName: true,
+                        Gender: true,
+                        DateOfBirth: true,
+                        Nationality: true,
+                        SeatNo: true,
+                        BaggageChecked: true,
+                        BaggageCabin: true,
+                        PassportNo: true,
+                        PassportExpiry: true,
+                    }
+                }
+            },
+        });
+
+        const tickets = purchases.map((p) => {
+            return p.ticket
+        });
+
+        const paymentData = {
+            PaymentID: latestPayment.PaymentID,
+            PaymentDateTime: latestPayment.PaymentDateTime,
+            PaymentMethod: latestPayment.PaymentMethod,
+            TransactionStatus: latestPayment.TransactionStatus,
+            PaymentEmail: latestPayment.PaymentEmail,
+            PaymentTelNo: latestPayment.PaymentTelNo,
+            BankName: latestPayment.BankName ?? null,
+            Amount: latestPayment.Amount,
+            CreatedAt: latestPayment.CreatedAt,
+            Adults: latestPayment.Adults,
+            Childrens: latestPayment.Childrens,
+            Infants: latestPayment.Infants,
+            ClassType: latestPayment.ClassType,
+            FlightType: latestPayment.FlightType,
+            
+            DepartFlight: latestPayment.DepartFlight,
+            ReturnFlight: latestPayment.ReturnFlight?? null
+        };
+
+        return NextResponse.json(
+            {
+                success: true,
+                data: {
+                    payment: paymentData,
+                    tickets,
+                },
+            },
+            { status: 200, headers: { "Cache-Control": "no-store" } },
+        );
+    } catch (err: unknown) {
+        console.error("Error fetching payments:", err);
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.SERVER },
+            { status: 500 },
+        );
+    }
+}

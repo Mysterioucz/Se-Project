@@ -23,9 +23,9 @@ function durationCalculation(segments: FlightSegment[]): string {
 
     const firstSeg = segments[0];
     const lastSeg = segments[segments.length - 1];
-
-    const start = new Date(`${firstSeg.Date}T${firstSeg.Time}`);
-    const end = new Date(`${lastSeg.Date}T${lastSeg.Time}`);
+    
+    const start = new Date(`${firstSeg.Date.replace(/\//g, "-")}T${firstSeg.Time}`);
+    const end = new Date(`${lastSeg.Date.replace(/\//g, "-")}T${lastSeg.Time}`);
 
     const diffMs = end.getTime() - start.getTime();
     if (diffMs < 0) return "0h 0m";

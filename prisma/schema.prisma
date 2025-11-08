@@ -160,12 +160,13 @@ model Ticket {
   DepartTime        DateTime
   ArrivalTime       DateTime
 
+  PassportNo     String?
+  PassportExpiry DateTime?
+
   // Relations
   flight               Flight                @relation(fields: [FlightNo, DepartTime, ArrivalTime], references: [FlightNo, DepartTime, ArrivalTime])
   seat                 Seat                  @relation(fields: [FlightNo, DepartTime, ArrivalTime, SeatNo], references: [FlightNo, DepartTime, ArrivalTime, SeatNo])
   purchase             Purchase?
-  domesticTicket       Domestic_Ticket?
-  internationalTicket  International_Ticket?
   roundTripTicketPart1 Round_Trip_Ticket?    @relation("RoundTrip1")
   roundTripTicketPart2 Round_Trip_Ticket?    @relation("RoundTrip2")
   bookedServices       TicketService[] //services booked with this ticket
@@ -321,25 +322,6 @@ model Report {
   payment Payment   @relation(fields: [PaymentID], references: [PaymentID])
 }
 
-// --- Ticket Specialization Models ---
-
-model Domestic_Ticket {
-  TicketID String @id @db.VarChar(50)
-
-  // Relation
-  ticket Ticket @relation(fields: [TicketID], references: [TicketID])
-}
-
-model International_Ticket {
-  TicketID       String   @id @db.VarChar(50)
-  PassportNo     String
-  IssuedCountry  String
-  PassportExpiry DateTime
-
-  // Relation
-  ticket Ticket @relation(fields: [TicketID], references: [TicketID])
-}
-
 model Round_Trip_Ticket {
   TicketID  String @id @db.VarChar(50) // Represents the first ticket in the pair
   TicketID2 String @unique @db.VarChar(50) // Represents the second ticket
@@ -378,6 +360,8 @@ model Payment {
   Infants           Int
   FlightType        String
   ClassType         String
+  
+  CreatedAt         DateTime @default(now())
 
   // Depart Flight (always required)
   DepartFlightNo          String
