@@ -1,13 +1,23 @@
 import { expect, test } from "@playwright/test";
+import dotenv from "dotenv";
 
-const USER_EMAIL = "usertest@gmail.com";
-const USER_PASS = "Thisisuser001";
-// TODO: Add Admin email & password from backend
-const ADMIN_EMAIL = "123@gmail.com";
-const ADMIN_PASS = "1234";
-const loginUrl = "http://localhost:3000/login";
-const flightsearchUrl = "http://localhost:3000/flights/search";
-const admindashboardUrl = "http://localhost:3000/dashboard";
+// Load variables from .env file into process.env
+dotenv.config();
+
+const requiredEnv = [ "USER_EMAIL", "USER_PASS", "ADMIN_EMAIL", "ADMIN_PASS", "LOGIN_URL", "FLIGHTSEARCH_URL", "ADMINDASHBOARD_URL", ];
+
+const missing = requiredEnv.filter((k) => !process.env[k] || process.env[k] === ""); 
+if (missing.length) { 
+    throw new Error(`Missing required env vars: ${missing.join(", ")}. Add them to your .env or CI secrets.`);
+}
+
+const USER_EMAIL = process.env.USER_EMAIL!; 
+const USER_PASS = process.env.USER_PASS!; 
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL!; 
+const ADMIN_PASS = process.env.ADMIN_PASS!; 
+const loginUrl = process.env.LOGIN_URL!; 
+const flightsearchUrl = process.env.FLIGHTSEARCH_URL!; 
+const admindashboardUrl = process.env.ADMINDASHBOARD_URL!;
 
 test.describe("Login Flow", () => {
     test("TC1: Render Login page successfully", async ({ page }) => {
