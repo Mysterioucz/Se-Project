@@ -1,6 +1,8 @@
 import Button from "@/src/components/Button";
 import ReportPiorityMarker from "./ReportPriorityMarker";
 import ReportStatusMarker from "./ReportStatusMarker";
+import ReportModal from "./ReportModal";
+import { useState } from "react";
 
 interface ReportFrameProps {
     priority: "normal" | "high";
@@ -17,6 +19,8 @@ export default function ReportFrame({
     submitted,
     lastUpdate,
 }: ReportFrameProps) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <div className="flex items-start gap-[0.5rem] self-stretch">
             {/* Report ID */}
@@ -66,8 +70,16 @@ export default function ReportFrame({
                     size="sm"
                     width="w-[4.25rem]"
                     height="h-[2.188rem]"
+                    onClick={() => setIsModalOpen(true)}
                 />
             </div>
+
+            {/* Modal */}
+            <ReportModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            >
+            </ReportModal>
         </div>
     );
 }
