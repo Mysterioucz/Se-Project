@@ -44,5 +44,9 @@
 **/.setup_done
 
 # Playwright
-**/playwright-report/
-**/test-results/
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

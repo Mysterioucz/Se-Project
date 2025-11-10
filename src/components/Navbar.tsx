@@ -25,7 +25,7 @@ export default function Navbar() {
             </Link>
             <div className="flex items-center gap-[2rem]">
                 {/* Navigate to Customer Support page */}
-                <Link href="">
+                <Link href="/customer-support">
                     <p className="text-white cursor-pointer">
                         Customer Support
                     </p>

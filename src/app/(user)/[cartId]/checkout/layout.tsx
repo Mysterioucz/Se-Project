@@ -3,7 +3,7 @@ import FooterButton from "@/src/app/(user)/[cartId]/checkout/_components/FooterB
 import Navbar from "@/src/components/Navbar";
 import PriceBreakdownCard, {
     TicketSummaryProps,
-} from "@/src/components/paymentConfirmation/priceBreakdownCard";
+} from "@/src/app/(user)/order-history/order-summary/_components/priceBreakdownCard";
 import { CheckoutProvider } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { fetchCartData, fetchFlightData } from "@/src/helper/CheckoutHelper";

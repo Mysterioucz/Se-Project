@@ -6,9 +6,9 @@ interface PassengerInfoSummaryProps {
     Birthdate: string;
     Nationality: string;
     SeatNo: string;
-    PassportNo?: string;
-    PassportIssueDate?: string;
-    PassportExpiryDate?: string;
+    PassportNo?: string | null;
+    PassportIssueDate?: string | null;
+    PassportExpiryDate?: string | null;
 }
 
 export default function PassengerInfoSummary({count,GivenName,LastName,GenderOnID,Birthdate,Nationality,SeatNo,PassportNo = "",PassportIssueDate = "",PassportExpiryDate = "",}: PassengerInfoSummaryProps) {

@@ -2,10 +2,12 @@ import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
 import { nextAuthOptions } from "@/src/lib/auth";
+import { AdUnits } from "@mui/icons-material";
 import { randomUUID } from "crypto";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { late } from "zod/v3";
 
 /**
  * @swagger
@@ -285,25 +287,23 @@ const TicketInputSchema = z.object({
     PassengerName: z.string().min(1),
     PassengerLastName: z.string().min(1),
     Gender: z.string().min(1),
-    DateOfBirth: z.string().refine((v) => !isNaN(Date.parse(v)), {
+    DateOfBirth: z.string().refine((v) => !isNaN(Date .parse(v)), {
         message: "Invalid date",
     }),
     Nationality: z.string().min(1),
     BaggageChecked: z.number().nonnegative().default(10),
     BaggageCabin: z.number().nonnegative().default(7),
     SeatNo: z.string().min(1),
+    AircraftRegNo: z.string().min(1),
+    FlightNo: z.string().min(1),
+    DepartTime: z.coerce.date(),
+    ArrivalTime: z.coerce.date(),
+    PassportNo: z.string().optional(),
+    PassportExpiry: z.coerce.date().optional()
 });
 
 const CreatePaymentSchema = z
     .object({
-        AircraftRegNo: z.string().min(1),
-        FlightNo: z.string().min(1),
-        DepartTime: z.string().refine((v) => !isNaN(Date.parse(v)), {
-            message: "Invalid DepartTime",
-        }),
-        ArrivalTime: z.string().refine((v) => !isNaN(Date.parse(v)), {
-            message: "Invalid ArrivalTime",
-        }),
         Tickets: z
             .array(TicketInputSchema)
             .min(1, "At least one ticket required"),
@@ -327,6 +327,18 @@ const CreatePaymentSchema = z
             .min(2, "bankName must be at least 2 characters")
             .optional()
             .transform((v) => (v === "" ? undefined : v)),
+
+        Adults: z.number(),
+        Childrens: z.number(),
+        Infants: z.number(),
+        FlightType: z.string(),
+        ClassType: z.string(),
+        DepartFlightNo: z.string(),
+        DepartFlightDepartTime: z.coerce.date(),
+        DepartFlightArrivalTime: z.coerce.date(),
+        ReturnFlightNo: z.string().optional(),
+        ReturnFlightDepartTime: z.coerce.date().optional(),
+        ReturnFlightArrivalTime: z.coerce.date().optional(),
     })
     .superRefine((v, ctx) => {
         // Require bankName when method is ONLINE_BANKING
@@ -356,10 +368,6 @@ export async function POST(request: NextRequest) {
         const parsed = CreatePaymentSchema.parse(await request.json());
         console.log("Parsed payment data:", parsed);
         const {
-            AircraftRegNo,
-            FlightNo,
-            DepartTime,
-            ArrivalTime,
             Tickets,
             totalAmount,
             method,
@@ -367,6 +375,17 @@ export async function POST(request: NextRequest) {
             paymentEmail,
             paymentTelNo,
             bankName,
+            Adults,
+            Childrens,
+            Infants,
+            FlightType,
+            ClassType,
+            DepartFlightNo,
+            DepartFlightDepartTime,
+            DepartFlightArrivalTime,
+            ReturnFlightNo,
+            ReturnFlightDepartTime,
+            ReturnFlightArrivalTime
         } = parsed;
 
         // Create payment and purchase
@@ -376,8 +395,9 @@ export async function POST(request: NextRequest) {
             async (tx) => {
                 // Create tickets
                 const createdTickets = await Promise.all(
-                    Tickets.map((ticket) =>
-                        tx.ticket.create({
+                    Tickets.map(async (ticket) => {
+                        // Create the ticket
+                        const created = await tx.ticket.create({
                             data: {
                                 Price: ticket.Price,
                                 ServiceFee: ticket.ServiceFee,
@@ -389,44 +409,43 @@ export async function POST(request: NextRequest) {
                                 BaggageChecked: ticket.BaggageChecked,
                                 BaggageCabin: ticket.BaggageCabin,
                                 SeatNo: ticket.SeatNo,
-                                AircraftRegNo,
-                                FlightNo,
-                                DepartTime: new Date(DepartTime),
-                                ArrivalTime: new Date(ArrivalTime),
+                                AircraftRegNo: ticket.AircraftRegNo,
+                                FlightNo: ticket.FlightNo,
+                                DepartTime: new Date(ticket.DepartTime),
+                                ArrivalTime: new Date(ticket.ArrivalTime),
+                                PassportNo: ticket.PassportNo
                             },
-                        }),
-                    ),
-                );
+                        });
 
-                // Decrease available seats
-                await tx.flight.updateMany({
-                    where: {
-                        FlightNo,
-                        DepartTime: new Date(DepartTime),
-                        ArrivalTime: new Date(ArrivalTime),
-                    },
-                    data: {
-                        AvailableSeat: {
-                            decrement: Tickets.length,
-                        },
-                    },
-                });
-
-                // Mark seats unavailable
-                await Promise.all(
-                    Tickets.map((ticket) =>
-                        tx.seat.updateMany({
+                        // Decrease available seats
+                        await tx.flight.updateMany({
                             where: {
-                                FlightNo,
-                                DepartTime: new Date(DepartTime),
-                                ArrivalTime: new Date(ArrivalTime),
+                                FlightNo: ticket.FlightNo,
+                                DepartTime: new Date(ticket.DepartTime),
+                                ArrivalTime: new Date(ticket.ArrivalTime),
+                            },
+                            data: {
+                                AvailableSeat: {
+                                    decrement: 1,
+                                },
+                            },
+                        });
+
+                        // Marks seat unavailable
+                        await tx.seat.updateMany({
+                            where: {
+                                FlightNo: ticket.FlightNo,
+                                DepartTime: new Date(ticket.DepartTime),
+                                ArrivalTime: new Date(ticket.ArrivalTime),
                                 SeatNo: ticket.SeatNo,
                             },
                             data: {
                                 IsAvailable: false,
                             },
-                        }),
-                    ),
+                        })
+
+                        return created;
+                    })
                 );
 
                 // Create Payment
@@ -440,6 +459,17 @@ export async function POST(request: NextRequest) {
                         PaymentTelNo: paymentTelNo,
                         Amount: totalAmount,
                         BankName: method === "ONLINE_BANKING" ? bankName : null,
+                        Adults: Adults,
+                        Childrens: Childrens,
+                        Infants: Infants,
+                        FlightType: FlightType,
+                        ClassType: ClassType,
+                        DepartFlightNo: DepartFlightNo,
+                        DepartFlightDepartTime: DepartFlightDepartTime,
+                        DepartFlightArrivalTime: DepartFlightArrivalTime,
+                        ReturnFlightNo: ReturnFlightNo,
+                        ReturnFlightDepartTime: ReturnFlightDepartTime,
+                        ReturnFlightArrivalTime: ReturnFlightArrivalTime,
                     },
                 });
 
@@ -501,50 +531,131 @@ export async function POST(request: NextRequest) {
 
 //GET /api/v1/payments?userId=...
 // GET /api/v1/payments (no auth check)
-
 export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const requestedUserId = url.searchParams.get("userId");
 
     if (!requestedUserId) {
         return NextResponse.json(
-            { success: false, message: "Missing userId query parameter" },
+            { success: false, message: ErrorMessages.MISSING_PARAMETER },
+            { status: 400 },
+        );
+    }
+
+    const session = await getServerSession(nextAuthOptions);
+    if (!session?.user?.id) {
+        return NextResponse.json(
+            { error: { message: ErrorMessages.AUTHENTICATION } },
+            { status: 401 },
+        );
+    }
+
+    // The accountId is securely obtained from the session object.
+    const UserAccountID = String(session.user.id);
+
+    if (requestedUserId != UserAccountID) {
+        return NextResponse.json(
+            { success: false, message: ErrorMessages.PERMISSION },
             { status: 400 },
         );
     }
 
     try {
-        const payments = await prisma.payment.findMany({
+        // 1. Find the latest payment
+        const latestPayment = await prisma.payment.findFirst({
             where: {
                 purchase: {
-                    UserAccountID: requestedUserId,
+                    some: {
+                        UserAccountID: UserAccountID,
+                    }
                 },
             },
-            orderBy: { PaymentDateTime: "desc" },
+            orderBy: {
+                CreatedAt: "desc", // Assuming payment table has CreatedAt
+            },
             include: {
                 purchase: true,
+                DepartFlight: {
+                    include: {
+                        departureAirport: true,
+                        arrivalAirport: true,
+                    }
+                },
+                ReturnFlight: {
+                    include: {
+                        departureAirport: true,
+                        arrivalAirport: true,
+                    }
+                },
             },
         });
 
-        const data = payments.map((p) => ({
-            id: p.PaymentID,
-            dateTime: p.PaymentDateTime,
-            method: p.PaymentMethod,
-            status: p.TransactionStatus,
-            email: p.PaymentEmail,
-            telNo: p.PaymentTelNo,
-            bankName: p.BankName ?? null,
-            amount: p.Amount,
-            purchase: p.purchase
-                ? {
-                      ticketId: p.purchase.TicketID,
-                      userAccountId: p.purchase.UserAccountID,
-                  }
-                : null,
-        }));
+        if (!latestPayment) {
+            return NextResponse.json(
+                { success: true, data: { payment: null, tickets: [] } },
+                { status: 200, headers: { "Cache-Control": "no-store" } },
+            );
+        }
+
+        // 2. Find all purchases that use this payment ID
+        const purchases = await prisma.purchase.findMany({
+            where: {
+                PaymentID: latestPayment.PaymentID,
+            },
+            include: {
+                ticket: {
+                    select: {
+                        TicketID: true,
+                        Price: true,
+                        ServiceFee: true,
+                        TicketStatus: true,
+                        PassengerName: true,
+                        PassengerLastName: true,
+                        Gender: true,
+                        DateOfBirth: true,
+                        Nationality: true,
+                        SeatNo: true,
+                        BaggageChecked: true,
+                        BaggageCabin: true,
+                        PassportNo: true,
+                        PassportExpiry: true,
+                    }
+                }
+            },
+        });
+
+        const tickets = purchases.map((p) => {
+            return p.ticket
+        });
+
+        const paymentData = {
+            PaymentID: latestPayment.PaymentID,
+            PaymentDateTime: latestPayment.PaymentDateTime,
+            PaymentMethod: latestPayment.PaymentMethod,
+            TransactionStatus: latestPayment.TransactionStatus,
+            PaymentEmail: latestPayment.PaymentEmail,
+            PaymentTelNo: latestPayment.PaymentTelNo,
+            BankName: latestPayment.BankName ?? null,
+            Amount: latestPayment.Amount,
+            CreatedAt: latestPayment.CreatedAt,
+            Adults: latestPayment.Adults,
+            Childrens: latestPayment.Childrens,
+            Infants: latestPayment.Infants,
+            ClassType: latestPayment.ClassType,
+            FlightType: latestPayment.FlightType,
+            
+            DepartFlight: latestPayment.DepartFlight,
+            ReturnFlight: latestPayment.ReturnFlight?? null
+        };
 
         return NextResponse.json(
-            { success: true, data },
+            {
+                success: true,
+                data: {
+                    payment: paymentData,
+                    tickets,
+                },
+            },
             { status: 200, headers: { "Cache-Control": "no-store" } },
         );
     } catch (err: unknown) {
