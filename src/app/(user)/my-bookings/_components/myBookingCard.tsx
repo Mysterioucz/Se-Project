@@ -1,11 +1,12 @@
 "use client";
 
 import BookingItem from "@/src/components/booking/BookingItem";
+import Button from "@/src/components/Button";
 import { CartType } from "@/src/enums/CartType";
 import { useState } from "react";
+import { StatusFilter } from "./Helper";
 import SearchField from "./searchField";
 import StatusFilterBar from "./statusFilterBar";
-import { StatusFilter } from "./Helper";
 
 export const cartItems: CartType[] = [
     {
@@ -86,14 +87,25 @@ export default function myBookingCard() {
                     />
                 </div>
                 {/* Booking Item List */}
-                <div className="lg:col-span-3 rounded-lg p-3 justify-center">
+                <div className="lg:col-span-3 rounded-lg p-4 justify-center">
                     {cartItems.length > 0 ? (
                         cartItems.map((item: CartType) => (
-                            <BookingItem
-                                key={item.id}
-                                item={item}
-                                isViewOnly={true}
-                            />
+                            <div className="flex flex-col">
+                                <BookingItem
+                                    key={item.id}
+                                    item={item}
+                                    isViewOnly={true}
+                                />
+                                <div className="pb-6">
+                                    <Button
+                                        text="View Details"
+                                        width="w-full"
+                                        onClick={ () => {
+                                            // TODO: Navigate to booking details page
+                                        }}
+                                    />
+                                </div>
+                            </div>
                         ))
                     ) : (
                         <div className="text-center text-2xl font-bold rounded-lg bg-primary-50 text-primary-600 my-10">
@@ -102,7 +114,7 @@ export default function myBookingCard() {
                     )}
 
                     {cartItems.length > 0 && (
-                        <div className="text-center text-primary-600 mt-4">
+                        <div className="text-center text-primary-600">
                             End of My Booking.
                         </div>
                     )}
