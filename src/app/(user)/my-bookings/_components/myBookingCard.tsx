@@ -1,5 +1,13 @@
+"use client";
+
 import BookingItem from "@/src/components/booking/BookingItem";
+import Button from "@/src/components/Button";
 import { CartType } from "@/src/enums/CartType";
+import { useState } from "react";
+import { StatusFilter } from "./Helper";
+import BookingItemHeader from "./bookingItemHeader";
+import SearchField from "./searchField";
+import StatusFilterBar from "./statusFilterBar";
 
 export const cartItems: CartType[] = [
     {
@@ -17,7 +25,7 @@ export const cartItems: CartType[] = [
         Depart: {
             FlightNo: "TG102",
             // เราใช้ new Date() เพื่อสร้างข้อมูลวันที่จริงๆ
-            DepartTime: new Date("2025-12-10T09:30:00"), 
+            DepartTime: new Date("2025-12-10T09:30:00"),
             ArrivalTime: new Date("2025-12-10T10:45:00"),
             AirlineName: "Thai Airways",
             Stops: 0,
@@ -51,27 +59,58 @@ export const cartItems: CartType[] = [
             Stops: 1,
         },
         // สำหรับ One Way, object "Return" จะต้องเป็น null
-        Return: null, 
+        Return: null,
     },
 ];
 
-export default function myBookingCard() {
+export default function MyBookingCard() {
+    // use this for query search (booking id)
+    const [searchValue, setSearchValue] = useState("");
+
+    // use this select status filter (all, scheduled, departed, cancelled)
+    const [selectedStatus, setSelectedStatus] = useState(StatusFilter.ALL);
+
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
             <h2 className="!text-[2.5rem] !font-bold !leading-[3rem] !text-[var(--color-primary-900)]">
                 My Bookings
             </h2>
-            <div>
-                {/* TODO: Implement Search by BookingID */}
-                {/* TODO: Implement Status filter bar */}
-                <div className="lg:col-span-3 bg-primary-50 rounded-lg p-3">
+            <div className="flex flex-col gap-6">
+                {/* Search-Filter */}
+                <div className="flex flex-col gap-2">
+                    <SearchField
+                        value={searchValue}
+                        onChange={setSearchValue}
+                    />
+                    <StatusFilterBar
+                        selectedStatus={selectedStatus}
+                        onStatusChange={setSelectedStatus}
+                    />
+                </div>
+                {/* Booking Item List */}
+                <div className="lg:col-span-3 rounded-lg p-4 justify-center">
                     {cartItems.length > 0 ? (
                         cartItems.map((item: CartType) => (
-                            <BookingItem
-                                key={item.id}
-                                item={item}
-                                isViewOnly={true}
-                            />
+                            <div key={item.id} className="flex flex-col">
+                                {/* TODO: Implement booking status */}
+                                <BookingItemHeader 
+                                    bookingID={item.id.toString()}
+                                    bookingStatus="Scheduled"
+                                />
+                                <BookingItem
+                                    item={item}
+                                    isViewOnly={true}
+                                />
+                                <div className="pb-6">
+                                    <Button
+                                        text="View Details"
+                                        width="w-full"
+                                        onClick={ () => {
+                                            // TODO: Navigate to booking details page
+                                        }}
+                                    />
+                                </div>
+                            </div>
                         ))
                     ) : (
                         <div className="text-center text-2xl font-bold rounded-lg bg-primary-50 text-primary-600 my-10">
@@ -80,7 +119,7 @@ export default function myBookingCard() {
                     )}
 
                     {cartItems.length > 0 && (
-                        <div className="text-center text-primary-600 mt-4">
+                        <div className="text-center text-primary-600">
                             End of My Booking.
                         </div>
                     )}
