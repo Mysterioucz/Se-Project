@@ -173,3 +173,63 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function PUT(req: NextRequest) {
+  const session = await getServerSession(nextAuthOptions);
+
+  // Check authentication
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { success: false, message: ErrorMessages.AUTHENTICATION },
+      { status: 401 }
+    );
+  }
+
+  const adminAccountId = String(session.user.id);
+
+  // Check if user is admin
+  const admin = await prisma.admin.findUnique({
+    where: { AdminAccountID: adminAccountId },
+  });
+  if (!admin) {
+    return NextResponse.json(
+      { success: false, message: ErrorMessages.PERMISSION },
+      { status: 403 }
+    );
+  }
+
+  const body = await req.json();
+  const { reportId, status } = body;
+
+  if (!reportId || !status) {
+    return NextResponse.json(
+      { success: false, message: "Missing required fields: reportId or status." },
+      { status: 400 }
+    );
+  }
+
+  if (!Object.values(ReportStatusEnum).includes(status as ReportStatusEnum)) {
+    return NextResponse.json(
+      { success: false, message: "Invalid status value." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const updatedReport = await prisma.report.update({
+      where: { ReportID: reportId },
+      data: { Status: status as ReportStatusEnum },
+    });
+
+    return NextResponse.json(
+      { success: true, data: updatedReport },
+      { status: 200 }
+    );
+  } catch (err) {
+    console.error("Error updating report status:", err);
+    return NextResponse.json(
+      { success: false, message: ErrorMessages.SERVER },
+      { status: 500 }
+    );
+  }
+}
