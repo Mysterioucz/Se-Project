@@ -305,6 +305,19 @@ model User_Tel_No {
   user User @relation(fields: [UserAccountID], references: [UserAccountID])
 }
 
+enum ReportStatusEnum {
+  OPENED
+  IN_PROGRESS
+  CANCELLED
+  RESOLVED
+}
+
+enum ReportPriorityEnum {
+  NORMAL
+  HIGH
+}
+
+
 model Report {
   ReportID          String  @id @db.VarChar(50)
   ReportDescription String
@@ -315,6 +328,11 @@ model Report {
   AccountID             String
   TelNo             String
   PassengerName     String
+
+  Status   ReportStatusEnum   @default(OPENED)
+  Priority ReportPriorityEnum @default(NORMAL)
+  CreatedAt DateTime          @default(now())
+  UpdatedAt DateTime          @updatedAt
 
   // Relations
   creator Report_To @relation("CreatedReports", fields: [UserAccountID, AdminAccountID], references: [UserAccountID, AdminAccountID])
