@@ -67,7 +67,6 @@ function AdditionalServiceSection({
     const [selectedOptions, setSelectedOptions] = useState<ServiceType[]>([]);
 
     const handleOptionChange = (index: number, value: ServiceType) => {
-        console.log("Selected option for index", index, ":", value);
         const updated = [...selectedOptions];
         updated[index] = value;
         setSelectedOptions(updated);

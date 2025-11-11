@@ -147,7 +147,6 @@ export default function InformationCard({
         if (passengerNum !== undefined) {
             updatePassengerAt(passengerNum - 1, passengerData);
         }
-        console.log("Passenger data saved:", data);
     };
 
     return (

@@ -91,7 +91,6 @@ export async function POST(req: NextRequest) {
     try {
         const salt = await bcrypt.genSalt(12);
         const hashedPassword = await bcrypt.hash(Password, salt);
-        console.log("salted");
 
         const newAccount = await prisma.account.create({
             data: {
@@ -101,14 +100,12 @@ export async function POST(req: NextRequest) {
                 LastName,
             },
         });
-        console.log("UserCreated", newAccount);
         const accountID = newAccount?.AccountID;
         await prisma.user.create({
             data: {
                 UserAccountID: accountID,
             },
         });
-        console.log("account created with id", accountID);
         return new Response(
             JSON.stringify({
                 success: true,

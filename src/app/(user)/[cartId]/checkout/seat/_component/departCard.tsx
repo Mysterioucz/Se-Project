@@ -14,7 +14,6 @@ interface props {
 }
 
 export default function DepartCard({ flightData, cartData }: props) {
-    console.log(flightData)
     return (
         <SelectSeatCard
             key={`${flightData.FlightNo}-${flightData.DepartTime}`}

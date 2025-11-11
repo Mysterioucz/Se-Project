@@ -366,7 +366,6 @@ export async function POST(request: NextRequest) {
 
     try {
         const parsed = CreatePaymentSchema.parse(await request.json());
-        console.log("Parsed payment data:", parsed);
         const {
             Tickets,
             totalAmount,
