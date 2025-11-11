@@ -25,7 +25,10 @@ jobs:
           node-version: 20
           cache: "pnpm"
           cache-dependency-path: ./pnpm-lock.yaml
-
+      - name: Clean up node modules and build cache
+        run: |
+          rm -rf node_modules
+          rm -rf .next
       - name: Install dependencies
         run: pnpm install
         working-directory: ./
