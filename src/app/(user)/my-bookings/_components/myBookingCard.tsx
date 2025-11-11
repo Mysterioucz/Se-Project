@@ -64,7 +64,7 @@ export default function myBookingCard() {
             <div>
                 {/* TODO: Implement Search by BookingID */}
                 {/* TODO: Implement Status filter bar */}
-                <div className="lg:col-span-3 bg-primary-50 rounded-lg p-3">
+                <div className="lg:col-span-3 rounded-lg p-3">
                     {cartItems.length > 0 ? (
                         cartItems.map((item: CartType) => (
                             <BookingItem
