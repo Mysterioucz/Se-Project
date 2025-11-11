@@ -1,8 +1,13 @@
 import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
+import { TicketStatus } from "@/src/generated/prisma";
 import { nextAuthOptions } from "@/src/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+
+interface TicketWhereClause {
+    TicketStatus?: TicketStatus;
+}
 
 /**
  * @swagger
@@ -207,9 +212,9 @@ export async function GET(
         }
 
         // Build where clause for tickets
-        const ticketWhereClause: any = {};
+        const ticketWhereClause: TicketWhereClause = {};
         if (statusParam) {
-            ticketWhereClause.TicketStatus = statusParam;
+            ticketWhereClause.TicketStatus = statusParam as TicketStatus;
         }
 
         // Get total count for pagination
