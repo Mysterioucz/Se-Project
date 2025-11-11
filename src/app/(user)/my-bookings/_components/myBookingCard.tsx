@@ -1,4 +1,8 @@
+'use client';
+
+import { useState } from "react";
 import BookingItem from "@/src/components/booking/BookingItem";
+import SearchField from "./searchField";
 import { CartType } from "@/src/enums/CartType";
 
 export const cartItems: CartType[] = [
@@ -56,15 +60,22 @@ export const cartItems: CartType[] = [
 ];
 
 export default function myBookingCard() {
+
+    // use this for query search (booking id)
+    const [searchValue, setSearchValue] = useState("");
+
     return (
         <div className="flex flex-col px-[2.5rem] gap-[1.5rem] w-full">
             <h2 className="!text-[2.5rem] !font-bold !leading-[3rem] !text-[var(--color-primary-900)]">
                 My Bookings
             </h2>
-            <div>
-                {/* TODO: Implement Search by BookingID */}
-                {/* TODO: Implement Status filter bar */}
-                <div className="lg:col-span-3 rounded-lg p-3">
+            <div className="flex flex-col gap-6">
+                {/* Search-Filter */}
+                <div className="flex flex-col gap-2">
+                    <SearchField value={searchValue} onChange={setSearchValue} />
+                </div>
+                {/* Booking Item List */}
+                <div className="lg:col-span-3 rounded-lg p-3 justify-center">
                     {cartItems.length > 0 ? (
                         cartItems.map((item: CartType) => (
                             <BookingItem
