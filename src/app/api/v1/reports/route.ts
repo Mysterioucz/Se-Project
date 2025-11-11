@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import prisma from "@/db";
-import type { Prisma } from "@prisma/client";
+import type {
+  Prisma,
+  ReportStatusEnum,
+  ReportPriorityEnum,
+} from "@/src/generated/prisma";
 
 import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
@@ -19,7 +23,7 @@ export async function GET(req: NextRequest) {
 
   const adminAccountId = String(session.user.id);
 
-  // verify only admin can access this route
+  //Authorization: verify only admin can access this route
   const admin = await prisma.admin.findUnique({
     where: { AdminAccountID: adminAccountId },
   });
@@ -34,41 +38,44 @@ export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   //Optional filters
   const status = url.searchParams.get("status"); 
-  const bookingId = url.searchParams.get("bookingId");
+  const priority = url.searchParams.get("priority"); // "NORMAL" | "HIGH"
 
   const where: Prisma.ReportWhereInput = {};
 
-  if (bookingId) {
-    where.BookingID = bookingId;
-  }
+    if (status) {
+    where.Status = status as ReportStatusEnum;  
+    }
 
-  if (status) {
-    // filter by the Report_To relation (creator)
-    where.creator = { ReportStatus: status };
-  }
+    if (priority) {
+    where.Priority = priority as ReportPriorityEnum;
+    }
+
 
   try {
     const reports = await prisma.report.findMany({
       where,
       include: {
-        creator: true, // Report_To (ReportStatus + link to user/admin)
+        creator: true,
       },
       orderBy: {
-        ReportID: "desc", 
+        CreatedAt: "desc", 
       },
     });
 
     const data = reports.map((r: (typeof reports)[number]) => ({
       id: r.ReportID,
       description: r.ReportDescription,
-      bookingId: r.BookingID,
       attachment: r.Attachment,
-      status: r.creator?.ReportStatus ?? null,
+      status: r.Status,
+      priority: r.Priority,
+      submittedAt: r.CreatedAt,
+      updatedAt: r.UpdatedAt,
       userAccountId: r.UserAccountID,
       adminAccountId: r.AdminAccountID,
       accountId: r.AccountID,
       telNo: r.TelNo,
       passengerName: r.PassengerName,
+      creatorStatus: r.creator?.ReportStatus ?? null,
     }));
 
     return NextResponse.json(
