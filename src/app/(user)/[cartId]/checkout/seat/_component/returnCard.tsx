@@ -4,7 +4,7 @@ import {
     formatToShortDate,
     formatToTime,
     getFlightDuration,
-} from "@/src/app/(user)/cart/[AccountID]/_components/FlightDetail";
+} from "@/src/components/booking/FlightDetail";
 import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
 import { Cart } from "@/src/contexts/CheckoutContext";
 import { Flight } from "@/src/helper/CheckoutHelper";

@@ -1,11 +1,11 @@
 "use client";
 
-import ProfileCard from "@/src/app/(user)/account-setting/_components/ProfileCard";
+import MyBookingCard from "./_components/myBookingCard";
 import Sidebar from "@/src/components/sidebar/sidebar";
 import Footer from "@components/footer/footer";
 import Navbar from "@components/Navbar";
 
-export default function AccountSettingPage() {
+export default function MyBookingPage() {
     return (
         <div className="flex flex-col h-dvh">
             {/* Navigation Bar */}
@@ -20,7 +20,7 @@ export default function AccountSettingPage() {
                     <div className="flex h-fit p-[0.75rem] items-start gap-[1rem] self-stretch border border-dashed border-[var(--Gray-300,#848B8F)]">
                         <Sidebar/>
                         <div className="w-full flex px-[2rem] py-[0.5rem] ">
-                            <ProfileCard />
+                            <MyBookingCard />
                         </div>
                     </div>
                 </div>

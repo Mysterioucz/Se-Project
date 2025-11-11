@@ -8,7 +8,7 @@ import { useState } from "react";
 import {
     formatToTime,
     getFlightDuration,
-} from "../../../cart/[AccountID]/_components/FlightDetail";
+} from "@/src/components/booking/FlightDetail";
 
 export default function Page() {
     const { cartData, departFlight, returnFlight } = useCheckout();
