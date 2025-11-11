@@ -1,3 +1,5 @@
+"use client";
+
 import { BookingStatus } from "@/src/lib/bookingHistory";
 
 interface FilterBarProps {
@@ -32,7 +34,7 @@ export default function FilterBar({
 }: FilterBarProps) {
     const statuses: BookingStatus[] = ["SCHEDULED", "DEPARTED", "CANCELLED"];
     return (
-        <div className="flex rounded-3xl bg-gray-100 p-3">
+        <div className="flex rounded-2xl bg-gray-100 p-3">
             {statuses.map((status, index) =>
                 filterPill(index, status, selectedStatus, setStatus),
             )}

@@ -66,6 +66,29 @@ export interface GetBookingHistoryParams {
 }
 
 /**
+ * Get the base URL for API calls
+ * Works in both client and server environments
+ */
+function getBaseUrl(): string {
+    // Client-side
+    if (typeof window !== "undefined") {
+        return "";
+    }
+
+    // Server-side - check for environment variables
+    if (process.env.NEXT_PUBLIC_API_URL) {
+        return process.env.NEXT_PUBLIC_API_URL;
+    }
+
+    if (process.env.VERCEL_URL) {
+        return `https://${process.env.VERCEL_URL}`;
+    }
+
+    // Fallback to localhost
+    return "http://localhost:3000";
+}
+
+/**
  * Fetch booking history for the authenticated user
  * @param params - Query parameters for filtering and pagination
  * @returns Promise with booking history data
@@ -80,17 +103,16 @@ export async function getBookingHistory(
     queryParams.append("page", page.toString());
     queryParams.append("limit", limit.toString());
 
-    const response = await fetch(
-        `/api/v1/purchase/?${queryParams.toString()}`,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            cache: "no-store",
+    const baseUrl = getBaseUrl();
+    const url = `${baseUrl}/api/v1/purchase/?${queryParams.toString()}`;
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
         },
-    );
+        cache: "no-store",
+    });
 
     if (!response.ok) {
         const error = await response.json().catch(() => ({}));

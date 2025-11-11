@@ -1,3 +1,5 @@
+"use client";
+
 import { MagnifyIcon } from "@/src/components/icons/module";
 
 interface SearchBarProps {
@@ -7,7 +9,7 @@ interface SearchBarProps {
 
 export default function SearchBar({ bookingId, setBookingId }: SearchBarProps) {
     return (
-        <div className="flex w-full gap-4 rounded-lg bg-gray-50 p-3 items-center">
+        <div className="flex w-full items-center gap-4 rounded-2xl bg-gray-50 p-3">
             <div className="h-5 w-5 text-gray-300">
                 <MagnifyIcon />
             </div>
