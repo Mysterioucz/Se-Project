@@ -63,7 +63,7 @@ export const cartItems: CartType[] = [
     },
 ];
 
-export default function myBookingCard() {
+export default function MyBookingCard() {
     // use this for query search (booking id)
     const [searchValue, setSearchValue] = useState("");
 
