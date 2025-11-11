@@ -88,3 +88,88 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+export async function POST(req: NextRequest) {
+  const session = await getServerSession(nextAuthOptions);
+  console.log(session?.user.id)
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { success: false, message: ErrorMessages.AUTHENTICATION },
+      { status: 401 }
+    );
+  }
+
+  const userAccountId = String(session.user.id);
+  const body = await req.json();
+  const {
+    paymentId,
+    description,
+    attachment,
+    priority,
+    adminAccountId,
+    telNo,
+    passengerName,
+    accountId,
+  } = body;
+
+  if (!paymentId || !description || !adminAccountId || !accountId) {
+    return NextResponse.json(
+      { success: false, message: "Missing required fields." },
+      { status: 400 }
+    );
+  }
+
+  // Validate enums
+  if (priority && !Object.values(ReportPriorityEnum).includes(priority as ReportPriorityEnum)) {
+    return NextResponse.json(
+      { success: false, message: "Invalid priority value." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    // Check if Report_To exists (User ↔ Admin)
+    const existingRelation = await prisma.report_To.findUnique({
+      where: {
+        UserAccountID_AdminAccountID: {
+          UserAccountID: userAccountId,
+          AdminAccountID: adminAccountId,
+        },
+      },
+    });
+
+    if (!existingRelation) {
+      await prisma.report_To.create({
+        data: {
+          UserAccountID: userAccountId,
+          AdminAccountID: adminAccountId,
+          ReportStatus: "OPENED",
+        },
+      });
+    }
+
+    const report = await prisma.report.create({
+      data: {
+        ReportID: crypto.randomUUID(),
+        ReportDescription: description,
+        PaymentID: paymentId,
+        Attachment: attachment || null,
+        UserAccountID: userAccountId,
+        AdminAccountID: adminAccountId,
+        AccountID: accountId,
+        TelNo: telNo || "",
+        PassengerName: passengerName || "",
+        Priority: (priority as ReportPriorityEnum) || ReportPriorityEnum.NORMAL,
+        Status: ReportStatusEnum.OPENED,
+      },
+    });
+
+    return NextResponse.json({ success: true, data: report }, { status: 201 });
+  } catch (err) {
+    console.error("Error creating report:", err);
+    return NextResponse.json(
+      { success: false, message: ErrorMessages.SERVER },
+      { status: 500 }
+    );
+  }
+}
