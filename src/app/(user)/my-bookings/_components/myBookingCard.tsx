@@ -5,6 +5,7 @@ import Button from "@/src/components/Button";
 import { CartType } from "@/src/enums/CartType";
 import { useState } from "react";
 import { StatusFilter } from "./Helper";
+import BookingItemHeader from "./bookingItemHeader";
 import SearchField from "./searchField";
 import StatusFilterBar from "./statusFilterBar";
 
@@ -66,7 +67,7 @@ export default function myBookingCard() {
     // use this for query search (booking id)
     const [searchValue, setSearchValue] = useState("");
 
-    // use this select status filter (all, upcoming, completed, cancelled)
+    // use this select status filter (all, scheduled, departed, cancelled)
     const [selectedStatus, setSelectedStatus] = useState(StatusFilter.ALL);
 
     return (
@@ -90,9 +91,13 @@ export default function myBookingCard() {
                 <div className="lg:col-span-3 rounded-lg p-4 justify-center">
                     {cartItems.length > 0 ? (
                         cartItems.map((item: CartType) => (
-                            <div className="flex flex-col">
+                            <div key={item.id} className="flex flex-col">
+                                {/* TODO: Implement booking status */}
+                                <BookingItemHeader 
+                                    bookingID={item.id.toString()}
+                                    bookingStatus="Scheduled"
+                                />
                                 <BookingItem
-                                    key={item.id}
                                     item={item}
                                     isViewOnly={true}
                                 />
