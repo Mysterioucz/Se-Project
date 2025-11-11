@@ -27,7 +27,6 @@ export default function Sidebar({
                     />
                 </Link>
 
-                {/*<Link href="/noti-center">*/}
                 <Button
                     text="Notification Center"
                     iconStart="/buttons/fi-br-bell.svg"
@@ -37,7 +36,6 @@ export default function Sidebar({
                     width="w-[16.6875rem]"
                     height="h-[3rem]"
                 />
-                {/*</Link>*/}
 
                 <Link href="/account-setting">
                     <Button
@@ -52,7 +50,6 @@ export default function Sidebar({
                     />
                 </Link>
 
-                {/*<Link href="/priv-sec">*/}
                 <Button
                     text="Privacy & Security"
                     iconStart="/buttons/fi-br-eye.svg"
@@ -63,7 +60,6 @@ export default function Sidebar({
                     height="h-[3rem]"
                     onClick={() => console.log("Privacy & Security clicked")}
                 />
-                {/*</Link>*/}
             </div>
         </div>
     );
