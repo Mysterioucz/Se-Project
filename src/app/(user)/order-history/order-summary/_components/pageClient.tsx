@@ -8,7 +8,7 @@ import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { redirect } from "next/navigation";
 import formatDateLocal from "@/src/lib/formatDateLocal";
-import { formatToTime } from "../../../cart/[AccountID]/_components/FlightDetail";
+import { formatToTime } from "@components/booking/FlightDetail";
 
 export interface Airport {
     AirportID: string;
