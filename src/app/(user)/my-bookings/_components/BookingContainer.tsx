@@ -2,7 +2,7 @@
 
 import { BookingStatus } from "@/src/lib/bookingHistory";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ReactNode, useTransition } from "react";
+import { ReactNode, useEffect, useRef, useTransition } from "react";
 import FilterBar from "./filterBar";
 import SearchBar from "./searchBar";
 
@@ -14,6 +14,7 @@ export default function BookingContainer({ children }: BookingContainerProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [isPending, startTransition] = useTransition();
+    const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     const bookingId = searchParams.get("bookingId") || "";
     const statusFilter =
@@ -31,8 +32,39 @@ export default function BookingContainer({ children }: BookingContainerProps) {
         });
     };
 
+    const debouncedUpdateSearchParams = (
+        key: string,
+        value: string,
+        delay: number = 500,
+    ) => {
+        if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
+        }
+
+        debounceTimerRef.current = setTimeout(() => {
+            startTransition(() => {
+                const params = new URLSearchParams(searchParams.toString());
+                if (value) {
+                    params.set(key, value);
+                } else {
+                    params.delete(key);
+                }
+                router.push(`?${params.toString()}`);
+            });
+        }, delay);
+    };
+
+    // Cleanup timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+        };
+    }, []);
+
     const setBookingId = (id: string) => {
-        updateSearchParams("bookingId", id);
+        debouncedUpdateSearchParams("bookingId", id, 500);
     };
 
     const setStatus = (status: BookingStatus) => {
@@ -57,9 +89,7 @@ export default function BookingContainer({ children }: BookingContainerProps) {
                     />
                 </div>
 
-                <div className="bg-primary-50 rounded-lg p-3 lg:col-span-3">
-                    {children}
-                </div>
+                <div className="rounded-lg p-3 lg:col-span-3">{children}</div>
             </div>
         </div>
     );

@@ -1,12 +1,19 @@
 import BookingItem from "@/src/components/booking/BookingItem";
-import { Booking } from "@/src/lib/bookingHistory";
+import Button from "@/src/components/Button";
 import { CartType } from "@/src/enums/CartType";
+import { Booking } from "@/src/lib/bookingHistory";
+import BookingItemHeader from "./bookingItemHeader";
 
 interface BookingListProps {
     bookings: Booking[];
 }
 
 export default function BookingList({ bookings }: BookingListProps) {
+    // Helper function to format status for display
+    const formatStatus = (status: string): string => {
+        return status.charAt(0) + status.slice(1).toLowerCase();
+    };
+
     // Transform Booking to CartType for BookingItem component
     const transformBookingToCart = (booking: Booking): CartType => {
         return {
@@ -45,11 +52,22 @@ export default function BookingList({ bookings }: BookingListProps) {
             {bookings.map((booking) => {
                 const item = transformBookingToCart(booking);
                 return (
-                    <BookingItem
-                        key={booking.paymentId}
-                        item={item}
-                        isViewOnly={true}
-                    />
+                    <div key={booking.paymentId}>
+                        <BookingItemHeader
+                            bookingID={booking.paymentId}
+                            bookingStatus={formatStatus(booking.status)}
+                        />
+                        <BookingItem item={item} isViewOnly={true} />
+                        <div className="pb-6">
+                            <Button
+                                text="View Details"
+                                width="w-full"
+                                onClick={() => {
+                                    // TODO: Navigate to booking details page
+                                }}
+                            />
+                        </div>
+                    </div>
                 );
             })}
             <div className="text-primary-600 mt-4 text-center">

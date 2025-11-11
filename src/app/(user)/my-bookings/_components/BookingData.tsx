@@ -37,7 +37,14 @@ export default function BookingData() {
                     throw new Error("Failed to fetch booking history");
                 }
 
-                setBookings(response.data.bookings);
+                // Add status to each booking based on the current filter
+                const bookingsWithStatus = response.data.bookings.map(
+                    (booking) => ({
+                        ...booking,
+                        status,
+                    }),
+                );
+                setBookings(bookingsWithStatus);
             } catch (err) {
                 console.error("Error fetching bookings:", err);
                 setError(

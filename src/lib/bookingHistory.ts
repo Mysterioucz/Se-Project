@@ -36,6 +36,7 @@ export interface Booking {
     totalAmount: number;
     paymentMethod: string;
     transactionStatus: string;
+    status: BookingStatus;
     flightType: string;
     classType: string;
     adults: number;
