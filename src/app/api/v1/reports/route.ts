@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import prisma from "@/db";
-import type {
-  Prisma,
-  ReportStatusEnum,
-  ReportPriorityEnum,
-} from "@/src/generated/prisma";
+import type {Prisma} from "@/src/generated/prisma";
+import { ReportStatusEnum, ReportPriorityEnum } from "@/src/generated/prisma";
 
 import { nextAuthOptions } from "@/src/lib/auth";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
@@ -42,11 +39,11 @@ export async function GET(req: NextRequest) {
 
   const where: Prisma.ReportWhereInput = {};
 
-    if (status) {
+    if (status && Object.values(ReportStatusEnum).includes(status as ReportStatusEnum)) {
     where.Status = status as ReportStatusEnum;  
     }
 
-    if (priority) {
+    if (priority && Object.values(ReportPriorityEnum).includes(priority as ReportPriorityEnum)) {
     where.Priority = priority as ReportPriorityEnum;
     }
 
@@ -64,6 +61,7 @@ export async function GET(req: NextRequest) {
 
     const data = reports.map((r: (typeof reports)[number]) => ({
       id: r.ReportID,
+      bookingID: r.PaymentID,
       description: r.ReportDescription,
       attachment: r.Attachment,
       status: r.Status,
