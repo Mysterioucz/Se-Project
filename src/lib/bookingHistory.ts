@@ -1,5 +1,6 @@
 import { TicketStatus } from "../generated/prisma";
 
+export type BookingStatus = "SCHEDULED" | "CANCELLED" | "DEPARTED";
 export interface BookingTicket {
     ticketId: string;
     status: TicketStatus;
@@ -13,12 +14,19 @@ export interface BookingTicket {
     arrivalTime: Date;
 }
 
+export interface Airport {
+    AirportID: string;
+    AirportName: string;
+    City: string;
+    Country: string;
+}
+
 export interface BookingFlight {
     flightNo: string;
     departTime: Date;
     arrivalTime: Date;
-    departureAirport: string;
-    arrivalAirport: string;
+    departureAirport: Airport;
+    arrivalAirport: Airport;
     airlineName: string;
 }
 
@@ -52,19 +60,17 @@ export interface BookingHistoryResponse {
 }
 
 export interface GetBookingHistoryParams {
-    status?: "SCHEDULED" | "CANCELLED" | "DEPARTED";
+    status?: BookingStatus;
     page?: number;
     limit?: number;
 }
 
 /**
  * Fetch booking history for the authenticated user
- * @param userAccountId - User account ID
  * @param params - Query parameters for filtering and pagination
  * @returns Promise with booking history data
  */
 export async function getBookingHistory(
-    userAccountId: string,
     params: GetBookingHistoryParams = {},
 ): Promise<BookingHistoryResponse> {
     const { status, page = 1, limit = 10 } = params;
@@ -75,7 +81,7 @@ export async function getBookingHistory(
     queryParams.append("limit", limit.toString());
 
     const response = await fetch(
-        `/api/v1/purchase/${userAccountId}?${queryParams.toString()}`,
+        `/api/v1/purchase/?${queryParams.toString()}`,
         {
             method: "GET",
             headers: {
@@ -97,12 +103,8 @@ export async function getBookingHistory(
 /**
  * Get all scheduled bookings
  */
-export async function getScheduledBookings(
-    userAccountId: string,
-    page = 1,
-    limit = 10,
-) {
-    return getBookingHistory(userAccountId, {
+export async function getScheduledBookings(page = 1, limit = 10) {
+    return getBookingHistory({
         status: "SCHEDULED",
         page,
         limit,
@@ -112,12 +114,8 @@ export async function getScheduledBookings(
 /**
  * Get all cancelled bookings
  */
-export async function getCancelledBookings(
-    userAccountId: string,
-    page = 1,
-    limit = 10,
-) {
-    return getBookingHistory(userAccountId, {
+export async function getCancelledBookings(page = 1, limit = 10) {
+    return getBookingHistory({
         status: "CANCELLED",
         page,
         limit,
@@ -127,12 +125,8 @@ export async function getCancelledBookings(
 /**
  * Get all departed bookings
  */
-export async function getDepartedBookings(
-    userAccountId: string,
-    page = 1,
-    limit = 10,
-) {
-    return getBookingHistory(userAccountId, {
+export async function getDepartedBookings(page = 1, limit = 10) {
+    return getBookingHistory({
         status: "DEPARTED",
         page,
         limit,

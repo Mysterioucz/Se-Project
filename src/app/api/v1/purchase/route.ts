@@ -300,8 +300,8 @@ export async function GET(
                     flightNo: payment.DepartFlight.FlightNo,
                     departTime: payment.DepartFlight.DepartTime,
                     arrivalTime: payment.DepartFlight.ArrivalTime,
-                    departureAirport: `${payment.DepartFlight.departureAirport.AirportName} (${payment.DepartFlight.departureAirport.AirportID})`,
-                    arrivalAirport: `${payment.DepartFlight.arrivalAirport.AirportName} (${payment.DepartFlight.arrivalAirport.AirportID})`,
+                    departureAirport: payment.DepartFlight.departureAirport,
+                    arrivalAirport: payment.DepartFlight.arrivalAirport,
                     airlineName: payment.DepartFlight.AirlineName,
                 },
                 returnFlight: payment.ReturnFlight
@@ -309,8 +309,9 @@ export async function GET(
                           flightNo: payment.ReturnFlight.FlightNo,
                           departTime: payment.ReturnFlight.DepartTime,
                           arrivalTime: payment.ReturnFlight.ArrivalTime,
-                          departureAirport: `${payment.ReturnFlight.departureAirport.AirportName} (${payment.ReturnFlight.departureAirport.AirportID})`,
-                          arrivalAirport: `${payment.ReturnFlight.arrivalAirport.AirportName} (${payment.ReturnFlight.arrivalAirport.AirportID})`,
+                          departureAirport:
+                              payment.ReturnFlight.departureAirport,
+                          arrivalAirport: payment.ReturnFlight.arrivalAirport,
                           airlineName: payment.ReturnFlight.AirlineName,
                       }
                     : null,
