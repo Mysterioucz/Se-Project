@@ -170,8 +170,7 @@ interface TicketWhereClause {
  *         description: Server error
  */
 export async function GET(
-    req: NextRequest,
-    { params }: { params: Promise<{ UserAccountID: string }> },
+    req: NextRequest
 ) {
     try {
         // Check authentication
