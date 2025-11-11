@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @swagger
- * /api/v1/purchase/{UserAccountID}:
+ * /api/v1/purchase:
  *   get:
  *     summary: Get user booking history
  *     description: Retrieve booking history for a specific user, with optional status filtering and pagination
@@ -15,13 +15,6 @@ import { NextRequest, NextResponse } from "next/server";
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: UserAccountID
- *         in: path
- *         description: User account ID
- *         required: true
- *         schema:
- *           type: string
- *           example: acc_123456
  *       - name: status
  *         in: query
  *         description: Filter bookings by ticket status
