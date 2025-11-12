@@ -22,7 +22,7 @@ export default function ReportManagement() {
         <div className="flex flex-col items-start self-stretch rounded-[0.5rem] border-[0.125rem] border-primary-600 bg-white">
             <div className="flex items-center self-stretch px-[1rem] py-[0.75rem] gap-[0.5rem]">
                 <Image
-                    src="/fi-br-warning.svg"
+                    src="/modal/fi-br-warning-blue.svg"
                     alt="Logo"
                     width={24}
                     height={24}
