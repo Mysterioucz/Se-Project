@@ -1,5 +1,6 @@
 import Button from "@/src/components/Button";
 import SelectComponent from "@/src/components/select";
+import { SelectEvent } from "@/src/components/select";
 import { Dialog } from "@headlessui/react";
 import { MenuItem } from "@mui/material";
 import { useState } from "react";
@@ -12,7 +13,7 @@ interface ReportModalProps {
 
 export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
     const [status, setStatus] = useState("Opened"); // status must be current status
-    const setStatusChange = (event: any) => {
+    const setStatusChange = (event: SelectEvent) => {
         const value = event.target.value as string;
         setStatus(value);
     };

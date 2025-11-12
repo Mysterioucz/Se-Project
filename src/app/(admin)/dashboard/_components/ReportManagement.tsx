@@ -1,6 +1,6 @@
 import SelectComponent from "@/src/components/select";
+import { SelectEvent } from "@/src/components/select";
 import { MenuItem } from "@mui/material";
-import { SelectChangeEvent } from "@mui/material/Select";
 import Image from "next/image";
 import { useState } from "react";
 import ReportFrame from "./ReportFrame";
@@ -9,15 +9,15 @@ export default function ReportManagement() {
     const [priority, setPriority] = useState("");
     const [status, setStatus] = useState("");
 
-    const handleChange = (event: any) => {
-        const value = event.target.value as string;
+     const handleChange = (event: SelectEvent) => {
+        const value = (event.target as HTMLInputElement).value as string;
         setPriority(value);
     };
 
-    const setStatusChange = (event: any) => {
-        const value = event.target.value as string;
+    const setStatusChange = (event: SelectEvent) => {
+        const value = (event.target as HTMLInputElement).value as string;
         setStatus(value);
-    }
+    };
 
     return (
         <div className="flex flex-col items-start self-stretch rounded-[0.5rem] border-[0.125rem] border-[var(--color-primary-600)] bg-white">
@@ -45,9 +45,11 @@ export default function ReportManagement() {
                             onChange={handleChange}
                             placeholder="Select priority"
                             width="w-[12.5rem]"
-                            height="h-[2rem]" 
+                            height="h-[2rem]"
                         >
-                            <MenuItem value="All Priority">All Priority</MenuItem>
+                            <MenuItem value="All Priority">
+                                All Priority
+                            </MenuItem>
                             <MenuItem value="Normal">Normal</MenuItem>
                             <MenuItem value="High">High</MenuItem>
                         </SelectComponent>
@@ -63,7 +65,7 @@ export default function ReportManagement() {
                             onChange={setStatusChange}
                             placeholder="Select Status"
                             width="w-[12.5rem]"
-                            height="h-[2rem]" 
+                            height="h-[2rem]"
                         >
                             <MenuItem value="All Status">All Status</MenuItem>
                             <MenuItem value="Opened">Opened</MenuItem>
@@ -120,21 +122,21 @@ export default function ReportManagement() {
                     </div>
 
                     {/* reports */}
-                    <ReportFrame 
+                    <ReportFrame
                         priority="normal"
                         status="opened"
                         problemType="Network Issue"
                         submitted="2025-08-06 19:32:10"
                         lastUpdate="2025-08-11 08:30:09"
                     />
-                    <ReportFrame 
+                    <ReportFrame
                         priority="high"
                         status="in progress"
                         problemType="Software Bug"
                         submitted="2025-08-07 10:15:45"
                         lastUpdate="2025-08-12 14:22:30"
                     />
-                    <ReportFrame 
+                    <ReportFrame
                         priority="normal"
                         status="resolved"
                         problemType="Hardware Failure"
