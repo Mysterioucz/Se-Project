@@ -7,8 +7,8 @@ import { useSession } from "next-auth/react";
 
 export default function AdminNavBar() {
     const { data: session, status } = useSession();
-    const displayName = session?.user?.name;
-    const AccountID = session?.user.id;
+    // const displayName = session?.user?.name;
+    // const AccountID = session?.user.id;
     return (
         <nav className="bg-primary-400 flex items-center w-full justify-between py-[0.5rem] px-[2rem] sticky top-0 z-99">
             {/* Navigate to main page */}
