@@ -1,8 +1,8 @@
 import authOptions from "@/auth.config";
 import prisma from "@/db";
+import bcrypt from "bcrypt";
 import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
 
 export const nextAuthOptions: NextAuthOptions = {
     ...authOptions,
@@ -32,7 +32,7 @@ export const nextAuthOptions: NextAuthOptions = {
                 if (!account) return null;
                 const isMatch = await bcrypt.compare(
                     credentials.password,
-                    account.Password
+                    account.Password,
                 );
                 if (!isMatch) throw new Error("Invalid Email or Password");
                 return {
@@ -45,20 +45,50 @@ export const nextAuthOptions: NextAuthOptions = {
     ],
     callbacks: {
         signIn: async ({ user, account, profile, email, credentials }) => {
+            console.log(user);
             return true;
         },
-        session: ({ session, token }) => {
+        session: async ({ session, token }) => {
+            console.log("Session Callback called");
             if (token && token.user) {
                 session.user = token.user as User;
             }
+            if (token.error) {
+                session.error = token.error as string;
+            }
             return session;
         },
-        jwt: ({ token, trigger, session, user }) => {
-            // console.log("JWT callback:", { token, trigger, session, user });
+        jwt: async ({ token, trigger, session, user }) => {
+            console.log("JWT Callback called");
+            // Check for user object on initial sign in
             if (user) {
                 token.user = user;
                 token.id = user.id;
             }
+
+            // Verify user still exists in database
+            if (token.id) {
+                try {
+                    const existingUser = await prisma.account.findUnique({
+                        where: { AccountID: token.id as string },
+                    });
+
+                    // If user doesn't exist, invalidate the token
+                    if (!existingUser) {
+                        console.log(
+                            "User no longer exists, invalidating token",
+                        );
+                        token.error = "UserDeleted";
+                        return token;
+                    }
+                } catch (error) {
+                    console.error("Error checking user existence:", error);
+                    token.error = "DatabaseError";
+                    return token;
+                }
+            }
+
+            // Handle session update
             if (trigger === "update") {
                 // console.log(session);
                 if (session.user && session.user.name) {

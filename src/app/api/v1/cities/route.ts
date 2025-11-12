@@ -82,6 +82,7 @@ export async function GET() {
             {
                 success: false,
                 message: ErrorMessages.SERVER,
+                errors: error,
             },
             { status: 500 },
         );

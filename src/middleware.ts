@@ -14,7 +14,13 @@ export default withAuth(
         callbacks: {
             // This callback is triggered if the user is not authenticated
             // You can define a custom redirect here instead of the default sign-in page
-            authorized: ({ token }) => !!token,
+            authorized: ({ token }) => {
+                // If token has error (user deleted), deny access
+                if (token?.error === "UserDeleted") {
+                    return false;
+                }
+                return !!token;
+            },
         },
     },
 );

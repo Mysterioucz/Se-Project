@@ -1,18 +1,17 @@
 "use client";
 
-import React from "react";
 import {
+    Box,
+    Button,
     Dialog,
-    DialogTitle,
+    DialogActions,
     DialogContent,
     DialogContentText,
-    DialogActions,
-    Button,
+    DialogTitle,
     Typography,
-    Box,
 } from "@mui/material";
 import Image from "next/image";
-import { ModalVariant, ModalProps, themeColors } from "./Helper";
+import { ModalProps, themeColors } from "./Helper";
 
 export default function Modal({
     open,
@@ -25,6 +24,8 @@ export default function Modal({
     rightButtonText,
     onLeftButton,
     onRightButton,
+    showLeftBtn,
+    showRightBtn,
     variant,
     preventClose = false,
     disableRightButton = false,
@@ -87,41 +88,47 @@ export default function Modal({
             </DialogContent>
 
             <DialogActions>
-                <Button
-                    variant="outlined"
-                    onClick={onLeftButton}
-                    sx={{
-                        color: colors.button.left.color,
-                        borderColor: colors.button.left.border,
-                        borderRadius: "0.5rem",
-                    }}
-                >
-                    {leftButtonText}
-                </Button>
+                {showLeftBtn && (
+                    <Button
+                        variant="outlined"
+                        onClick={onLeftButton}
+                        sx={{
+                            color: colors.button.left.color,
+                            borderColor: colors.button.left.border,
+                            borderRadius: "0.5rem",
+                        }}
+                    >
+                        {leftButtonText}
+                    </Button>
+                )}
 
-                <Button
-                    variant="contained"
-                    onClick={onRightButton}
-                    disabled={disableRightButton}
-                    sx={{
-                        backgroundColor: disableRightButton
-                            ? "var(--color-gray-400)"
-                            : colors.button.right.bg,
-                        color: disableRightButton
-                            ? "var(--color-gray-700)"
-                            : colors.button.right.color,
-                        cursor: disableRightButton ? "not-allowed" : "pointer",
-                        opacity: disableRightButton ? 0.6 : 1,
-                        "&:hover": {
+                {showRightBtn && (
+                    <Button
+                        variant="contained"
+                        onClick={onRightButton}
+                        disabled={disableRightButton}
+                        sx={{
                             backgroundColor: disableRightButton
                                 ? "var(--color-gray-400)"
-                                : colors.button.right.hoverBg,
-                        },
-                        borderRadius: "0.5rem",
-                    }}
-                >
-                    {rightButtonText}
-                </Button>
+                                : colors.button.right.bg,
+                            color: disableRightButton
+                                ? "var(--color-gray-700)"
+                                : colors.button.right.color,
+                            cursor: disableRightButton
+                                ? "not-allowed"
+                                : "pointer",
+                            opacity: disableRightButton ? 0.6 : 1,
+                            "&:hover": {
+                                backgroundColor: disableRightButton
+                                    ? "var(--color-gray-400)"
+                                    : colors.button.right.hoverBg,
+                            },
+                            borderRadius: "0.5rem",
+                        }}
+                    >
+                        {rightButtonText}
+                    </Button>
+                )}
             </DialogActions>
         </Dialog>
     );

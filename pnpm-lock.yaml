@@ -45,7 +45,7 @@ importers:
         specifier: ^6.16.1
         version: 6.16.1
       '@prisma/client':
-        specifier: 6.16.1
+        specifier: ^6.16.1
         version: 6.16.1(prisma@6.19.0(typescript@5.9.2))(typescript@5.9.2)
       '@tailwindcss/cli':
         specifier: ^4.1.13
