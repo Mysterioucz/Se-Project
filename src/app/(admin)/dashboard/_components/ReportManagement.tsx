@@ -1,5 +1,4 @@
-import SelectComponent from "@/src/components/select";
-import { SelectEvent } from "@/src/components/select";
+import SelectComponent, { SelectEvent } from "@/src/components/select";
 import { MenuItem } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
@@ -9,7 +8,7 @@ export default function ReportManagement() {
     const [priority, setPriority] = useState("");
     const [status, setStatus] = useState("");
 
-     const handleChange = (event: SelectEvent) => {
+    const handleChange = (event: SelectEvent) => {
         const value = (event.target as HTMLInputElement).value as string;
         setPriority(value);
     };
@@ -20,7 +19,7 @@ export default function ReportManagement() {
     };
 
     return (
-        <div className="flex flex-col items-start self-stretch rounded-[0.5rem] border-[0.125rem] border-[var(--color-primary-600)] bg-white">
+        <div className="flex flex-col items-start self-stretch rounded-[0.5rem] border-[0.125rem] border-primary-600 bg-white">
             <div className="flex items-center self-stretch px-[1rem] py-[0.75rem] gap-[0.5rem]">
                 <Image
                     src="/fi-br-warning.svg"
@@ -29,13 +28,13 @@ export default function ReportManagement() {
                     height={24}
                 />
 
-                <div className="!text-[var(--color-primary-600)] font-sarabun text-[2rem] font-bold leading-[1.2] not-italic">
+                <div className="!text-primary-600 font-sarabun text-[2rem] font-bold leading-[1.2] not-italic">
                     Problem Report Management
                 </div>
 
                 <div className="flex justify-end items-center px-[1.25rem] py-0 gap-[0.625rem] flex-[1_0_0]">
                     <div className="flex flex-col items-start gap-1">
-                        <div className="text-[var(--color-primary-900)] font-sarabun text-[1rem] font-normal leading-[1.2] not-italic">
+                        <div className="text-primary-900 font-sarabun text-[1rem] font-normal leading-[1.2] not-italic">
                             Priority Level:
                         </div>
                         <SelectComponent
@@ -55,7 +54,7 @@ export default function ReportManagement() {
                         </SelectComponent>
                     </div>
                     <div className="flex flex-col items-start gap-1">
-                        <div className="text-[var(--color-primary-900)] font-sarabun text-[1rem] font-normal leading-[1.2] not-italic">
+                        <div className="text-primary-900 font-sarabun text-[1rem] font-normal leading-[1.2] not-italic">
                             Status:
                         </div>
                         <SelectComponent
@@ -78,9 +77,9 @@ export default function ReportManagement() {
             </div>
 
             <div className="flex flex-col items-center self-stretch px-4 pb-4 pt-0">
-                <div className="flex flex-col items-start gap-2 pb-2 rounded-md border-2 border-[var(--color-primary-100)]">
+                <div className="flex flex-col items-start gap-2 pb-2 rounded-md border-2 border-primary-100">
                     {/* header */}
-                    <div className="flex items-start gap-2 self-stretch bg-[var(--color-primary-100)]">
+                    <div className="flex items-start gap-2 self-stretch bg-primary-100">
                         <div className="flex flex-col justify-center items-center w-[3.75rem] h-[3.125rem] py-[0.5rem]">
                             <div className="text-black text-center font-sarabun text-[1.25rem] font-semibold leading-[1.2]">
                                 No.
