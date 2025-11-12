@@ -27,5 +27,7 @@ export const config = {
         "/account-setting/:path*",
         "/cart/:path*",
         "/checkout/:path*",
+        "/customer-support",
+        "/customer-support/:path*"
     ],
 };
