@@ -211,7 +211,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                                         placeholder="Opened"
                                         width="w-[16rem]"
                                         height="h-[2.188rem]"
-                                        maxChildrenHeight={200}
+                                        maxChildrenHeight="max-h-20"
                                     >
                                         <MenuItem value="Opened">
                                             Opened

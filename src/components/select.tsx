@@ -14,7 +14,7 @@ interface Props {
     value: string;
     error?: boolean;
     disabled?: boolean;
-    maxChildrenHeight?: number;
+    maxChildrenHeight?: string;
     width?: string;
     height?: string;
     onChange?: (event: SelectEvent, child?: React.ReactNode) => void;
@@ -30,7 +30,7 @@ export default function SelectComponent({
     value,
     error,
     disabled,
-    maxChildrenHeight = 256,
+    maxChildrenHeight = "max-h-60",
     onChange,
     children,
     placeholder = "Select an option",
