@@ -113,7 +113,6 @@ export async function GET(
             .getAll("cartId")
             .map(Number)
             .filter(Boolean);
-        console.log(cartIds);
         if (!UserAccountID) {
             return NextResponse.json(
                 {

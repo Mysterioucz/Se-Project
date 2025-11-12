@@ -57,13 +57,11 @@ export default function Page() {
     });
 
     const onValidSubmit = (data: SupportFormData) => {
-        console.log("Form Data Valid:", data);
         // TODO: POST report to backend
         setIsModalOpen(true);
     };
 
     const handleConfirmSubmit = () => {
-        console.log("Submitting to API");
         setIsModalOpen(false);
         router.push("/"); 
     };
