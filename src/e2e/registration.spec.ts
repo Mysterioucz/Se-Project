@@ -70,5 +70,56 @@ test.describe('Registration Flow', () => {
 		await expect(page).toHaveURL(/.*\/registration\/privacyPolicy$/);
 		await expect(page.getByText(/Privacy Policy/i)).toBeVisible();
 	});
+
+	// New test: verify back buttons navigate correctly through the flow
+	test('back buttons navigate to previous steps', async ({ page }) => {
+		// Start at first step
+		await page.goto('/registration/email');
+		// Enter valid email and proceed
+		const email = uniqueEmail();
+		await page.getByTestId('registration-email-input').fill(email);
+		await page.getByTestId('registration-email-next-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/name$/);
+
+		// Click Back on name step -> email step
+		await page.getByTestId('registration-name-back-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/email$/);
+
+		// Proceed again to name step (email should persist)
+		await page.getByTestId('registration-email-next-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/name$/);
+
+		// Fill names and go forward
+		await page.getByTestId('registration-first-name-input').fill('John');
+		await page.getByTestId('registration-last-name-input').fill('Doe');
+		await page.getByTestId('registration-name-next-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/password$/);
+
+		// Back from password -> name, verify values persisted
+		await page.getByTestId('registration-password-back-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/name$/);
+		await expect(page.getByTestId('registration-first-name-input')).toHaveValue('John');
+		await expect(page.getByTestId('registration-last-name-input')).toHaveValue('Doe');
+
+		// Forward again to password
+		await page.getByTestId('registration-name-next-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/password$/);
+
+		// Fill matching strong password and proceed
+		await page.getByTestId('registration-password-input').fill('StrongPass1!');
+		await page.getByTestId('registration-confirm-password-input').fill('StrongPass1!');
+		await page.getByTestId('registration-password-next-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/terms$/);
+
+		// Back from terms -> password
+		await page.getByTestId('registration-terms-back-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/password$/);
+
+		// (Optional) Proceed again to terms to ensure navigation still works
+		await page.getByTestId('registration-password-input').fill('StrongPass1!');
+		await page.getByTestId('registration-confirm-password-input').fill('StrongPass1!');
+		await page.getByTestId('registration-password-next-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/terms$/);
+	});
 });
 
