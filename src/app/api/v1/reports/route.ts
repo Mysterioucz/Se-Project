@@ -9,7 +9,7 @@ import { ErrorMessages } from "@/src/enums/ErrorMessages";
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(nextAuthOptions);
-
+  console.log(session)
   //Check authentication
   if (!session?.user?.id) {
     return NextResponse.json(
@@ -91,7 +91,6 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(nextAuthOptions);
-  console.log(session?.user.id)
   if (!session?.user?.id) {
     return NextResponse.json(
       { success: false, message: ErrorMessages.AUTHENTICATION },
@@ -105,7 +104,7 @@ export async function POST(req: NextRequest) {
     paymentId,
     description,
     attachment,
-    priority,
+    // priority,
     adminAccountId,
     telNo,
     passengerName,
@@ -119,16 +118,24 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Validate enums
-  if (priority && !Object.values(ReportPriorityEnum).includes(priority as ReportPriorityEnum)) {
-    return NextResponse.json(
-      { success: false, message: "Invalid priority value." },
-      { status: 400 }
-    );
-  }
-
   try {
-    // Check if Report_To exists (User ↔ Admin)
+    // Create report
+    const report = await prisma.report.create({
+      data: {
+        ReportID: crypto.randomUUID(),
+        ReportDescription: description,
+        PaymentID: paymentId,
+        Attachment: attachment || null,
+        UserAccountID: userAccountId,
+        AdminAccountID: adminAccountId,
+        AccountID: accountId,
+        TelNo: telNo || "",
+        PassengerName: passengerName || "",
+      },
+      include: { creator: true },
+    });
+
+    // Ensure report_To exists
     const existingRelation = await prisma.report_To.findUnique({
       where: {
         UserAccountID_AdminAccountID: {
@@ -143,28 +150,30 @@ export async function POST(req: NextRequest) {
         data: {
           UserAccountID: userAccountId,
           AdminAccountID: adminAccountId,
-          ReportStatus: "OPENED",
+          ReportStatus: ReportStatusEnum.OPENED,
+          // ReportPriority: (priority as ReportPriorityEnum) || ReportPriorityEnum.NORMAL,
         },
       });
     }
 
-    const report = await prisma.report.create({
-      data: {
-        ReportID: crypto.randomUUID(),
-        ReportDescription: description,
-        PaymentID: paymentId,
-        Attachment: attachment || null,
-        UserAccountID: userAccountId,
-        AdminAccountID: adminAccountId,
-        AccountID: accountId,
-        TelNo: telNo || "",
-        PassengerName: passengerName || "",
-        Priority: (priority as ReportPriorityEnum) || ReportPriorityEnum.NORMAL,
-        Status: ReportStatusEnum.OPENED,
-      },
-    });
+    const data = {
+      id: report.ReportID,
+      bookingID: report.PaymentID,
+      description: report.ReportDescription,
+      attachment: report.Attachment,
+      status: ReportStatusEnum.OPENED,
+      // priority: (priority as ReportPriorityEnum) || ReportPriorityEnum.NORMAL,
+      submittedAt: report.CreatedAt,
+      updatedAt: report.UpdatedAt,
+      userAccountId: report.UserAccountID,
+      adminAccountId: report.AdminAccountID,
+      accountId: report.AccountID,
+      telNo: report.TelNo,
+      passengerName: report.PassengerName,
+      creatorStatus: report.creator?.ReportStatus ?? null,
+    };
 
-    return NextResponse.json({ success: true, data: report }, { status: 201 });
+    return NextResponse.json({ success: true, data }, { status: 201 });
   } catch (err) {
     console.error("Error creating report:", err);
     return NextResponse.json(
@@ -177,7 +186,7 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const session = await getServerSession(nextAuthOptions);
 
-  // Check authentication
+  // Authentication
   if (!session?.user?.id) {
     return NextResponse.json(
       { success: false, message: ErrorMessages.AUTHENTICATION },
@@ -187,7 +196,7 @@ export async function PUT(req: NextRequest) {
 
   const adminAccountId = String(session.user.id);
 
-  // Check if user is admin
+  // Verify admin
   const admin = await prisma.admin.findUnique({
     where: { AdminAccountID: adminAccountId },
   });
@@ -199,11 +208,11 @@ export async function PUT(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { reportId, status } = body;
+  const { userAccountId, status } = body;
 
-  if (!reportId || !status) {
+  if (!userAccountId || !status) {
     return NextResponse.json(
-      { success: false, message: "Missing required fields: reportId or status." },
+      { success: false, message: "Missing required fields: userAccountId or status." },
       { status: 400 }
     );
   }
@@ -216,13 +225,22 @@ export async function PUT(req: NextRequest) {
   }
 
   try {
-    const updatedReport = await prisma.report.update({
-      where: { ReportID: reportId },
-      data: { Status: status as ReportStatusEnum },
+    // Update only ReportStatus
+    const updated = await prisma.report_To.update({
+      where: {
+        UserAccountID_AdminAccountID: {
+          UserAccountID: userAccountId,
+          AdminAccountID: adminAccountId,
+        },
+      },
+      data: {
+        ReportStatus: status as ReportStatusEnum,
+        // UpdatedAt: new Date(),
+      },
     });
 
     return NextResponse.json(
-      { success: true, data: updatedReport },
+      { success: true, message: "Report status updated successfully." },
       { status: 200 }
     );
   } catch (err) {
@@ -233,3 +251,5 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
+
+
