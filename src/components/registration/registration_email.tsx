@@ -75,6 +75,7 @@ export default function RegistrationEmail() {
                         >
                             <input
                                 type="email"
+                                data-testid="registration-email-input"
                                 {...register("email")}
                                 placeholder="Enter your email"
                                 className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
@@ -119,6 +120,7 @@ export default function RegistrationEmail() {
             <div className="flex justify-center">
                 <button
                     type="submit"
+                    data-testid="registration-email-next-btn"
                     className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px] cursor-pointer hover:opacity-90"
                 >
                     Next

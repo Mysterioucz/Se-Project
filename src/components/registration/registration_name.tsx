@@ -83,13 +83,14 @@ export default function RegistrationName() {
                                     : "border-gray-400"
                             } rounded-sm items-center`}
                         >
-                            <input
-                                {...register("firstName")}
-                                placeholder="Enter your first name"
-                                className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
-                                onFocus={() => setNameFocused(true)}
-                                onBlur={() => setNameFocused(false)}
-                            />
+              <input
+                data-testid="registration-first-name-input"
+                {...register("firstName")}
+                placeholder="Enter your first name"
+                className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
+                onFocus={() => setNameFocused(true)}
+                onBlur={() => setNameFocused(false)}
+              />
                         </div>
                         {errors.firstName && (
                             <p className="text-error-main text-sm">
@@ -123,14 +124,15 @@ export default function RegistrationName() {
                                         : "border-gray-400"
                                 } rounded-sm items-center`}
                             >
-                                <input
-                                    type="text"
-                                    {...register("lastName")}
-                                    placeholder="Enter your last name"
-                                    className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
-                                    onFocus={() => setLastNameFocused(true)}
-                                    onBlur={() => setLastNameFocused(false)}
-                                />
+                <input
+                  type="text"
+                  data-testid="registration-last-name-input"
+                  {...register("lastName")}
+                  placeholder="Enter your last name"
+                  className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
+                  onFocus={() => setLastNameFocused(true)}
+                  onBlur={() => setLastNameFocused(false)}
+                />
                             </div>
                             {errors.lastName && (
                                 <p className="text-error-main text-sm">
@@ -146,6 +148,7 @@ export default function RegistrationName() {
       <div className="flex justify-center gap-4">
         <button
           type="button"
+          data-testid="registration-name-back-btn"
           className="w-[7rem] h-[2.1875rem] bg-white rounded-md items-center justify-center text-primary-400 border-1 border-primary-400 text-[16px] cursor-pointer hover:opacity-90"
           onClick={() => router.push("/registration/email")}
         >
@@ -153,6 +156,7 @@ export default function RegistrationName() {
         </button>
         <button
           type="submit"
+          data-testid="registration-name-next-btn"
           className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px] cursor-pointer hover:opacity-90"
         >
           Next

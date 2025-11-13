@@ -84,6 +84,7 @@ export default function RegistrationPassword() {
             >
               <input
                 type={showPassword ? "text" : "password"}
+                data-testid="registration-password-input"
                 {...register("password")}
                 placeholder="Enter your password"
                 className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
@@ -101,6 +102,7 @@ export default function RegistrationPassword() {
         </div>
         <div className="flex flex-col">
           <p
+            data-testid="registration-password-req-length"
             className={`text-[1rem] ${
               Object.values(errors.password?.types || {}).at(0) ===
               "Password must be at least 8 characters long"
@@ -111,6 +113,7 @@ export default function RegistrationPassword() {
             Must be at least 8 characters long
           </p>
           <p
+            data-testid="registration-password-req-capital"
             className={`text-[1rem] ${
               Object.values(errors.password?.types || {})
                 .at(1)
@@ -128,6 +131,7 @@ export default function RegistrationPassword() {
             Must include at least 1 capital letter
           </p>
           <p
+            data-testid="registration-password-req-number-symbol"
             className={`text-[1rem] ${
               Object.values(errors.password?.types || {})
                 .at(1)
@@ -170,6 +174,7 @@ export default function RegistrationPassword() {
               >
                 <input
                   type={showConfirmPassword ? "text" : "password"}
+                  data-testid="registration-confirm-password-input"
                   {...register("confirmPassword")}
                   placeholder="Enter your password"
                   className="text-[1rem] text-primary-900 font-normal bg-transparent outline-none w-full"
@@ -195,6 +200,7 @@ export default function RegistrationPassword() {
           <p className="text-[1rem] text-gray-300">Privacy Policy</p>
           <p
             className="text-primary-400 cursor-pointer"
+            data-testid="registration-password-privacy-link"
             onClick={() => router.push("/registration/privacyPolicy")}
           >
             Link
@@ -206,6 +212,7 @@ export default function RegistrationPassword() {
       <div className="flex justify-center gap-4">
         <button
           type="button"
+          data-testid="registration-password-back-btn"
           className="w-[7rem] h-[2.1875rem] bg-white rounded-md items-center justify-center text-primary-400 border-1 border-primary-400 text-[16px] cursor-pointer hover:opacity-90"
           onClick={() => router.push("/registration/name")}
         >
@@ -213,6 +220,7 @@ export default function RegistrationPassword() {
         </button>
         <button
           type="submit"
+          data-testid="registration-password-next-btn"
           className="w-[7rem] h-[2.1875rem] bg-primary-400 rounded-md items-center justify-center text-white text-[16px] cursor-pointer hover:opacity-90"
         >
           Next
