@@ -97,19 +97,23 @@ export async function POST(req: NextRequest) {
   const userAccountId = String(session.user.id);
   const body = await req.json();
   const {
-    paymentId,
     description,
+    paymentId,
     attachment,
+    telno,
+    email,
+    passengerFirstName,
+    passengerLastName,
     priority,
-    adminAccountId,
-    telNo,
-    passengerName,
-    accountId,
+    problemType
   } = body;
 
-  if (!paymentId || !description || !adminAccountId || !accountId) {
+  if (
+    !description || !paymentId || !telno || !email || !passengerFirstName || !passengerLastName
+    || !problemType
+  ) {
     return NextResponse.json(
-      { success: false, message: "Missing required fields." },
+      { success: false, message: ErrorMessages.MISSING_PARAMETER },
       { status: 400 }
     );
   }
@@ -121,55 +125,18 @@ export async function POST(req: NextRequest) {
         ReportID: crypto.randomUUID(),
         ReportDescription: description,
         PaymentID: paymentId,
-        Attachment: attachment || null,
+        Attachment: attachment || "",
         UserAccountID: userAccountId,
-        AdminAccountID: adminAccountId,
-        AccountID: accountId,
-        TelNo: telNo || "",
-        PassengerName: passengerName || "",
-      },
-      include: { creator: true },
-    });
-
-    // Ensure report_To exists
-    const existingRelation = await prisma.report_To.findUnique({
-      where: {
-        UserAccountID_AdminAccountID: {
-          UserAccountID: userAccountId,
-          AdminAccountID: adminAccountId,
-        },
+        TelNo: telno,
+        Email: email,
+        PassengerFirstName: passengerFirstName,
+        PassengerLastName: passengerLastName,
+        ProblemType: problemType,
+        Priority: (priority as ReportPriorityEnum) || ReportPriorityEnum.NORMAL,
       },
     });
 
-    if (!existingRelation) {
-      await prisma.report_To.create({
-        data: {
-          UserAccountID: userAccountId,
-          AdminAccountID: adminAccountId,
-          ReportStatus: ReportStatusEnum.OPENED,
-          // ReportPriority: (priority as ReportPriorityEnum) || ReportPriorityEnum.NORMAL,
-        },
-      });
-    }
-
-    const data = {
-      id: report.ReportID,
-      bookingID: report.PaymentID,
-      description: report.ReportDescription,
-      attachment: report.Attachment,
-      status: ReportStatusEnum.OPENED,
-      priority: (priority as ReportPriorityEnum) || ReportPriorityEnum.NORMAL,
-      submittedAt: report.CreatedAt,
-      updatedAt: report.UpdatedAt,
-      userAccountId: report.UserAccountID,
-      adminAccountId: report.AdminAccountID,
-      accountId: report.AccountID,
-      telNo: report.TelNo,
-      passengerName: report.PassengerName,
-      creatorStatus: report.creator?.ReportStatus ?? null,
-    };
-
-    return NextResponse.json({ success: true, data }, { status: 201 });
+    return NextResponse.json({ success: true, data: report }, { status: 201 });
   } catch (err) {
     console.error("Error creating report:", err);
     return NextResponse.json(
