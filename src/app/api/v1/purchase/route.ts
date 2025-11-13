@@ -189,6 +189,32 @@ export async function GET(
 
         const { searchParams } = req.nextUrl;
 
+        // Before fetching data, auto-update ticket statuses for departed flights
+        // Business rule: Only tickets that are still SCHEDULED and whose associated
+        // payment's DepartFlightDepartTime is in the past should be marked as DEPARTED.
+        // We scope this to the current user's purchases only.
+        const now = new Date();
+        try {
+            await prisma.ticket.updateMany({
+                where: {
+                    TicketStatus: TicketStatus.SCHEDULED,
+                    purchase: {
+                        is: {
+                            UserAccountID,
+                            payment: {
+                                DepartFlightDepartTime: { lt: now },
+                            },
+                        },
+                    },
+                },
+                data: {
+                    TicketStatus: TicketStatus.DEPARTED,
+                },
+            });
+        } catch (e) {
+            console.warn("Auto-update of departed tickets skipped:", e);
+        }
+
         // Get query parameters
         const statusParam = searchParams.get("status");
         const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
