@@ -28,7 +28,7 @@ describe("GET /api/v1/airlines", () => {
     jest.clearAllMocks();
   });
 
-  test("✅ should return 200 and list of airlines (success path)", async () => {
+  test("return 200 and list of airlines (success path)", async () => {
     // Arrange
     (prisma.airline.findMany as jest.Mock).mockResolvedValue([
       { AirlineName: "Thai Airways" },
@@ -53,7 +53,7 @@ describe("GET /api/v1/airlines", () => {
     expect(response.status).toBe(200);
   });
 
-  test("⚠️ should return 404 when no airlines found", async () => {
+  test("return 404 when no airlines found", async () => {
     // Arrange
     (prisma.airline.findMany as jest.Mock).mockResolvedValue([]);
 
@@ -68,7 +68,7 @@ describe("GET /api/v1/airlines", () => {
     expect(response.status).toBe(404);
   });
 
-  test("💥 should return 500 when prisma throws error", async () => {
+  test("return 500 when prisma throws error", async () => {
     // Arrange
     (prisma.airline.findMany as jest.Mock).mockRejectedValue(new Error("DB fail"));
 
