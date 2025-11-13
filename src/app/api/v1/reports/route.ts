@@ -9,7 +9,7 @@ import { ErrorMessages } from "@/src/enums/ErrorMessages";
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(nextAuthOptions);
-  console.log(session)
+
   //Check authentication
   if (!session?.user?.id) {
     return NextResponse.json(
@@ -31,6 +31,7 @@ export async function GET(req: NextRequest) {
       { status: 403 }
     );
   }
+  console.log("PASSED")
 
   const url = new URL(req.url);
   //Optional filters
@@ -39,21 +40,17 @@ export async function GET(req: NextRequest) {
 
   const where: Prisma.ReportWhereInput = {};
 
-    if (status && Object.values(ReportStatusEnum).includes(status as ReportStatusEnum)) {
+  if (status && Object.values(ReportStatusEnum).includes(status as ReportStatusEnum)) {
     where.Status = status as ReportStatusEnum;  
-    }
+  }
 
-    if (priority && Object.values(ReportPriorityEnum).includes(priority as ReportPriorityEnum)) {
+  if (priority && Object.values(ReportPriorityEnum).includes(priority as ReportPriorityEnum)) {
     where.Priority = priority as ReportPriorityEnum;
-    }
-
+  }
 
   try {
     const reports = await prisma.report.findMany({
       where,
-      include: {
-        creator: true,
-      },
       orderBy: {
         CreatedAt: "desc", 
       },
