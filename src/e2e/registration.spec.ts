@@ -6,7 +6,7 @@ function uniqueEmail() {
 }
 
 test.describe('Registration Flow', () => {
-	test('happy path with validation checks', async ({ page }) => {
+	test('TC1-1: happy path with validation checks', async ({ page }) => {
 		// Intercept registration API to avoid depending on backend state
 		await page.route('**/api/v1/auth/register', async (route) => {
 			route.fulfill({ status: 200, body: JSON.stringify({ success: true }) });
@@ -64,7 +64,7 @@ test.describe('Registration Flow', () => {
 		await expect(page.getByText(/Successfully Signed Up/i)).toBeVisible();
 	});
 
-	test('privacy policy link navigates correctly from password step', async ({ page }) => {
+	test('TC1-2: privacy policy link navigates correctly from password step', async ({ page }) => {
 		await page.goto('/registration/password');
 		await page.getByTestId('registration-password-privacy-link').click();
 		await expect(page).toHaveURL(/.*\/registration\/privacyPolicy$/);
@@ -72,7 +72,7 @@ test.describe('Registration Flow', () => {
 	});
 
 	// New test: verify back buttons navigate correctly through the flow
-	test('back buttons navigate to previous steps', async ({ page }) => {
+	test('TC1-3: back buttons navigate to previous steps', async ({ page }) => {
 		// Start at first step
 		await page.goto('/registration/email');
 		// Enter valid email and proceed
@@ -123,7 +123,7 @@ test.describe('Registration Flow', () => {
 	});
 
 	// New test: password requirement validations
-	test('password requirement validations', async ({ page }) => {
+	test('TC1-4: password requirement validations', async ({ page }) => {
 		await page.goto('/registration/password');
 		await page.waitForLoadState('networkidle');
 		// Sanity: requirement hints rendered
