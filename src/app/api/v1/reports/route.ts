@@ -107,6 +107,7 @@ export async function POST(req: NextRequest) {
     priority,
     problemType
   } = body;
+  console.log(email)
 
   if (
     !description || !paymentId || !telno || !email || !passengerFirstName || !passengerLastName
