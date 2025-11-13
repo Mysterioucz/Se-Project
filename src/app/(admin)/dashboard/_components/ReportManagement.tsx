@@ -1,12 +1,36 @@
+"use client";
 import SelectComponent, { SelectEvent } from "@/src/components/select";
 import { MenuItem } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReportFrame from "./ReportFrame";
+
+interface ReportSummary {
+    id: string;
+    priority: "normal" | "high";
+    status: "opened" | "in progress" | "resolved" | "cancelled";
+    problemType: string;
+    submitted: string;
+    lastUpdate: string;
+}
 
 export default function ReportManagement() {
     const [priority, setPriority] = useState("");
     const [status, setStatus] = useState("");
+    const [reports, setReports] = useState<ReportSummary[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch("/api/v1/reports")
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.success && Array.isArray(res.data)) {
+                    setReports(res.data);
+                } else {
+                    setReports([]);
+                }
+            });
+    }, []);
 
     const handleChange = (event: SelectEvent) => {
         const value = (event.target as HTMLInputElement).value as string;
@@ -20,6 +44,7 @@ export default function ReportManagement() {
 
     return (
         <div className="flex flex-col items-start self-stretch rounded-[0.5rem] border-[0.125rem] border-primary-600 bg-white">
+            {/* Header */}
             <div className="flex items-center self-stretch px-[1rem] py-[0.75rem] gap-[0.5rem]">
                 <Image
                     src="/modal/fi-br-warning-blue.svg"
@@ -27,14 +52,13 @@ export default function ReportManagement() {
                     width={24}
                     height={24}
                 />
-
-                <div className="!text-primary-600 font-sarabun text-[2rem] font-bold leading-[1.2] not-italic">
+                <div className="!text-primary-600 font-sarabun text-[2rem] font-bold leading-[1.2]">
                     Problem Report Management
                 </div>
-
+                {/* Filter area*/}
                 <div className="flex justify-end items-center px-[1.25rem] py-0 gap-[0.625rem] flex-[1_0_0]">
                     <div className="flex flex-col items-start gap-1">
-                        <div className="text-primary-900 font-sarabun text-[1rem] font-normal leading-[1.2] not-italic">
+                        <div className="text-primary-900 text-[1rem] font-normal leading-[1.2]">
                             Priority Level:
                         </div>
                         <SelectComponent
@@ -54,7 +78,7 @@ export default function ReportManagement() {
                         </SelectComponent>
                     </div>
                     <div className="flex flex-col items-start gap-1">
-                        <div className="text-primary-900 font-sarabun text-[1rem] font-normal leading-[1.2] not-italic">
+                        <div className="text-primary-900 text-[1rem] font-normal leading-[1.2]">
                             Status:
                         </div>
                         <SelectComponent
@@ -76,72 +100,40 @@ export default function ReportManagement() {
                 </div>
             </div>
 
+            {/* Table Body */}
             <div className="flex flex-col items-center self-stretch px-4 pb-4 pt-0">
                 <div className="flex flex-col items-start gap-2 pb-2 rounded-md border-2 border-primary-100">
-                    {/* header */}
+                    {/* Header Row */}
                     <div className="flex items-start gap-2 self-stretch bg-primary-100">
-                        <div className="flex flex-col justify-center items-center w-[3.75rem] h-[3.125rem] py-[0.5rem]">
-                            <div className="text-black text-center font-sarabun text-[1.25rem] font-semibold leading-[1.2]">
-                                No.
+                        {[
+                            "No.",
+                            "Priority Level",
+                            "Status",
+                            "Problem Type",
+                            "Submitted",
+                            "Last Update",
+                        ].map((h) => (
+                            <div
+                                key={h}
+                                className="flex flex-col justify-center items-center w-[9.875rem] h-[3.125rem] py-[0.5rem]"
+                            >
+                                <div className="text-black text-center font-sarabun text-[1.25rem] font-semibold">
+                                    {h}
+                                </div>
                             </div>
-                        </div>
-
-                        <div className="flex flex-col justify-center items-center w-[9.875rem] h-[3.125rem] py-[0.5rem]">
-                            <div className="text-black text-center font-sarabun text-[1.25rem] font-semibold leading-[1.2]">
-                                Priority Level
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col justify-center items-center w-[9.875rem] h-[3.125rem] py-[0.5rem]">
-                            <div className="text-black text-center font-sarabun text-[1.25rem] font-semibold leading-[1.2]">
-                                Status
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col justify-center items-center w-[11.25rem] h-[3.125rem] py-[0.5rem]">
-                            <div className="text-black text-center font-sarabun text-[1.25rem] font-semibold leading-[1.2]">
-                                Problem Type
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col justify-center items-center w-[11.25rem] h-[3.125rem] py-[0.5rem]">
-                            <div className="text-black text-center font-sarabun text-[1.25rem] font-semibold leading-[1.2]">
-                                Submitted
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col justify-center items-center w-[11.25rem] h-[3.125rem] py-[0.5rem]">
-                            <div className="text-black text-center font-sarabun text-[1.25rem] font-semibold leading-[1.2]">
-                                Last Update
-                            </div>
-                        </div>
-
-                        {/* Space */}
-                        <div className="flex flex-col justify-center items-center w-[5.625rem] h-[3.125rem] py-[0.5rem]"></div>
+                        ))}
+                        <div className="w-[5.625rem]"></div>
                     </div>
 
-                    {/* reports */}
-                    <ReportFrame
-                        priority="normal"
-                        status="opened"
-                        problemType="Network Issue"
-                        submitted="2025-08-06 19:32:10"
-                        lastUpdate="2025-08-11 08:30:09"
-                    />
-                    <ReportFrame
-                        priority="high"
-                        status="in progress"
-                        problemType="Software Bug"
-                        submitted="2025-08-07 10:15:45"
-                        lastUpdate="2025-08-12 14:22:30"
-                    />
-                    <ReportFrame
-                        priority="normal"
-                        status="resolved"
-                        problemType="Hardware Failure"
-                        submitted="2025-08-08 08:50:20"
-                        lastUpdate="2025-08-13 09:10:15"
-                    />
+                    {loading ? (
+                        <div className="p-4 text-gray-500 font-sarabun">
+                            Loading reports...
+                        </div>
+                    ) : (
+                        reports.map((r, idx) => (
+                            <ReportFrame key={r.id} index={idx + 1} {...r} />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

@@ -1,10 +1,12 @@
 import Button from "@/src/components/Button";
+import { useState } from "react";
+import ReportModal from "./ReportModal";
 import ReportPiorityMarker from "./ReportPriorityMarker";
 import ReportStatusMarker from "./ReportStatusMarker";
-import ReportModal from "./ReportModal";
-import { useState } from "react";
 
 interface ReportFrameProps {
+    id: string;
+    index: number;
     priority: "normal" | "high";
     status: "opened" | "in progress" | "resolved" | "cancelled";
     problemType: string;
@@ -13,6 +15,8 @@ interface ReportFrameProps {
 }
 
 export default function ReportFrame({
+    id,
+    index,
     priority,
     status,
     problemType,
@@ -24,45 +28,45 @@ export default function ReportFrame({
     return (
         <div className="flex items-start gap-[0.5rem] self-stretch">
             {/* Report ID */}
-            <div className="flex flex-col justify-center items-center w-[3.75rem] h-[3.125rem] py-[0.5rem]">
-                <div className="text-black text-center font-sarabun text-[1rem] font-bold leading-[1.2]">
-                    1.
+            <div className="flex justify-center items-center w-[3.75rem]">
+                <div className="text-black font-sarabun text-[1rem] font-bold">
+                    {index}.
                 </div>
             </div>
 
-            {/* Priority Level */}
-            <div className="flex flex-col justify-center items-center w-[9.875rem] h-[3.125rem] py-[0.5rem]">
+            {/* Priority */}
+            <div className="flex justify-center items-center w-[9.875rem]">
                 <ReportPiorityMarker priority={priority} />
             </div>
 
             {/* Status */}
-            <div className="flex flex-col justify-center items-center w-[9.875rem] h-[3.125rem] py-[0.5rem]">
+            <div className="flex justify-center items-center w-[9.875rem]">
                 <ReportStatusMarker status={status} />
             </div>
 
             {/* Problem Type */}
-            <div className="flex flex-col justify-center items-center w-[11.25rem] h-[3.125rem] py-[0.5rem]">
-                <div className="text-black text-center font-sarabun text-[1rem] font-normal leading-[1.2]">
+            <div className="flex justify-center items-center w-[11.25rem]">
+                <div className="text-black font-sarabun text-[1rem]">
                     {problemType}
                 </div>
             </div>
 
             {/* Submitted */}
-            <div className="flex flex-col justify-center items-center w-[11.25rem] h-[3.125rem] py-[0.5rem]">
-                <div className="text-black text-center font-sarabun text-[1rem] font-normal leading-[1.2]">
+            <div className="flex justify-center items-center w-[11.25rem]">
+                <div className="text-black font-sarabun text-[1rem]">
                     {submitted}
                 </div>
             </div>
 
             {/* Last Update */}
-            <div className="flex flex-col justify-center items-center w-[11.25rem] h-[3.125rem] py-[0.5rem]">
-                <div className="text-black text-center font-sarabun text-[1rem] font-normal leading-[1.2]">
+            <div className="flex justify-center items-center w-[11.25rem]">
+                <div className="text-black font-sarabun text-[1rem]">
                     {lastUpdate}
                 </div>
             </div>
 
-            {/* Modal */}
-            <div className="flex flex-col justify-center items-center w-[5.625rem] h-[3.125rem] py-[0.5rem]">
+            {/* Button */}
+            <div className="flex justify-center items-center w-[5.625rem]">
                 <Button
                     text="View"
                     align="center"
@@ -78,8 +82,8 @@ export default function ReportFrame({
             <ReportModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-            >
-            </ReportModal>
+                reportId={id}
+            />
         </div>
     );
 }
