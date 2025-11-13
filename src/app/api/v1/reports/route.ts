@@ -31,7 +31,6 @@ export async function GET(req: NextRequest) {
       { status: 403 }
     );
   }
-  console.log("PASSED")
 
   const url = new URL(req.url);
   //Optional filters
@@ -66,11 +65,11 @@ export async function GET(req: NextRequest) {
       submittedAt: r.CreatedAt,
       updatedAt: r.UpdatedAt,
       userAccountId: r.UserAccountID,
-      adminAccountId: r.AdminAccountID,
-      accountId: r.AccountID,
       telNo: r.TelNo,
-      passengerName: r.PassengerName,
-      creatorStatus: r.creator?.ReportStatus ?? null,
+      email: r.Email,
+      passengerFirstName: r.PassengerFirstName,
+      passengerLastName: r.PassengerLastName,
+      problemType: r.ProblemType,
     }));
 
     return NextResponse.json(
@@ -205,11 +204,14 @@ export async function PUT(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { userAccountId, status } = body;
+  const { reportID, status } = body as {
+    reportID: string;
+    status: ReportStatusEnum;
+  };
 
-  if (!userAccountId || !status) {
+  if (!reportID || !status) {
     return NextResponse.json(
-      { success: false, message: "Missing required fields: userAccountId or status." },
+      { success: false, message: ErrorMessages.MISSING_PARAMETER },
       { status: 400 }
     );
   }
@@ -222,28 +224,28 @@ export async function PUT(req: NextRequest) {
   }
 
   try {
-    // Update only ReportStatus
-    const existing = await prisma.report_To.findUnique({
-      where: { UserAccountID_AdminAccountID: { UserAccountID: userAccountId, AdminAccountID: adminAccountId } },
+    const report = await prisma.report.findUnique({
+      where: { ReportID: reportID },
     });
 
-    if (existing) {
-      await prisma.report_To.update({
-        where: { UserAccountID_AdminAccountID: { UserAccountID: userAccountId, AdminAccountID: adminAccountId } },
-        data: { ReportStatus: status as ReportStatusEnum },
-      });
-    } else {
-      await prisma.report_To.create({
-        data: {
-          UserAccountID: userAccountId,
-          AdminAccountID: adminAccountId,
-          ReportStatus: status as ReportStatusEnum,
-        },
-      });
-}
+    if (!report) {
+      return NextResponse.json(
+        { success: false, message: ErrorMessages.NOT_FOUND },
+        { status: 404 }
+      );
+    }
+
+    const updatedReport = await prisma.report.update({
+      where: { ReportID: reportID },
+      data: { Status: status },
+    });
 
     return NextResponse.json(
-      { success: true, message: "Report status updated successfully." },
+      { 
+        success: true, 
+        message: "Report status updated successfully.",
+        data: updatedReport
+      },
       { status: 200 }
     );
   } catch (err) {
@@ -254,5 +256,3 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
-
-
