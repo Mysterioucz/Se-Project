@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 
 export default function Navbar() {
     const { data: session, status } = useSession();
-    const displayName = session?.user?.name;
+    // const displayName = session?.user?.name;
 
     const AccountID = session?.user.id;
 
