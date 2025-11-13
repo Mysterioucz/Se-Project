@@ -102,6 +102,7 @@ export default function RegistrationPassword() {
         </div>
         <div className="flex flex-col">
           <p
+            data-testid="registration-password-req-length"
             className={`text-[1rem] ${
               Object.values(errors.password?.types || {}).at(0) ===
               "Password must be at least 8 characters long"
@@ -112,6 +113,7 @@ export default function RegistrationPassword() {
             Must be at least 8 characters long
           </p>
           <p
+            data-testid="registration-password-req-capital"
             className={`text-[1rem] ${
               Object.values(errors.password?.types || {})
                 .at(1)
@@ -129,6 +131,7 @@ export default function RegistrationPassword() {
             Must include at least 1 capital letter
           </p>
           <p
+            data-testid="registration-password-req-number-symbol"
             className={`text-[1rem] ${
               Object.values(errors.password?.types || {})
                 .at(1)

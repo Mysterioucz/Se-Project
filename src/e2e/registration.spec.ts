@@ -121,5 +121,46 @@ test.describe('Registration Flow', () => {
 		await page.getByTestId('registration-password-next-btn').click();
 		await expect(page).toHaveURL(/.*\/registration\/terms$/);
 	});
+
+	// New test: password requirement validations
+	test('password requirement validations', async ({ page }) => {
+		await page.goto('/registration/password');
+		await page.waitForLoadState('networkidle');
+		// Sanity: requirement hints rendered
+		await expect(page.getByTestId('registration-password-req-length')).toBeVisible();
+		await expect(page.getByTestId('registration-password-req-capital')).toBeVisible();
+		await expect(page.getByTestId('registration-password-req-number-symbol')).toBeVisible();
+
+		// Case 1: Fails length only (has capital + number)
+		await page.getByTestId('registration-password-input').fill('A1!');
+		await page.getByTestId('registration-confirm-password-input').fill('A1!');
+		await page.getByTestId('registration-password-next-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/password$/);
+		await expect(page.getByTestId('registration-password-req-length')).toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-capital')).not.toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-number-symbol')).not.toHaveClass(/text-error-main/);
+
+		// Case 2: Fails capital only
+		await page.getByTestId('registration-password-input').fill('abcd1234!');
+		await page.getByTestId('registration-confirm-password-input').fill('abcd1234!');
+		await page.getByTestId('registration-password-next-btn').click();
+		await expect(page.getByTestId('registration-password-req-length')).not.toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-capital')).toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-number-symbol')).not.toHaveClass(/text-error-main/);
+
+		// Case 3: Fails number/symbol only
+		await page.getByTestId('registration-password-input').fill('Abcdefgh');
+		await page.getByTestId('registration-confirm-password-input').fill('Abcdefgh');
+		await page.getByTestId('registration-password-next-btn').click();
+		await expect(page.getByTestId('registration-password-req-length')).not.toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-capital')).not.toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-number-symbol')).toHaveClass(/text-error-main/);
+
+		// Case 4: All pass -> proceed to terms
+		await page.getByTestId('registration-password-input').fill('StrongPass1!');
+		await page.getByTestId('registration-confirm-password-input').fill('StrongPass1!');
+		await page.getByTestId('registration-password-next-btn').click();
+		await expect(page).toHaveURL(/.*\/registration\/terms$/);
+	});
 });
 
