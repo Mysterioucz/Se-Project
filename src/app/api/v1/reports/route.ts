@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
     paymentId,
     description,
     attachment,
-    // priority,
+    priority,
     adminAccountId,
     telNo,
     passengerName,
@@ -162,7 +162,7 @@ export async function POST(req: NextRequest) {
       description: report.ReportDescription,
       attachment: report.Attachment,
       status: ReportStatusEnum.OPENED,
-      // priority: (priority as ReportPriorityEnum) || ReportPriorityEnum.NORMAL,
+      priority: (priority as ReportPriorityEnum) || ReportPriorityEnum.NORMAL,
       submittedAt: report.CreatedAt,
       updatedAt: report.UpdatedAt,
       userAccountId: report.UserAccountID,
@@ -226,18 +226,24 @@ export async function PUT(req: NextRequest) {
 
   try {
     // Update only ReportStatus
-    const updated = await prisma.report_To.update({
-      where: {
-        UserAccountID_AdminAccountID: {
+    const existing = await prisma.report_To.findUnique({
+      where: { UserAccountID_AdminAccountID: { UserAccountID: userAccountId, AdminAccountID: adminAccountId } },
+    });
+
+    if (existing) {
+      await prisma.report_To.update({
+        where: { UserAccountID_AdminAccountID: { UserAccountID: userAccountId, AdminAccountID: adminAccountId } },
+        data: { ReportStatus: status as ReportStatusEnum },
+      });
+    } else {
+      await prisma.report_To.create({
+        data: {
           UserAccountID: userAccountId,
           AdminAccountID: adminAccountId,
+          ReportStatus: status as ReportStatusEnum,
         },
-      },
-      data: {
-        ReportStatus: status as ReportStatusEnum,
-        // UpdatedAt: new Date(),
-      },
-    });
+      });
+}
 
     return NextResponse.json(
       { success: true, message: "Report status updated successfully." },
