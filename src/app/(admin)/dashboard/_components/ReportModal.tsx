@@ -64,6 +64,29 @@ export default function ReportModal({
         FLIGHT_ROUTING_ADJUSTMENT_ISSUE: "Flight Routing/Adjustment Issue",
     };
 
+    const statusLabels: Record<string, string> = {
+        opened: "Opened",
+        "in progress": "In Progress",
+        resolved: "Resolved",
+        cancelled: "Cancelled",
+    };  
+
+
+    function formatDateTime(dateString: string) {
+        const date = new Date(dateString);
+        const pad = (n: number) => n.toString().padStart(2, "0");
+
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1);
+        const day = pad(date.getDate());
+
+        const hours = pad(date.getHours());
+        const minutes = pad(date.getMinutes());
+        const seconds = pad(date.getSeconds());
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
             {/* Overlay */}
@@ -205,7 +228,7 @@ export default function ReportModal({
                                     </div>
                                     <div className="flex flex-[1_0_0] flex-col items-start gap-[0.5rem]">
                                         <div className="font-sarabun text-[1rem] leading-[1.2rem] font-normal text-black">
-                                            {status}
+                                            {statusLabels[status]}
                                         </div>
                                         <ReportPiorityMarker
                                             priority={priority}
@@ -223,7 +246,8 @@ export default function ReportModal({
                                         id="update-status-select"
                                         value={status}
                                         onChange={handleStatusChange}
-                                        placeholder={status}
+                                        placeholder={statusLabels[status]}
+                                        renderSelected={() => statusLabels[status]} 
                                         width="w-[16rem]"
                                         height="h-[2.188rem]"
                                         maxChildrenHeight="h-[12.5rem]"
@@ -274,10 +298,10 @@ export default function ReportModal({
                                     </div>
                                     <div className="flex flex-col items-start gap-[0.75rem]">
                                         <div className="font-sarabun text-[1rem] leading-[1.2rem] font-normal text-black">
-                                            {submitted}
+                                            {formatDateTime(submitted)}
                                         </div>
                                         <div className="font-sarabun text-[1rem] leading-[1.2rem] font-normal text-black">
-                                            {lastUpdate}
+                                            {formatDateTime(lastUpdate)}
                                         </div>
                                     </div>
                                 </div>

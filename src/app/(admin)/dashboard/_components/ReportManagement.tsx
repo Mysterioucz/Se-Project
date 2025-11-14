@@ -70,20 +70,22 @@ export default function ReportManagement() {
     });
 
     return (
-        <div className="border-primary-600 flex flex-col items-start self-stretch rounded-[0.5rem] border-[0.125rem] bg-white">
-            <div className="flex items-center gap-[0.5rem] self-stretch px-[1rem] py-[0.75rem]">
+        <div className="flex flex-col items-start self-stretch rounded-md border-2 border-[var(--color-primary-600)] bg-white">
+            {/* Header */}
+            <div className="flex items-center gap-2 self-stretch px-4 py-3">
                 <Image
                     src="/modal/fi-br-warning-blue.svg"
                     alt="Logo"
                     width={24}
                     height={24}
                 />
-                <div className="!text-primary-600 font-sarabun text-[2rem] leading-[1.2] font-bold">
+                <div className="font-sarabun text-[2rem] font-bold leading-[1.2] text-[var(--color-primary-600)]">
                     Problem Report Management
                 </div>
-                <div className="flex flex-[1_0_0] items-center justify-end gap-[0.625rem] px-[1.25rem] py-0">
-                    <div className="flex flex-col items-start gap-1">
-                        <div className="text-primary-900 text-[1rem] leading-[1.2] font-normal">
+                <div className="flex flex-1 justify-end gap-2">
+                    {/* Priority Filter */}
+                    <div className="flex flex-col gap-1">
+                        <div className="font-sarabun text-[1rem] font-normal text-[var(--color-primary-900)]">
                             Priority Level:
                         </div>
                         <SelectComponent
@@ -95,15 +97,14 @@ export default function ReportManagement() {
                             width="w-[12.5rem]"
                             height="h-[2rem]"
                         >
-                            <MenuItem value="All Priority">
-                                All Priority
-                            </MenuItem>
+                            <MenuItem value="All Priority">All Priority</MenuItem>
                             <MenuItem value="Normal">Normal</MenuItem>
                             <MenuItem value="High">High</MenuItem>
                         </SelectComponent>
                     </div>
-                    <div className="flex flex-col items-start gap-1">
-                        <div className="text-primary-900 text-[1rem] leading-[1.2] font-normal">
+                    {/* Status Filter */}
+                    <div className="flex flex-col gap-1">
+                        <div className="font-sarabun text-[1rem] font-normal text-[var(--color-primary-900)]">
                             Status:
                         </div>
                         <SelectComponent
@@ -124,28 +125,33 @@ export default function ReportManagement() {
                     </div>
                 </div>
             </div>
+
+            {/* Report Table */}
             <div className="flex flex-col items-center self-stretch px-4 pt-0 pb-4">
-                <div className="border-primary-100 flex flex-col items-start gap-2 rounded-md border-2 pb-2">
-                    <div className="bg-primary-100 flex items-start gap-2 self-stretch">
+                <div className="flex flex-col items-start gap-2 rounded-md border-2 border-[var(--color-primary-100)] pb-2">
+                    {/* Table Header */}
+                    <div className="flex items-start gap-2 self-stretch bg-[var(--color-primary-100)]">
                         {[
-                            "No.",
-                            "Priority Level",
-                            "Status",
-                            "Problem Type",
-                            "Submitted",
-                            "Last Update",
+                            { title: "No.", width: "w-[3.75rem]" },
+                            { title: "Priority Level", width: "w-[9.875rem]" },
+                            { title: "Status", width: "w-[9.875rem]" },
+                            { title: "Problem Type", width: "w-[11.25rem]" },
+                            { title: "Submitted", width: "w-[11.25rem]" },
+                            { title: "Last Update", width: "w-[11.25rem]" },
                         ].map((h) => (
                             <div
-                                key={h}
-                                className="flex h-[3.125rem] w-[9.875rem] flex-col items-center justify-center py-[0.5rem]"
+                                key={h.title}
+                                className={`${h.width} h-[3.125rem] flex flex-col justify-center items-center py-[0.5rem]`}
                             >
-                                <div className="font-sarabun text-center text-[1.25rem] font-semibold text-black">
-                                    {h}
+                                <div className="font-sarabun text-[1.25rem] font-semibold text-black text-center leading-[1.2]">
+                                    {h.title}
                                 </div>
                             </div>
                         ))}
-                        <div className="w-[5.625rem]"></div>
+                        <div className="w-[5.625rem] h-[3.125rem] py-[0.5rem]"></div>
                     </div>
+
+                    {/* Table Rows */}
                     {loading ? (
                         <div className="font-sarabun p-4 text-gray-500">
                             Loading reports...
@@ -161,9 +167,7 @@ export default function ReportManagement() {
                                 index={idx + 1}
                                 id={r.id}
                                 priority={
-                                    r.priority.toLowerCase() as
-                                        | "normal"
-                                        | "high"
+                                    r.priority.toLowerCase() as "normal" | "high"
                                 }
                                 status={
                                     r.status === "IN_PROGRESS"
