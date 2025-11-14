@@ -142,7 +142,7 @@ import { nextAuthOptions } from "@/src/lib/auth";
  *                 enum: [NORMAL, HIGH]
  *               problemType:
  *                 type: string
-     responses:
+        responses:
  *       201:
  *         description: Report created successfully
  *       400:
@@ -180,7 +180,7 @@ import { nextAuthOptions } from "@/src/lib/auth";
  *               status:
  *                 type: string
  *                 description: One of the ReportStatusEnum values
-     responses:
+        responses:
  *       200:
  *         description: Report status updated successfully
  *       400:
