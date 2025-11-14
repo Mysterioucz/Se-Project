@@ -1,5 +1,6 @@
 "use client";
 import SelectComponent, { SelectEvent } from "@/src/components/select";
+import TextFieldComponent from "@/src/components/text_field";
 import { MenuItem } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -27,12 +28,14 @@ export default function ReportManagement() {
     const [status, setStatus] = useState("");
     const [reports, setReports] = useState<ReportSummary[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchId, setSearchId] = useState("");
 
     useEffect(() => {
         const fetchReports = async () => {
             try {
                 const res = await fetch("/api/v1/reports");
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                if (!res.ok)
+                    throw new Error(`HTTP error! status: ${res.status}`);
                 const json = await res.json();
                 if (json.success && Array.isArray(json.data)) {
                     setReports(json.data);
@@ -62,11 +65,17 @@ export default function ReportManagement() {
             !priority || priority === "All Priority"
                 ? true
                 : r.priority === priority.toUpperCase();
+
         const statusMatch =
             !status || status === "All Status"
                 ? true
                 : r.status === status.toUpperCase();
-        return priorityMatch && statusMatch;
+
+        const idMatch = !searchId
+            ? true
+            : r.id.toLowerCase().includes(searchId.toLowerCase());
+
+        return priorityMatch && statusMatch && idMatch;
     });
 
     return (
@@ -79,10 +88,26 @@ export default function ReportManagement() {
                     width={24}
                     height={24}
                 />
-                <div className="font-sarabun text-[2rem] font-bold leading-[1.2] text-[var(--color-primary-600)]">
+                <div className="font-sarabun text-[2rem] leading-[1.2] font-bold text-[var(--color-primary-600)]">
                     Problem Report Management
                 </div>
                 <div className="flex flex-1 justify-end gap-2">
+                    {/* Search by ID */}
+                    <div className="flex flex-col gap-1">
+                        <div className="font-sarabun text-[1rem] font-normal text-[var(--color-primary-900)]">
+                            Search Report ID:
+                        </div>
+                        <TextFieldComponent
+                            textValue={searchId}
+                            placeHolder="Enter Report ID"
+                            width="w-[12.5rem]"
+                            height="h-[2rem]"
+                            gap="gap-0"
+                            labelSize="!text-sm"
+                            onChange={({ text }) => setSearchId(text)}
+                        />
+                    </div>
+
                     {/* Priority Filter */}
                     <div className="flex flex-col gap-1">
                         <div className="font-sarabun text-[1rem] font-normal text-[var(--color-primary-900)]">
@@ -97,7 +122,9 @@ export default function ReportManagement() {
                             width="w-[12.5rem]"
                             height="h-[2rem]"
                         >
-                            <MenuItem value="All Priority">All Priority</MenuItem>
+                            <MenuItem value="All Priority">
+                                All Priority
+                            </MenuItem>
                             <MenuItem value="Normal">Normal</MenuItem>
                             <MenuItem value="High">High</MenuItem>
                         </SelectComponent>
@@ -141,14 +168,14 @@ export default function ReportManagement() {
                         ].map((h) => (
                             <div
                                 key={h.title}
-                                className={`${h.width} h-[3.125rem] flex flex-col justify-center items-center py-[0.5rem]`}
+                                className={`${h.width} flex h-[3.125rem] flex-col items-center justify-center py-[0.5rem]`}
                             >
-                                <div className="font-sarabun text-[1.25rem] font-semibold text-black text-center leading-[1.2]">
+                                <div className="font-sarabun text-center text-[1.25rem] leading-[1.2] font-semibold text-black">
                                     {h.title}
                                 </div>
                             </div>
                         ))}
-                        <div className="w-[5.625rem] h-[3.125rem] py-[0.5rem]"></div>
+                        <div className="h-[3.125rem] w-[5.625rem] py-[0.5rem]"></div>
                     </div>
 
                     {/* Table Rows */}
@@ -167,7 +194,9 @@ export default function ReportManagement() {
                                 index={idx + 1}
                                 id={r.id}
                                 priority={
-                                    r.priority.toLowerCase() as "normal" | "high"
+                                    r.priority.toLowerCase() as
+                                        | "normal"
+                                        | "high"
                                 }
                                 status={
                                     r.status === "IN_PROGRESS"
