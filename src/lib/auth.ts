@@ -35,6 +35,7 @@ export const nextAuthOptions: NextAuthOptions = {
                     account.Password,
                 );
                 if (!isMatch) throw new Error("Invalid Email or Password");
+                
                 return {
                     id: account?.AccountID,
                     name: account?.FirstName + " " + account?.LastName,

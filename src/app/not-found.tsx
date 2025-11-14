@@ -14,7 +14,7 @@ export default function NotFound() {
                 <div className="mt-8">
                     <Link
                         href="/"
-                        className="inline-block rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
+                        className="inline-block rounded-lg bg-primary-400 px-6 py-3 text-white transition-colors hover:bg-primary-600"
                     >
                         Go back home
                     </Link>
