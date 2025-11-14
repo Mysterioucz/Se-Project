@@ -17,9 +17,7 @@ test.describe("Logout Flow", () => {
     await page.getByPlaceholder("Enter your email").fill(USER_EMAIL);
     await page.getByPlaceholder("Enter your password").fill(USER_PASS);
 
-    await page
-      .getByRole("button", { name: "Sign In", exact: true })
-      .click();
+    await page.getByTestId("logout").click();
 
     await page.waitForURL(flightsearchUrl);
     expect(page.url()).toContain("/flights/search");
@@ -30,5 +28,13 @@ test.describe("Logout Flow", () => {
     // Optional: verify user-specific elements are visible
     await expect(page.getByText("Welcome")).toBeVisible(); // adjust selector
   });
+
+  // Case 1: Navigation Bar
+
+  // Case 2: Redirect to page after logout
+
+  // Case 3: Access to protected route is blocked
+
+  // Case 4: Session Token is deleted
   
 });

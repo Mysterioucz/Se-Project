@@ -13,7 +13,7 @@ import { NextRequest } from "next/server";
  *     tags:
  *       - Account
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     parameters:
  *       - name: accountId
  *         in: path
@@ -69,7 +69,7 @@ import { NextRequest } from "next/server";
  *     tags:
  *       - Account
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     parameters:
  *       - name: accountId
  *         in: path
@@ -127,7 +127,7 @@ import { NextRequest } from "next/server";
  *     tags:
  *       - Account
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     parameters:
  *       - name: accountId
  *         in: path

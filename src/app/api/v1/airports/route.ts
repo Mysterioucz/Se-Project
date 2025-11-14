@@ -59,7 +59,7 @@ import { NextRequest } from "next/server";
  *     tags:
  *       - Airports
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     requestBody:
  *       required: true
  *       content:

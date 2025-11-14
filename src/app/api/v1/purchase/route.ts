@@ -18,7 +18,7 @@ interface TicketWhereClause {
  *     tags:
  *       - Purchase
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     parameters:
  *       - name: status
  *         in: query

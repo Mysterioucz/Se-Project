@@ -18,7 +18,7 @@ import { late } from "zod/v3";
  *     tags:
  *       - Payments
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -203,6 +203,8 @@ import { late } from "zod/v3";
  *     description: Retrieve payment history for a specific user
  *     tags:
  *       - Payments
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - name: userId
  *         in: query

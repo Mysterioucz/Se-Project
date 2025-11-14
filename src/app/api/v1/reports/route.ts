@@ -8,6 +8,193 @@ import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { ReportErrorType } from "@/src/enums/ReportErrorTypes";
 import { nextAuthOptions } from "@/src/lib/auth";
 
+/**
+ * @swagger
+ * /api/v1/reports:
+ *   get:
+ *     summary: List reports (admin only)
+ *     description: Retrieve reports optionally filtered by status and priority. Requires admin authentication via cookie session.
+ *     tags:
+ *       - Reports
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: status
+ *         in: query
+ *         description: Filter by report status (e.g. OPEN, RESOLVED)
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - name: priority
+ *         in: query
+ *         description: Filter by priority (NORMAL or HIGH)
+ *         required: false
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved reports
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       bookingID:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       attachment:
+ *                         type: string
+ *                       status:
+ *                         type: string
+ *                       priority:
+ *                         type: string
+ *                       submittedAt:
+ *                         type: string
+ *                         format: date-time
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                       userAccountId:
+ *                         type: string
+ *                       telNo:
+ *                         type: string
+ *                       email:
+ *                         type: string
+ *                       passengerFirstName:
+ *                         type: string
+ *                       passengerLastName:
+ *                         type: string
+ *                       problemType:
+ *                         type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 - id: "rep_550e8400-e29b-41d4-a716-446655440000"
+ *                   bookingID: "pay_550e8400-e29b-41d4-a716-446655440000"
+ *                   description: "Baggage missing"
+ *                   attachment: "https://example.com/image.png"
+ *                   status: "OPEN"
+ *                   priority: "NORMAL"
+ *                   submittedAt: "2025-11-15T10:00:00.000Z"
+ *                   updatedAt: "2025-11-15T10:00:00.000Z"
+ *                   userAccountId: "123e4567-e89b-12d3-a456-426614174000"
+ *                   telNo: "+66812345678"
+ *                   email: "user@example.com"
+ *                   passengerFirstName: "John"
+ *                   passengerLastName: "Doe"
+ *                   problemType: "BAGGAGE_LOST"
+ *       401:
+ *         description: Unauthorized - authentication required
+ *       403:
+ *         description: Forbidden - admin access required
+ *       500:
+ *         description: Server error
+ *
+ *   post:
+ *     summary: Submit a new report (user)
+ *     description: Create a new report for a booking. User must be authenticated via cookie session.
+ *     tags:
+ *       - Reports
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - description
+ *               - paymentId
+ *               - telno
+ *               - email
+ *               - passengerFirstName
+ *               - passengerLastName
+ *               - problemType
+ *             properties:
+ *               description:
+ *                 type: string
+ *               paymentId:
+ *                 type: string
+ *               attachment:
+ *                 type: string
+ *               telno:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               passengerFirstName:
+ *                 type: string
+ *               passengerLastName:
+ *                 type: string
+ *               priority:
+ *                 type: string
+ *                 enum: [NORMAL, HIGH]
+ *               problemType:
+ *                 type: string
+     responses:
+ *       201:
+ *         description: Report created successfully
+ *       400:
+ *         description: Missing required parameters
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - booking does not belong to user
+ *       404:
+ *         description: Booking not found
+ *       409:
+ *         description: Duplicate report for booking
+ *       500:
+ *         description: Server error
+ *
+ *   put:
+ *     summary: Update report status (admin)
+ *     description: Change the status of a report. Requires admin authentication.
+ *     tags:
+ *       - Reports
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - reportID
+ *               - status
+ *             properties:
+ *               reportID:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 description: One of the ReportStatusEnum values
+     responses:
+ *       200:
+ *         description: Report status updated successfully
+ *       400:
+ *         description: Missing or invalid parameters
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - admin required
+ *       404:
+ *         description: Report not found
+ *       500:
+ *         description: Server error
+ */
+
 export async function GET(req: NextRequest) {
     const session = await getServerSession(nextAuthOptions);
 

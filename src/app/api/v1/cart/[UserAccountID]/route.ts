@@ -79,7 +79,7 @@ import { NextRequest, NextResponse } from "next/server";
  *     tags:
  *       - Cart
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     parameters:
  *       - name: UserAccountID
  *         in: path
