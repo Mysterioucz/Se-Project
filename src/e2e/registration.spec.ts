@@ -156,7 +156,31 @@ test.describe('Registration Flow', () => {
 		await expect(page.getByTestId('registration-password-req-capital')).not.toHaveClass(/text-error-main/);
 		await expect(page.getByTestId('registration-password-req-number-symbol')).toHaveClass(/text-error-main/);
 
-		// Case 4: All pass -> proceed to terms
+		// Case 4: Fails length + capital
+		await page.getByTestId('registration-password-input').fill('abc1!');
+		await page.getByTestId('registration-confirm-password-input').fill('abc1!');
+		await page.getByTestId('registration-password-next-btn').click();
+		await expect(page.getByTestId('registration-password-req-length')).toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-capital')).toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-number-symbol')).not.toHaveClass(/text-error-main/);
+
+		// Case 5: Fails capital + number/symbol
+		await page.getByTestId('registration-password-input').fill('abcdefgh');
+		await page.getByTestId('registration-confirm-password-input').fill('abcdefgh');
+		await page.getByTestId('registration-password-next-btn').click();
+		await expect(page.getByTestId('registration-password-req-length')).not.toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-capital')).toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-number-symbol')).toHaveClass(/text-error-main/);
+
+		// Case 6: Fails length + number/symbol
+		await page.getByTestId('registration-password-input').fill('Abc');
+		await page.getByTestId('registration-confirm-password-input').fill('Abc');
+		await page.getByTestId('registration-password-next-btn').click();
+		await expect(page.getByTestId('registration-password-req-length')).toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-capital')).not.toHaveClass(/text-error-main/);
+		await expect(page.getByTestId('registration-password-req-number-symbol')).toHaveClass(/text-error-main/);
+
+		// Case 7: All pass -> proceed to terms
 		await page.getByTestId('registration-password-input').fill('StrongPass1!');
 		await page.getByTestId('registration-confirm-password-input').fill('StrongPass1!');
 		await page.getByTestId('registration-password-next-btn').click();
