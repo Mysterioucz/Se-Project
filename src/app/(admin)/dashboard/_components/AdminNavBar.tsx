@@ -1,16 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import Button from "@/src/components/Button";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function AdminNavBar() {
     const { data: session, status } = useSession();
-    const displayName = session?.user?.name;
-    const AccountID = session?.user.id;
     return (
-        <nav className="bg-primary-400 flex items-center w-full justify-between py-[0.5rem] px-[2rem] sticky top-0 z-99">
+        <nav className="bg-primary-400 sticky top-0 z-99 flex w-full items-center justify-between px-[2rem] py-[0.5rem]">
             {/* Navigate to main page */}
             <Link href="/dashboard">
                 <Image
@@ -18,19 +16,17 @@ export default function AdminNavBar() {
                     alt="White Logo"
                     width={50}
                     height={50}
-                    className="w-[3.125rem] h-[3.125rem]"
+                    className="h-[3.125rem] w-[3.125rem]"
                 />
             </Link>
-            <div className="flex items-center gap-[2rem]">                
+            <div className="flex items-center gap-[2rem]">
                 {status === "authenticated" ? (
-                    <Link href={"/dashboard"}>
-                        <Button
-                            text={"Profile"}
-                            styleType="stroke"
-                            size="md"
-                            iconStart="/navbar/fi-sr-user.svg"
-                        />
-                    </Link>
+                    <Button
+                        text={"Signout"}
+                        styleType="stroke"
+                        size="md"
+                        onClick={signOut}
+                    />
                 ) : (
                     <Link href={"/login"}>
                         <Button
