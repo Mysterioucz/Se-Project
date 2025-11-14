@@ -99,7 +99,8 @@ export default function ReportModal({
 
             alert("Status updated successfully!");
 
-            onClose();
+            // onClose();
+            window.location.reload();
         } catch (err) {
             console.error(err);
             alert("Server error");
