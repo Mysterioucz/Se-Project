@@ -25,6 +25,15 @@ export default function ReportFrame({
 }: ReportFrameProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const problemTypeLabels: Record<string, string> = {
+        PAYMENT_ISSUE: "Payment Issue",
+        BOOOKING_ISSUE: "Booking Issue",
+        CANCELLATION_REFUND: "Cancellation/Refund",
+        EXTRA_SERVICE_ISSUE: "Extra Service Issue",
+        ACCOUNT_SYSTEM_ISSUE: "Account/System Issue",
+        FLIGHT_ROUTING_ADJUSTMENT_ISSUE: "Flight Routing/Adjustment Issue",
+    };
+
     return (
         <div className="flex items-start gap-[0.5rem] self-stretch">
             {/* Report ID */}
@@ -46,8 +55,8 @@ export default function ReportFrame({
 
             {/* Problem Type */}
             <div className="flex w-[11.25rem] items-center justify-center">
-                <div className="font-sarabun text-[1rem] text-black">
-                    {problemType}
+                <div className="font-sarabun text-[1rem] leading-[1.2rem] font-normal text-black">
+                    {problemTypeLabels[problemType] || problemType}
                 </div>
             </div>
 

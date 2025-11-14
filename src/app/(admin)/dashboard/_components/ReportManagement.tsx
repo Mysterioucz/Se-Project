@@ -98,8 +98,8 @@ export default function ReportManagement() {
                             <MenuItem value="All Priority">
                                 All Priority
                             </MenuItem>
-                            <MenuItem value="NORMAL">Normal</MenuItem>
-                            <MenuItem value="HIGH">High</MenuItem>
+                            <MenuItem value="Normal">Normal</MenuItem>
+                            <MenuItem value="High">High</MenuItem>
                         </SelectComponent>
                     </div>
                     <div className="flex flex-col items-start gap-1">
@@ -116,10 +116,10 @@ export default function ReportManagement() {
                             height="h-[2rem]"
                         >
                             <MenuItem value="All Status">All Status</MenuItem>
-                            <MenuItem value="OPENED">Opened</MenuItem>
-                            <MenuItem value="IN_PROGRESS">In Progress</MenuItem>
-                            <MenuItem value="CANCELLED">Cancelled</MenuItem>
-                            <MenuItem value="RESOLVED">Resolved</MenuItem>
+                            <MenuItem value="Opened">Opened</MenuItem>
+                            <MenuItem value="In Progress">In Progress</MenuItem>
+                            <MenuItem value="Cancelled">Cancelled</MenuItem>
+                            <MenuItem value="Resolved">Resolved</MenuItem>
                         </SelectComponent>
                     </div>
                 </div>

@@ -55,6 +55,15 @@ export default function ReportModal({
 
     if (!isOpen) return null;
 
+    const problemTypeLabels: Record<string, string> = {
+        PAYMENT_ISSUE: "Payment Issue",
+        BOOOKING_ISSUE: "Booking Issue",
+        CANCELLATION_REFUND: "Cancellation/Refund",
+        EXTRA_SERVICE_ISSUE: "Extra Service Issue",
+        ACCOUNT_SYSTEM_ISSUE: "Account/System Issue",
+        FLIGHT_ROUTING_ADJUSTMENT_ISSUE: "Flight Routing/Adjustment Issue",
+    };
+
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
             {/* Overlay */}
@@ -148,7 +157,7 @@ export default function ReportModal({
                                         Problem Type:
                                     </div>
                                     <div className="font-sarabun text-[1rem] leading-[1.2rem] font-normal text-black">
-                                        {problemType}
+                                        {problemTypeLabels[problemType] || problemType}
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-[0.75rem] self-stretch px-[1rem]">
@@ -219,16 +228,16 @@ export default function ReportModal({
                                         height="h-[2.188rem]"
                                         maxChildrenHeight="h-[12.5rem]"
                                     >
-                                        <MenuItem value="opened">
+                                        <MenuItem value="Opened">
                                             Opened
                                         </MenuItem>
-                                        <MenuItem value="in progress">
+                                        <MenuItem value="In Progress">
                                             In Progress
                                         </MenuItem>
-                                        <MenuItem value="cancelled">
+                                        <MenuItem value="Cancelled">
                                             Cancelled
                                         </MenuItem>
-                                        <MenuItem value="resolved">
+                                        <MenuItem value="Resolved">
                                             Resolved
                                         </MenuItem>
                                     </SelectComponent>
