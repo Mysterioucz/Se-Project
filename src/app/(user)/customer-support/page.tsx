@@ -12,6 +12,11 @@ import Button from "@/src/components/Button";
 import Navbar from "@/src/components/Navbar";
 import TextAreaComponent from "@/src/components/TextAreaComponent";
 import TextFieldComponent from "@/src/components/text_field";
+import {
+    getErrorColor,
+    ReportErrorMessages,
+    ReportErrorType,
+} from "@/src/enums/ReportErrorTypes";
 import ConfirmSubmitModal from "./_component/ConfirmSubmitModal";
 import ContactUs from "./_component/ContactUs";
 import PriorityLevelSelect from "./_component/PrioritySelect";
@@ -54,7 +59,9 @@ export default function Page() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
-    const [submitData, setSubmitData] = useState<SupportFormData | null>(null);
+    const [errorType, setErrorType] = useState<ReportErrorType | null>(null);
+    const [pendingFormData, setPendingFormData] =
+        useState<SupportFormData | null>(null);
 
     // React Hook Form (RHF)
     const {
@@ -76,20 +83,29 @@ export default function Page() {
         },
     });
 
-    const onValidSubmit = async (data: SupportFormData) => {
+    // This function just opens the modal and stores the data
+    const handleFormSubmit = (data: SupportFormData) => {
         if (!session?.user?.id) {
             setSubmitError("You must be logged in to submit a report");
+            setErrorType(ReportErrorType.AUTHENTICATION);
             return;
         }
-        
-        setIsSubmitting(true);
+
+        // Clear previous errors
         setSubmitError(null);
-        setSubmitData(data);
+        setErrorType(null);
+
+        // Store form data and open confirmation modal
+        setPendingFormData(data);
         setIsModalOpen(true);
     };
 
+    // This function is called when user confirms in the modal
     const handleConfirmSubmit = async () => {
-        setIsModalOpen(false);
+        if (!pendingFormData) return;
+
+        setIsSubmitting(true);
+
         try {
             // Convert attachment to base64 if present
             let attachmentBase64 = "";
@@ -101,35 +117,43 @@ export default function Page() {
                     reader.readAsDataURL(attachment);
                 });
             }
-            const data = submitData!;
+
             const response = await fetch("/api/v1/reports", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    description: data.description,
-                    paymentId: data.bookingId,
+                    description: pendingFormData.description,
+                    paymentId: pendingFormData.bookingId,
                     attachment: attachmentBase64,
-                    telno: data.phoneNumber,
-                    email: data.email,
-                    passengerFirstName: data.givenNames,
-                    passengerLastName: data.givenLastname,
-                    priority: data.priorityLevel,
-                    problemType: data.problemType,
+                    telno: pendingFormData.phoneNumber,
+                    email: pendingFormData.email,
+                    passengerFirstName: pendingFormData.givenNames,
+                    passengerLastName: pendingFormData.givenLastname,
+                    priority: pendingFormData.priorityLevel,
+                    problemType: pendingFormData.problemType,
                 }),
             });
 
             const result = await response.json();
 
             if (!response.ok || !result.success) {
+                // Set error type for specific error handling
+                setErrorType(result.errorCode || ReportErrorType.UNKNOWN);
                 throw new Error(result.message || "Failed to submit report");
             }
-            
-            // On success, redirect or show success message
+
+            // Success - close modal and redirect
+            setIsModalOpen(false);
             router.push("/");
         } catch (error) {
             console.error("Error submitting report:", error);
+
+            // Close modal to show error on form
+            setIsModalOpen(false);
+
+            // Set user-friendly error message
             setSubmitError(
                 error instanceof Error
                     ? error.message
@@ -139,9 +163,10 @@ export default function Page() {
             setIsSubmitting(false);
         }
     };
+
     const handleCloseModal = () => {
-        setIsSubmitting(false);
         setIsModalOpen(false);
+        setPendingFormData(null);
     };
     const handleAttachmentChange = (file: File | null) => {
         setAttachment(file);
@@ -164,7 +189,7 @@ export default function Page() {
                 {/* Content */}
                 <div className="mb-10 flex gap-[2rem]">
                     <form
-                        onSubmit={handleSubmit(onValidSubmit)}
+                        onSubmit={handleSubmit(handleFormSubmit)}
                         className="flex grow-[5] basis-0 flex-col gap-[1.5rem]"
                     >
                         <div className="grid grid-cols-1 gap-x-[1.5rem] gap-y-4 md:grid-cols-2">
@@ -351,9 +376,80 @@ export default function Page() {
                             />
                         </div>
 
-                        {submitError && (
-                            <div className="text-error-main bg-error-light rounded-md p-3 text-sm">
-                                {submitError}
+                        {submitError && errorType && (
+                            <div
+                                className="rounded-md border-l-4 p-4 shadow-sm"
+                                style={{
+                                    backgroundColor:
+                                        getErrorColor(errorType).bg,
+                                    borderColor:
+                                        getErrorColor(errorType).border,
+                                }}
+                            >
+                                <div className="flex items-start">
+                                    <div className="flex-shrink-0">
+                                        {errorType ===
+                                        ReportErrorType.DUPLICATE_REPORT ? (
+                                            <svg
+                                                className="h-5 w-5 text-yellow-600"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                        ) : (
+                                            <svg
+                                                className="h-5 w-5 text-red-600"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                        )}
+                                    </div>
+                                    <div className="ml-3 flex-1">
+                                        <h3
+                                            className="text-sm font-medium"
+                                            style={{
+                                                color: getErrorColor(errorType)
+                                                    .text,
+                                            }}
+                                        >
+                                            {ReportErrorMessages[errorType]}
+                                        </h3>
+                                        <div
+                                            className="mt-2 text-sm"
+                                            style={{
+                                                color:
+                                                    errorType ===
+                                                    ReportErrorType.DUPLICATE_REPORT
+                                                        ? "#78350F"
+                                                        : "#7F1D1D",
+                                            }}
+                                        >
+                                            {submitError}
+                                        </div>
+                                        {errorType ===
+                                            ReportErrorType.DUPLICATE_REPORT && (
+                                            <div
+                                                className="mt-2 text-sm"
+                                                style={{ color: "#78350F" }}
+                                            >
+                                                <strong>Need help?</strong>{" "}
+                                                Contact our support team to
+                                                update your existing report.
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         )}
 
@@ -393,6 +489,7 @@ export default function Page() {
                 open={isModalOpen}
                 onClose={handleCloseModal}
                 onConfirm={handleConfirmSubmit}
+                isSubmitting={isSubmitting}
             />
         </div>
     );

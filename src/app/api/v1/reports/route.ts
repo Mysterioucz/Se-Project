@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
+import { ReportErrorType } from "@/src/enums/ReportErrorTypes";
 import { nextAuthOptions } from "@/src/lib/auth";
 
 export async function GET(req: NextRequest) {
@@ -133,6 +134,60 @@ export async function POST(req: NextRequest) {
     }
 
     try {
+        // Check if a report already exists for this PaymentID
+        const existingReport = await prisma.report.findUnique({
+            where: { PaymentID: paymentId },
+        });
+
+        if (existingReport) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message:
+                        "A report has already been submitted for this booking ID. Please contact support if you need to update your existing report.",
+                    errorCode: ReportErrorType.DUPLICATE_REPORT,
+                },
+                { status: 409 }, // 409 Conflict
+            );
+        }
+
+        // Verify that the payment/booking exists
+        const payment = await prisma.payment.findUnique({
+            where: { PaymentID: paymentId },
+        });
+
+        if (!payment) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message:
+                        "The booking ID you entered does not exist. Please check your booking ID and try again.",
+                    errorCode: ReportErrorType.INVALID_BOOKING_ID,
+                },
+                { status: 404 },
+            );
+        }
+
+        // Verify that the payment belongs to the user by checking Purchase records
+        const userPurchase = await prisma.purchase.findFirst({
+            where: {
+                PaymentID: paymentId,
+                UserAccountID: userAccountId,
+            },
+        });
+
+        if (!userPurchase) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message:
+                        "This booking ID does not belong to your account. Please verify the booking ID.",
+                    errorCode: ReportErrorType.UNAUTHORIZED_BOOKING,
+                },
+                { status: 403 },
+            );
+        }
+
         // Create report
         const report = await prisma.report.create({
             data: {
@@ -156,10 +211,50 @@ export async function POST(req: NextRequest) {
             { success: true, data: report },
             { status: 201 },
         );
-    } catch (err) {
+    } catch (err: any) {
         console.error("Error creating report:", err);
+
+        // Handle Prisma-specific errors
+        if (err.code === "P2002") {
+            // Unique constraint violation
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "A report already exists for this booking ID.",
+                    errorCode: ReportErrorType.DUPLICATE_REPORT,
+                },
+                { status: 409 },
+            );
+        } else if (err.code === "P2003") {
+            // Foreign key constraint violation
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "Invalid booking ID or user account.",
+                    errorCode: ReportErrorType.INVALID_REFERENCE,
+                },
+                { status: 400 },
+            );
+        } else if (err.code === "P2025") {
+            // Record not found
+            return NextResponse.json(
+                {
+                    success: false,
+                    message: "The booking ID does not exist in our system.",
+                    errorCode: ReportErrorType.BOOKING_NOT_FOUND,
+                },
+                { status: 404 },
+            );
+        }
+
+        // Generic error
         return NextResponse.json(
-            { success: false, message: ErrorMessages.SERVER, errors: err },
+            {
+                success: false,
+                message:
+                    "An error occurred while submitting your report. Please try again later.",
+                errorCode: ReportErrorType.SERVER_ERROR,
+            },
             { status: 500 },
         );
     }
