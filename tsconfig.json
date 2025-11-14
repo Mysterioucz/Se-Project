@@ -37,7 +37,8 @@
       ]
     },
     "types": [
-      "next-auth"
+      "next-auth",
+      "jest"
     ]
   },
   "include": [

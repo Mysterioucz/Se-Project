@@ -211,20 +211,6 @@ model Contact {
   @@id([AdminAccountID, AirlineName])
 }
 
-model Report_To {
-  UserAccountID  String @db.VarChar(50)
-  AdminAccountID String @db.VarChar(50)
-  ReportStatus   String
-
-  // Relations
-  //user   User   @relation(fields: [UserAccountID], references: [UserAccountID])
-  admin   Admin    @relation(fields: [AdminAccountID], references: [AdminAccountID])
-  user    User     @relation(fields: [UserAccountID], references: [UserAccountID])
-  Reports Report[] @relation("CreatedReports")
-
-  @@id([UserAccountID, AdminAccountID])
-}
-
 // --- Other Models ---
 
 model CabinClass {
@@ -259,7 +245,6 @@ model Admin {
   account             Account           @relation(fields: [AdminAccountID], references: [AccountID])
   sentAirlineMessages Airline_Message[]
   contacts            Contact[]
-  involvedInReports   Report_To[]
 }
 
 model Airline_Message {
@@ -294,8 +279,8 @@ model User {
   telNos            User_Tel_No[]
   assignedFlights   Assigned_To[]
   purchases         Purchase[]
-  involvedInReports Report_To[]
   carts             Cart[]
+  reports           Report[]
 }
 
 model User_Tel_No {
@@ -318,6 +303,14 @@ enum ReportPriorityEnum {
   HIGH
 }
 
+enum ReportProblemType {
+  PAYMENT_ISSUE
+  BOOOKING_ISSUE
+  CANCELLATION_REFUND
+  EXTRA_SERVICE_ISSUE
+  ACCOUNT_SYSTEM_ISSUE
+  FLIGHT_ROUTING_ADJUSTMENT_ISSUE
+}
 
 model Report {
   ReportID          String  @id @db.VarChar(50)
@@ -325,19 +318,20 @@ model Report {
   PaymentID         String  @unique
   Attachment        String?
   UserAccountID     String  @db.VarChar(50) // The user who created the report
-  AdminAccountID    String  @db.VarChar(50) // The admin handling the report
-  AccountID             String
   TelNo             String
-  PassengerName     String
-
+  Email             String
+  PassengerFirstName     String
+  PassengerLastName String
+  
+  ProblemType ReportProblemType
   Status   ReportStatusEnum   @default(OPENED)
   Priority ReportPriorityEnum @default(NORMAL)
   CreatedAt DateTime          @default(now())
   UpdatedAt DateTime          @updatedAt
 
   // Relations
-  creator Report_To @relation("CreatedReports", fields: [UserAccountID, AdminAccountID], references: [UserAccountID, AdminAccountID])
   // ticket  Ticket    @relation(fields: [TicketID], references: [TicketID])
+  user User @relation(fields: [UserAccountID], references: [UserAccountID])
   payment Payment   @relation(fields: [PaymentID], references: [PaymentID])
 }
 
