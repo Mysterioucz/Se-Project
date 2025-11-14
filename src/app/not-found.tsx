@@ -9,8 +9,7 @@ export default function NotFound() {
                     Page Not Found
                 </h2>
                 <p className="mt-2 text-gray-600">
-                    Sorry, the page you are looking for does not exist or you
-                    don't have permission to access it.
+                    Sorry, the page you are looking for does not exist
                 </p>
                 <div className="mt-8">
                     <Link
