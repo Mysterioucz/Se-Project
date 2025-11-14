@@ -57,7 +57,15 @@ export default function ReportManagement() {
     };
 
     const handleStatusChange = (event: SelectEvent) => {
-        setStatus((event.target as HTMLInputElement).value);
+        const value = (event.target as HTMLInputElement).value;
+        setStatus(value.toLowerCase());
+    };
+
+    const FE_STATUS_TO_BE: Record<string, string> = {
+        opened: "OPENED",
+        "in progress": "IN_PROGRESS",
+        resolved: "RESOLVED",
+        cancelled: "CANCELLED",
     };
 
     const filteredReports = reports.filter((r) => {
@@ -67,9 +75,9 @@ export default function ReportManagement() {
                 : r.priority === priority.toUpperCase();
 
         const statusMatch =
-            !status || status === "All Status"
+            !status || status === "all status"
                 ? true
-                : r.status === status.toUpperCase();
+                : r.status === FE_STATUS_TO_BE[status];
 
         const idMatch = !searchId
             ? true
@@ -142,12 +150,23 @@ export default function ReportManagement() {
                             placeholder="Select Status"
                             width="w-[12.5rem]"
                             height="h-[2rem]"
+                            renderSelected={(value) => {
+                                if (!value) return "Select Status";
+                                const mapping: Record<string, string> = {
+                                    opened: "Opened",
+                                    "in progress": "In Progress",
+                                    resolved: "Resolved",
+                                    cancelled: "Cancelled",
+                                    "all status": "All Status",
+                                };
+                                return mapping[value] ?? value;
+                            }}
                         >
-                            <MenuItem value="All Status">All Status</MenuItem>
-                            <MenuItem value="Opened">Opened</MenuItem>
-                            <MenuItem value="In Progress">In Progress</MenuItem>
-                            <MenuItem value="Cancelled">Cancelled</MenuItem>
-                            <MenuItem value="Resolved">Resolved</MenuItem>
+                            <MenuItem value="all status">All Status</MenuItem>
+                            <MenuItem value="opened">Opened</MenuItem>
+                            <MenuItem value="in progress">In Progress</MenuItem>
+                            <MenuItem value="cancelled">Cancelled</MenuItem>
+                            <MenuItem value="resolved">Resolved</MenuItem>
                         </SelectComponent>
                     </div>
                 </div>
