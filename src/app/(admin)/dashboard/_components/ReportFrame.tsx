@@ -28,45 +28,45 @@ export default function ReportFrame({
     return (
         <div className="flex items-start gap-[0.5rem] self-stretch">
             {/* Report ID */}
-            <div className="flex justify-center items-center w-[3.75rem]">
-                <div className="text-black font-sarabun text-[1rem] font-bold">
+            <div className="flex w-[3.75rem] items-center justify-center">
+                <div className="font-sarabun text-[1rem] font-bold text-black">
                     {index}.
                 </div>
             </div>
 
             {/* Priority */}
-            <div className="flex justify-center items-center w-[9.875rem]">
+            <div className="flex w-[9.875rem] items-center justify-center">
                 <ReportPiorityMarker priority={priority} />
             </div>
 
             {/* Status */}
-            <div className="flex justify-center items-center w-[9.875rem]">
+            <div className="flex w-[9.875rem] items-center justify-center">
                 <ReportStatusMarker status={status} />
             </div>
 
             {/* Problem Type */}
-            <div className="flex justify-center items-center w-[11.25rem]">
-                <div className="text-black font-sarabun text-[1rem]">
+            <div className="flex w-[11.25rem] items-center justify-center">
+                <div className="font-sarabun text-[1rem] text-black">
                     {problemType}
                 </div>
             </div>
 
             {/* Submitted */}
-            <div className="flex justify-center items-center w-[11.25rem]">
-                <div className="text-black font-sarabun text-[1rem]">
+            <div className="flex w-[11.25rem] items-center justify-center">
+                <div className="font-sarabun text-[1rem] text-black">
                     {submitted}
                 </div>
             </div>
 
             {/* Last Update */}
-            <div className="flex justify-center items-center w-[11.25rem]">
-                <div className="text-black font-sarabun text-[1rem]">
+            <div className="flex w-[11.25rem] items-center justify-center">
+                <div className="font-sarabun text-[1rem] text-black">
                     {lastUpdate}
                 </div>
             </div>
 
             {/* Button */}
-            <div className="flex justify-center items-center w-[5.625rem]">
+            <div className="flex w-[5.625rem] items-center justify-center">
                 <Button
                     text="View"
                     align="center"
@@ -82,7 +82,19 @@ export default function ReportFrame({
             <ReportModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                reportId={id}
+                id={id}
+                bookingId=""
+                passengerEmail=""
+                passengerPhone=""
+                passengerFirstName=""
+                passengerLastName=""
+                problemType={problemType}
+                description=""
+                attachment={null}
+                status={status}
+                priority={priority}
+                submitted={submitted}
+                lastUpdate={lastUpdate}
             />
         </div>
     );
