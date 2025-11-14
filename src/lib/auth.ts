@@ -45,7 +45,6 @@ export const nextAuthOptions: NextAuthOptions = {
     ],
     callbacks: {
         signIn: async ({ user, account, profile, email, credentials }) => {
-            console.log(user);
             return true;
         },
         session: async ({ session, token }) => {
@@ -55,6 +54,9 @@ export const nextAuthOptions: NextAuthOptions = {
             }
             if (token.error) {
                 session.error = token.error as string;
+            }
+            if (token.isAdmin !== undefined) {
+                session.isAdmin = token.isAdmin as boolean;
             }
             return session;
         },
@@ -66,11 +68,15 @@ export const nextAuthOptions: NextAuthOptions = {
                 token.id = user.id;
             }
 
-            // Verify user still exists in database
+            // Verify user still exists in database and check if admin
             if (token.id) {
                 try {
                     const existingUser = await prisma.account.findUnique({
                         where: { AccountID: token.id as string },
+                        include: {
+                            admin: true,
+                            user: true,
+                        },
                     });
 
                     // If user doesn't exist, invalidate the token
@@ -81,6 +87,9 @@ export const nextAuthOptions: NextAuthOptions = {
                         token.error = "UserDeleted";
                         return token;
                     }
+
+                    // Store admin status in token
+                    token.isAdmin = !!existingUser.admin;
                 } catch (error) {
                     console.error("Error checking user existence:", error);
                     token.error = "DatabaseError";

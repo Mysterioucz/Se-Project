@@ -1,11 +1,11 @@
 "use client";
-import FlightFilterTab from "@/src/app/flights/search/_components/filter";
-import FlightSearchFunishing from "@/src/app/flights/search/_components/FlightSearchFurnishings";
+import FlightFilterTab from "@/src/app/(user)/flights/search/_components/filter";
+import FlightSearchFunishing from "@/src/app/(user)/flights/search/_components/FlightSearchFurnishings";
 import FlightSearchBar, {
     PassengerCount,
     SelectedValues,
-} from "@/src/app/flights/search/_components/search";
-import FlightSortTab from "@/src/app/flights/search/_components/sort";
+} from "@/src/app/(user)/flights/search/_components/search";
+import FlightSortTab from "@/src/app/(user)/flights/search/_components/sort";
 import FlightCard from "@/src/components/flightCard/flight_card";
 import Footer from "@/src/components/footer/footer";
 import { MagnifyIcon } from "@/src/components/icons/module";
