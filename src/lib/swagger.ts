@@ -16,6 +16,11 @@ export const getApiDocs = async () => {
                         in: "cookie",
                         name: "next-auth.session-token",
                     },
+                    bearerAuth: {
+                        type: "http",
+                        scheme: "bearer",
+                        bearerFormat: "JWT",
+                    },
                 },
             },
             security: [],

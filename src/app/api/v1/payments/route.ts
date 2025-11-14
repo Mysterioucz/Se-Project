@@ -200,6 +200,8 @@ import { late } from "zod/v3";
  *               message: "Internal server error. Please try again later."
  *   get:
  *     summary: Get user payments
+ *     security:
+ *       - bearerAuth: []
  *     description: Retrieve payment history for a specific user
  *     tags:
  *       - Payments
