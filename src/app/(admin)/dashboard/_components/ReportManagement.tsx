@@ -29,22 +29,36 @@ export default function ReportManagement() {
                 } else {
                     setReports([]);
                 }
+                setLoading(false);
             });
     }, []);
 
-    const handleChange = (event: SelectEvent) => {
+    const handlePriorityChange = (event: SelectEvent) => {
         const value = (event.target as HTMLInputElement).value as string;
         setPriority(value);
     };
 
-    const setStatusChange = (event: SelectEvent) => {
+    const handleStatusChange = (event: SelectEvent) => {
         const value = (event.target as HTMLInputElement).value as string;
         setStatus(value);
     };
 
+    const filteredReports = reports.filter((r) => {
+        const priorityMatch =
+            !priority || priority === "All Priority"
+                ? true
+                : r.priority.toLowerCase() === priority.toLowerCase();
+
+        const statusMatch =
+            !status || status === "All Status"
+                ? true
+                : r.status.toLowerCase() === status.toLowerCase();
+
+        return priorityMatch && statusMatch;
+    });
+
     return (
         <div className="flex flex-col items-start self-stretch rounded-[0.5rem] border-[0.125rem] border-primary-600 bg-white">
-            {/* Header */}
             <div className="flex items-center self-stretch px-[1rem] py-[0.75rem] gap-[0.5rem]">
                 <Image
                     src="/modal/fi-br-warning-blue.svg"
@@ -55,7 +69,6 @@ export default function ReportManagement() {
                 <div className="!text-primary-600 font-sarabun text-[2rem] font-bold leading-[1.2]">
                     Problem Report Management
                 </div>
-                {/* Filter area*/}
                 <div className="flex justify-end items-center px-[1.25rem] py-0 gap-[0.625rem] flex-[1_0_0]">
                     <div className="flex flex-col items-start gap-1">
                         <div className="text-primary-900 text-[1rem] font-normal leading-[1.2]">
@@ -65,14 +78,12 @@ export default function ReportManagement() {
                             labelId="priority-select-label"
                             id="priority-select"
                             value={priority}
-                            onChange={handleChange}
+                            onChange={handlePriorityChange}
                             placeholder="Select priority"
                             width="w-[12.5rem]"
                             height="h-[2rem]"
                         >
-                            <MenuItem value="All Priority">
-                                All Priority
-                            </MenuItem>
+                            <MenuItem value="All Priority">All Priority</MenuItem>
                             <MenuItem value="Normal">Normal</MenuItem>
                             <MenuItem value="High">High</MenuItem>
                         </SelectComponent>
@@ -85,7 +96,7 @@ export default function ReportManagement() {
                             labelId="status-select-label"
                             id="status-select"
                             value={status}
-                            onChange={setStatusChange}
+                            onChange={handleStatusChange}
                             placeholder="Select Status"
                             width="w-[12.5rem]"
                             height="h-[2rem]"
@@ -99,11 +110,8 @@ export default function ReportManagement() {
                     </div>
                 </div>
             </div>
-
-            {/* Table Body */}
             <div className="flex flex-col items-center self-stretch px-4 pb-4 pt-0">
                 <div className="flex flex-col items-start gap-2 pb-2 rounded-md border-2 border-primary-100">
-                    {/* Header Row */}
                     <div className="flex items-start gap-2 self-stretch bg-primary-100">
                         {[
                             "No.",
@@ -129,8 +137,12 @@ export default function ReportManagement() {
                         <div className="p-4 text-gray-500 font-sarabun">
                             Loading reports...
                         </div>
+                    ) : filteredReports.length === 0 ? (
+                        <div className="p-4 text-gray-500 font-sarabun">
+                            No reports found.
+                        </div>
                     ) : (
-                        reports.map((r, idx) => (
+                        filteredReports.map((r, idx) => (
                             <ReportFrame key={r.id} index={idx + 1} {...r} />
                         ))
                     )}
