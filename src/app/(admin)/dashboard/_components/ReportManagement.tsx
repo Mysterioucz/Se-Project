@@ -1,5 +1,6 @@
 "use client";
 import SelectComponent, { SelectEvent } from "@/src/components/select";
+import TextFieldComponent from "@/src/components/text_field";
 import { MenuItem } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -7,11 +8,19 @@ import ReportFrame from "./ReportFrame";
 
 interface ReportSummary {
     id: string;
-    priority: "normal" | "high";
-    status: "opened" | "in progress" | "resolved" | "cancelled";
+    bookingID: string;
+    description: string;
+    attachment: string | null;
+    status: "OPENED" | "IN_PROGRESS" | "RESOLVED" | "CANCELLED";
+    priority: "NORMAL" | "HIGH";
+    submittedAt: string;
+    updatedAt: string;
+    userAccountId: string;
+    telNo: string;
+    email: string;
+    passengerFirstName: string;
+    passengerLastName: string;
     problemType: string;
-    submitted: string;
-    lastUpdate: string;
 }
 
 export default function ReportManagement() {
@@ -19,53 +28,96 @@ export default function ReportManagement() {
     const [status, setStatus] = useState("");
     const [reports, setReports] = useState<ReportSummary[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchId, setSearchId] = useState("");
 
     useEffect(() => {
-        fetch("/api/v1/reports")
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.success && Array.isArray(res.data)) {
-                    setReports(res.data);
+        const fetchReports = async () => {
+            try {
+                const res = await fetch("/api/v1/reports");
+                if (!res.ok)
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                const json = await res.json();
+                if (json.success && Array.isArray(json.data)) {
+                    setReports(json.data);
                 } else {
                     setReports([]);
                 }
-            });
+            } catch (err) {
+                console.error("Failed to fetch reports:", err);
+                setReports([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchReports();
     }, []);
 
-    const handleChange = (event: SelectEvent) => {
-        const value = (event.target as HTMLInputElement).value as string;
-        setPriority(value);
+    const handlePriorityChange = (event: SelectEvent) => {
+        setPriority((event.target as HTMLInputElement).value);
     };
 
-    const setStatusChange = (event: SelectEvent) => {
-        const value = (event.target as HTMLInputElement).value as string;
-        setStatus(value);
+    const handleStatusChange = (event: SelectEvent) => {
+        setStatus((event.target as HTMLInputElement).value);
     };
+
+    const filteredReports = reports.filter((r) => {
+        const priorityMatch =
+            !priority || priority === "All Priority"
+                ? true
+                : r.priority === priority.toUpperCase();
+
+        const statusMatch =
+            !status || status === "All Status"
+                ? true
+                : r.status === status.toUpperCase();
+
+        const idMatch = !searchId
+            ? true
+            : r.id.toLowerCase().includes(searchId.toLowerCase());
+
+        return priorityMatch && statusMatch && idMatch;
+    });
 
     return (
-        <div className="flex flex-col items-start self-stretch rounded-[0.5rem] border-[0.125rem] border-primary-600 bg-white">
+        <div className="flex flex-col items-start self-stretch rounded-md border-2 border-[var(--color-primary-600)] bg-white">
             {/* Header */}
-            <div className="flex items-center self-stretch px-[1rem] py-[0.75rem] gap-[0.5rem]">
+            <div className="flex items-center gap-2 self-stretch px-4 py-3">
                 <Image
                     src="/modal/fi-br-warning-blue.svg"
                     alt="Logo"
                     width={24}
                     height={24}
                 />
-                <div className="!text-primary-600 font-sarabun text-[2rem] font-bold leading-[1.2]">
+                <div className="font-sarabun text-[2rem] leading-[1.2] font-bold text-[var(--color-primary-600)]">
                     Problem Report Management
                 </div>
-                {/* Filter area*/}
-                <div className="flex justify-end items-center px-[1.25rem] py-0 gap-[0.625rem] flex-[1_0_0]">
-                    <div className="flex flex-col items-start gap-1">
-                        <div className="text-primary-900 text-[1rem] font-normal leading-[1.2]">
+                <div className="flex flex-1 justify-end gap-2">
+                    {/* Search by ID */}
+                    <div className="flex flex-col gap-1">
+                        <div className="font-sarabun text-[1rem] font-normal text-[var(--color-primary-900)]">
+                            Search Report ID:
+                        </div>
+                        <TextFieldComponent
+                            textValue={searchId}
+                            placeHolder="Enter Report ID"
+                            width="w-[12.5rem]"
+                            height="h-[2rem]"
+                            gap="gap-0"
+                            labelSize="!text-sm"
+                            onChange={({ text }) => setSearchId(text)}
+                        />
+                    </div>
+
+                    {/* Priority Filter */}
+                    <div className="flex flex-col gap-1">
+                        <div className="font-sarabun text-[1rem] font-normal text-[var(--color-primary-900)]">
                             Priority Level:
                         </div>
                         <SelectComponent
                             labelId="priority-select-label"
                             id="priority-select"
                             value={priority}
-                            onChange={handleChange}
+                            onChange={handlePriorityChange}
                             placeholder="Select priority"
                             width="w-[12.5rem]"
                             height="h-[2rem]"
@@ -77,15 +129,16 @@ export default function ReportManagement() {
                             <MenuItem value="High">High</MenuItem>
                         </SelectComponent>
                     </div>
-                    <div className="flex flex-col items-start gap-1">
-                        <div className="text-primary-900 text-[1rem] font-normal leading-[1.2]">
+                    {/* Status Filter */}
+                    <div className="flex flex-col gap-1">
+                        <div className="font-sarabun text-[1rem] font-normal text-[var(--color-primary-900)]">
                             Status:
                         </div>
                         <SelectComponent
                             labelId="status-select-label"
                             id="status-select"
                             value={status}
-                            onChange={setStatusChange}
+                            onChange={handleStatusChange}
                             placeholder="Select Status"
                             width="w-[12.5rem]"
                             height="h-[2rem]"
@@ -100,38 +153,64 @@ export default function ReportManagement() {
                 </div>
             </div>
 
-            {/* Table Body */}
-            <div className="flex flex-col items-center self-stretch px-4 pb-4 pt-0">
-                <div className="flex flex-col items-start gap-2 pb-2 rounded-md border-2 border-primary-100">
-                    {/* Header Row */}
-                    <div className="flex items-start gap-2 self-stretch bg-primary-100">
+            {/* Report Table */}
+            <div className="flex flex-col items-center self-stretch px-4 pt-0 pb-4">
+                <div className="flex flex-col items-start gap-2 rounded-md border-2 border-[var(--color-primary-100)] pb-2">
+                    {/* Table Header */}
+                    <div className="flex items-start gap-2 self-stretch bg-[var(--color-primary-100)]">
                         {[
-                            "No.",
-                            "Priority Level",
-                            "Status",
-                            "Problem Type",
-                            "Submitted",
-                            "Last Update",
+                            { title: "No.", width: "w-[3.75rem]" },
+                            { title: "Priority Level", width: "w-[9.875rem]" },
+                            { title: "Status", width: "w-[9.875rem]" },
+                            { title: "Problem Type", width: "w-[11.25rem]" },
+                            { title: "Submitted", width: "w-[11.25rem]" },
+                            { title: "Last Update", width: "w-[11.25rem]" },
                         ].map((h) => (
                             <div
-                                key={h}
-                                className="flex flex-col justify-center items-center w-[9.875rem] h-[3.125rem] py-[0.5rem]"
+                                key={h.title}
+                                className={`${h.width} flex h-[3.125rem] flex-col items-center justify-center py-[0.5rem]`}
                             >
-                                <div className="text-black text-center font-sarabun text-[1.25rem] font-semibold">
-                                    {h}
+                                <div className="font-sarabun text-center text-[1.25rem] leading-[1.2] font-semibold text-black">
+                                    {h.title}
                                 </div>
                             </div>
                         ))}
-                        <div className="w-[5.625rem]"></div>
+                        <div className="h-[3.125rem] w-[5.625rem] py-[0.5rem]"></div>
                     </div>
 
+                    {/* Table Rows */}
                     {loading ? (
-                        <div className="p-4 text-gray-500 font-sarabun">
+                        <div className="font-sarabun p-4 text-gray-500">
                             Loading reports...
                         </div>
+                    ) : filteredReports.length === 0 ? (
+                        <div className="font-sarabun p-4 text-gray-500">
+                            No reports found.
+                        </div>
                     ) : (
-                        reports.map((r, idx) => (
-                            <ReportFrame key={r.id} index={idx + 1} {...r} />
+                        filteredReports.map((r, idx) => (
+                            <ReportFrame
+                                key={r.id}
+                                index={idx + 1}
+                                id={r.id}
+                                priority={
+                                    r.priority.toLowerCase() as
+                                        | "normal"
+                                        | "high"
+                                }
+                                status={
+                                    r.status === "IN_PROGRESS"
+                                        ? "in progress"
+                                        : (r.status.toLowerCase() as
+                                              | "opened"
+                                              | "resolved"
+                                              | "cancelled"
+                                              | "in progress")
+                                }
+                                problemType={r.problemType}
+                                submitted={r.submittedAt}
+                                lastUpdate={r.updatedAt}
+                            />
                         ))
                     )}
                 </div>
