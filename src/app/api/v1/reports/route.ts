@@ -211,40 +211,43 @@ export async function POST(req: NextRequest) {
             { success: true, data: report },
             { status: 201 },
         );
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error("Error creating report:", err);
 
         // Handle Prisma-specific errors
-        if (err.code === "P2002") {
-            // Unique constraint violation
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "A report already exists for this booking ID.",
-                    errorCode: ReportErrorType.DUPLICATE_REPORT,
-                },
-                { status: 409 },
-            );
-        } else if (err.code === "P2003") {
-            // Foreign key constraint violation
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Invalid booking ID or user account.",
-                    errorCode: ReportErrorType.INVALID_REFERENCE,
-                },
-                { status: 400 },
-            );
-        } else if (err.code === "P2025") {
-            // Record not found
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "The booking ID does not exist in our system.",
-                    errorCode: ReportErrorType.BOOKING_NOT_FOUND,
-                },
-                { status: 404 },
-            );
+        if (err && typeof err === "object" && "code" in err) {
+            const prismaError = err as { code: string };
+            if (prismaError.code === "P2002") {
+                // Unique constraint violation
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "A report already exists for this booking ID.",
+                        errorCode: ReportErrorType.DUPLICATE_REPORT,
+                    },
+                    { status: 409 },
+                );
+            } else if (prismaError.code === "P2003") {
+                // Foreign key constraint violation
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "Invalid booking ID or user account.",
+                        errorCode: ReportErrorType.INVALID_REFERENCE,
+                    },
+                    { status: 400 },
+                );
+            } else if (prismaError.code === "P2025") {
+                // Record not found
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "The booking ID does not exist in our system.",
+                        errorCode: ReportErrorType.BOOKING_NOT_FOUND,
+                    },
+                    { status: 404 },
+                );
+            }
         }
 
         // Generic error
