@@ -29,6 +29,8 @@ export default function Modal({
     variant,
     preventClose = false,
     disableRightButton = false,
+    leftButtonTestId,
+    rightButtonTestId,
 }: ModalProps) {
     const colors = themeColors[variant];
     return (
@@ -90,6 +92,7 @@ export default function Modal({
             <DialogActions>
                 {showLeftBtn && (
                     <Button
+                        data-testid={leftButtonTestId}
                         variant="outlined"
                         onClick={onLeftButton}
                         sx={{
@@ -104,6 +107,7 @@ export default function Modal({
 
                 {showRightBtn && (
                     <Button
+                        data-testid={rightButtonTestId}
                         variant="contained"
                         onClick={onRightButton}
                         disabled={disableRightButton}

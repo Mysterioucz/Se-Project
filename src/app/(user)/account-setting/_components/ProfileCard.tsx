@@ -233,6 +233,7 @@ export default function ProfileCard() {
 
                     <div className="flex flex-col gap-[0.75rem]">
                         <Button
+                            data-testid="logout-btn"
                             text="Sign Out"
                             align="center"
                             styleType="fill"
