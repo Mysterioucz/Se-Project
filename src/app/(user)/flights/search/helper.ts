@@ -1,7 +1,7 @@
 import {
     PassengerCount,
     SelectedValues,
-} from "@/src/app/flights/search/_components/search";
+} from "@/src/app/(user)/flights/search/_components/search";
 
 export interface FlightData {
     airlineName: string;
@@ -37,7 +37,7 @@ export interface MappedFlightData {
             date: Date;
             time: string;
             airport: string;
-            city: string; 
+            city: string;
         };
         duration: string;
         stops: number;

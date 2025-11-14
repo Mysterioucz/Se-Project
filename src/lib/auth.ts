@@ -45,7 +45,6 @@ export const nextAuthOptions: NextAuthOptions = {
     ],
     callbacks: {
         signIn: async ({ user, account, profile, email, credentials }) => {
-            console.log(user);
             return true;
         },
         session: async ({ session, token }) => {

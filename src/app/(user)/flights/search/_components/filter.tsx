@@ -1,7 +1,7 @@
 "use client";
 import CheckIcon from "@mui/icons-material/Check";
-import TimeSlider from "../../../../components/TimeSlider";
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import TimeSlider from "@src/components/TimeSlider";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function FlightFilterTab({
     selectedAirlines,
@@ -30,9 +30,9 @@ export default function FlightFilterTab({
         setSelectedAirlines((prevSelectedAirlines: string[]) =>
             prevSelectedAirlines.includes(name)
                 ? prevSelectedAirlines.filter(
-                      (airlineName) => airlineName !== name
+                      (airlineName) => airlineName !== name,
                   )
-                : [...prevSelectedAirlines, name]
+                : [...prevSelectedAirlines, name],
         );
     };
 
@@ -49,8 +49,8 @@ export default function FlightFilterTab({
                 setAirlines(
                     data.data.map(
                         (airline: { AirlineName: string }) =>
-                            airline.AirlineName
-                    )
+                            airline.AirlineName,
+                    ),
                 ); // Extract city names
             } catch (err) {
                 console.log("Failed to fetch cities");
@@ -61,35 +61,35 @@ export default function FlightFilterTab({
     }, []);
 
     return (
-        <div className="flex flex-col bg-primary-200 rounded-lg w-full max-w-[18.75rem] p-3 h-fit gap-2">
+        <div className="bg-primary-200 flex h-fit w-full max-w-[18.75rem] flex-col gap-2 rounded-lg p-3">
             {/* Filter by */}
-            <div className="text-primary-700 text-3xl font-bold py-2 px-1">
+            <div className="text-primary-700 px-1 py-2 text-3xl font-bold">
                 Filter by
             </div>
 
             {/* Airlines */}
-            <div className="bg-white rounded-lg px-3 py-4">
-                <div className="text-primary-900 text-2xl font-bold mx-3 mt-4">
+            <div className="rounded-lg bg-white px-3 py-4">
+                <div className="text-primary-900 mx-3 mt-4 text-2xl font-bold">
                     Airlines
                 </div>
                 <div className="mx-3">
-                    <ul className="space-y-4 max-h-[200] overflow-y-auto pr-2 mb-4 mt-3">
+                    <ul className="mt-3 mb-4 max-h-[200] space-y-4 overflow-y-auto pr-2">
                         {airlines.map((airline, index) => (
                             <li key={index}>
-                                <label className="flex items-center space-x-3 cursor-pointer text-primary-900 text-base">
+                                <label className="text-primary-900 flex cursor-pointer items-center space-x-3 text-base">
                                     <input
                                         type="checkbox"
-                                        className="hidden peer"
+                                        className="peer hidden"
                                         checked={selectedAirlines.includes(
-                                            airline
+                                            airline,
                                         )}
                                         onChange={() =>
                                             handleCheckboxChange(airline)
                                         }
                                     />
 
-                                    <span className="w-6 h-6 border-2 border-dashed border-primary-200 rounded-md flex items-center justify-center transition-all duration-200 peer-checked:bg-primary-200 peer-checked:border-[#a0dde6] peer-checked:border-solid relative">
-                                        <CheckIcon className="hidden w-4 h-4 text-white peer-checked:block" />
+                                    <span className="border-primary-200 peer-checked:bg-primary-200 relative flex h-6 w-6 items-center justify-center rounded-md border-2 border-dashed transition-all duration-200 peer-checked:border-solid peer-checked:border-[#a0dde6]">
+                                        <CheckIcon className="hidden h-4 w-4 text-white peer-checked:block" />
                                     </span>
 
                                     <span className="text-md font-medium">
@@ -103,7 +103,7 @@ export default function FlightFilterTab({
             </div>
 
             {/* Depature Time */}
-            <div className="bg-white rounded-sm px-3 py-4">
+            <div className="rounded-sm bg-white px-3 py-4">
                 <TimeSlider
                     label="Departure Time"
                     value={departureTime}
@@ -112,7 +112,7 @@ export default function FlightFilterTab({
             </div>
 
             {/* Arrival Time */}
-            <div className="bg-white rounded-sm px-3 py-4">
+            <div className="rounded-sm bg-white px-3 py-4">
                 <TimeSlider
                     label="Arrival Time"
                     value={arrivalTime}
@@ -121,16 +121,16 @@ export default function FlightFilterTab({
             </div>
 
             {/* Bottom Button */}
-            <div className="flex flex-row justify-between rounded-sm gap-2">
+            <div className="flex flex-row justify-between gap-2 rounded-sm">
                 <button
-                    className="bg-white text-primary-400 w-full py-2 rounded-sm border-1 border-primary-500 cursor-pointer"
+                    className="text-primary-400 border-primary-500 w-full cursor-pointer rounded-sm border-1 bg-white py-2"
                     onClick={() => handleReset()}
                 >
                     Reset
                 </button>
 
                 <button
-                    className="bg-primary-500 text-white w-full py-2 rounded-sm cursor-pointer"
+                    className="bg-primary-500 w-full cursor-pointer rounded-sm py-2 text-white"
                     onClick={() => handleApply()}
                 >
                     Apply filter
