@@ -2,6 +2,7 @@
 
 import Button from "@/src/components/Button";
 import SelectComponent, { SelectEvent } from "@/src/components/select";
+import { ReportStatusEnum } from "@/src/generated/prisma";
 import { MenuItem } from "@mui/material";
 import { useState } from "react";
 import ReportPiorityMarker from "./ReportPriorityMarker";
@@ -69,8 +70,41 @@ export default function ReportModal({
         "in progress": "In Progress",
         resolved: "Resolved",
         cancelled: "Cancelled",
-    };  
+    };
 
+    const FE_TO_BE: Record<string, ReportStatusEnum> = {
+        opened: "OPENED",
+        "in progress": "IN_PROGRESS",
+        resolved: "RESOLVED",
+        cancelled: "CANCELLED",
+    };
+
+    const updateStatus = async () => {
+        try {
+            const res = await fetch("/api/v1/reports", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    reportID: id,
+                    status: FE_TO_BE[status],
+                }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                alert(data.message || "Failed to update status");
+                return;
+            }
+
+            alert("Status updated successfully!");
+
+            onClose();
+        } catch (err) {
+            console.error(err);
+            alert("Server error");
+        }
+    };
 
     function formatDateTime(dateString: string) {
         const date = new Date(dateString);
@@ -180,7 +214,8 @@ export default function ReportModal({
                                         Problem Type:
                                     </div>
                                     <div className="font-sarabun text-[1rem] leading-[1.2rem] font-normal text-black">
-                                        {problemTypeLabels[problemType] || problemType}
+                                        {problemTypeLabels[problemType] ||
+                                            problemType}
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-[0.75rem] self-stretch px-[1rem]">
@@ -247,21 +282,23 @@ export default function ReportModal({
                                         value={status}
                                         onChange={handleStatusChange}
                                         placeholder={statusLabels[status]}
-                                        renderSelected={() => statusLabels[status]} 
+                                        renderSelected={() =>
+                                            statusLabels[status]
+                                        }
                                         width="w-[16rem]"
                                         height="h-[2.188rem]"
                                         maxChildrenHeight="h-[12.5rem]"
                                     >
-                                        <MenuItem value="Opened">
+                                        <MenuItem value="opened">
                                             Opened
                                         </MenuItem>
-                                        <MenuItem value="In Progress">
+                                        <MenuItem value="in progress">
                                             In Progress
                                         </MenuItem>
-                                        <MenuItem value="Cancelled">
+                                        <MenuItem value="cancelled">
                                             Cancelled
                                         </MenuItem>
-                                        <MenuItem value="Resolved">
+                                        <MenuItem value="resolved">
                                             Resolved
                                         </MenuItem>
                                     </SelectComponent>
@@ -272,12 +309,7 @@ export default function ReportModal({
                                         size="md"
                                         width="w-[16rem]"
                                         height="h-[2.188rem]"
-                                        onClick={() =>
-                                            console.log(
-                                                "Update status:",
-                                                status,
-                                            )
-                                        }
+                                        onClick={updateStatus}
                                     />
                                 </div>
                             </div>
