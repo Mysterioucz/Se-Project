@@ -93,6 +93,7 @@ type CheckoutContextType = {
         baggagePatch: Partial<BaggageAllowance>,
     ) => void;
     clearCheckoutData: () => void; // after successful payment
+    areAllSeatsSelected: () => boolean;
     cartData: Cart;
     departFlight: Flight;
     returnFlight?: Flight;
@@ -314,6 +315,21 @@ export function CheckoutProvider({
         });
     };
 
+    const areAllSeatsSelected = (): boolean => {
+        const isRoundTrip = cartData.FlightType === "Round-trip";
+
+        return checkoutData.passengerData.every((passenger) => {
+            const hasDepartureSeat = !!passenger.seatSelection.departureSeat;
+
+            if (isRoundTrip) {
+                const hasReturnSeat = !!passenger.seatSelection.returnSeat;
+                return hasDepartureSeat && hasReturnSeat;
+            }
+
+            return hasDepartureSeat;
+        });
+    };
+
     return (
         <CheckoutContext.Provider
             value={{
@@ -323,6 +339,7 @@ export function CheckoutProvider({
                 updatePassengerAt,
                 updatePassengerSeatAt,
                 updateBaggageAt,
+                areAllSeatsSelected,
                 cartData,
                 departFlight,
                 returnFlight,

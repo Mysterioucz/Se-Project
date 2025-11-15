@@ -2,12 +2,11 @@
 
 import {
     CHECKOUT_STORAGE_KEY,
-    PassengerData,
     useCheckout,
 } from "@/src/contexts/CheckoutContext";
 import Button from "@components/Button";
 import { FiSrPlane, FlightCardDivider } from "@components/icons/module";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SelectSeatCardProps {
     header: string;
@@ -50,21 +49,24 @@ export default function SelectSeatCard({
     passengerType,
     seatClass,
 }: SelectSeatCardProps) {
-    const { updatePassengerSeatAt } = useCheckout();
+    const { updatePassengerSeatAt, checkoutData } = useCheckout();
     const [selected, setSelected] = useState(false);
     const [selectedPassengers, setSelectedPassengers] = useState<number>(0);
-    const passengerData: PassengerData[] = getPassengerData();
-    const passengerSeatArr: string[] = useState<string[]>(
-        passengerData.map((pass) => {
+    const [passengerSeatArr, setPassengerSeatArr] = useState<string[]>([]);
+    const [curSeat, setCurSeat] = useState("");
+
+    // Initialize and sync passenger seat array with context
+    useEffect(() => {
+        const seats = checkoutData.passengerData.map((pass) => {
             if (header === "Departure") {
                 return pass.seatSelection.departureSeat || "";
             } else if (header === "Return") {
                 return pass.seatSelection.returnSeat || "";
             }
             return "";
-        }),
-    )[0];
-    const [curSeat, setCurSeat] = useState("");
+        });
+        setPassengerSeatArr(seats);
+    }, [checkoutData.passengerData, header]);
 
     function handlePassengerClick(index: number) {
         setSelectedPassengers((prev) => {
@@ -88,8 +90,10 @@ export default function SelectSeatCard({
                 alert("Seat already taken. Please select another seat.");
                 return;
             }
-            // Assign seat to selected passenger
-            passengerSeatArr[selectedPassengers] = seat;
+            // Assign seat to selected passenger and update state
+            const newSeatArr = [...passengerSeatArr];
+            newSeatArr[selectedPassengers] = seat;
+            setPassengerSeatArr(newSeatArr);
             setCurSeat(seat);
         };
     }
@@ -113,11 +117,16 @@ export default function SelectSeatCard({
     }
 
     function handleConfirm() {
+        const newSeatArr = [...passengerSeatArr];
+
         for (let i = 0; i < passengerCount; i++) {
             const seatToAssign =
                 passengerSeatArr[i] === ""
                     ? randomeAvailableSeat()
                     : passengerSeatArr[i];
+
+            // Update local state
+            newSeatArr[i] = seatToAssign;
 
             if (header === "Departure") {
                 updatePassengerSeatAt(i, {
@@ -129,6 +138,9 @@ export default function SelectSeatCard({
                 });
             }
         }
+
+        // Update UI immediately
+        setPassengerSeatArr(newSeatArr);
 
         // Show confirmation message
         alert(`${header} seats confirmed for all passengers!`);
@@ -142,16 +154,16 @@ export default function SelectSeatCard({
         index: number;
         onClick: () => void;
     }) {
+        const passengerData = checkoutData.passengerData;
         return (
             <div
-                className={`bg-primary-50 flex h-[3.1875rem] w-[15.3125rem] rounded-2xl ${selectedPassengers === index ? "ring-primary-400 ring-2" : ""}`}
+                className={`bg-primary-50 flex h-[3.1875rem] w-[15.3125rem] cursor-pointer rounded-2xl ${selectedPassengers === index ? "ring-primary-400 ring-2" : ""}`}
                 onClick={onClick}
             >
                 <div className="flex w-full flex-row items-center justify-between gap-2 px-4 py-[0.3125rem]">
                     <div
                         className={`flex h-8 min-w-8 items-center justify-center rounded-lg p-[0.4375rem] ${passengerSeatArr[index] ? "bg-primary-300" : "bg-disable-main"}`}
                     >
-                        {/* TODO: implement passenger selection */}
                         <p className="!text-common-white !text-[0.875rem]">
                             {passengerSeatArr[index]
                                 ? passengerSeatArr[index]
@@ -251,11 +263,27 @@ export default function SelectSeatCard({
         );
     }
 
+    const selectedSeatsCount = passengerSeatArr.filter(
+        (seat) => seat !== "",
+    ).length;
+    const allSeatsSelected = selectedSeatsCount === passengerCount;
+
     return (
         <div className="bg-primary-50 flex h-fit w-fit rounded-lg p-6">
             {/* Content */}
             <div className="flex h-fit flex-col gap-4">
-                <p className="!text-[2rem] !font-bold">{header}</p>
+                <div className="flex items-center justify-between">
+                    <p className="!text-[2rem] !font-bold">{header}</p>
+                    <div
+                        className={`flex items-center gap-2 rounded-lg px-4 py-2 ${allSeatsSelected ? "bg-green-100" : "bg-yellow-100"}`}
+                    >
+                        <p
+                            className={`!text-[1rem] !font-semibold ${allSeatsSelected ? "!text-green-700" : "!text-yellow-700"}`}
+                        >
+                            {selectedSeatsCount}/{passengerCount} Seats Selected
+                        </p>
+                    </div>
+                </div>
                 {/* Box */}
                 <div className="border-primary-300 flex h-fit w-[49.3125rem] flex-col rounded-sm border-2">
                     {/* Top part */}
