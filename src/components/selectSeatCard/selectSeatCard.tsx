@@ -55,7 +55,14 @@ export default function SelectSeatCard({
     const [selectedPassengers, setSelectedPassengers] = useState<number>(0);
     const passengerData: PassengerData[] = getPassengerData();
     const passengerSeatArr: string[] = useState<string[]>(
-        passengerData.map((pass) => header === "Departure" ? pass.seatSelection.departureSeat || "" : pass.seatSelection.returnSeat || ""),
+        passengerData.map((pass) => {
+            if (header === "Departure") {
+                return pass.seatSelection.departureSeat || "";
+            } else if (header === "Return") {
+                return pass.seatSelection.returnSeat || "";
+            }
+            return "";
+        }),
     )[0];
     const [curSeat, setCurSeat] = useState("");
 
@@ -88,6 +95,7 @@ export default function SelectSeatCard({
     }
 
     function randomeAvailableSeat(): string {
+        console.log("random seat");
         const rows = 10;
         const cols = 6; // A-F
         let seat = "";
@@ -106,22 +114,25 @@ export default function SelectSeatCard({
 
     function handleConfirm() {
         for (let i = 0; i < passengerCount; i++) {
+            const seatToAssign =
+                passengerSeatArr[i] === ""
+                    ? randomeAvailableSeat()
+                    : passengerSeatArr[i];
+
             if (header === "Departure") {
                 updatePassengerSeatAt(i, {
-                    departureSeat:
-                        passengerSeatArr[i] === ""
-                            ? randomeAvailableSeat()
-                            : passengerSeatArr[i],
+                    departureSeat: seatToAssign,
                 });
             } else if (header === "Return") {
                 updatePassengerSeatAt(i, {
-                    returnSeat:
-                        passengerSeatArr[i] === ""
-                            ? randomeAvailableSeat()
-                            : passengerSeatArr[i],
+                    returnSeat: seatToAssign,
                 });
             }
         }
+
+        // Show confirmation message
+        alert(`${header} seats confirmed for all passengers!`);
+        setSelected(false); // Close the seat map after confirmation
     }
 
     function PassengerName({
@@ -133,22 +144,22 @@ export default function SelectSeatCard({
     }) {
         return (
             <div
-                className={`flex w-[15.3125rem] h-[3.1875rem] rounded-2xl bg-primary-50 ${selectedPassengers === index ? "ring-2 ring-primary-400" : ""}`}
+                className={`bg-primary-50 flex h-[3.1875rem] w-[15.3125rem] rounded-2xl ${selectedPassengers === index ? "ring-primary-400 ring-2" : ""}`}
                 onClick={onClick}
             >
-                <div className="flex flex-row gap-2 justify-between items-center w-full px-4 py-[0.3125rem]">
+                <div className="flex w-full flex-row items-center justify-between gap-2 px-4 py-[0.3125rem]">
                     <div
-                        className={`flex min-w-8 h-8 items-center justify-center p-[0.4375rem] rounded-lg ${passengerSeatArr[index] ? "bg-primary-300" : "bg-disable-main"}`}
+                        className={`flex h-8 min-w-8 items-center justify-center rounded-lg p-[0.4375rem] ${passengerSeatArr[index] ? "bg-primary-300" : "bg-disable-main"}`}
                     >
                         {/* TODO: implement passenger selection */}
-                        <p className="!text-[0.875rem] !text-common-white">
+                        <p className="!text-common-white !text-[0.875rem]">
                             {passengerSeatArr[index]
                                 ? passengerSeatArr[index]
                                 : "-"}
                         </p>
                     </div>
-                    <div className="w-[11.125rem] h-[2rem] rounded-lg p-[0.4375rem] bg-primary-100 items-center">
-                        <p className="!text-[0.875rem] !text-primary-400">
+                    <div className="bg-primary-100 h-[2rem] w-[11.125rem] items-center rounded-lg p-[0.4375rem]">
+                        <p className="!text-primary-400 !text-[0.875rem]">
                             {passengerData[index]?.givenName +
                                 " " +
                                 passengerData[index]?.lastName}
@@ -161,17 +172,17 @@ export default function SelectSeatCard({
 
     function SeatMap() {
         return (
-            <div className="flex px-6 bg-white w-full h-[27.0625rem] items-center justify-center">
-                <div className="flex flex-col gap-4 h-[24rem]">
+            <div className="flex h-[27.0625rem] w-full items-center justify-center bg-white px-6">
+                <div className="flex h-[24rem] flex-col gap-4">
                     <div className="flex flex-row gap-5">
                         {/* Seat Map */}
-                        <div className="flex flex-row w-[29.1875rem] rounded-2xl p-8 g-8 bg-primary-50 items-center justify-center">
-                            <div className="flex w-[2rem] h-[14.125rem] rounded-lg bg-white items-center justify-center">
-                                <p className="!text-[0.875rem] !text-primary-600 -rotate-90">
+                        <div className="g-8 bg-primary-50 flex w-[29.1875rem] flex-row items-center justify-center rounded-2xl p-8">
+                            <div className="flex h-[14.125rem] w-[2rem] items-center justify-center rounded-lg bg-white">
+                                <p className="!text-primary-600 -rotate-90 !text-[0.875rem]">
                                     Font
                                 </p>
                             </div>
-                            <div className="flex flex-col gap-2 overflow-x-auto py-2 px-2">
+                            <div className="flex flex-col gap-2 overflow-x-auto px-2 py-2">
                                 {[...Array(6)].map((_, rowIndex) => {
                                     const letter = String.fromCharCode(
                                         70 - rowIndex,
@@ -179,19 +190,19 @@ export default function SelectSeatCard({
                                     const row = (
                                         <div
                                             key={letter}
-                                            className="flex gap-4 items-center"
+                                            className="flex items-center gap-4"
                                         >
                                             {[...Array(10)].map(
                                                 (_, colIndex) => (
                                                     // Seat
                                                     <div
                                                         key={colIndex}
-                                                        className={`${curSeat === `${colIndex + 1}${letter}` ? "ring-2 ring-primary-400" : ""} min-w-8 min-h-8 p-[0.3125rem] ${passengerSeatArr.includes(`${colIndex + 1}${letter}`) && curSeat !== `${colIndex + 1}${letter}` ? "bg-gray-100" : "bg-white"} rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary-100`}
+                                                        className={`${curSeat === `${colIndex + 1}${letter}` ? "ring-primary-400 ring-2" : ""} min-h-8 min-w-8 p-[0.3125rem] ${passengerSeatArr.includes(`${colIndex + 1}${letter}`) && curSeat !== `${colIndex + 1}${letter}` ? "bg-gray-100" : "bg-white"} hover:bg-primary-100 flex cursor-pointer items-center justify-center rounded-lg`}
                                                         onClick={handleSeatClick(
                                                             `${colIndex + 1}${letter}`,
                                                         )}
                                                     >
-                                                        <p className="!text-[0.875rem] !text-primary-600 -rotate-90">
+                                                        <p className="!text-primary-600 -rotate-90 !text-[0.875rem]">
                                                             {colIndex + 1}
                                                             {letter}
                                                         </p>
@@ -241,68 +252,68 @@ export default function SelectSeatCard({
     }
 
     return (
-        <div className="flex p-6 rounded-lg bg-primary-50 h-fit w-fit">
+        <div className="bg-primary-50 flex h-fit w-fit rounded-lg p-6">
             {/* Content */}
-            <div className="flex flex-col h-fit gap-4">
-                <p className="!font-bold !text-[2rem]">{header}</p>
+            <div className="flex h-fit flex-col gap-4">
+                <p className="!text-[2rem] !font-bold">{header}</p>
                 {/* Box */}
-                <div className="flex flex-col w-[49.3125rem] h-fit rounded-sm border-2 border-primary-300">
+                <div className="border-primary-300 flex h-fit w-[49.3125rem] flex-col rounded-sm border-2">
                     {/* Top part */}
-                    <div className="flex py-2 px-4 bg-primary-300">
-                        <p className="!font-semibold !text-[1.25rem] text-white">
+                    <div className="bg-primary-300 flex px-4 py-2">
+                        <p className="!text-[1.25rem] !font-semibold text-white">
                             {header}: {departFrom} to {arriveAt}
                         </p>
                     </div>
-                    <div className="flex flex-row h-fit w-full">
+                    <div className="flex h-fit w-full flex-row">
                         {/* Left part */}
-                        <div className="flex flex-col py-3 gap-3 w-[36rem] bg-primary-50">
-                            <div className="flex px-4 gap-3 items-center">
+                        <div className="bg-primary-50 flex w-[36rem] flex-col gap-3 py-3">
+                            <div className="flex items-center gap-3 px-4">
                                 <FiSrPlane />
-                                <p className="!font-semibold !text-[1.25rem] !text-primary-600">
+                                <p className="!text-primary-600 !text-[1.25rem] !font-semibold">
                                     Airline
                                 </p>
-                                <p className="!text-[1rem] !text-primary-600">
+                                <p className="!text-primary-600 !text-[1rem]">
                                     {date}
                                 </p>
                             </div>
-                            <div className="flex flex-row px-8 pb-2 items-center">
-                                <div className="flex flex-col w-[6.25rem] px-4 pb-2">
-                                    <p className="!font-semibold !text-[1.5rem] !text-primary-600">
+                            <div className="flex flex-row items-center px-8 pb-2">
+                                <div className="flex w-[6.25rem] flex-col px-4 pb-2">
+                                    <p className="!text-primary-600 !text-[1.5rem] !font-semibold">
                                         {departTime}
                                     </p>
-                                    <p className="!text-[1rem] !text-primary-600">
+                                    <p className="!text-primary-600 !text-[1rem]">
                                         {departFrom}
                                     </p>
-                                    <p className="!text-[1rem] !text-primary-500">
+                                    <p className="!text-primary-500 !text-[1rem]">
                                         {departFromFull}
                                     </p>
                                 </div>
-                                <div className="flex flex-col w-fit py-1 px-2 gap-1 items-center">
-                                    <p className="!text-[1rem] !text-primary-500">
+                                <div className="flex w-fit flex-col items-center gap-1 px-2 py-1">
+                                    <p className="!text-primary-500 !text-[1rem]">
                                         {duration}
                                     </p>
                                     <FlightCardDivider />
                                 </div>
-                                <div className="flex flex-col w-fit px-4 pb-2">
-                                    <p className="!font-semibold !text-[1.5rem] !text-primary-600">
+                                <div className="flex w-fit flex-col px-4 pb-2">
+                                    <p className="!text-primary-600 !text-[1.5rem] !font-semibold">
                                         {arriveTime}
                                     </p>
-                                    <p className="!text-[1rem] !text-primary-600">
+                                    <p className="!text-primary-600 !text-[1rem]">
                                         {arriveAt}
                                     </p>
-                                    <p className="!text-[1rem] !text-primary-500">
+                                    <p className="!text-primary-500 !text-[1rem]">
                                         {arriveAtFull}
                                     </p>
                                 </div>
                             </div>
                         </div>
                         {/* Right part */}
-                        <div className="flex flex-col w-[13.3125rem] h-auto px-4 gap-3 bg-primary-100 justify-center items-center">
-                            <div className="flex flex-col gap-1 items-end w-full">
-                                <p className="!text-[1rem] !text-primary-600">
+                        <div className="bg-primary-100 flex h-auto w-[13.3125rem] flex-col items-center justify-center gap-3 px-4">
+                            <div className="flex w-full flex-col items-end gap-1">
+                                <p className="!text-primary-600 !text-[1rem]">
                                     {passengerCount} {passengerType}
                                 </p>
-                                <p className="!font-semibold !text-[1.125rem] !text-primary-600">
+                                <p className="!text-primary-600 !text-[1.125rem] !font-semibold">
                                     {seatClass}
                                 </p>
                             </div>

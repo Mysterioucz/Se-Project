@@ -66,7 +66,7 @@ export interface Cart {
         AirlineName: string;
         Stops: number;
     };
-    Return: {
+    Return?: {
         FlightNo: string;
         DepartTime: Date;
         ArrivalTime: Date;
@@ -111,17 +111,10 @@ export const initialBaggageAllowance: BaggageAllowance = {
         Price: 0,
         Description: "",
     },
-    returnBaggage: {
-        ServiceID: "",
-        ServiceName: "",
-        Price: 0,
-        Description: "",
-    },
 };
 
 export const initialSeatSelection: Seat = {
     departureSeat: "",
-    returnSeat: "",
 };
 
 const initialPassengerData: PassengerData = {
@@ -203,9 +196,27 @@ export function CheckoutProvider({
     };
 
     // helper to make an empty PassengerData (you already have `initialPassengerData`)
-    const makeEmptyPassenger = (): PassengerData => ({
-        ...initialPassengerData, // or create a fresh object if needed
-    });
+    const makeEmptyPassenger = (): PassengerData => {
+        const isRoundTrip = cartData.FlightType === "Round-trip";
+        return {
+            ...initialPassengerData,
+            baggageAllowance: {
+                departureBaggage: initialBaggageAllowance.departureBaggage,
+                ...(isRoundTrip && {
+                    returnBaggage: {
+                        ServiceID: "",
+                        ServiceName: "",
+                        Price: 0,
+                        Description: "",
+                    },
+                }),
+            },
+            seatSelection: {
+                departureSeat: "",
+                ...(isRoundTrip && { returnSeat: "" }),
+            },
+        };
+    };
 
     // ensures list has length > index
     const ensurePassengerAt = (index: number) => {

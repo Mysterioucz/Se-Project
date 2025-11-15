@@ -39,22 +39,22 @@ export default function Page() {
     }
 
     function returnSelectCard(flightData: Flight | undefined, cartData: Cart) {
-        if (!flightData) {
-            return <div>Loading...</div>;
+        if (!flightData || !cartData.Return) {
+            return null;
         }
         return (
             <SelectSeatCard
-                header={flightData.FlightNo}
+                header="Return"
                 departFrom={flightData.DepartureAirportID}
                 departFromFull=""
                 arriveAt={flightData.ArrivalAirportID}
-                departTime={formatToTime(flightData.DepartTime)}
-                arriveTime={formatToTime(flightData.ArrivalTime)}
+                departTime={formatToTime(cartData.Return.DepartTime)}
+                arriveTime={formatToTime(cartData.Return.ArrivalTime)}
                 duration={getFlightDuration(
-                    flightData.DepartTime,
-                    flightData.ArrivalTime,
+                    cartData.Return.DepartTime,
+                    cartData.Return.ArrivalTime,
                 )}
-                date={formatToShortDate(flightData.DepartTime)}
+                date={formatToShortDate(cartData.Return.DepartTime)}
                 passengerCount={
                     cartData.Adults + cartData.Childrens + cartData.Infants
                 }
@@ -66,9 +66,11 @@ export default function Page() {
 
     return (
         <div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-6">
                 {departSelectCard(departFlight, cartData)}
-                {cartData.Return && returnSelectCard(returnFlight, cartData)}
+                {returnFlight &&
+                    cartData.Return &&
+                    returnSelectCard(returnFlight, cartData)}
             </div>
         </div>
     );
