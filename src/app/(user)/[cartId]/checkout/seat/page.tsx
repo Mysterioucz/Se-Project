@@ -5,7 +5,7 @@ import {
     formatToTime,
     getFlightDuration,
 } from "@/src/components/booking/FlightDetail";
-import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
+import SelectSeatCard from "@/src/app/(user)/[cartId]/checkout/seat/_components/selectSeatCard";
 import { Cart } from "@/src/contexts/checkout/types";
 import { useCheckout } from "@/src/contexts/CheckoutContext";
 import { Flight } from "@/src/helper/CheckoutHelper";
@@ -35,6 +35,7 @@ export default function Page() {
                 }
                 passengerType="People"
                 seatClass={cartData.ClassType}
+                flightData={flightData}
             />
         );
     }
@@ -61,6 +62,7 @@ export default function Page() {
                 }
                 passengerType="People"
                 seatClass={cartData.ClassType}
+                flightData={flightData}
             />
         );
     }

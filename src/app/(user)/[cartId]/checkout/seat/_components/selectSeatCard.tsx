@@ -4,6 +4,7 @@ import {
     CHECKOUT_STORAGE_KEY,
     useCheckout,
 } from "@/src/contexts/CheckoutContext";
+import { Flight } from "@/src/helper/CheckoutHelper";
 import Button from "@components/Button";
 import { FiSrPlane, FlightCardDivider } from "@components/icons/module";
 import { useEffect, useState } from "react";
@@ -21,6 +22,13 @@ interface SelectSeatCardProps {
     passengerCount: number;
     passengerType?: string;
     seatClass: string;
+    flightData: Flight;
+}
+
+interface SeatData {
+    SeatNo: string;
+    SeatType: string;
+    IsAvailable: boolean;
 }
 
 function getPassengerData() {
@@ -48,12 +56,52 @@ export default function SelectSeatCard({
     passengerCount,
     passengerType,
     seatClass,
+    flightData,
 }: SelectSeatCardProps) {
     const { updatePassengerSeatAt, checkoutData } = useCheckout();
     const [selected, setSelected] = useState(false);
     const [selectedPassengers, setSelectedPassengers] = useState<number>(0);
     const [passengerSeatArr, setPassengerSeatArr] = useState<string[]>([]);
     const [curSeat, setCurSeat] = useState("");
+    const [availableSeats, setAvailableSeats] = useState<SeatData[]>([]);
+    const [loadingSeats, setLoadingSeats] = useState(false);
+
+    // Fetch available seats from database
+    useEffect(() => {
+        const fetchAvailableSeats = async () => {
+            setLoadingSeats(true);
+            try {
+                const params = new URLSearchParams({
+                    flightNo: flightData.FlightNo,
+                    departTime: flightData.DepartTime.toString(),
+                    arrivalTime: flightData.ArrivalTime.toString(),
+                });
+
+                const response = await fetch(
+                    `/api/v1/flights/lookup?${params.toString()}`,
+                );
+                const data = await response.json();
+
+                if (data.success && data.data.flight.seats) {
+                    const availableSeats = data.data.flight.seats.filter(
+                        (seat: SeatData) => seat.IsAvailable,
+                    );
+                    setAvailableSeats(availableSeats);
+                } else {
+                    console.error("Failed to fetch seats:", data.error);
+                    // Fallback to empty array
+                    setAvailableSeats([]);
+                }
+            } catch (error) {
+                console.error("Error fetching available seats:", error);
+                setAvailableSeats([]);
+            } finally {
+                setLoadingSeats(false);
+            }
+        };
+
+        fetchAvailableSeats();
+    }, [flightData]);
 
     // Initialize and sync passenger seat array with context
     useEffect(() => {
@@ -85,11 +133,24 @@ export default function SelectSeatCard({
                 alert("Please select a passenger first.");
                 return;
             }
-            // Check if seat is already taken
-            if (passengerSeatArr.includes(seat) && curSeat !== seat) {
-                alert("Seat already taken. Please select another seat.");
+
+            // Check if seat is available in database
+            const seatData = availableSeats.find((s) => s.SeatNo === seat);
+            if (!seatData || !seatData.IsAvailable) {
+                alert(
+                    "This seat is not available. Please select another seat.",
+                );
                 return;
             }
+
+            // Check if seat is already taken by another passenger
+            if (passengerSeatArr.includes(seat) && curSeat !== seat) {
+                alert(
+                    "Seat already taken by another passenger. Please select another seat.",
+                );
+                return;
+            }
+
             // Assign seat to selected passenger and update state
             const newSeatArr = [...passengerSeatArr];
             newSeatArr[selectedPassengers] = seat;
@@ -98,22 +159,25 @@ export default function SelectSeatCard({
         };
     }
 
-    function randomeAvailableSeat(): string {
+    function randomAvailableSeat(): string {
         console.log("random seat");
-        const rows = 10;
-        const cols = 6; // A-F
-        let seat = "";
-        while (true) {
-            const row = Math.floor(Math.random() * rows) + 1;
-            const col = String.fromCharCode(
-                65 + Math.floor(Math.random() * cols),
-            ); // 65 = 'A'
-            seat = `${row}${col}`;
-            if (!passengerSeatArr.includes(seat)) {
-                break;
-            }
+        // Filter seats that are available in database and not already selected
+        const availableSeatsFiltered = availableSeats.filter(
+            (seat) =>
+                seat.IsAvailable && !passengerSeatArr.includes(seat.SeatNo),
+        );
+
+        if (availableSeatsFiltered.length === 0) {
+            // Fallback: no available seats found
+            console.error("No available seats found");
+            return "";
         }
-        return seat;
+
+        // Pick a random seat from available seats
+        const randomIndex = Math.floor(
+            Math.random() * availableSeatsFiltered.length,
+        );
+        return availableSeatsFiltered[randomIndex].SeatNo;
     }
 
     function handleConfirm() {
@@ -122,7 +186,7 @@ export default function SelectSeatCard({
         for (let i = 0; i < passengerCount; i++) {
             const seatToAssign =
                 passengerSeatArr[i] === ""
-                    ? randomeAvailableSeat()
+                    ? randomAvailableSeat()
                     : passengerSeatArr[i];
 
             // Update local state
@@ -183,9 +247,48 @@ export default function SelectSeatCard({
     }
 
     function SeatMap() {
+        const isSeatAvailable = (seatNo: string): boolean => {
+            const seatData = availableSeats.find((s) => s.SeatNo === seatNo);
+            return seatData ? seatData.IsAvailable : false;
+        };
+
+        const getSeatClassName = (seatNo: string): string => {
+            const isCurrentSeat = curSeat === seatNo;
+            const isTakenByOtherPassenger =
+                passengerSeatArr.includes(seatNo) && !isCurrentSeat;
+            const isAvailable = isSeatAvailable(seatNo);
+
+            let className =
+                "min-h-8 min-w-8 p-[0.3125rem] flex items-center justify-center rounded-lg ";
+
+            if (isCurrentSeat) {
+                className += "ring-primary-400 ring-2 ";
+            }
+
+            if (isTakenByOtherPassenger) {
+                className += "bg-blue-200 cursor-not-allowed ";
+            } else if (!isAvailable) {
+                className += "bg-gray-300 cursor-not-allowed ";
+            } else {
+                className += "bg-white hover:bg-primary-100 cursor-pointer ";
+            }
+
+            return className;
+        };
+
+        if (loadingSeats) {
+            return (
+                <div className="flex h-[27.0625rem] w-full items-center justify-center bg-white px-6">
+                    <p className="!text-primary-600 !text-[1rem]">
+                        Loading seats...
+                    </p>
+                </div>
+            );
+        }
+
         return (
-            <div className="flex h-[27.0625rem] w-full items-center justify-center bg-white px-6">
-                <div className="flex h-[24rem] flex-col gap-4">
+            <div className="flex h-fit w-full items-center justify-center bg-white py-6 px-6">
+                <div className="flex h-fit flex-col gap-4">
                     <div className="flex flex-row gap-5">
                         {/* Seat Map */}
                         <div className="g-8 bg-primary-50 flex w-[29.1875rem] flex-row items-center justify-center rounded-2xl p-8">
@@ -205,21 +308,25 @@ export default function SelectSeatCard({
                                             className="flex items-center gap-4"
                                         >
                                             {[...Array(10)].map(
-                                                (_, colIndex) => (
-                                                    // Seat
-                                                    <div
-                                                        key={colIndex}
-                                                        className={`${curSeat === `${colIndex + 1}${letter}` ? "ring-primary-400 ring-2" : ""} min-h-8 min-w-8 p-[0.3125rem] ${passengerSeatArr.includes(`${colIndex + 1}${letter}`) && curSeat !== `${colIndex + 1}${letter}` ? "bg-gray-100" : "bg-white"} hover:bg-primary-100 flex cursor-pointer items-center justify-center rounded-lg`}
-                                                        onClick={handleSeatClick(
-                                                            `${colIndex + 1}${letter}`,
-                                                        )}
-                                                    >
-                                                        <p className="!text-primary-600 -rotate-90 !text-[0.875rem]">
-                                                            {colIndex + 1}
-                                                            {letter}
-                                                        </p>
-                                                    </div>
-                                                ),
+                                                (_, colIndex) => {
+                                                    const seatNo = `${colIndex + 1}${letter}`;
+                                                    return (
+                                                        // Seat
+                                                        <div
+                                                            key={colIndex}
+                                                            className={getSeatClassName(
+                                                                seatNo,
+                                                            )}
+                                                            onClick={handleSeatClick(
+                                                                seatNo,
+                                                            )}
+                                                        >
+                                                            <p className="!text-primary-600 -rotate-90 !text-[0.875rem]">
+                                                                {seatNo}
+                                                            </p>
+                                                        </div>
+                                                    );
+                                                },
                                             )}
                                         </div>
                                     );
@@ -242,7 +349,6 @@ export default function SelectSeatCard({
 
                         {/* Passengers */}
                         <div className="flex flex-col gap-4">
-                            {/* TODO: implement passenger selection to match seat selection */}
                             {[...Array(passengerCount)].map((_, index) => (
                                 <PassengerName
                                     key={index}
@@ -252,6 +358,23 @@ export default function SelectSeatCard({
                             ))}
                         </div>
                     </div>
+
+                    {/* Legend */}
+                    <div className="flex flex-row items-center justify-center gap-4">
+                        <div className="flex items-center gap-2">
+                            <div className="h-6 w-6 rounded border border-gray-300 bg-white"></div>
+                            <p className="!text-[0.875rem]">Available</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="h-6 w-6 rounded bg-gray-300"></div>
+                            <p className="!text-[0.875rem]">Unavailable</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="h-6 w-6 rounded bg-blue-200"></div>
+                            <p className="!text-[0.875rem]">Selected by you</p>
+                        </div>
+                    </div>
+
                     <Button
                         text="Confirm"
                         height="h-[2.0625rem]"
