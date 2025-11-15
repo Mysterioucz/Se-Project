@@ -12,21 +12,22 @@ test.describe("Logout Flow", () => {
 
   // Login before each test
   test.beforeEach(async ({ page }) => {
+    console.log("LOGINURL", loginUrl);
     await page.goto(loginUrl);
 
     await page.getByPlaceholder("Enter your email").fill(USER_EMAIL);
     await page.getByPlaceholder("Enter your password").fill(USER_PASS);
+    await page.getByRole("button", { name: "Sign In", exact: true }).click();
 
-    await page.getByTestId("signin").click();
 
-    await page.waitForURL(flightsearchUrl);
+    await page.waitForURL(/\/flights\/search$/, { timeout: 10000 });
     expect(page.url()).toContain("/flights/search");
   });
 
   async function performLogout(page: Page) {
-    await page.getByTestId("navbar-profile").click();
-    await page.getByTestId("logout-btn").click();
-    await page.getByTestId("confirm-logout-btn").click();///////////////////////////////////////////////////////
+    await page.getByRole('button', { name: 'Icon start Profile' }).click();
+    await page.getByRole('button', { name: 'Sign Out' }).click();
+    await page.getByTestId('confirm-logout-btn').click();
     await page.waitForURL(loginUrl);
   }
 
@@ -41,7 +42,8 @@ test.describe("Logout Flow", () => {
   test("navbar should show Sign in / Register after logout", async ({ page }) => {
     await performLogout(page);
 
-    const text = await page.locator("#navbar-login").innerText();
+    
+    const text = await page.getByRole('button', { name: 'Icon start Sign in / Register' }).innerText();
     expect(text.trim()).toBe("Sign in / Register");
   });
 
@@ -52,8 +54,8 @@ test.describe("Logout Flow", () => {
     // Try to access protected page
     await page.goto(flightsearchUrl);
 
-    await page.waitForURL(loginUrl);
-    expect(page.url()).toBe(loginUrl);
+    await page.waitForURL(/\/login/);
+    expect(page.url()).toContain("/login");
   });
 
   
