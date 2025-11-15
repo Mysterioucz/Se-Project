@@ -166,8 +166,8 @@ export default function QRModal({ open, onClose }: QRModalProps) {
         );
         console.log("Payment Response:", res);
         const PaymentID = res.data.PaymentID;
-        if (res.success) {
-            router.push(`/payment/success/${PaymentID}`);
+        if (res.success && PaymentID) {
+            router.push(`/payment-success/${PaymentID}`);
         }
     };
     useEffect(() => {
