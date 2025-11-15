@@ -6,7 +6,7 @@ import {
     getFlightDuration,
 } from "@/src/components/booking/FlightDetail";
 import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
-import { Cart } from "@/src/contexts/CheckoutContext";
+import { Cart } from "@/src/contexts/checkout/types";
 import { Flight } from "@/src/helper/CheckoutHelper";
 
 interface props {

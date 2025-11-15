@@ -33,18 +33,6 @@ import {
     validateCheckoutDataAgainstCart,
 } from "./checkout/validation";
 
-// Re-export types and constants for backward compatibility
-export type {
-    BaggageAllowance,
-    Cart,
-    CheckoutPayload,
-    Info,
-    PassengerData,
-    Payment,
-    Seat,
-    ServiceType,
-} from "./checkout/types";
-
 export {
     CHECKOUT_STORAGE_KEY,
     initialBaggageAllowance,

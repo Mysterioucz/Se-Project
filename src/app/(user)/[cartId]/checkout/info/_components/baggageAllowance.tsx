@@ -2,9 +2,9 @@
 import {
     PassengerData,
     ServiceType,
-    useCheckout,
     type BaggageAllowance,
-} from "@/src/contexts/CheckoutContext";
+} from "@/src/contexts/checkout/types";
+import { useCheckout } from "@/src/contexts/CheckoutContext";
 import SelectComponent from "@components/select";
 import { MenuItem } from "@mui/material";
 import Image from "next/image";
@@ -87,15 +87,15 @@ function AdditionalServiceSection({
     const to = isReturn ? departurePlace : arrivalPlace;
 
     return (
-        <div className={`flex flex-col p-0 m-0 ${isReturn ? "mt-4" : ""}`}>
-            <div className="flex p-[0.25rem] items-center gap-[0.5rem] self-stretch rounded-[0.25rem] bg-white">
-                <div className="flex p-[0.25rem] justify-center items-center rounded-[0.25rem] bg-primary-300">
-                    <div className="text-white font-sarabun text-[0.75rem] not-italic font-normal leading-[1.2]">
+        <div className={`m-0 flex flex-col p-0 ${isReturn ? "mt-4" : ""}`}>
+            <div className="flex items-center gap-[0.5rem] self-stretch rounded-[0.25rem] bg-white p-[0.25rem]">
+                <div className="bg-primary-300 flex items-center justify-center rounded-[0.25rem] p-[0.25rem]">
+                    <div className="font-sarabun text-[0.75rem] leading-[1.2] font-normal text-white not-italic">
                         {isReturn ? "Return" : "Depart"}
                     </div>
                 </div>
 
-                <div className="text-primary-300 font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
+                <div className="text-primary-300 font-sarabun text-[0.875rem] leading-[1.2] font-normal not-italic">
                     {from} ⇒ {to}
                 </div>
             </div>
@@ -105,26 +105,26 @@ function AdditionalServiceSection({
                     key={index}
                     className="flex items-start gap-[1rem] self-stretch"
                 >
-                    <div className="flex w-[9.688rem] flex-col justify-center items-center self-stretch py-[1rem]">
-                        <div className="text-black font-sarabun text-[1rem] not-italic font-normal leading-[1.2] text-nowrap">
+                    <div className="flex w-[9.688rem] flex-col items-center justify-center self-stretch py-[1rem]">
+                        <div className="font-sarabun text-[1rem] leading-[1.2] font-normal text-nowrap text-black not-italic">
                             {name}
                         </div>
                     </div>
 
-                    <div className="flex w-[9.688rem] flex-col justify-center items-center self-stretch py-[1rem]">
-                        <div className="text-black text-center font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
+                    <div className="flex w-[9.688rem] flex-col items-center justify-center self-stretch py-[1rem]">
+                        <div className="font-sarabun text-center text-[0.875rem] leading-[1.2] font-normal text-black not-italic">
                             1 piece, 7 kg including carry-on baggage
                         </div>
                     </div>
 
-                    <div className="flex w-[9.688rem] flex-col justify-center items-center self-stretch py-[1rem]">
-                        <div className="text-black text-center font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
+                    <div className="flex w-[9.688rem] flex-col items-center justify-center self-stretch py-[1rem]">
+                        <div className="font-sarabun text-center text-[0.875rem] leading-[1.2] font-normal text-black not-italic">
                             1 piece, 7 kg including personal items
                         </div>
                     </div>
 
-                    <div className="flex w-[9.625rem] flex-col justify-center items-center px-[0.5rem] gap-[0.5rem] py-[1rem]">
-                        <div className="text-black text-center font-sarabun text-[0.875rem] not-italic font-normal leading-[1.2]">
+                    <div className="flex w-[9.625rem] flex-col items-center justify-center gap-[0.5rem] px-[0.5rem] py-[1rem]">
+                        <div className="font-sarabun text-center text-[0.875rem] leading-[1.2] font-normal text-black not-italic">
                             {(initialCheckedBaggage[index] ?? 0) > 0
                                 ? `1 x ${initialCheckedBaggage[index]} kg`
                                 : "Not Included"}
@@ -294,12 +294,12 @@ export default function BaggageAllowance({
     };
 
     return (
-        <div className="flex w-[44.625rem] px-[1.5rem] py-[0.75rem] flex-col justify-center items-start rounded-[0.5rem] bg-primary-50">
+        <div className="bg-primary-50 flex w-[44.625rem] flex-col items-start justify-center rounded-[0.5rem] px-[1.5rem] py-[0.75rem]">
             <div className="flex items-start gap-4 self-stretch">
-                <div className="flex w-[9.625rem] h-[9.625rem] p-[0.625rem] flex-col justify-center items-center gap-[0.625rem]"></div>
+                <div className="flex h-[9.625rem] w-[9.625rem] flex-col items-center justify-center gap-[0.625rem] p-[0.625rem]"></div>
 
-                <div className="flex w-[9.625rem] h-[9.625rem] p-[0.625rem] flex-col justify-center items-center gap-[0.625rem]">
-                    <div className="flex w-[3.563rem] h-[3.563rem] px-[0.371rem] py-[0.297rem] justify-center items-center shrink-0 aspect-square">
+                <div className="flex h-[9.625rem] w-[9.625rem] flex-col items-center justify-center gap-[0.625rem] p-[0.625rem]">
+                    <div className="flex aspect-square h-[3.563rem] w-[3.563rem] shrink-0 items-center justify-center px-[0.371rem] py-[0.297rem]">
                         <Image
                             src="/additional-services/backpack.svg"
                             alt="Logo"
@@ -307,13 +307,13 @@ export default function BaggageAllowance({
                             height={57}
                         />
                     </div>
-                    <div className="text-black font-sarabun text-[1rem] not-italic font-normal leading-[1.2]">
+                    <div className="font-sarabun text-[1rem] leading-[1.2] font-normal text-black not-italic">
                         Personal Item
                     </div>
                 </div>
 
-                <div className="flex w-[9.625rem] h-[9.625rem] p-[0.625rem] flex-col justify-center items-center gap-[0.625rem]">
-                    <div className="flex w-[3.563rem] h-[3.563rem] px-[0.371rem] py-[0.297rem] justify-center items-center shrink-0 aspect-square">
+                <div className="flex h-[9.625rem] w-[9.625rem] flex-col items-center justify-center gap-[0.625rem] p-[0.625rem]">
+                    <div className="flex aspect-square h-[3.563rem] w-[3.563rem] shrink-0 items-center justify-center px-[0.371rem] py-[0.297rem]">
                         <Image
                             src="/additional-services/carryon-baggage.svg"
                             alt="Logo"
@@ -321,13 +321,13 @@ export default function BaggageAllowance({
                             height={57}
                         />
                     </div>
-                    <div className="text-black font-sarabun text-[1rem] not-italic font-normal leading-[1.2]">
+                    <div className="font-sarabun text-[1rem] leading-[1.2] font-normal text-black not-italic">
                         Carry-on Baggage
                     </div>
                 </div>
 
-                <div className="flex w-[9.625rem] h-[9.625rem] p-[0.625rem] flex-col justify-center items-center gap-[0.625rem]">
-                    <div className="flex w-[3.563rem] h-[3.563rem] px-[0.371rem] py-[0.297rem] justify-center items-center shrink-0 aspect-square">
+                <div className="flex h-[9.625rem] w-[9.625rem] flex-col items-center justify-center gap-[0.625rem] p-[0.625rem]">
+                    <div className="flex aspect-square h-[3.563rem] w-[3.563rem] shrink-0 items-center justify-center px-[0.371rem] py-[0.297rem]">
                         <Image
                             src="/additional-services/checked-baggage.svg"
                             alt="Logo"
@@ -335,7 +335,7 @@ export default function BaggageAllowance({
                             height={57}
                         />
                     </div>
-                    <div className="text-black font-sarabun text-[1rem] not-italic font-normal leading-[1.2]">
+                    <div className="font-sarabun text-[1rem] leading-[1.2] font-normal text-black not-italic">
                         Checked Baggage
                     </div>
                 </div>

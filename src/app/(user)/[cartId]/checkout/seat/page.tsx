@@ -6,7 +6,8 @@ import {
     getFlightDuration,
 } from "@/src/components/booking/FlightDetail";
 import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
-import { Cart, useCheckout } from "@/src/contexts/CheckoutContext";
+import { Cart } from "@/src/contexts/checkout/types";
+import { useCheckout } from "@/src/contexts/CheckoutContext";
 import { Flight } from "@/src/helper/CheckoutHelper";
 
 export default function Page() {

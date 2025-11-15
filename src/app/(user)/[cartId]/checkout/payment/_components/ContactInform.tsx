@@ -3,7 +3,6 @@
 import { useCheckout } from "@/src/contexts/CheckoutContext";
 import TextFieldComponent from "@components/text_field";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Email } from "@mui/icons-material";
 import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -46,7 +45,6 @@ const ContactInform = React.memo(function ContactInform({
     const values = watch();
     const lastNotifiedRef = useRef<string>("");
 
-    // Only notify when values actually change to prevent infinite loops
     useEffect(() => {
         const currentValues = JSON.stringify({
             isValid,
@@ -63,18 +61,16 @@ const ContactInform = React.memo(function ContactInform({
         }
         lastNotifiedRef.current = currentValues;
         onStatusChange(isValid, values);
-        // Only depend on the actual values and validation state, not the callback
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isValid, values.userContactEmail, values.userTel]);
 
-    const handleEmailChange = (val: any) => {
+    const handleEmailChange = (val: unknown) => {
         const { text } = val as { text: string };
         setValue("userContactEmail", text, {
             shouldValidate: true,
         });
     };
 
-    const handleTelChange = (val: any) => {
+    const handleTelChange = (val: unknown) => {
         const { text } = val as { text: string };
         setValue("userTel", text, { shouldValidate: true });
     };
