@@ -254,22 +254,22 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        // Check if a report already exists for this PaymentID
-        const existingReport = await prisma.report.findUnique({
-            where: { PaymentID: paymentId },
-        });
+        // // Check if a report already exists for this PaymentID
+        // const existingReport = await prisma.report.findUnique({
+        //     where: { PaymentID: paymentId },
+        // });
 
-        if (existingReport) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message:
-                        "A report has already been submitted for this booking ID. Please contact support if you need to update your existing report.",
-                    errorCode: ReportErrorType.DUPLICATE_REPORT,
-                },
-                { status: 409 }, // 409 Conflict
-            );
-        }
+        // if (existingReport) {
+        //     return NextResponse.json(
+        //         {
+        //             success: false,
+        //             message:
+        //                 "A report has already been submitted for this booking ID. Please contact support if you need to update your existing report.",
+        //             errorCode: ReportErrorType.DUPLICATE_REPORT,
+        //         },
+        //         { status: 409 }, // 409 Conflict
+        //     );
+        // }
 
         // Verify that the payment/booking exists
         const payment = await prisma.payment.findUnique({
