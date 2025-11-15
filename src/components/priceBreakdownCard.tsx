@@ -9,6 +9,11 @@ export interface TicketSummaryProps {
     quantity: number;
 }
 
+export interface FlightPricing {
+    departurePrice: number;
+    returnPrice?: number; // Optional for round-trip
+}
+
 export interface BaggageSummaryProps {
     personal_item_price: number;
     carry_on_item_price: number;
@@ -32,6 +37,42 @@ function TicketSummary({ type, price, quantity }: TicketSummaryProps) {
 
                 <div className="font-sarabun col-span-1 col-start-2 row-span-1 row-start-1 justify-self-end text-right text-[0.875rem] leading-[120%] font-normal text-gray-500">
                     x {quantity}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function FlightTicketSummary({
+    flightLabel,
+    type,
+    price,
+    quantity,
+}: {
+    flightLabel: string;
+    type: PassengerTypes;
+    price: number;
+    quantity: number;
+}) {
+    return (
+        <div className="flex flex-col gap-1 pl-[0.75rem]">
+            <div className="font-sarabun text-[0.75rem] leading-[120%] font-medium text-gray-600">
+                {flightLabel}
+            </div>
+            <div className="grid h-[1.75rem] grid-cols-[repeat(2,minmax(0,1fr))] gap-x-[1rem]">
+                {/* Passenger Type */}
+                <div className="font-sarabun text-[0.875rem] leading-[120%] font-normal text-gray-500">
+                    {type}
+                </div>
+
+                {/* Price and Count */}
+                <div className="grid h-[1.75rem] w-[7.25rem] grid-cols-[repeat(2,minmax(0,1fr))] justify-self-end">
+                    <div className="font-sarabun justify-self-end text-right text-[0.875rem] leading-[120%] font-normal whitespace-nowrap text-gray-500">
+                        ฿ {price.toFixed(2)}
+                    </div>
+                    <div className="font-sarabun justify-self-end text-right text-[0.875rem] leading-[120%] font-normal text-gray-500">
+                        x {quantity}
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,11 +114,15 @@ function BaggageSummary({
 interface PriceBreakdownCardProps {
     tickets: TicketSummaryProps[];
     servicesFee?: number;
+    flightPricing?: FlightPricing; // Optional: for detailed round-trip breakdown
+    isRoundTrip?: boolean; // Flag to indicate if this is a round-trip booking
 }
 
 export default function PriceBreakdownCard({
     tickets,
     servicesFee = 0,
+    flightPricing,
+    isRoundTrip = false,
 }: PriceBreakdownCardProps) {
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [totalBaggagePrice, setTotalBaggagePrice] = useState<number>(0);
@@ -94,6 +139,13 @@ export default function PriceBreakdownCard({
         setTotalBaggagePrice(servicesFee);
         setTotalPrice(ticketTotal + baggageTotal);
     }, [tickets, servicesFee]);
+
+    // Check if we have detailed flight pricing for round-trip
+    const hasDetailedPricing =
+        flightPricing &&
+        isRoundTrip &&
+        flightPricing.returnPrice !== undefined &&
+        flightPricing.returnPrice !== null;
 
     return (
         <div className="border-primary-300 flex flex-col items-start gap-[1rem] self-stretch rounded-[0.5rem] border-[0.125rem] bg-white p-[1rem_1.5rem]">
@@ -114,19 +166,62 @@ export default function PriceBreakdownCard({
 
                         {/* Ticket Summary Components */}
                         <div className="flex flex-col space-y-[0.5rem] self-stretch">
-                            {tickets.map((ticket, index) => {
-                                if (ticket.quantity > 0) {
-                                    return (
-                                        <TicketSummary
-                                            key={index}
-                                            type={ticket.type}
-                                            price={ticket.price}
-                                            quantity={ticket.quantity}
-                                        />
-                                    );
-                                }
-                                return;
-                            })}
+                            {hasDetailedPricing ? (
+                                // Detailed round-trip breakdown
+                                <>
+                                    {tickets.map((ticket, index) => {
+                                        if (ticket.quantity > 0) {
+                                            return (
+                                                <div
+                                                    key={`detailed-${index}`}
+                                                    className="flex flex-col gap-2"
+                                                >
+                                                    <FlightTicketSummary
+                                                        flightLabel="Departure"
+                                                        type={ticket.type}
+                                                        price={
+                                                            flightPricing!
+                                                                .departurePrice
+                                                        }
+                                                        quantity={
+                                                            ticket.quantity
+                                                        }
+                                                    />
+                                                    <FlightTicketSummary
+                                                        flightLabel="Return"
+                                                        type={ticket.type}
+                                                        price={
+                                                            flightPricing!
+                                                                .returnPrice!
+                                                        }
+                                                        quantity={
+                                                            ticket.quantity
+                                                        }
+                                                    />
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    })}
+                                </>
+                            ) : (
+                                // Standard breakdown (combines both flights or one-way)
+                                <>
+                                    {tickets.map((ticket, index) => {
+                                        if (ticket.quantity > 0) {
+                                            return (
+                                                <TicketSummary
+                                                    key={index}
+                                                    type={ticket.type}
+                                                    price={ticket.price}
+                                                    quantity={ticket.quantity}
+                                                />
+                                            );
+                                        }
+                                        return null;
+                                    })}
+                                </>
+                            )}
                         </div>
                     </div>
 

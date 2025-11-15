@@ -45,12 +45,12 @@ export default function QRModal({ open, onClose }: QRModalProps) {
                 const returnBaggageFee =
                     passenger.baggageAllowance.returnBaggage?.Price || 0;
                 return (
-                    sum +
                     cartData.Price +
                     departureBaggageFee +
                     returnBaggageFee
                 );
             }, 0) || 0;
+        console.log(checkoutData.passengerData);
         setAmount(totalAmount);
     }, [open]);
 

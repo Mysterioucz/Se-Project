@@ -5,6 +5,7 @@ import { CheckoutProvider } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { fetchCartData, fetchFlightData } from "@/src/helper/CheckoutHelper";
 import PriceBreakdownCard, {
+    FlightPricing,
     TicketSummaryProps,
 } from "@components/priceBreakdownCard";
 import BookingInfo from "./_components/BookingInfo";
@@ -37,10 +38,29 @@ export default async function CheckoutLayout({
     const childCount = cartData?.Childrens ?? 0;
     const infantCount = cartData?.Infants ?? 0;
 
-    // The `Price` on Cart appears to be the total price stored in cart.
-    // We'll distribute it proportionally across passenger types by count.
+    // Determine if this is a round-trip booking
+    const isRoundTrip = !!cartData.Return;
+
+    // Calculate pricing
     const totalPassengers = adultCount + childCount + infantCount || 1;
     const pricePerPassenger = (cartData?.Price ?? 0) / totalPassengers;
+
+    // If round-trip, try to get individual flight prices for detailed breakdown
+    let flightPricing: FlightPricing | undefined;
+    if (isRoundTrip && departData && returnData) {
+        // Assuming departData and returnData have a Price field
+        // If they don't, this will use the combined price approach below
+        const departPrice = (departData as any).Price;
+        const returnPrice = (returnData as any).Price;
+
+        if (departPrice !== undefined && returnPrice !== undefined) {
+            flightPricing = {
+                departurePrice: departPrice,
+                returnPrice: returnPrice,
+            };
+        }
+    }
+
     const tickets: TicketSummaryProps[] = [
         {
             type: PassengerTypes.Adult,
@@ -73,7 +93,11 @@ export default async function CheckoutLayout({
                     <div className="flex w-full">{children}</div>
                     <div className="flex w-full max-w-[21.25rem] flex-col gap-10">
                         <BookingInfo />
-                        <PriceBreakdownCard tickets={tickets} />
+                        <PriceBreakdownCard
+                            tickets={tickets}
+                            isRoundTrip={isRoundTrip}
+                            flightPricing={flightPricing}
+                        />
                     </div>
                 </div>
                 <FooterButton cartId={cartId} />
