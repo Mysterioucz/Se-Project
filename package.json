@@ -9,7 +9,14 @@
         "start": "next start",
         "lint": "next lint",
         "postinstall": "prisma generate",
-        "test": "jest --coverage"
+        "test": "jest --coverage",
+        "seats:validate": "tsx scripts/validateSetup.ts",
+        "seats:generate": "tsx scripts/generateSeats.ts",
+        "seats:seed": "tsx scripts/seedSeats.ts",
+        "seats:all": "tsx scripts/generateAndSeedSeats.ts",
+        "flight:generate": "tsx scripts/generateFlights.ts",
+        "flight:seed": "tsx scripts/seedFlights.ts",
+        "flight:all": "tsx scripts/generateAndSeedFlights.ts"
     },
     "dependencies": {
         "@emotion/cache": "^11.14.0",
@@ -64,6 +71,7 @@
         "prisma": "^6.16.1",
         "tailwindcss": "^4.1.13",
         "ts-jest": "^29.4.5",
+        "tsx": "^4.19.2",
         "typescript": "^5.9.2"
     }
 }

@@ -11,13 +11,13 @@ import Footer from "@/src/components/footer/footer";
 import { MagnifyIcon } from "@/src/components/icons/module";
 import Navbar from "@/src/components/Navbar";
 import { CircularProgress } from "@mui/material";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import SummaryModal from "./_components/SummaryModal";
 import {
     FlightData,
     INIT_ARRIVAL_TIME,
     INIT_DEPARTURE_TIME,
-    INIT_PASSENGER_COUNT,
     INIT_SELECTED_AIRLINES,
     INIT_SELECTED_END_DATE,
     INIT_SELECTED_START_DATE,
@@ -27,7 +27,9 @@ import {
 } from "./helper";
 
 export default function Page() {
-    //TODO: Need to refactor the whole page to be stateless and use searchParams instead
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
     const [selectedFlightBuffer, setSelectedFlightBuffer] = useState<
         MappedFlightData[]
     >([]);
@@ -37,39 +39,124 @@ export default function Page() {
     const [isSummaryModalOpen, setSummaryModalOpen] = useState(false);
     const [swap, setSwap] = useState<boolean>(false);
 
-    const [selectedValues, setSelectedValues] =
-        useState<SelectedValues>(INIT_SELECTED_VALUES);
-    const [passengerCount, setPassengerCount] =
-        useState<PassengerCount>(INIT_PASSENGER_COUNT);
+    // Initialize state from searchParams
+    const [selectedValues, setSelectedValues] = useState<SelectedValues>(() => {
+        const flightType =
+            searchParams.get("flightType") || INIT_SELECTED_VALUES.flight;
+        const classType =
+            searchParams.get("classType") || INIT_SELECTED_VALUES.class;
+        const leave = searchParams.get("leave") || INIT_SELECTED_VALUES.leave;
+        const go = searchParams.get("go") || INIT_SELECTED_VALUES.go;
+        return {
+            flight: (flightType === "Round Trip" ? "Round Trip" : "One Way") as
+                | "One Way"
+                | "Round Trip",
+            class: classType,
+            leave: leave,
+            go: go,
+        };
+    });
+
+    const [passengerCount, setPassengerCount] = useState<PassengerCount>(() => {
+        const adult = parseInt(searchParams.get("adult") || "1");
+        const children = parseInt(searchParams.get("children") || "0");
+        const infants = parseInt(searchParams.get("infants") || "0");
+        return {
+            adult: adult,
+            children: children,
+            infants: infants,
+        };
+    });
+
     const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
-        INIT_SELECTED_START_DATE,
-    );
-    const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(
-        INIT_SELECTED_END_DATE,
+        () => {
+            const startDate = searchParams.get("startDate");
+            return startDate ? new Date(startDate) : INIT_SELECTED_START_DATE;
+        },
     );
 
-    const [selectedAirlines, setSelectedAirlines] = useState<string[]>(
-        INIT_SELECTED_AIRLINES,
-    );
-    const [departureTime, setDepartureTime] = useState(INIT_DEPARTURE_TIME);
-    const [arrivalTime, setArrivalTime] = useState(INIT_ARRIVAL_TIME);
+    const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(() => {
+        const endDate = searchParams.get("endDate");
+        return endDate ? new Date(endDate) : INIT_SELECTED_END_DATE;
+    });
 
-    const [sort, setSort] = useState<string>(INIT_SORT);
+    const [selectedAirlines, setSelectedAirlines] = useState<string[]>(() => {
+        const airlines = searchParams.get("airlines");
+        return airlines ? airlines.split(",") : INIT_SELECTED_AIRLINES;
+    });
+
+    const [departureTime, setDepartureTime] = useState(() => {
+        const depTime = searchParams.get("departureTime");
+        return depTime ? depTime.split(",").map(Number) : INIT_DEPARTURE_TIME;
+    });
+
+    const [arrivalTime, setArrivalTime] = useState(() => {
+        const arrTime = searchParams.get("arrivalTime");
+        return arrTime ? arrTime.split(",").map(Number) : INIT_ARRIVAL_TIME;
+    });
+
+    const [sort, setSort] = useState<string>(() => {
+        return searchParams.get("sort") || INIT_SORT;
+    });
 
     const [convertedFlightData, setConvertedFlightData] = useState<
         MappedFlightData[]
-    >([]); // State for storing converted flight data
+    >([]);
 
     const [pageState, setPageState] = useState<
         "initial" | "loading" | "loaded" | "empty"
-    >("initial");
+    >(() => {
+        return searchParams.get("searched") === "true" ? "loading" : "initial";
+    });
 
     const [flightState, setFlightState] = useState<"depart" | "return">(
         "depart",
     );
 
+    // Update URL with current search parameters
+    const updateSearchParams = (additionalParams?: Record<string, string>) => {
+        const params = new URLSearchParams();
+
+        params.set("flightType", selectedValues.flight);
+        params.set("classType", selectedValues.class);
+        params.set("leave", selectedValues.leave);
+        params.set("go", selectedValues.go);
+        params.set("adult", passengerCount.adult.toString());
+        params.set("children", passengerCount.children.toString());
+        params.set("infants", passengerCount.infants.toString());
+
+        if (selectedStartDate) {
+            params.set(
+                "startDate",
+                selectedStartDate.toISOString().split("T")[0],
+            );
+        }
+        if (selectedEndDate) {
+            params.set("endDate", selectedEndDate.toISOString().split("T")[0]);
+        }
+        if (selectedAirlines.length > 0) {
+            params.set("airlines", selectedAirlines.join(","));
+        }
+        params.set("departureTime", departureTime.join(","));
+        params.set("arrivalTime", arrivalTime.join(","));
+        if (sort) {
+            params.set("sort", sort);
+        }
+
+        // Add any additional parameters
+        if (additionalParams) {
+            Object.entries(additionalParams).forEach(([key, value]) => {
+                params.set(key, value);
+            });
+        }
+
+        router.push(`/flights/search?${params.toString()}`, { scroll: false });
+    };
+
     const fetchData = async () => {
         setPageState("loading");
+        updateSearchParams({ searched: "true" });
+
         const totalPassenger =
             passengerCount.adult +
             passengerCount.children +
@@ -77,8 +164,9 @@ export default function Page() {
         try {
             const url = new URL(
                 `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights`,
-            ); // Base URL for API
+            );
             const params = new URLSearchParams();
+
             // Search
             params.append(`flightType`, "One Way");
             params.append(`classType`, selectedValues.class);
@@ -92,22 +180,24 @@ export default function Page() {
                 if (swap && selectedEndDate) {
                     const departDate = selectedEndDate
                         .toISOString()
-                        .split("T")[0]; // Convert to 'YYYY-MM-DD'
+                        .split("T")[0];
                     params.append("departDate", departDate);
                 } else {
                     const departDate = selectedStartDate
                         .toISOString()
-                        .split("T")[0]; // Convert to 'YYYY-MM-DD'
+                        .split("T")[0];
                     params.append("departDate", departDate);
                 }
             }
 
             params.append(`numberOfPassenger`, totalPassenger.toString());
+
             // Filter
             if (selectedAirlines.length > 0)
                 params.append("airlines", selectedAirlines.join(","));
             params.append(`departureTimeRange`, departureTime.join(`,`));
             params.append(`arrivalTimeRange`, arrivalTime.join(`,`));
+
             // Sort
             if (sort !== "") params.append(`sortBy`, sort);
 
@@ -161,6 +251,7 @@ export default function Page() {
 
     useEffect(() => {
         if (pageState !== "initial") {
+            updateSearchParams();
             fetchData();
         }
     }, [sort]);
@@ -170,6 +261,13 @@ export default function Page() {
             fetchData();
         }
     }, [swap]);
+
+    // Fetch data on initial load if searched param is present
+    useEffect(() => {
+        if (searchParams.get("searched") === "true") {
+            fetchData();
+        }
+    }, []);
 
     const [HeaderText, setHeaderText] = useState("Select flight informations");
     useEffect(() => {
@@ -210,12 +308,14 @@ export default function Page() {
         } else {
             selectedFlightBuffer.push(flight);
             setSelectedFlightBuffer(selectedFlightBuffer);
-            selectedDateBuffer.push(selectedStartDate);
+            // FIX: Use selectedEndDate for return flight instead of selectedStartDate
+            selectedDateBuffer.push(selectedEndDate);
             setSelectedDateBuffer(selectedDateBuffer);
             setSummaryModalOpen(true);
             return;
         }
     }
+
     function renderContent() {
         if (pageState == "initial") {
             return <FlightSearchFunishing />;

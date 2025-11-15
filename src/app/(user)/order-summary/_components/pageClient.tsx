@@ -76,21 +76,21 @@ export default function PageClient({
     UserAccountID: string;
 }) {
     const flightType = data.payment.FlightType;
-
+    const pricePerPassenger = data.tickets[0].Price * (data.payment.ReturnFlight ? 2 : 1);
     const tickets = [
         {
             type: PassengerTypes.Adult,
-            price: data.tickets[0].Price,
+            price: pricePerPassenger,
             quantity: data.payment.Adults,
         },
         {
             type: PassengerTypes.Child,
-            price: data.tickets[0].Price,
+            price: pricePerPassenger,
             quantity: data.payment.Childrens,
         },
         {
             type: PassengerTypes.Infant,
-            price: data.tickets[0].Price,
+            price: pricePerPassenger,
             quantity: data.payment.Infants,
         },
     ];

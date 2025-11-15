@@ -113,7 +113,6 @@ function Content({ departure, arrival }: BookingInfoProps) {
 
 export default function BookingInfo() {
     const { cartData, departFlight, returnFlight } = useCheckout();
-
     // Map departFlight to Flight format
     const departure: Flight = {
         flightNumber: departFlight.FlightNo,
