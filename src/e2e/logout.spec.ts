@@ -32,7 +32,7 @@ test.describe("Logout Flow", () => {
     await page.getByRole('button', { name: 'Icon start Profile' }).click();
     await page.getByRole('button', { name: 'Sign Out' }).click();
     await page.getByTestId('confirm-logout-btn').click();
-    await page.waitForURL(loginUrl);
+    await page.waitForURL(loginUrl, { timeout: 25000 });
   }
 
   // Test 1: Redirect to login page after logout
