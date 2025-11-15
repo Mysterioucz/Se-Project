@@ -7,7 +7,6 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import AttachmentInput from "@/src/components/AttachmentInput";
 import Button from "@/src/components/Button";
 import Navbar from "@/src/components/Navbar";
 import TextAreaComponent from "@/src/components/TextAreaComponent";
@@ -55,7 +54,6 @@ export default function Page() {
     const router = useRouter();
     const { data: session } = useSession();
 
-    const [attachment, setAttachment] = useState<File | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
@@ -107,16 +105,6 @@ export default function Page() {
         setIsSubmitting(true);
 
         try {
-            // Convert attachment to base64 if present
-            let attachmentBase64 = "";
-            if (attachment) {
-                const reader = new FileReader();
-                attachmentBase64 = await new Promise((resolve, reject) => {
-                    reader.onload = () => resolve(reader.result as string);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(attachment);
-                });
-            }
 
             const response = await fetch("/api/v1/reports", {
                 method: "POST",
@@ -126,7 +114,6 @@ export default function Page() {
                 body: JSON.stringify({
                     description: pendingFormData.description,
                     paymentId: pendingFormData.bookingId,
-                    attachment: attachmentBase64,
                     telno: pendingFormData.phoneNumber,
                     email: pendingFormData.email,
                     passengerFirstName: pendingFormData.givenNames,
@@ -167,9 +154,6 @@ export default function Page() {
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setPendingFormData(null);
-    };
-    const handleAttachmentChange = (file: File | null) => {
-        setAttachment(file);
     };
 
     return (
@@ -367,13 +351,6 @@ export default function Page() {
                                 )}
                             />
 
-                            {/* Attachment */}
-                            <AttachmentInput
-                                label="Attachment"
-                                value={attachment}
-                                onChange={handleAttachmentChange}
-                                containerClassName="md:col-span-2"
-                            />
                         </div>
 
                         {submitError && errorType && (
