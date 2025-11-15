@@ -31,8 +31,8 @@ export default function QRModal({ open, onClose }: QRModalProps) {
             returnFlight,
         );
         console.log("Payment Response:", res);
-        if (res.success && res.data.PaymentID) {
-            router.push(`/payment-success/${res.data.PaymentID}`);
+        if (res.success && res.data.payment.PaymentID) {
+            router.push(`/payment-success/${res.data.payment.PaymentID}`);
         }
     };
     useEffect(() => {
