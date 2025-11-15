@@ -133,7 +133,7 @@ export default function PriceBreakdownCard({
             (sum, t) => sum + t.price * t.quantity,
             0,
         );
-
+        console.log(tickets);
         // Calculate total baggage price
         const baggageTotal = servicesFee;
         setTotalBaggagePrice(servicesFee);

@@ -50,7 +50,6 @@ export default function QRModal({ open, onClose }: QRModalProps) {
                     returnBaggageFee
                 );
             }, 0) || 0;
-        console.log(checkoutData.passengerData);
         setAmount(totalAmount);
     }, [open]);
 
