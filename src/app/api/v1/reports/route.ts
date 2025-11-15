@@ -9,6 +9,65 @@ import { ReportErrorType } from "@/src/enums/ReportErrorTypes";
 import { nextAuthOptions } from "@/src/lib/auth";
 
 export async function GET(req: NextRequest) {
+    /**
+     * @swagger
+     * /api/v1/reports:
+     *   get:
+     *     summary: Get all reports (admin only)
+     *     description: Retrieve reports with optional filters for status and priority. Requires an admin account.
+     *     tags:
+     *       - Reports
+     *     security:
+     *       - bearerAuth: []
+     *     parameters:
+     *       - name: status
+     *         in: query
+     *         description: Filter by report status (e.g., OPEN, CLOSED)
+     *         required: false
+     *         schema:
+     *           type: string
+     *       - name: priority
+     *         in: query
+     *         description: Filter by report priority (NORMAL or HIGH)
+     *         required: false
+     *         schema:
+     *           type: string
+     *           enum: [NORMAL, HIGH]
+     *     responses:
+     *       200:
+     *         description: Successfully retrieved reports
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                 data:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                     properties:
+     *                       id:
+     *                         type: string
+     *                       bookingID:
+     *                         type: string
+     *                       description:
+     *                         type: string
+     *                       status:
+     *                         type: string
+     *                       priority:
+     *                         type: string
+     *                       submittedAt:
+     *                         type: string
+     *                         format: date-time
+     *       401:
+     *         description: Unauthorized
+     *       403:
+     *         description: Forbidden - requires admin role
+     *       500:
+     *         description: Server error
+     */
     const session = await getServerSession(nextAuthOptions);
 
     //Check authentication
@@ -95,6 +154,67 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+    /**
+     * @swagger
+     * /api/v1/reports:
+     *   post:
+     *     summary: Submit a report for a booking
+     *     description: Submit a customer report tied to a booking. Requires authentication. Prevents duplicate reports per booking.
+     *     tags:
+     *       - Reports
+     *     security:
+     *       - bearerAuth: []
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - description
+     *               - paymentId
+     *               - telno
+     *               - email
+     *               - passengerFirstName
+     *               - passengerLastName
+     *               - problemType
+     *             properties:
+     *               description:
+     *                 type: string
+     *               paymentId:
+     *                 type: string
+     *               attachment:
+     *                 type: string
+     *               telno:
+     *                 type: string
+     *               email:
+     *                 type: string
+     *                 format: email
+     *               passengerFirstName:
+     *                 type: string
+     *               passengerLastName:
+     *                 type: string
+     *               priority:
+     *                 type: string
+     *                 enum: [NORMAL, HIGH]
+     *               problemType:
+     *                 type: string
+     *     responses:
+     *       201:
+     *         description: Report submitted
+     *       400:
+     *         description: Missing parameters
+     *       401:
+     *         description: Unauthorized
+     *       403:
+     *         description: Forbidden - booking does not belong to user
+     *       404:
+     *         description: Booking not found
+     *       409:
+     *         description: Duplicate report for booking
+     *       500:
+     *         description: Server error
+     */
     const session = await getServerSession(nextAuthOptions);
     if (!session?.user?.id) {
         return NextResponse.json(
@@ -264,6 +384,44 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
+    /**
+     * @swagger
+     * /api/v1/reports:
+     *   put:
+     *     summary: Update report status (admin only)
+     *     description: Update the status of an existing report. Admin only.
+     *     tags:
+     *       - Reports
+     *     security:
+     *       - bearerAuth: []
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - reportID
+     *               - status
+     *             properties:
+     *               reportID:
+     *                 type: string
+     *               status:
+     *                 type: string
+     *     responses:
+     *       200:
+     *         description: Report status updated
+     *       400:
+     *         description: Missing parameters or invalid status
+     *       401:
+     *         description: Unauthorized
+     *       403:
+     *         description: Forbidden - admin required
+     *       404:
+     *         description: Report not found
+     *       500:
+     *         description: Server error
+     */
     const session = await getServerSession(nextAuthOptions);
 
     // Authentication

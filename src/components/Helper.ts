@@ -17,6 +17,8 @@ export interface ModalProps {
     variant: ModalVariant;
     preventClose?: boolean;
     disableRightButton?: boolean;
+    leftButtonTestId?: string;
+    rightButtonTestId?: string;
 }
 
 export const themeColors: Record<

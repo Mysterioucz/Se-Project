@@ -22,6 +22,8 @@ export default function ModalSignOut({ isOpen, onClose }: ModalSignOutProps) {
             variant="normal"
             preventClose={false}
             disableRightButton={false}
+            rightButtonTestId="confirm-logout-btn" 
+            leftButtonTestId="cancel-logout-btn"
         />
     );
 }

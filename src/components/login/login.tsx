@@ -135,6 +135,7 @@ export default function RegistrationEmail() {
             <div className="flex flex-col items-center justify-center gap-3">
                 {/* TODO: implement onClick */}
                 <Button
+                    data-testid="signin"
                     text="Sign In"
                     styleType="fill"
                     size="md"

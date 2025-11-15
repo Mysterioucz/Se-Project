@@ -59,6 +59,7 @@ export default function Navbar() {
                     <Link href={"/account-setting"}>
                         <Button
                             //TODO: change to display name when the problem of editing profile name resolved
+                            data-testid="navbar-profile"
                             text={"Profile"}
                             styleType="stroke"
                             size="md"
@@ -68,6 +69,7 @@ export default function Navbar() {
                 ) : (
                     <Link href={"/login"}>
                         <Button
+                            data-testid="navbar-login"
                             text="Sign in / Register"
                             styleType="stroke"
                             size="md"
