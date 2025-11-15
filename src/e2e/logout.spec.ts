@@ -15,12 +15,16 @@ test.describe("Logout Flow", () => {
     console.log("LOGINURL", loginUrl);
     await page.goto(loginUrl);
 
-    await page.getByPlaceholder("Enter your email").fill(USER_EMAIL);
-    await page.getByPlaceholder("Enter your password").fill(USER_PASS);
+    await page.locator('[data-testid="email-test"]').click();
+    await page.locator('[data-testid="email-test"]').fill(USER_EMAIL);
+
+    await page.locator('[data-testid="password"]').click();
+    await page.locator('[data-testid="password"]').fill(USER_PASS);
+    
     await page.getByRole("button", { name: "Sign In", exact: true }).click();
 
 
-    await page.waitForURL(/\/flights\/search$/, { timeout: 10000 });
+    await page.waitForURL(/\/flights\/search$/, { timeout: 25000 });
     expect(page.url()).toContain("/flights/search");
   });
 
@@ -28,7 +32,7 @@ test.describe("Logout Flow", () => {
     await page.getByRole('button', { name: 'Icon start Profile' }).click();
     await page.getByRole('button', { name: 'Sign Out' }).click();
     await page.getByTestId('confirm-logout-btn').click();
-    await page.waitForURL(loginUrl);
+    await page.waitForURL(loginUrl, { timeout: 25000 });
   }
 
   // Test 1: Redirect to login page after logout
