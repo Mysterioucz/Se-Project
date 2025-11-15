@@ -315,7 +315,7 @@ enum ReportProblemType {
 model Report {
   ReportID          String  @id @db.VarChar(50)
   ReportDescription String
-  PaymentID         String  @unique
+  PaymentID         String 
   Attachment        String?
   UserAccountID     String  @db.VarChar(50) // The user who created the report
   TelNo             String
@@ -390,7 +390,7 @@ model Payment {
 
   // Relation
   purchase Purchase[]
-  report   Report?
+  report   Report[]
 }
 
 model Airline_Tel_No {
