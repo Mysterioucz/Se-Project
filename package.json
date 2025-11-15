@@ -13,7 +13,10 @@
         "seats:validate": "tsx scripts/validateSetup.ts",
         "seats:generate": "tsx scripts/generateSeats.ts",
         "seats:seed": "tsx scripts/seedSeats.ts",
-        "seats:all": "tsx scripts/generateAndSeedSeats.ts"
+        "seats:all": "tsx scripts/generateAndSeedSeats.ts",
+        "flight:generate": "tsx scripts/generateFlights.ts",
+        "flight:seed": "tsx scripts/seedFlights.ts",
+        "flight:all": "tsx scripts/generateAndSeedFlights.ts"
     },
     "dependencies": {
         "@emotion/cache": "^11.14.0",
