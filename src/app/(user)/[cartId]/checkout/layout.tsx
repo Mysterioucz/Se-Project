@@ -3,7 +3,7 @@ import FooterButton from "@/src/app/(user)/[cartId]/checkout/_components/FooterB
 import Navbar from "@/src/components/Navbar";
 import { CheckoutProvider } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
-import { fetchCartData, fetchFlightData } from "@/src/helper/CheckoutHelper";
+import { fetchCartData, fetchFlightData, Flight } from "@/src/helper/CheckoutHelper";
 import PriceBreakdownCard, {
     FlightPricing,
     TicketSummaryProps,
@@ -50,8 +50,8 @@ export default async function CheckoutLayout({
     if (isRoundTrip && departData && returnData) {
         // Assuming departData and returnData have a Price field
         // If they don't, this will use the combined price approach below
-        const departPrice = (departData as any).Price;
-        const returnPrice = (returnData as any).Price;
+        const departPrice = (departData as Flight & { Price?: number }).Price;
+        const returnPrice = (returnData as Flight & { Price?: number }).Price;
 
         if (departPrice !== undefined && returnPrice !== undefined) {
             flightPricing = {
