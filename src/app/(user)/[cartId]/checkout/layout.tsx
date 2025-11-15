@@ -41,7 +41,6 @@ export default async function CheckoutLayout({
     // We'll distribute it proportionally across passenger types by count.
     const totalPassengers = adultCount + childCount + infantCount || 1;
     const pricePerPassenger = (cartData?.Price ?? 0) / totalPassengers;
-
     const tickets: TicketSummaryProps[] = [
         {
             type: PassengerTypes.Adult,

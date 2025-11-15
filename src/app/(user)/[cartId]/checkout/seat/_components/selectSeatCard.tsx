@@ -73,8 +73,8 @@ export default function SelectSeatCard({
             try {
                 const params = new URLSearchParams({
                     flightNo: flightData.FlightNo,
-                    departTime: flightData.DepartTime.toString(),
-                    arrivalTime: flightData.ArrivalTime.toString(),
+                    departTime: new Date(flightData.DepartTime).toISOString(),
+                    arrivalTime: new Date(flightData.ArrivalTime).toISOString(),
                 });
 
                 const response = await fetch(
@@ -287,7 +287,7 @@ export default function SelectSeatCard({
         }
 
         return (
-            <div className="flex h-fit w-full items-center justify-center bg-white py-6 px-6">
+            <div className="flex h-fit w-full items-center justify-center bg-white px-6 py-6">
                 <div className="flex h-fit flex-col gap-4">
                     <div className="flex flex-row gap-5">
                         {/* Seat Map */}

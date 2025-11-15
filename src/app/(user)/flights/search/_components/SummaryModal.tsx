@@ -3,7 +3,7 @@
 import addToCart from "@/src/lib/addToCart";
 import { Dialog } from "@headlessui/react";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { MappedFlightData } from "../helper";
 import SummaryCard from "./SummaryCard";
 
@@ -25,7 +25,6 @@ export default function SummaryModal({
     selectedDates,
 }: FlightSummaryModalProps) {
     const { data: session } = useSession();
-    const router = useRouter();
     return (
         <Dialog open={isOpen} onClose={onClose} className="relative z-50">
             {/* Background overlay */}
