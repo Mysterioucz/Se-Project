@@ -1,8 +1,17 @@
+"use client";
+
+import {
+    formatToShortDate,
+    formatToTime,
+    getFlightDuration,
+} from "@/src/components/booking/FlightDetail";
 import {
     OneWayArrowIcon,
     TimeForwardIcon,
     TwoWayArrowIcon,
 } from "@/src/components/icons/module";
+import { useCheckout } from "@/src/contexts/CheckoutContext";
+
 export interface Flight {
     flightNumber: string;
     departureCity: string;
@@ -30,13 +39,13 @@ function FlightContent({
             {/* Header */}
             <div className="flex gap-4">
                 {/* Tag */}
-                <div className="flex text-center p-1 items-center justify-center w-fit h-6 rounded-sm bg-primary-50">
-                    <p className="text-[0.75rem] text-primary-500 ">
+                <div className="bg-primary-50 flex h-6 w-fit items-center justify-center rounded-sm p-1 text-center">
+                    <p className="text-primary-500 text-[0.75rem]">
                         {headerText}
                     </p>
                 </div>
                 {/* Date & Interval Time */}
-                <div className="flex gap-4 ">
+                <div className="flex gap-4">
                     <p className="text-[0.75rem] text-gray-700">
                         {flight.date}
                     </p>
@@ -52,7 +61,7 @@ function FlightContent({
             {/* Timeline row: times | vertical connector | airport */}
             <div className="flex w-full items-center pl-4">
                 {/* Left - times */}
-                <div className="flex flex-col items-start w-fit gap-4">
+                <div className="flex w-fit flex-col items-start gap-4">
                     <span className="text-base text-gray-600">
                         {flight.departureTime}
                     </span>
@@ -62,14 +71,14 @@ function FlightContent({
                 </div>
 
                 {/* Middle - vertical line with two nodes */}
-                <div className="flex flex-col items-center justify-center w-12 h-full">
+                <div className="flex h-full w-12 flex-col items-center justify-center">
                     <div
-                        className="w-3 h-3 rounded-full bg-gray-100"
+                        className="h-3 w-3 rounded-full bg-gray-100"
                         aria-hidden
                     />
-                    <div className="w-[2px] bg-gray-100 h-[2rem]" aria-hidden />
+                    <div className="h-[2rem] w-[2px] bg-gray-100" aria-hidden />
                     <div
-                        className="w-3 h-3 rounded-full bg-gray-100"
+                        className="h-3 w-3 rounded-full bg-gray-100"
                         aria-hidden
                     />
                 </div>
@@ -90,8 +99,8 @@ function FlightContent({
 
 function Content({ departure, arrival }: BookingInfoProps) {
     return (
-        <div className="flex flex-col gap-4 ">
-            <div className="flex font-extrabold text-[1.125rem] text-primary-700 items-baseline gap-1">
+        <div className="flex flex-col gap-4">
+            <div className="text-primary-700 flex items-baseline gap-1 text-[1.125rem] font-extrabold">
                 <span>{departure.departureCity}</span>
                 {arrival ? <TwoWayArrowIcon /> : <OneWayArrowIcon />}
                 <span>{departure.arrivalCity}</span>
@@ -102,37 +111,43 @@ function Content({ departure, arrival }: BookingInfoProps) {
     );
 }
 
-async function fetchBookingInfo(): Promise<BookingInfoProps> {
-    // TODO: Replace with actual API call
-    // Dummy price data
+export default function BookingInfo() {
+    const { cartData, departFlight, returnFlight } = useCheckout();
+
+    // Map departFlight to Flight format
     const departure: Flight = {
-        flightNumber: "AB123",
-        departureCity: "New York",
-        departureTime: "10:00 AM",
-        arrivalCity: "Los Angeles",
-        arrivalTime: "1:00 PM",
-        date: "2023-10-01",
-        duration: "6h",
+        flightNumber: departFlight.FlightNo,
+        departureCity: cartData.DepartureCity,
+        departureTime: formatToTime(departFlight.DepartTime),
+        arrivalCity: cartData.ArrivalCity,
+        arrivalTime: formatToTime(departFlight.ArrivalTime),
+        date: formatToShortDate(departFlight.DepartTime),
+        duration: getFlightDuration(
+            departFlight.DepartTime,
+            departFlight.ArrivalTime,
+        ),
     };
 
-    const arrival: Flight = {
-        flightNumber: "CD456",
-        departureCity: "Los Angeles",
-        departureTime: "3:00 PM",
-        arrivalCity: "New York",
-        arrivalTime: "10:00 PM",
-        date: "2023-10-02",
-        duration: "6h",
-    };
+    // Map returnFlight to Flight format if it exists
+    let arrival: Flight | undefined = undefined;
+    if (returnFlight) {
+        arrival = {
+            flightNumber: returnFlight.FlightNo,
+            departureCity: cartData.ArrivalCity,
+            departureTime: formatToTime(returnFlight.DepartTime),
+            arrivalCity: cartData.DepartureCity,
+            arrivalTime: formatToTime(returnFlight.ArrivalTime),
+            date: formatToShortDate(returnFlight.DepartTime),
+            duration: getFlightDuration(
+                returnFlight.DepartTime,
+                returnFlight.ArrivalTime,
+            ),
+        };
+    }
 
-    return { departure, arrival };
-}
-
-export default async function BookingInfo() {
-    const { departure, arrival } = await fetchBookingInfo(); // This will suspend until the promise resolves
     return (
-        <div className="flex flex-col gap-6 px-6 py-4 border-2 border-primary-300 rounded-lg w-full">
-            <h2 className="font-semibold text-primary-900">
+        <div className="border-primary-300 flex w-full flex-col gap-6 rounded-lg border-2 px-6 py-4">
+            <h2 className="text-primary-900 font-semibold">
                 Booking Information
             </h2>
             <Content departure={departure} arrival={arrival} />
