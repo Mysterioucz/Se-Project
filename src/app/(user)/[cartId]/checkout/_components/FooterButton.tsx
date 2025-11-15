@@ -4,14 +4,20 @@ import Button from "@/src/components/Button";
 import { useCheckout } from "@/src/contexts/CheckoutContext";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { checkoutPaths, isCheckoutPath } from "./helper";
+import { checkoutPaths, isCheckoutPath, postPaymentCompletion } from "./helper";
 
 export default function FooterButton({ cartId }: { cartId: string }) {
     let pathname = usePathname();
     pathname = pathname.replace(`/${cartId}`, "");
     const router = useRouter();
-    const { checkoutData, updateCheckoutData, areAllSeatsSelected } =
-        useCheckout();
+    const {
+        checkoutData,
+        updateCheckoutData,
+        areAllSeatsSelected,
+        cartData,
+        departFlight,
+        returnFlight,
+    } = useCheckout();
     const { isPaymentValid, isContactValid, isQRmethod } = checkoutData.payment;
     const prefixButtonText = new Map<string, string>([
         [`/checkout/info`, "Cancel"],
@@ -48,10 +54,23 @@ export default function FooterButton({ cartId }: { cartId: string }) {
         }
     };
 
-    const handleNextButton = () => {
+    const handleNextButton = async () => {
         if (isCheckoutPath(pathname)) {
-            if (pathname === `/checkout/payment` && isQRmethod) {
-                setQRModalOpen(true);
+            if (pathname === `/checkout/payment`) {
+                if (isQRmethod) {
+                    setQRModalOpen(true);
+                } else {
+                    const res = await postPaymentCompletion(
+                        checkoutData,
+                        cartData,
+                        departFlight,
+                        returnFlight,
+                    );
+                    console.log(res);
+                    if (res.success && res.data.payment.PaymentID) {
+                        router.push(`/payment-success/${res.data.payment.PaymentID}`);
+                    }
+                }
             } else {
                 const nextIdx = checkoutPaths.indexOf(pathname) + 1;
                 router.push(`/${cartId}` + checkoutPaths[nextIdx]);

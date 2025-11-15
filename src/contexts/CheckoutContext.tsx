@@ -82,7 +82,30 @@ export function CheckoutProvider({
                 { ...prev, ...data },
                 cartData,
             );
-            saveCheckoutToStorage(updatedData);
+            // Only save if data actually changed (deep comparison of relevant fields)
+            const hasChanged =
+                JSON.stringify(prev.payment) !==
+                    JSON.stringify(updatedData.payment) ||
+                JSON.stringify(prev.passengerData) !==
+                    JSON.stringify(updatedData.passengerData) ||
+                JSON.stringify(prev.info) !== JSON.stringify(updatedData.info);
+
+            if (hasChanged) {
+                console.log(
+                    "[CheckoutContext] Saving checkout data to storage:",
+                    {
+                        hasPassengerData: updatedData.passengerData.length,
+                        cartId: updatedData.cartMetadata?.cartId,
+                        payment: updatedData.payment,
+                    },
+                );
+                saveCheckoutToStorage(updatedData);
+            } else {
+                console.log(
+                    "[CheckoutContext] Skipping save - no changes detected",
+                );
+            }
+
             return updatedData;
         });
     };
@@ -114,6 +137,10 @@ export function CheckoutProvider({
                 { ...prev, passengerData: updatedPassengers },
                 cartData,
             );
+            console.log(
+                `[CheckoutContext] Updating passenger ${index}:`,
+                passengerPatch,
+            );
             saveCheckoutToStorage(updated);
             return updated;
         });
@@ -136,6 +163,10 @@ export function CheckoutProvider({
             const updated = ensureCartMetadata(
                 { ...prev, passengerData: updatedPassengers },
                 cartData,
+            );
+            console.log(
+                `[CheckoutContext] Updating seat for passenger ${index}:`,
+                seatPatch,
             );
             saveCheckoutToStorage(updated);
             return updated;
@@ -162,6 +193,10 @@ export function CheckoutProvider({
             const updated = ensureCartMetadata(
                 { ...prev, passengerData: updatedPassengers },
                 cartData,
+            );
+            console.log(
+                `[CheckoutContext] Updating baggage for passenger ${index}:`,
+                baggagePatch,
             );
             saveCheckoutToStorage(updated);
             return updated;

@@ -23,7 +23,7 @@ export default function Page() {
         <div className="flex flex-col gap-[2.5rem] px-[5rem] py-[3rem] mx-[8rem] mt-[2rem] bg-white rounded-[0.5rem] border-[var(--color-success-main)] border-[0.125rem] w-full">
             <div className="gap-[0.75rem] justify-center flex flex-col items-center w-full">
                 <Image
-                    src="/payment/success.svg"
+                    src="/payment/Success.svg"
                     alt="Success Icon"
                     width={48}
                     height={48}
