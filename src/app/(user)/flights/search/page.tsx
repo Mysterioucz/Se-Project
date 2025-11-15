@@ -1,13 +1,18 @@
 "use client";
-import FlightFilterTab from "@/src/app/flights/search/_components/filter";
+import FlightFilterTab from "@/src/app/(user)/flights/search/_components/filter";
+import FlightSearchFunishing from "@/src/app/(user)/flights/search/_components/FlightSearchFurnishings";
 import FlightSearchBar, {
     PassengerCount,
     SelectedValues,
-} from "@/src/app/flights/search/_components/search";
-import FlightSortTab from "@/src/app/flights/search/_components/sort";
+} from "@/src/app/(user)/flights/search/_components/search";
+import FlightSortTab from "@/src/app/(user)/flights/search/_components/sort";
 import FlightCard from "@/src/components/flightCard/flight_card";
+import Footer from "@/src/components/footer/footer";
 import { MagnifyIcon } from "@/src/components/icons/module";
+import Navbar from "@/src/components/Navbar";
+import { CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
+import SummaryModal from "./_components/SummaryModal";
 import {
     FlightData,
     INIT_ARRIVAL_TIME,
@@ -20,16 +25,15 @@ import {
     INIT_SORT,
     MappedFlightData,
 } from "./helper";
-import FlightSearchFunishing from "@/src/app/flights/search/_components/FlightSearchFurnishings";
-import Navbar from "@/src/components/Navbar";
-import { CircularProgress } from "@mui/material";
-import Footer from "@/src/components/footer/footer";
-import SummaryModal from "./_components/SummaryModal";
 
 export default function Page() {
     //TODO: Need to refactor the whole page to be stateless and use searchParams instead
-    const [selectedFlightBuffer, setSelectedFlightBuffer] = useState<MappedFlightData[]>([]);
-    const [selectedDateBuffer, setSelectedDateBuffer] = useState<(Date | null)[]>([]);
+    const [selectedFlightBuffer, setSelectedFlightBuffer] = useState<
+        MappedFlightData[]
+    >([]);
+    const [selectedDateBuffer, setSelectedDateBuffer] = useState<
+        (Date | null)[]
+    >([]);
     const [isSummaryModalOpen, setSummaryModalOpen] = useState(false);
     const [swap, setSwap] = useState<boolean>(false);
 
@@ -38,14 +42,14 @@ export default function Page() {
     const [passengerCount, setPassengerCount] =
         useState<PassengerCount>(INIT_PASSENGER_COUNT);
     const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
-        INIT_SELECTED_START_DATE
+        INIT_SELECTED_START_DATE,
     );
     const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(
-        INIT_SELECTED_END_DATE
+        INIT_SELECTED_END_DATE,
     );
 
     const [selectedAirlines, setSelectedAirlines] = useState<string[]>(
-        INIT_SELECTED_AIRLINES
+        INIT_SELECTED_AIRLINES,
     );
     const [departureTime, setDepartureTime] = useState(INIT_DEPARTURE_TIME);
     const [arrivalTime, setArrivalTime] = useState(INIT_ARRIVAL_TIME);
@@ -61,7 +65,7 @@ export default function Page() {
     >("initial");
 
     const [flightState, setFlightState] = useState<"depart" | "return">(
-        "depart"
+        "depart",
     );
 
     const fetchData = async () => {
@@ -72,34 +76,33 @@ export default function Page() {
             passengerCount.infants;
         try {
             const url = new URL(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights`
+                `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flights`,
             ); // Base URL for API
             const params = new URLSearchParams();
             // Search
             params.append(`flightType`, "One Way");
             params.append(`classType`, selectedValues.class);
             if (selectedValues.leave != `Leaving from?`)
-                if (! swap) params.append(`departureCity`, selectedValues.leave);
+                if (!swap) params.append(`departureCity`, selectedValues.leave);
                 else params.append(`departureCity`, selectedValues.go);
             if (selectedValues.go != `Going to?`)
-                if (! swap) params.append(`arrivalCity`, selectedValues.go);
+                if (!swap) params.append(`arrivalCity`, selectedValues.go);
                 else params.append(`arrivalCity`, selectedValues.leave);
             if (selectedStartDate) {
                 if (swap && selectedEndDate) {
                     const departDate = selectedEndDate
-                    .toISOString()
-                    .split("T")[0]; // Convert to 'YYYY-MM-DD'
+                        .toISOString()
+                        .split("T")[0]; // Convert to 'YYYY-MM-DD'
                     params.append("departDate", departDate);
                 } else {
                     const departDate = selectedStartDate
-                    .toISOString()
-                    .split("T")[0]; // Convert to 'YYYY-MM-DD'
+                        .toISOString()
+                        .split("T")[0]; // Convert to 'YYYY-MM-DD'
                     params.append("departDate", departDate);
                 }
-                
             }
 
-            params.append(`numberOfPassenger`, totalPassenger.toString());            
+            params.append(`numberOfPassenger`, totalPassenger.toString());
             // Filter
             if (selectedAirlines.length > 0)
                 params.append("airlines", selectedAirlines.join(","));
@@ -112,7 +115,7 @@ export default function Page() {
                 url.toString() + `?${params.toString()}`,
                 {
                     method: "GET",
-                }
+                },
             ).then((res) => res.json());
 
             // Transform data to match FlightCard
@@ -194,7 +197,10 @@ export default function Page() {
             return;
         }
 
-        if (selectedValues.flight === "Round Trip" && selectedFlightBuffer.length == 0) {
+        if (
+            selectedValues.flight === "Round Trip" &&
+            selectedFlightBuffer.length == 0
+        ) {
             setSwap(true);
             selectedFlightBuffer.push(flight);
             setSelectedFlightBuffer(selectedFlightBuffer);
@@ -225,7 +231,7 @@ export default function Page() {
                     setArrivalTime={setArrivalTime}
                     handleApply={fetchData}
                 />
-                <div className="flex flex-col gap-4 overflow-y-auto w-full items-center">
+                <div className="flex w-full flex-col items-center gap-4 overflow-y-auto">
                     {renderSearchContent()}
                 </div>
                 <FlightSortTab sort={sort} setSort={setSort} />
@@ -238,14 +244,16 @@ export default function Page() {
             return <FlightSearchFunishing />;
         } else if (pageState === "loading") {
             return (
-                <div className="flex flex-col items-center h-full text-primary-300 justify-center w-full py-4">
+                <div className="text-primary-300 flex h-full w-full flex-col items-center justify-center py-4">
                     <CircularProgress />
                 </div>
             );
         } else if (pageState === "empty") {
             return (
-                <div className="flex flex-col items-center h-full text-primary-300 justify-center w-full py-4">
-                    <MagnifyIcon />
+                <div className="text-primary-300 flex h-full w-full flex-col items-center justify-center py-4">
+                    <div className="h-20 w-20">
+                        <MagnifyIcon />
+                    </div>
                     <h2>Flight Not Found</h2>
                 </div>
             );
@@ -259,7 +267,7 @@ export default function Page() {
                         priceCabinClass={flight.priceCabinClass}
                         onClick={() => handleSelectFlightCard(flight)}
                     />
-                )
+                ),
             );
         }
     }
@@ -274,13 +282,13 @@ export default function Page() {
 
     return (
         <div
-            className={`flex flex-col gap-10 w-full min-h-screen items-center ${
+            className={`flex min-h-screen w-full flex-col items-center gap-10 ${
                 pageState === "initial" ? "" : "bg-primary-50"
             } justify-top`}
         >
             <Navbar />
-            <div className="flex flex-col w-full h-full px-[5rem]">
-                <div className="flex flex-col gap-4 w-full">
+            <div className="flex h-full w-full flex-col px-[5rem]">
+                <div className="flex w-full flex-col gap-4">
                     <FlightSearchBar
                         headerText={HeaderText}
                         selectedValues={selectedValues}
@@ -299,15 +307,15 @@ export default function Page() {
                 </div>
             </div>
             <div>
-                <SummaryModal 
-                isOpen={isSummaryModalOpen}
-                onClose={() => {
-                    resetState();
-                }}
-                FlightType={selectedValues.flight}
-                ClassType={selectedValues.class}
-                selectedFlights={selectedFlightBuffer}
-                selectedDates={selectedDateBuffer}
+                <SummaryModal
+                    isOpen={isSummaryModalOpen}
+                    onClose={() => {
+                        resetState();
+                    }}
+                    FlightType={selectedValues.flight}
+                    ClassType={selectedValues.class}
+                    selectedFlights={selectedFlightBuffer}
+                    selectedDates={selectedDateBuffer}
                 />
             </div>
             {pageState === "initial" ? <Footer /> : null}

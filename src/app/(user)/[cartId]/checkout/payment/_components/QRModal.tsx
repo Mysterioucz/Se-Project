@@ -42,44 +42,93 @@ async function postPaymentCompletion(
     const passengerData = checkoutData?.passengerData;
     const paymentData = checkoutData?.payment;
 
-    // Calculate total amount (base price + service fees for all passengers)
-    const totalAmount = passengerData.reduce((sum, passenger) => {
-        const departureBaggageFee =
-            passenger.baggageAllowance.departureBaggage.Price || 0;
-        const returnBaggageFee =
-            passenger.baggageAllowance.returnBaggage?.Price || 0;
-        return sum + cartData.Price + departureBaggageFee + returnBaggageFee;
+    // Calculate price per passenger (total cart price divided by number of passengers)
+    const totalPassengers = cartData.Adults + cartData.Childrens + cartData.Infants;
+    const pricePerPassenger = cartData.Price / totalPassengers;
+
+    // Create tickets array - for round trip, each passenger gets 2 tickets (departure + return)
+    const tickets = [];
+    
+    for (const passenger of passengerData) {
+        // Departure ticket for this passenger
+        const departureBaggageFee = passenger.baggageAllowance.departureBaggage.Price || 0;
+        
+        tickets.push({
+            Price: pricePerPassenger,
+            ServiceFee: departureBaggageFee,
+            PassengerName: passenger.givenName,
+            PassengerLastName: passenger.lastName,
+            Gender: passenger.gender,
+            DateOfBirth: new Date(passenger.dateOfBirth.split("/").reverse().join("-")),
+            Nationality: passenger.nationality,
+            BaggageChecked: extractOnlyNumbers(
+                passenger.baggageAllowance.departureBaggage.Description
+            ),
+            BaggageCabin: 7,
+            SeatNo: passenger.seatSelection.departureSeat,
+            AircraftRegNo: departFlight.AircraftRegNo,
+            FlightNo: departFlight.FlightNo,
+            DepartTime: departFlight.DepartTime,
+            ArrivalTime: departFlight.ArrivalTime,
+            PassportNo: passenger.passportNo || undefined,
+            PassportExpiry: passenger.expiryDate 
+                ? new Date(passenger.expiryDate.split("/").reverse().join("-"))
+                : undefined,
+        });
+
+        // Return ticket for this passenger (if round trip)
+        if (returnFlight && cartData.FlightType.toLowerCase().includes("round")) {
+            const returnBaggageFee = passenger.baggageAllowance.returnBaggage?.Price || 0;
+            
+            tickets.push({
+                Price: pricePerPassenger,
+                ServiceFee: returnBaggageFee,
+                PassengerName: passenger.givenName,
+                PassengerLastName: passenger.lastName,
+                Gender: passenger.gender,
+                DateOfBirth: new Date(passenger.dateOfBirth.split("/").reverse().join("-")),
+                Nationality: passenger.nationality,
+                BaggageChecked: extractOnlyNumbers(
+                    passenger.baggageAllowance.returnBaggage?.Description || ""
+                ),
+                BaggageCabin: 7,
+                SeatNo: passenger.seatSelection.returnSeat || "",
+                AircraftRegNo: returnFlight.AircraftRegNo,
+                FlightNo: returnFlight.FlightNo,
+                DepartTime: returnFlight.DepartTime,
+                ArrivalTime: returnFlight.ArrivalTime,
+                PassportNo: passenger.passportNo || undefined,
+                PassportExpiry: passenger.expiryDate 
+                    ? new Date(passenger.expiryDate.split("/").reverse().join("-"))
+                    : undefined,
+            });
+        }
+    }
+
+    // Calculate total amount (sum of all ticket prices and service fees)
+    const totalAmount = tickets.reduce((sum, ticket) => {
+        return sum + ticket.Price + (ticket.ServiceFee || 0);
     }, 0);
 
-    // Map passenger data to ticket format expected by API
-    const tickets = passengerData.map((passenger) => ({
-        Price: cartData.Price,
-        ServiceFee:
-            (passenger.baggageAllowance.departureBaggage.Price || 0) +
-            (passenger.baggageAllowance.returnBaggage?.Price || 0),
-        PassengerName: passenger.givenName,
-        PassengerLastName: passenger.lastName,
-        Gender: passenger.gender,
-        DateOfBirth: str2DateTime(passenger.dateOfBirth), // Should be in ISO format or parseable date string
-        Nationality: passenger.nationality,
-        BaggageChecked: extractOnlyNumbers(
-            passenger.baggageAllowance.departureBaggage.Description,
-        ), // Default or from passenger data if available
-        BaggageCabin: 7, // Default or from passenger data if available
-        SeatNo: passenger.seatSelection.departureSeat,
-    }));
     const payload = {
-        AircraftRegNo: departFlight.AircraftRegNo,
-        FlightNo: departFlight.FlightNo,
-        DepartTime: departFlight.DepartTime,
-        ArrivalTime: departFlight.ArrivalTime,
         Tickets: tickets,
         totalAmount: totalAmount,
         method: paymentData.isQRmethod ? "QR_CODE" : "ONLINE_BANKING",
         status: "PAID",
         paymentEmail: paymentData.email,
         paymentTelNo: paymentData.telNo,
-        bankName: paymentData.bankName,
+        bankName: paymentData.bankName || undefined,
+        Adults: cartData.Adults,
+        Childrens: cartData.Childrens,
+        Infants: cartData.Infants,
+        FlightType: cartData.FlightType,
+        ClassType: cartData.ClassType,
+        DepartFlightNo: departFlight.FlightNo,
+        DepartFlightDepartTime: departFlight.DepartTime,
+        DepartFlightArrivalTime: departFlight.ArrivalTime,
+        ReturnFlightNo: returnFlight?.FlightNo,
+        ReturnFlightDepartTime: returnFlight?.DepartTime,
+        ReturnFlightArrivalTime: returnFlight?.ArrivalTime,
     };
 
     const response = await fetch(
@@ -101,6 +150,7 @@ async function postPaymentCompletion(
     return await response.json();
 }
 
+
 export default function QRModal({ open, onClose }: QRModalProps) {
     const router = useRouter();
     const [amount, setAmount] = useState<number>(0);
@@ -114,8 +164,10 @@ export default function QRModal({ open, onClose }: QRModalProps) {
             departFlight,
             returnFlight,
         );
+        console.log("Payment Response:", res);
+        const PaymentID = res.data.PaymentID;
         if (res.success) {
-            router.push(`/payment/success/${res.data.paymentId}`);
+            router.push(`/payment/success/${PaymentID}`);
         }
     };
     useEffect(() => {

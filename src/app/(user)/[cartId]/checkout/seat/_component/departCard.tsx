@@ -3,7 +3,7 @@ import {
     formatToShortDate,
     formatToTime,
     getFlightDuration,
-} from "@/src/app/(user)/cart/[AccountID]/_components/FlightDetail";
+} from "@/src/components/booking/FlightDetail";
 import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
 import { Cart } from "@/src/contexts/CheckoutContext";
 import { Flight } from "@/src/helper/CheckoutHelper";
@@ -14,7 +14,6 @@ interface props {
 }
 
 export default function DepartCard({ flightData, cartData }: props) {
-    console.log(flightData)
     return (
         <SelectSeatCard
             key={`${flightData.FlightNo}-${flightData.DepartTime}`}

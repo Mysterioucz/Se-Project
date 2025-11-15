@@ -100,14 +100,12 @@ export async function POST(req: NextRequest) {
                 LastName,
             },
         });
-
         const accountID = newAccount?.AccountID;
         await prisma.user.create({
             data: {
                 UserAccountID: accountID,
             },
         });
-
         return new Response(
             JSON.stringify({
                 success: true,
@@ -119,6 +117,7 @@ export async function POST(req: NextRequest) {
         return new Response(
             JSON.stringify({
                 message: ErrorMessages.SERVER,
+                error: error,
             }),
             { status: 500 },
         );

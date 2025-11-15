@@ -3,12 +3,15 @@ import SelectComponent, { SelectEvent } from "@/src/components/select";
 import { MenuItem } from "@mui/material";
 
 const problemTypeOptions = [
-    { value: "Booking Issue", label: "Booking Issue" },
-    { value: "Payment Issue", label: "Payment Issue" },
-    { value: "Cancellation / Refund", label: "Cancellation / Refund" },
-    { value: "Extra Service Issue", label: "Extra Service Issue" },
-    { value: "Account / System Issue", label: "Account / System Issue" },
-    { value: "Flight Rerouting / Adjustment Issue", label: "Flight Rerouting / Adjustment Issue" }
+    { value: "PAYMENT_ISSUE", label: "Payment Issue" },
+    { value: "BOOOKING_ISSUE", label: "Booking Issue" }, // Note: typo in DB schema
+    { value: "CANCELLATION_REFUND", label: "Cancellation / Refund" },
+    { value: "EXTRA_SERVICE_ISSUE", label: "Extra Service Issue" },
+    { value: "ACCOUNT_SYSTEM_ISSUE", label: "Account / System Issue" },
+    {
+        value: "FLIGHT_ROUTING_ADJUSTMENT_ISSUE",
+        label: "Flight Rerouting / Adjustment Issue",
+    },
 ];
 
 interface Props {

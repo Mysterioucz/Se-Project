@@ -1,14 +1,13 @@
 "use client";
 
-import { formatToShortDate } from "@/src/app/flights/search/_components/SummaryCard";
-import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
-import { Cart, useCheckout } from "@/src/contexts/CheckoutContext";
-import { Flight } from "@/src/helper/CheckoutHelper";
-import { useState } from "react";
+import { formatToShortDate } from "@/src/app/(user)/flights/search/_components/SummaryCard";
 import {
     formatToTime,
     getFlightDuration,
-} from "../../../cart/[AccountID]/_components/FlightDetail";
+} from "@/src/components/booking/FlightDetail";
+import SelectSeatCard from "@/src/components/selectSeatCard/selectSeatCard";
+import { Cart, useCheckout } from "@/src/contexts/CheckoutContext";
+import { Flight } from "@/src/helper/CheckoutHelper";
 
 export default function Page() {
     const { cartData, departFlight, returnFlight } = useCheckout();

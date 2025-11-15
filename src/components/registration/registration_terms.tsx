@@ -64,6 +64,7 @@ export default function RegistrationTerms() {
           <input
             type="checkbox"
             id="terms"
+            data-testid="registration-terms-checkbox"
             className="
                 flex
                 w-5 h-5 
@@ -90,6 +91,7 @@ export default function RegistrationTerms() {
       <div className="flex justify-center gap-4">
         <button
           type="button"
+          data-testid="registration-terms-back-btn"
           className="w-[7rem] h-[2.1875rem] bg-white rounded-md items-center justify-center text-primary-400 border-1 border-primary-400 text-[16px] cursor-pointer hover:opacity-90"
           onClick={() => router.push("/registration/password")}
         >
@@ -97,6 +99,7 @@ export default function RegistrationTerms() {
         </button>
         <button
           type="submit"
+          data-testid="registration-terms-next-btn"
           disabled={!accepted}
           className={`w-[7rem] h-[2.1875rem] ${
             accepted ? "bg-primary-400" : "bg-disable-light"
