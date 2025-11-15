@@ -8,10 +8,11 @@ import QRModal from "./_components/QRModal";
 export default function Page() {
     const { checkoutData, updateCheckoutData } = useCheckout();
 
-    // TODO: Fetch actual data from backend to check if user fill in all required info
-    
-
-    const handlePaymentStatusChange = (isValid: boolean, isQR: boolean, bankName: string) => {
+    const handlePaymentStatusChange = (
+        isValid: boolean,
+        isQR: boolean,
+        bankName: string,
+    ) => {
         updateCheckoutData({
             payment: {
                 ...(checkoutData?.payment ?? {}),
@@ -21,6 +22,7 @@ export default function Page() {
             },
         });
     };
+
     const handleContactStatusChange = (
         isValid: boolean,
         values: ContactFormData,
@@ -46,15 +48,15 @@ export default function Page() {
     };
 
     return (
-        <div className="flex flex-row gap-[8rem] justify-between pb-[2rem] w-full">
-            <div className="flex flex-col gap-[1.5rem] w-full">
+        <div className="flex w-full flex-row justify-between gap-[8rem] pb-[2rem]">
+            <div className="flex w-full flex-col gap-[1.5rem]">
                 <div className="text-[3rem] font-bold text-[var(--color-primary-900)]">
                     Payment
                 </div>
 
                 <div className="flex flex-col gap-[2rem]">
-                    <div className="gap-[2rem] p-[1.5rem] bg-[var(--color-primary-50)] rounded-[0.5rem]">
-                        <div className="text-[2rem] font-bold text-[var(--color-primary-900)] mb-[1.5rem]">
+                    <div className="gap-[2rem] rounded-[0.5rem] bg-[var(--color-primary-50)] p-[1.5rem]">
+                        <div className="mb-[1.5rem] text-[2rem] font-bold text-[var(--color-primary-900)]">
                             Payment Methods
                         </div>
                         <PaymentMethods
@@ -62,8 +64,8 @@ export default function Page() {
                         />
                     </div>
 
-                    <div className="gap-[2rem] p-[1.5rem] bg-[var(--color-primary-50)] rounded-[0.5rem]">
-                        <div className="text-[2rem] font-bold text-[var(--color-primary-900)] mb-[1.5rem]">
+                    <div className="gap-[2rem] rounded-[0.5rem] bg-[var(--color-primary-50)] p-[1.5rem]">
+                        <div className="mb-[1.5rem] text-[2rem] font-bold text-[var(--color-primary-900)]">
                             Contact Information
                         </div>
                         <ContactInform

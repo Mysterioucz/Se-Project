@@ -1,0 +1,265 @@
+"use client";
+import FlightDetailSummary from "@/src/app/(user)/order-summary/_components/flightDetailSummary";
+import PassengerInfoSummary from "@/src/app/(user)/order-summary/_components/passengerInfoSummary";
+import PaymentDetailSummary from "@/src/app/(user)/order-summary/_components/paymentDetailSummary";
+import PriceBreakdownCard from "@/src/components/priceBreakdownCard";
+import Button from "@/src/components/Button";
+import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
+import { PassengerTypes } from "@/src/enums/PassengerTypes";
+import formatDateLocal from "@/src/lib/formatDateLocal";
+import { formatToTime } from "@components/booking/FlightDetail";
+import { redirect } from "next/navigation";
+
+export interface Airport {
+    AirportID: string;
+    AirportName: string;
+    City: string;
+    Country: string;
+}
+
+export interface Flight {
+    FlightNo: string;
+    DepartTime: string; // ISO string from Date
+    ArrivalTime: string; // ISO string from Date
+    AirlineName: string;
+    Aircraft?: string | null;
+    departureAirport: Airport;
+    arrivalAirport: Airport;
+}
+
+export interface PaymentData {
+    PaymentID: string;
+    PaymentDateTime: string;
+    PaymentMethod: string;
+    TransactionStatus: string;
+    PaymentEmail: string;
+    PaymentTelNo: string;
+    BankName: string | null;
+    Amount: number;
+    CreatedAt: string;
+    Adults: number;
+    Childrens: number;
+    Infants: number;
+    ClassType: string;
+    FlightType: string;
+    DepartFlight: Flight;
+    ReturnFlight?: Flight | null;
+}
+
+export interface Ticket {
+    TicketID: string;
+    Price: number;
+    ServiceFee?: number | null;
+    TicketStatus: string;
+    PassengerName: string;
+    PassengerLastName: string;
+    Gender: string;
+    DateOfBirth: string;
+    Nationality: string;
+    SeatNo: string;
+    BaggageChecked?: string | null;
+    BaggageCabin?: string | null;
+    PassportNo?: string | null;
+    PassportExpiry?: string | null;
+}
+
+export interface PaymentsApiResponse {
+    payment: PaymentData;
+    tickets: Ticket[];
+}
+
+export default function PageClient({
+    data,
+    UserAccountID,
+}: {
+    data: PaymentsApiResponse;
+    UserAccountID: string;
+}) {
+    const flightType = data.payment.FlightType;
+
+    const tickets = [
+        {
+            type: PassengerTypes.Adult,
+            price: data.tickets[0].Price,
+            quantity: data.payment.Adults,
+        },
+        {
+            type: PassengerTypes.Child,
+            price: data.tickets[0].Price,
+            quantity: data.payment.Childrens,
+        },
+        {
+            type: PassengerTypes.Infant,
+            price: data.tickets[0].Price,
+            quantity: data.payment.Infants,
+        },
+    ];
+    const servicesFee = data.tickets.reduce((total, ticket) => {
+        return total + (ticket.ServiceFee || 0);
+    }, 0);
+
+    const paymentDetail = {
+        bookingId: data.payment.PaymentID,
+        paymentMethod: data.payment.PaymentMethod,
+    };
+
+    const passengers = data.tickets.map((ticket) => ({
+        GivenName: ticket.PassengerName,
+        LastName: ticket.PassengerLastName,
+        GenderOnID: ticket.Gender,
+        Birthdate: formatDateLocal(ticket.DateOfBirth),
+        Nationality: ticket.Nationality,
+        SeatNo: ticket.SeatNo,
+        PassportNo: ticket.PassportNo ?? null,
+        PassportExpiryDate: formatDateLocal(ticket.PassportExpiry ?? null),
+    }));
+
+    const flightDetail = {
+        flightLeg: FlightLegTypes.DEPARTURE,
+        departurePlace: data.payment.DepartFlight.departureAirport.City,
+        arrivalPlace: data.payment.DepartFlight.arrivalAirport.City,
+        airline: data.payment.DepartFlight.AirlineName,
+        flightNumber: data.payment.DepartFlight.FlightNo,
+        cabinClass: data.payment.ClassType,
+        segments: [
+            {
+                Time: formatToTime(
+                    new Date(data.payment.DepartFlight.DepartTime),
+                ),
+                Date: formatDateLocal(data.payment.DepartFlight.DepartTime),
+                Airport: data.payment.DepartFlight.departureAirport.AirportID,
+                Place: data.payment.DepartFlight.departureAirport.AirportName,
+            },
+            {
+                Time: formatToTime(
+                    new Date(data.payment.DepartFlight.ArrivalTime),
+                ),
+                Date: formatDateLocal(data.payment.DepartFlight.ArrivalTime),
+                Airport: data.payment.DepartFlight.arrivalAirport.AirportID,
+                Place: data.payment.DepartFlight.arrivalAirport.AirportName,
+            },
+        ],
+    };
+
+    const returnFlightDetail = {
+        flightLeg: FlightLegTypes.RETURN,
+        departurePlace: data.payment.ReturnFlight?.departureAirport.City,
+        arrivalPlace: data.payment.ReturnFlight?.arrivalAirport.City,
+        airline: data.payment.ReturnFlight?.AirlineName,
+        flightNumber: data.payment.ReturnFlight?.FlightNo,
+        cabinClass: data.payment.ClassType,
+        segments: [
+            {
+                Time: formatToTime(
+                    new Date(
+                        data.payment.ReturnFlight?.DepartTime ??
+                            "2025-12-25T00:00:00.0000Z",
+                    ),
+                ),
+                Date: formatDateLocal(
+                    data.payment.ReturnFlight?.DepartTime ?? "",
+                ),
+                Airport:
+                    data.payment.ReturnFlight?.departureAirport.AirportID ?? "",
+                Place:
+                    data.payment.ReturnFlight?.departureAirport.AirportName ??
+                    "",
+            },
+            {
+                Time: formatToTime(
+                    new Date(
+                        data.payment.ReturnFlight?.ArrivalTime ??
+                            "2025-12-25T00:00:00.0000Z",
+                    ),
+                ),
+                Date: formatDateLocal(
+                    data.payment.ReturnFlight?.ArrivalTime ?? "",
+                ),
+                Airport:
+                    data.payment.ReturnFlight?.arrivalAirport.AirportID ?? "",
+                Place:
+                    data.payment.ReturnFlight?.arrivalAirport.AirportName ?? "",
+            },
+        ],
+    };
+
+    const RoundTripFlights = [flightDetail, returnFlightDetail];
+
+    return (
+        <div className="py-md flex w-full flex-col justify-center gap-10">
+            <h1 className="font-sarabun text-primary-600 text-[2rem] leading-[120%] font-bold">
+                Flight Order Summary
+            </h1>
+
+            <div className="flex items-start gap-16 self-stretch">
+                <div className="flex w-[35rem] flex-col items-start gap-[0.625rem] p-[1rem]">
+                    <div className="bg-primary-50 flex items-start self-stretch rounded-md px-4 py-2">
+                        <div className="font-sarabun text-primary-900 m-0 text-[1.2rem] leading-[120%] font-semibold">
+                            Trip Type : {flightType}
+                        </div>
+                    </div>
+
+                    {flightType === "Round Trip" &&
+                        RoundTripFlights.map((flight, index) => (
+                            <FlightDetailSummary
+                                key={index}
+                                flightLeg={flight.flightLeg}
+                                departurePlace={flight.departurePlace ?? ""}
+                                arrivalPlace={flight.arrivalPlace ?? ""}
+                                airline={flight.airline ?? ""}
+                                flightNumber={flight.flightNumber ?? ""}
+                                cabinClass={flight.cabinClass}
+                                segments={flight.segments}
+                            />
+                        ))}
+                    {flightType === "One Way" && (
+                        <FlightDetailSummary
+                            flightLeg={flightDetail.flightLeg}
+                            departurePlace={flightDetail.departurePlace ?? ""}
+                            arrivalPlace={flightDetail.arrivalPlace ?? ""}
+                            airline={flightDetail.airline ?? ""}
+                            flightNumber={flightDetail.flightNumber ?? ""}
+                            cabinClass={flightDetail.cabinClass}
+                            segments={flightDetail.segments}
+                        />
+                    )}
+                </div>
+
+                <div className="flex items-start gap-[4rem] self-stretch">
+                    {/* x-axis spacing */}
+                </div>
+
+                <div className="bg-common-white flex [flex:1_0_0] flex-col items-start gap-[1rem] p-[1rem]">
+                    {passengers.map((p, idx) => (
+                        <PassengerInfoSummary
+                            key={idx}
+                            count={idx + 1}
+                            {...p}
+                        />
+                    ))}
+                    <PriceBreakdownCard
+                        tickets={tickets}
+                        servicesFee={servicesFee}
+                    />
+                    <PaymentDetailSummary
+                        bookingId={paymentDetail.bookingId}
+                        paymentMethod={paymentDetail.paymentMethod}
+                    />
+                </div>
+            </div>
+
+            <div className="flex flex-col items-center self-stretch py-4">
+                <Button
+                    text="Done"
+                    size="md"
+                    width="w-[400px]"
+                    align="center"
+                    styleType="fill"
+                    onClick={() => {
+                        redirect("/flights/search");
+                    }}
+                />
+            </div>
+        </div>
+    );
+}

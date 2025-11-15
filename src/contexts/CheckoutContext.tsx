@@ -1,157 +1,48 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext } from "react";
 import { Flight } from "../helper/CheckoutHelper";
+import {
+    CHECKOUT_STORAGE_KEY,
+    initialBaggageAllowance,
+    initialCheckoutData,
+    initialPassengerData,
+    initialSeatSelection,
+} from "./checkout/constants";
+import {
+    ensureCartMetadata,
+    updatePassengerAtIndex,
+    updatePassengerBaggageAtIndex,
+    updatePassengerSeatAtIndex,
+} from "./checkout/helpers";
+import { useCheckoutInitialization } from "./checkout/hooks";
+import {
+    clearCheckoutStorage,
+    saveCheckoutToStorage,
+} from "./checkout/storage";
+import {
+    BaggageAllowance,
+    Cart,
+    CheckoutContextType,
+    CheckoutPayload,
+    PassengerData,
+    Seat,
+} from "./checkout/types";
+import {
+    areAllSeatsSelected as checkAllSeatsSelected,
+    validateCheckoutDataAgainstCart,
+} from "./checkout/validation";
 
-interface Payment {
-    isPaymentValid: boolean;
-    isContactValid: boolean;
-    isQRmethod: boolean;
-    isQRModalOpen: boolean;
-    email: string;
-    telNo: string;
-    bankName: string;
-}
-
-interface Info {
-    isValid: boolean;
-}
-
-export interface ServiceType {
-    ServiceID: string;
-    ServiceName: string;
-    Price: number;
-    Description: string;
-}
-
-interface Seat {
-    departureSeat: string; // Seat No
-    returnSeat?: string;
-}
-
-export interface BaggageAllowance {
-    departureBaggage: ServiceType;
-    returnBaggage?: ServiceType;
-}
-
-export interface PassengerData {
-    givenName: string;
-    lastName: string;
-    gender: string;
-    dateOfBirth: string;
-    nationality: string;
-    passportNo?: string;
-    issueDate?: string;
-    expiryDate?: string;
-    baggageAllowance: BaggageAllowance; // in kg
-    seatSelection: Seat; // Seat No
-}
-
-export interface Cart {
-    id: number;
-    FlightType: string;
-    ClassType: string;
-    Adults: number;
-    Childrens: number;
-    Infants: number;
-    Price: number;
-    DepartureAirport: string;
-    ArrivalAirport: string;
-    DepartureCity: string;
-    ArrivalCity: string;
-    Depart: {
-        FlightNo: string;
-        DepartTime: Date;
-        ArrivalTime: Date;
-        AirlineName: string;
-        Stops: number;
-    };
-    Return: {
-        FlightNo: string;
-        DepartTime: Date;
-        ArrivalTime: Date;
-        AirlineName: string;
-        Stops: number;
-    };
-}
-export interface CheckoutPayload {
-    passengerData: PassengerData[];
-    payment: Payment;
-    info: Info;
-}
-
-type CheckoutContextType = {
-    checkoutData: CheckoutPayload;
-    updateCheckoutData: (data: Partial<CheckoutPayload>) => void;
-    updatePassengerAt: (
-        index: number,
-        passengerPatch: Partial<PassengerData>,
-    ) => void;
-    updatePassengerSeatAt: (index: number, seatPatch: Partial<Seat>) => void;
-    updateBaggageAt: (
-        index: number,
-        baggagePatch: Partial<BaggageAllowance>,
-    ) => void;
-    clearCheckoutData: () => void; // after successful payment
-    cartData: Cart;
-    departFlight: Flight;
-    returnFlight?: Flight;
+export {
+    CHECKOUT_STORAGE_KEY,
+    initialBaggageAllowance,
+    initialPassengerData,
+    initialSeatSelection,
 };
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(
     undefined,
 );
-
-export const CHECKOUT_STORAGE_KEY = "tempCheckout";
-
-export const initialBaggageAllowance: BaggageAllowance = {
-    departureBaggage: {
-        ServiceID: "",
-        ServiceName: "",
-        Price: 0,
-        Description: "",
-    },
-    returnBaggage: {
-        ServiceID: "",
-        ServiceName: "",
-        Price: 0,
-        Description: "",
-    },
-};
-
-export const initialSeatSelection: Seat = {
-    departureSeat: "",
-    returnSeat: "",
-};
-
-const initialPassengerData: PassengerData = {
-    givenName: "",
-    lastName: "",
-    gender: "",
-    dateOfBirth: "",
-    nationality: "",
-    passportNo: "",
-    issueDate: "",
-    expiryDate: "",
-    baggageAllowance: initialBaggageAllowance,
-    seatSelection: initialSeatSelection,
-};
-
-const initialCheckoutData: CheckoutPayload = {
-    passengerData: [initialPassengerData],
-    payment: {
-        isPaymentValid: false,
-        isContactValid: false,
-        isQRmethod: false,
-        isQRModalOpen: false,
-        email: "",
-        telNo: "",
-        bankName: "",
-    },
-    info: {
-        isValid: false,
-    },
-};
 
 export function CheckoutProvider({
     children,
@@ -164,143 +55,148 @@ export function CheckoutProvider({
     departFlight: Flight;
     returnFlight?: Flight;
 }) {
-    const [checkoutData, setCheckoutData] =
-        useState<CheckoutPayload>(initialCheckoutData);
+    const { checkoutData, setCheckoutData } =
+        useCheckoutInitialization(cartData);
 
-    // Load from localStorage after mount (client-side only)
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const stored = localStorage.getItem(CHECKOUT_STORAGE_KEY);
-            if (stored) {
-                try {
-                    const parsed = JSON.parse(stored);
-                    setCheckoutData(parsed);
-                } catch (e) {
-                    console.error(
-                        "Failed to parse checkout data from storage",
-                        e,
-                    );
-                }
-            }
-        }
-    }, []);
+    // Validate if stored checkout data matches current cart
+    const isCheckoutDataValid = (): boolean => {
+        return validateCheckoutDataAgainstCart(checkoutData, cartData);
+    };
 
+    // Update checkout data with cart metadata
     const updateCheckoutData = (data: Partial<CheckoutPayload>) => {
         setCheckoutData((prev) => {
-            const updatedData = { ...prev, ...data };
-            if (typeof window !== "undefined") {
-                localStorage.setItem(
-                    CHECKOUT_STORAGE_KEY,
-                    JSON.stringify(updatedData),
+            const updatedData = ensureCartMetadata(
+                { ...prev, ...data },
+                cartData,
+            );
+            // Only save if data actually changed (deep comparison of relevant fields)
+            const hasChanged =
+                JSON.stringify(prev.payment) !==
+                    JSON.stringify(updatedData.payment) ||
+                JSON.stringify(prev.passengerData) !==
+                    JSON.stringify(updatedData.passengerData) ||
+                JSON.stringify(prev.info) !== JSON.stringify(updatedData.info);
+
+            if (hasChanged) {
+                console.log(
+                    "[CheckoutContext] Saving checkout data to storage:",
+                    {
+                        hasPassengerData: updatedData.passengerData.length,
+                        cartId: updatedData.cartMetadata?.cartId,
+                        payment: updatedData.payment,
+                    },
+                );
+                saveCheckoutToStorage(updatedData);
+            } else {
+                console.log(
+                    "[CheckoutContext] Skipping save - no changes detected",
                 );
             }
+
             return updatedData;
         });
     };
+
+    // Clear checkout data
     const clearCheckoutData = () => {
-        sessionStorage.removeItem(CHECKOUT_STORAGE_KEY);
+        clearCheckoutStorage();
         setCheckoutData(initialCheckoutData);
     };
 
-    // helper to make an empty PassengerData (you already have `initialPassengerData`)
-    const makeEmptyPassenger = (): PassengerData => ({
-        ...initialPassengerData, // or create a fresh object if needed
-    });
-
-    // ensures list has length > index
-    const ensurePassengerAt = (index: number) => {
-        setCheckoutData((prev) => {
-            const list = [...(prev.passengerData ?? [])];
-            while (list.length <= index) {
-                list.push(makeEmptyPassenger());
-            }
-            const updated = { ...prev, passengerData: list };
-            if (typeof window !== "undefined")
-                localStorage.setItem(
-                    CHECKOUT_STORAGE_KEY,
-                    JSON.stringify(updated),
-                );
-            return updated;
-        });
-    };
+    // Update passenger at specific index
     const updatePassengerAt = (
         index: number,
         passengerPatch: Partial<PassengerData>,
     ) => {
+        if (index < 0) {
+            console.warn("updatePassengerAt: index out of range", index);
+            return;
+        }
+
         setCheckoutData((prev) => {
-            const list = [...(prev.passengerData ?? [])];
-            if (index < 0) {
-                console.warn("updatePassengerAt: index out of range", index);
-                return prev;
-            } else if (index >= list.length) {
-                ensurePassengerAt(index);
-            }
-            list[index] = { ...list[index], ...passengerPatch };
-            const updated = { ...prev, passengerData: list };
-            if (typeof window !== "undefined")
-                localStorage.setItem(
-                    CHECKOUT_STORAGE_KEY,
-                    JSON.stringify(updated),
-                );
+            const updatedPassengers = updatePassengerAtIndex(
+                prev.passengerData,
+                index,
+                passengerPatch,
+                cartData,
+            );
+            const updated = ensureCartMetadata(
+                { ...prev, passengerData: updatedPassengers },
+                cartData,
+            );
+            console.log(
+                `[CheckoutContext] Updating passenger ${index}:`,
+                passengerPatch,
+            );
+            saveCheckoutToStorage(updated);
             return updated;
         });
     };
 
+    // Update passenger seat at specific index
     const updatePassengerSeatAt = (index: number, seatPatch: Partial<Seat>) => {
+        if (index < 0) {
+            console.warn("updatePassengerSeatAt: index out of range", index);
+            return;
+        }
+
         setCheckoutData((prev) => {
-            const list = prev.passengerData;
-            if (index < 0) {
-                console.warn(
-                    "updatePassengerSeatAt: index out of range",
-                    index,
-                );
-                return prev;
-            } else if (index >= list.length) {
-                ensurePassengerAt(index);
-            }
-            try {
-                list[index].seatSelection = {
-                    ...list[index].seatSelection,
-                    ...seatPatch,
-                };
-            } catch (e) {
-                console.error("Failed to update seat selection", e);
-                console.log("passengerData", prev.passengerData);
-            }
-            const updated = { ...prev, passengerData: list };
-            if (typeof window !== "undefined")
-                localStorage.setItem(
-                    CHECKOUT_STORAGE_KEY,
-                    JSON.stringify(updated),
-                );
+            const updatedPassengers = updatePassengerSeatAtIndex(
+                prev.passengerData,
+                index,
+                seatPatch,
+                cartData,
+            );
+            const updated = ensureCartMetadata(
+                { ...prev, passengerData: updatedPassengers },
+                cartData,
+            );
+            console.log(
+                `[CheckoutContext] Updating seat for passenger ${index}:`,
+                seatPatch,
+            );
+            saveCheckoutToStorage(updated);
             return updated;
         });
     };
 
+    // Update baggage at specific index
     const updateBaggageAt = (
         index: number,
         baggagePatch: Partial<BaggageAllowance>,
     ) => {
+        if (index < 0) {
+            console.warn("updateBaggageAt: index out of range", index);
+            return;
+        }
+
         setCheckoutData((prev) => {
-            const list = [...(prev.passengerData ?? [])];
-            if (index < 0) {
-                console.warn("updateBaggageAt: index out of range", index);
-                return prev;
-            } else if (index >= list.length) {
-                ensurePassengerAt(index);
-            }
-            list[index].baggageAllowance = {
-                ...list[index].baggageAllowance,
-                ...baggagePatch,
-            };
-            const updated = { ...prev, passengerData: list };
-            if (typeof window !== "undefined")
-                localStorage.setItem(
-                    CHECKOUT_STORAGE_KEY,
-                    JSON.stringify(updated),
-                );
+            const updatedPassengers = updatePassengerBaggageAtIndex(
+                prev.passengerData,
+                index,
+                baggagePatch,
+                cartData,
+            );
+            const updated = ensureCartMetadata(
+                { ...prev, passengerData: updatedPassengers },
+                cartData,
+            );
+            console.log(
+                `[CheckoutContext] Updating baggage for passenger ${index}:`,
+                baggagePatch,
+            );
+            saveCheckoutToStorage(updated);
             return updated;
         });
+    };
+
+    // Check if all seats are selected
+    const areAllSeatsSelected = (): boolean => {
+        return checkAllSeatsSelected(
+            checkoutData.passengerData,
+            cartData.FlightType,
+        );
     };
 
     return (
@@ -312,6 +208,8 @@ export function CheckoutProvider({
                 updatePassengerAt,
                 updatePassengerSeatAt,
                 updateBaggageAt,
+                areAllSeatsSelected,
+                isCheckoutDataValid,
                 cartData,
                 departFlight,
                 returnFlight,

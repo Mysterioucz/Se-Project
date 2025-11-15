@@ -1,12 +1,12 @@
 import CheckoutProgress from "@/src/app/(user)/[cartId]/checkout/_components/CheckoutProgress";
 import FooterButton from "@/src/app/(user)/[cartId]/checkout/_components/FooterButton";
 import Navbar from "@/src/components/Navbar";
-import PriceBreakdownCard, {
-    TicketSummaryProps,
-} from "@/src/app/(user)/order-history/order-summary/_components/priceBreakdownCard";
 import { CheckoutProvider } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { fetchCartData, fetchFlightData } from "@/src/helper/CheckoutHelper";
+import PriceBreakdownCard, {
+    TicketSummaryProps,
+} from "@components/priceBreakdownCard";
 import BookingInfo from "./_components/BookingInfo";
 
 export default async function CheckoutLayout({
@@ -62,7 +62,7 @@ export default async function CheckoutLayout({
     ].filter((t) => t.quantity > 0);
 
     return (
-        <div className="flex flex-col min-h-screen gap-8 pb-8 items-center">
+        <div className="flex min-h-screen flex-col items-center gap-8 pb-8">
             <Navbar />
             <CheckoutProgress />
             <CheckoutProvider
@@ -70,9 +70,9 @@ export default async function CheckoutLayout({
                 departFlight={departData}
                 returnFlight={returnData}
             >
-                <div className="flex w-full px-32 gap-32">
+                <div className="flex w-full gap-32 px-32">
                     <div className="flex w-full">{children}</div>
-                    <div className="flex flex-col w-full gap-10 max-w-[21.25rem]">
+                    <div className="flex w-full max-w-[21.25rem] flex-col gap-10">
                         <BookingInfo />
                         <PriceBreakdownCard tickets={tickets} />
                     </div>

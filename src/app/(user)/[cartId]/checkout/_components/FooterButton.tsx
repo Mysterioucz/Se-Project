@@ -3,13 +3,21 @@
 import Button from "@/src/components/Button";
 import { useCheckout } from "@/src/contexts/CheckoutContext";
 import { usePathname, useRouter } from "next/navigation";
-import { checkoutPaths, isCheckoutPath } from "./helper";
+import { useState } from "react";
+import { checkoutPaths, isCheckoutPath, postPaymentCompletion } from "./helper";
 
 export default function FooterButton({ cartId }: { cartId: string }) {
     let pathname = usePathname();
     pathname = pathname.replace(`/${cartId}`, "");
     const router = useRouter();
-    const { checkoutData, updateCheckoutData } = useCheckout();
+    const {
+        checkoutData,
+        updateCheckoutData,
+        areAllSeatsSelected,
+        cartData,
+        departFlight,
+        returnFlight,
+    } = useCheckout();
     const { isPaymentValid, isContactValid, isQRmethod } = checkoutData.payment;
     const prefixButtonText = new Map<string, string>([
         [`/checkout/info`, "Cancel"],
@@ -46,10 +54,23 @@ export default function FooterButton({ cartId }: { cartId: string }) {
         }
     };
 
-    const handleNextButton = () => {
+    const handleNextButton = async () => {
         if (isCheckoutPath(pathname)) {
-            if (pathname === `/checkout/payment` && isQRmethod) {
-                setQRModalOpen(true);
+            if (pathname === `/checkout/payment`) {
+                if (isQRmethod) {
+                    setQRModalOpen(true);
+                } else {
+                    const res = await postPaymentCompletion(
+                        checkoutData,
+                        cartData,
+                        departFlight,
+                        returnFlight,
+                    );
+                    console.log(res);
+                    if (res.success && res.data.payment.PaymentID) {
+                        router.push(`/payment-success/${res.data.payment.PaymentID}`);
+                    }
+                }
             } else {
                 const nextIdx = checkoutPaths.indexOf(pathname) + 1;
                 router.push(`/${cartId}` + checkoutPaths[nextIdx]);
@@ -62,6 +83,8 @@ export default function FooterButton({ cartId }: { cartId: string }) {
             return !(isPaymentValid && isContactValid);
         } else if (pathname === `/checkout/info`) {
             return !checkoutData.info?.isValid;
+        } else if (pathname === `/checkout/seat`) {
+            return !areAllSeatsSelected();
         }
         return false;
     };
@@ -74,21 +97,51 @@ export default function FooterButton({ cartId }: { cartId: string }) {
         return suffixButtonText.get(pathname) || "Next";
     };
 
+    const getDisabledMessage = () => {
+        if (pathname === `/checkout/seat` && !areAllSeatsSelected()) {
+            return "Please select seats for all passengers";
+        } else if (
+            pathname === `/checkout/info` &&
+            !checkoutData.info?.isValid
+        ) {
+            return "Please fill in all passenger information";
+        } else if (pathname === `/checkout/payment`) {
+            if (!isPaymentValid) return "Please select a payment method";
+            if (!isContactValid) return "Please provide contact information";
+        }
+        return "";
+    };
+
+    const [showTooltip, setShowTooltip] = useState(false);
+
+    const isDisabled = resolveDisabledState();
+    const disabledMessage = getDisabledMessage();
+
     return (
         //Action Buttons
-        <div className="flex w-full h-fit px-60 gap-6 justify-between">
+        <div className="flex h-fit w-full justify-between gap-6 px-60">
             <Button
                 text={resolvePrefixButtonText()}
                 width="w-full"
                 onClick={handleBackButton}
                 styleType="stroke"
             />
-            <Button
-                text={resolveSuffixButtonText()}
-                width="w-full"
-                onClick={handleNextButton}
-                disabled={resolveDisabledState()}
-            />
+            <div className="relative w-full">
+                <Button
+                    text={resolveSuffixButtonText()}
+                    width="w-full"
+                    onClick={handleNextButton}
+                    disabled={isDisabled}
+                    onMouseEnter={() => isDisabled && setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                />
+                {isDisabled && showTooltip && disabledMessage && (
+                    <div className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-lg bg-gray-800 px-3 py-2 text-sm whitespace-nowrap text-white shadow-lg">
+                        {disabledMessage}
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
