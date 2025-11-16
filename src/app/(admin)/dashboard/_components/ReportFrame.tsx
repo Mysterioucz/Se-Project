@@ -7,6 +7,9 @@ import ReportStatusMarker from "./ReportStatusMarker";
 interface ReportFrameProps {
     id: string;
     index: number;
+    bookingID: string;
+    description: string;
+    attachment: string | null;
     priority: "normal" | "high";
     status: "opened" | "in progress" | "resolved" | "cancelled";
     problemType: string;
@@ -23,6 +26,9 @@ interface ReportFrameProps {
 export default function ReportFrame({
     id,
     index,
+    bookingID,
+    description,
+    attachment,
     priority,
     status,
     problemType,

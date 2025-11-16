@@ -212,6 +212,9 @@ export default function ReportManagement() {
                                 key={r.id}
                                 index={idx + 1}
                                 id={r.id}
+                                bookingID={r.bookingID}
+                                description={r.description}
+                                attachment={r.attachment}
                                 priority={
                                     r.priority.toLowerCase() as
                                         | "normal"

@@ -39,7 +39,7 @@ export async function postPaymentCompletion(
     // Calculate price per passenger (total cart price divided by number of passengers)
     const totalPassengers =
         cartData.Adults + cartData.Childrens + cartData.Infants;
-    const pricePerPassenger = cartData.Price / totalPassengers;
+    const pricePerPassenger = (cartData.Price / totalPassengers) / (returnFlight ? 2 : 1);
 
     // Create tickets array - for round trip, each passenger gets 2 tickets (departure + return)
     const tickets = [];
@@ -110,12 +110,11 @@ export async function postPaymentCompletion(
             });
         }
     }
-
-    // Calculate total amount (sum of all ticket prices and service fees)
-    const totalAmount = tickets.reduce((sum, ticket) => {
-        return sum + ticket.Price + (ticket.ServiceFee || 0);
+    
+    const totalAmount = tickets.reduce((acc, ticket) => {
+        return acc + ticket.Price + (ticket.ServiceFee || 0);
     }, 0);
-
+    
     const payload = {
         Tickets: tickets,
         totalAmount: totalAmount,
