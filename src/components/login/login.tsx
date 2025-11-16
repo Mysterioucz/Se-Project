@@ -61,6 +61,7 @@ export default function RegistrationEmail() {
                         } items-center rounded-sm`}
                     >
                         <input
+                            data-testid="email-test"
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -96,6 +97,7 @@ export default function RegistrationEmail() {
                             } items-center rounded-sm`}
                         >
                             <input
+                                data-testid="password"
                                 type={showPassword ? "text" : "password"}
                                 value={password}
                                 placeholder="Enter your password"
