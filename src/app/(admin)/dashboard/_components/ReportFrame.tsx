@@ -128,7 +128,6 @@ export default function ReportFrame({
                 passengerLastName={passengerLastName}
                 problemType={problemType}
                 description={description}
-                attachment={attachment}
                 status={status}
                 priority={priority}
                 submitted={submitted}
