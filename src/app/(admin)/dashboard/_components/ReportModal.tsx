@@ -18,7 +18,6 @@ interface ReportModalProps {
     passengerLastName: string;
     problemType: string;
     description: string;
-    attachment: string | null;
     status: "opened" | "in progress" | "resolved" | "cancelled";
     priority: "normal" | "high";
     submitted: string;
@@ -36,7 +35,6 @@ export default function ReportModal({
     passengerLastName,
     problemType,
     description,
-    attachment,
     status: initialStatus,
     priority,
     submitted,
@@ -231,18 +229,6 @@ export default function ReportModal({
                                         </div>
                                     </div>
                                 </div>
-                                {attachment && (
-                                    <div className="flex items-start gap-[0.75rem] self-stretch px-[1rem]">
-                                        <Button
-                                            text={attachment}
-                                            styleType="fill"
-                                            size="md"
-                                            width="w-[6.25rem]"
-                                            height="h-[2.188rem]"
-                                            onClick={() => {}}
-                                        />
-                                    </div>
-                                )}
                             </div>
                         </div>
 
