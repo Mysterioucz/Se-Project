@@ -7,21 +7,35 @@ import ReportStatusMarker from "./ReportStatusMarker";
 interface ReportFrameProps {
     id: string;
     index: number;
+    bookingID: string;
+    description: string;
+    attachment: string | null;
     priority: "normal" | "high";
     status: "opened" | "in progress" | "resolved" | "cancelled";
     problemType: string;
     submitted: string;
     lastUpdate: string;
+    passengerEmail: string;
+    passengerPhone: string;
+    passengerFirstName: string;
+    passengerLastName: string;
 }
 
 export default function ReportFrame({
     id,
     index,
+    bookingID,
+    description,
+    attachment,
     priority,
     status,
     problemType,
     submitted,
     lastUpdate,
+    passengerEmail,
+    passengerPhone,
+    passengerFirstName,
+    passengerLastName,
 }: ReportFrameProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -52,45 +66,45 @@ export default function ReportFrame({
     return (
         <div className="flex items-start gap-[0.5rem] self-stretch">
             {/* Report ID */}
-            <div className="flex w-[3.75rem] h-[3.125rem] flex-col justify-center items-center p-2">
+            <div className="flex h-[3.125rem] w-[3.75rem] flex-col items-center justify-center p-2">
                 <div className="font-sarabun text-[1rem] font-bold text-black">
                     {index}.
                 </div>
             </div>
 
             {/* Priority */}
-            <div className="flex w-[9.875rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
+            <div className="flex h-[3.125rem] w-[9.875rem] flex-col items-center justify-center px-0 py-2">
                 <ReportPiorityMarker priority={priority} />
             </div>
 
             {/* Status */}
-            <div className="flex w-[9.875rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
+            <div className="flex h-[3.125rem] w-[9.875rem] flex-col items-center justify-center px-0 py-2">
                 <ReportStatusMarker status={status} />
             </div>
 
             {/* Problem Type */}
-            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
+            <div className="flex h-[3.125rem] w-[11.25rem] flex-col items-center justify-center px-0 py-2">
                 <div className="font-sarabun text-[1rem] leading-[1.2rem] font-normal text-black">
                     {problemTypeLabels[problemType] || problemType}
                 </div>
             </div>
 
             {/* Submitted */}
-            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
+            <div className="flex h-[3.125rem] w-[11.25rem] flex-col items-center justify-center px-0 py-2">
                 <div className="font-sarabun text-[1rem] text-black">
                     {formatDateTime(submitted)}
                 </div>
             </div>
 
             {/* Last Update */}
-            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
+            <div className="flex h-[3.125rem] w-[11.25rem] flex-col items-center justify-center px-0 py-2">
                 <div className="font-sarabun text-[1rem] text-black">
                     {formatDateTime(lastUpdate)}
                 </div>
             </div>
 
             {/* Button */}
-            <div className="flex w-[5.625rem] h-[3.125rem] flex-col justify-center items-center px-[0.6875rem] py-2 gap-[0.625rem]">
+            <div className="flex h-[3.125rem] w-[5.625rem] flex-col items-center justify-center gap-[0.625rem] px-[0.6875rem] py-2">
                 <Button
                     text="View"
                     align="center"
@@ -107,14 +121,14 @@ export default function ReportFrame({
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 id={id}
-                bookingId=""
-                passengerEmail=""
-                passengerPhone=""
-                passengerFirstName=""
-                passengerLastName=""
+                bookingId={bookingID}
+                passengerEmail={passengerEmail}
+                passengerPhone={passengerPhone}
+                passengerFirstName={passengerFirstName}
+                passengerLastName={passengerLastName}
                 problemType={problemType}
-                description=""
-                attachment={null}
+                description={description}
+                attachment={attachment}
                 status={status}
                 priority={priority}
                 submitted={submitted}

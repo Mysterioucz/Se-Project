@@ -71,10 +71,9 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
                 new Date().getDate()
             )
         );
-        // if (clickedDate.getDate() < today.getDate()) {
-        //     return; // Prevent selecting past dates
-        // }
-        //TODO: need to create enum for selectType
+        if (clickedDate.getDate() < today.getDate()) {
+            return; // Prevent selecting past dates
+        }
         if (selectType === "One Way") {
             // Select only one date
             setSelectedStartDate(clickedDate);
