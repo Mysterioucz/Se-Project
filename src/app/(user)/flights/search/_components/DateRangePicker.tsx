@@ -71,7 +71,7 @@ const DateRangePickerComponent: FC<DateRangePickerProps> = ({
                 new Date().getDate()
             )
         );
-        if (clickedDate.getDate() < today.getDate()) {
+        if (clickedDate < today) {
             return; // Prevent selecting past dates
         }
         if (selectType === "One Way") {

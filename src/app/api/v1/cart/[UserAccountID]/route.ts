@@ -447,29 +447,29 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const existingCartItem = await prisma.cart.findFirst({
-            where: {
-                UserAccountID: session.user.id,
-                DepartFlightNo: body.DepartFlightNo,
-                DepartFlightDepartTime: new Date(body.DepartFlightDepartTime),
-                DepartFlightArrivalTime: new Date(body.DepartFlightArrivalTime),
-                ReturnFlightNo: body.ReturnFlightNo || null,
-                ReturnFlightDepartTime:
-                    new Date(body.ReturnFlightDepartTime) || null,
-                ReturnFlightArrivalTime:
-                    new Date(body.ReturnFlightArrivalTime) || null,
-            },
-        });
+        // const existingCartItem = await prisma.cart.findFirst({
+        //     where: {
+        //         UserAccountID: session.user.id,
+        //         DepartFlightNo: body.DepartFlightNo,
+        //         DepartFlightDepartTime: new Date(body.DepartFlightDepartTime),
+        //         DepartFlightArrivalTime: new Date(body.DepartFlightArrivalTime),
+        //         ReturnFlightNo: body.ReturnFlightNo || null,
+        //         ReturnFlightDepartTime:
+        //             new Date(body.ReturnFlightDepartTime) || null,
+        //         ReturnFlightArrivalTime:
+        //             new Date(body.ReturnFlightArrivalTime) || null,
+        //     },
+        // });
 
-        if (existingCartItem) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "This flight is already in your cart.",
-                },
-                { status: 409 },
-            );
-        }
+        // if (existingCartItem) {
+        //     return NextResponse.json(
+        //         {
+        //             success: false,
+        //             message: "This flight is already in your cart.",
+        //         },
+        //         { status: 409 },
+        //     );
+        // }
 
         const newCartItem = await prisma.cart.create({
             data: {
