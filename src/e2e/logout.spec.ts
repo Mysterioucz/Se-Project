@@ -35,15 +35,13 @@ test.describe("Logout Flow", () => {
     await page.waitForURL(loginUrl, { timeout: 25000 });
   }
 
-  // Test 1: Redirect to login page after logout
-  test("should redirect to /login after logout", async ({ page }) => {
+  test("TC4-1: should redirect to /login after logout", async ({ page }) => {
     await performLogout(page);
 
     expect(page.url()).toBe(loginUrl);
   });
 
-  // Test 2: Navigation bar should show 'Sign in / Register'
-  test("navbar should show Sign in / Register after logout", async ({ page }) => {
+  test("TC4-2: navbar should show Sign in / Register after logout", async ({ page }) => {
     await performLogout(page);
 
     
@@ -51,8 +49,7 @@ test.describe("Logout Flow", () => {
     expect(text.trim()).toBe("Sign in / Register");
   });
 
-  // Test 3: Protected route should redirect to login
-  test("accessing protected /flights/search after logout should redirect to login", async ({ page }) => {
+  test("TC4-3: accessing protected /flights/search after logout should redirect to login", async ({ page }) => {
     await performLogout(page);
 
     // Try to access protected page
@@ -63,8 +60,7 @@ test.describe("Logout Flow", () => {
   });
 
   
-  // Test 4: Session cookie should be deleted 
-  test("session cookie should be deleted after logout", async ({ page }) => {
+  test("TC4-4: session cookie should be deleted after logout", async ({ page }) => {
     await performLogout(page);
 
     const cookies = await page.context().cookies();
