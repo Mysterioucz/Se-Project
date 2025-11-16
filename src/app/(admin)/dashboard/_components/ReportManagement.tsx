@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import ReportFrame from "./ReportFrame";
 
-interface ReportSummary {
+export interface ReportSummary {
     id: string;
     bookingID: string;
     description: string;
@@ -34,8 +34,8 @@ export default function ReportManagement() {
         const fetchReports = async () => {
             try {
                 const res = await fetch("/api/v1/reports");
-                if (!res.ok)
-                    throw new Error(`HTTP error! status: ${res.status}`);
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
                 const json = await res.json();
                 if (json.success && Array.isArray(json.data)) {
                     setReports(json.data);
@@ -130,13 +130,12 @@ export default function ReportManagement() {
                             width="w-[12.5rem]"
                             height="h-[2rem]"
                         >
-                            <MenuItem value="All Priority">
-                                All Priority
-                            </MenuItem>
+                            <MenuItem value="All Priority">All Priority</MenuItem>
                             <MenuItem value="Normal">Normal</MenuItem>
                             <MenuItem value="High">High</MenuItem>
                         </SelectComponent>
                     </div>
+
                     {/* Status Filter */}
                     <div className="flex flex-col gap-1">
                         <div className="font-sarabun text-[1rem] font-normal text-[var(--color-primary-900)]">
@@ -199,37 +198,12 @@ export default function ReportManagement() {
 
                     {/* Table Rows */}
                     {loading ? (
-                        <div className="font-sarabun p-4 text-gray-500">
-                            Loading reports...
-                        </div>
+                        <div className="font-sarabun p-4 text-gray-500">Loading reports...</div>
                     ) : filteredReports.length === 0 ? (
-                        <div className="font-sarabun p-4 text-gray-500">
-                            No reports found.
-                        </div>
+                        <div className="font-sarabun p-4 text-gray-500">No reports found.</div>
                     ) : (
                         filteredReports.map((r, idx) => (
-                            <ReportFrame
-                                key={r.id}
-                                index={idx + 1}
-                                id={r.id}
-                                priority={
-                                    r.priority.toLowerCase() as
-                                        | "normal"
-                                        | "high"
-                                }
-                                status={
-                                    r.status === "IN_PROGRESS"
-                                        ? "in progress"
-                                        : (r.status.toLowerCase() as
-                                              | "opened"
-                                              | "resolved"
-                                              | "cancelled"
-                                              | "in progress")
-                                }
-                                problemType={r.problemType}
-                                submitted={r.submittedAt}
-                                lastUpdate={r.updatedAt}
-                            />
+                            <ReportFrame key={r.id} index={idx + 1} report={r} />
                         ))
                     )}
                 </div>

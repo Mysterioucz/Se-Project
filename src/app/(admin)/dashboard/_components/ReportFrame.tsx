@@ -3,26 +3,29 @@ import { useState } from "react";
 import ReportModal from "./ReportModal";
 import ReportPiorityMarker from "./ReportPriorityMarker";
 import ReportStatusMarker from "./ReportStatusMarker";
+import type { ReportSummary } from "./ReportManagement";
 
 interface ReportFrameProps {
-    id: string;
     index: number;
-    priority: "normal" | "high";
-    status: "opened" | "in progress" | "resolved" | "cancelled";
-    problemType: string;
-    submitted: string;
-    lastUpdate: string;
+    report: ReportSummary;
 }
 
-export default function ReportFrame({
-    id,
-    index,
-    priority,
-    status,
-    problemType,
-    submitted,
-    lastUpdate,
-}: ReportFrameProps) {
+export default function ReportFrame({ index, report }: ReportFrameProps) {
+    const {
+        id,
+        priority,
+        status,
+        problemType,
+        submittedAt,
+        updatedAt,
+        bookingID,
+        email,
+        telNo,
+        passengerFirstName,
+        passengerLastName,
+        description
+    } = report;
+
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const problemTypeLabels: Record<string, string> = {
@@ -38,59 +41,48 @@ export default function ReportFrame({
         const date = new Date(dateString);
         const pad = (n: number) => n.toString().padStart(2, "0");
 
-        const year = date.getFullYear();
-        const month = pad(date.getMonth() + 1);
-        const day = pad(date.getDate());
-
-        const hours = pad(date.getHours());
-        const minutes = pad(date.getMinutes());
-        const seconds = pad(date.getSeconds());
-
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+            date.getDate()
+        )} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(
+            date.getSeconds()
+        )}`;
     }
 
     return (
         <div className="flex items-start gap-[0.5rem] self-stretch">
-            {/* Report ID */}
             <div className="flex w-[3.75rem] h-[3.125rem] flex-col justify-center items-center p-2">
                 <div className="font-sarabun text-[1rem] font-bold text-black">
                     {index}.
                 </div>
             </div>
 
-            {/* Priority */}
-            <div className="flex w-[9.875rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
-                <ReportPiorityMarker priority={priority} />
+            <div className="flex w-[9.875rem] h-[3.125rem] flex-col justify-center items-center">
+                <ReportPiorityMarker priority={priority.toLowerCase() as any} />
             </div>
 
-            {/* Status */}
-            <div className="flex w-[9.875rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
-                <ReportStatusMarker status={status} />
+            <div className="flex w-[9.875rem] h-[3.125rem] flex-col justify-center items-center">
+                <ReportStatusMarker status={status.toLowerCase() as any} />
             </div>
 
-            {/* Problem Type */}
-            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
-                <div className="font-sarabun text-[1rem] leading-[1.2rem] font-normal text-black">
+            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center">
+                <div className="font-sarabun text-[1rem] font-normal text-black">
                     {problemTypeLabels[problemType] || problemType}
                 </div>
             </div>
 
-            {/* Submitted */}
-            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
+            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center">
                 <div className="font-sarabun text-[1rem] text-black">
-                    {formatDateTime(submitted)}
+                    {formatDateTime(submittedAt)}
                 </div>
             </div>
 
-            {/* Last Update */}
-            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center py-2 px-0">
+            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center">
                 <div className="font-sarabun text-[1rem] text-black">
-                    {formatDateTime(lastUpdate)}
+                    {formatDateTime(updatedAt)}
                 </div>
             </div>
 
-            {/* Button */}
-            <div className="flex w-[5.625rem] h-[3.125rem] flex-col justify-center items-center px-[0.6875rem] py-2 gap-[0.625rem]">
+            <div className="flex w-[5.625rem] h-[3.125rem] flex-col justify-center items-center">
                 <Button
                     text="View"
                     align="center"
@@ -102,22 +94,21 @@ export default function ReportFrame({
                 />
             </div>
 
-            {/* Modal */}
             <ReportModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 id={id}
-                bookingId=""
-                passengerEmail=""
-                passengerPhone=""
-                passengerFirstName=""
-                passengerLastName=""
+                bookingId={bookingID}
+                passengerEmail={email}
+                passengerPhone={telNo}
+                passengerFirstName={passengerFirstName}
+                passengerLastName={passengerLastName}
                 problemType={problemType}
-                description=""
-                status={status}
-                priority={priority}
-                submitted={submitted}
-                lastUpdate={lastUpdate}
+                description={description}
+                status={status.toLowerCase() as any}
+                priority={priority.toLowerCase() as any}
+                submitted={submittedAt}
+                lastUpdate={updatedAt}
             />
         </div>
     );
