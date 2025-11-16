@@ -461,15 +461,15 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        if (existingCartItem) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "This flight is already in your cart.",
-                },
-                { status: 409 },
-            );
-        }
+        // if (existingCartItem) {
+        //     return NextResponse.json(
+        //         {
+        //             success: false,
+        //             message: "This flight is already in your cart.",
+        //         },
+        //         { status: 409 },
+        //     );
+        // }
 
         const newCartItem = await prisma.cart.create({
             data: {
