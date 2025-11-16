@@ -1,0 +1,77 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+.pnpm-debug.log*
+
+# Testing
+coverage
+.nyc_output
+test-results
+playwright-report
+blob-report
+playwright/.cache
+playwright/.auth
+
+# Next.js
+.next
+out
+.swc
+*.tsbuildinfo
+next-env.d.ts
+
+# Build
+build
+dist
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+README.md
+*.md
+docs
+
+# Misc
+.editorconfig
+.eslintcache
+.prettierignore
+mockdata
+scripts/*.ts
+!scripts/init-db.sh
+
+# Generated Prisma files (will be regenerated)
+src/generated/prisma
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Vercel
+.vercel
+
+# Logs
+*.log
+logs
