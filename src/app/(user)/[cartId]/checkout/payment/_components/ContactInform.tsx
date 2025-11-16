@@ -3,7 +3,7 @@
 import { useCheckout } from "@/src/contexts/CheckoutContext";
 import TextFieldComponent from "@components/text_field";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -26,7 +26,9 @@ const contactSchema = z.object({
 
 export type ContactFormData = z.infer<typeof contactSchema>;
 
-export default function ContactInform({ onStatusChange }: ContactInformProps) {
+const ContactInform = React.memo(function ContactInform({
+    onStatusChange,
+}: ContactInformProps) {
     const { checkoutData } = useCheckout();
     const {
         watch,
@@ -34,22 +36,47 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
         setValue,
     } = useForm<ContactFormData>({
         resolver: zodResolver(contactSchema),
-        mode: "onChange", // validate on every change
+        mode: "onChange",
         defaultValues: {
             userContactEmail: checkoutData.payment.email || "",
             userTel: checkoutData.payment.telNo || "",
         },
     });
     const values = watch();
+    const lastNotifiedRef = useRef<string>("");
 
-    // Notify parent whenever validation state changes
     useEffect(() => {
-        const val = watch();
-        onStatusChange(isValid, val);
-    }, [isValid]);
+        const currentValues = JSON.stringify({
+            isValid,
+            email: values.userContactEmail,
+            tel: values.userTel,
+        });
+
+        // Skip if values haven't changed or if both fields are empty (initial state)
+        if (
+            currentValues === lastNotifiedRef.current ||
+            (!values.userContactEmail && !values.userTel)
+        ) {
+            return;
+        }
+        lastNotifiedRef.current = currentValues;
+        onStatusChange(isValid, values);
+    }, [isValid, values.userContactEmail, values.userTel]);
+
+    const handleEmailChange = (val: unknown) => {
+        const { text } = val as { text: string };
+        setValue("userContactEmail", text, {
+            shouldValidate: true,
+        });
+    };
+
+    const handleTelChange = (val: unknown) => {
+        const { text } = val as { text: string };
+        setValue("userTel", text, { shouldValidate: true });
+    };
 
     return (
-        <form className="flex flex-col gap-[1.5rem] w-full">
+        <form className="flex w-full flex-col gap-[1.5rem]">
             {/* EMAIL FIELD */}
             <div className="flex flex-col gap-1">
                 <TextFieldComponent
@@ -61,15 +88,10 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
                         <img
                             src="/payment/update-info/fi-sr-pencil.svg"
                             alt="toggle"
-                            className="w-5 h-5"
+                            className="h-5 w-5"
                         />
                     }
-                    onSubmit={(val) => {
-                        const { text } = val as { text: string };
-                        setValue("userContactEmail", text, {
-                            shouldValidate: true,
-                        });
-                    }}
+                    onSubmit={handleEmailChange}
                 />
                 {errors.userContactEmail && (
                     <p className="text-error-main text-sm">
@@ -89,13 +111,10 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
                         <img
                             src="/payment/update-info/fi-sr-pencil.svg"
                             alt="toggle"
-                            className="w-5 h-5"
+                            className="h-5 w-5"
                         />
                     }
-                    onSubmit={(val) => {
-                        const { text } = val as { text: string };
-                        setValue("userTel", text, { shouldValidate: true });
-                    }}
+                    onSubmit={handleTelChange}
                 />
                 {errors.userTel && (
                     <p className="text-error-main text-sm">
@@ -105,4 +124,6 @@ export default function ContactInform({ onStatusChange }: ContactInformProps) {
             </div>
         </form>
     );
-}
+});
+
+export default ContactInform;

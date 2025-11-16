@@ -1,12 +1,13 @@
 import CheckoutProgress from "@/src/app/(user)/[cartId]/checkout/_components/CheckoutProgress";
 import FooterButton from "@/src/app/(user)/[cartId]/checkout/_components/FooterButton";
 import Navbar from "@/src/components/Navbar";
-import PriceBreakdownCard, {
-    TicketSummaryProps,
-} from "@/src/app/(user)/order-history/order-summary/_components/priceBreakdownCard";
 import { CheckoutProvider } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
-import { fetchCartData, fetchFlightData } from "@/src/helper/CheckoutHelper";
+import { fetchCartData, fetchFlightData, Flight } from "@/src/helper/CheckoutHelper";
+import PriceBreakdownCard, {
+    FlightPricing,
+    TicketSummaryProps,
+} from "@components/priceBreakdownCard";
 import BookingInfo from "./_components/BookingInfo";
 
 export default async function CheckoutLayout({
@@ -37,10 +38,28 @@ export default async function CheckoutLayout({
     const childCount = cartData?.Childrens ?? 0;
     const infantCount = cartData?.Infants ?? 0;
 
-    // The `Price` on Cart appears to be the total price stored in cart.
-    // We'll distribute it proportionally across passenger types by count.
+    // Determine if this is a round-trip booking
+    const isRoundTrip = !!cartData.Return;
+
+    // Calculate pricing
     const totalPassengers = adultCount + childCount + infantCount || 1;
     const pricePerPassenger = (cartData?.Price ?? 0) / totalPassengers;
+
+    // If round-trip, try to get individual flight prices for detailed breakdown
+    let flightPricing: FlightPricing | undefined;
+    if (isRoundTrip && departData && returnData) {
+        // Assuming departData and returnData have a Price field
+        // If they don't, this will use the combined price approach below
+        const departPrice = (departData as Flight & { Price?: number }).Price;
+        const returnPrice = (returnData as Flight & { Price?: number }).Price;
+
+        if (departPrice !== undefined && returnPrice !== undefined) {
+            flightPricing = {
+                departurePrice: departPrice,
+                returnPrice: returnPrice,
+            };
+        }
+    }
 
     const tickets: TicketSummaryProps[] = [
         {
@@ -62,7 +81,7 @@ export default async function CheckoutLayout({
     ].filter((t) => t.quantity > 0);
 
     return (
-        <div className="flex flex-col min-h-screen gap-8 pb-8 items-center">
+        <div className="flex min-h-screen flex-col items-center gap-8 pb-8">
             <Navbar />
             <CheckoutProgress />
             <CheckoutProvider
@@ -70,11 +89,15 @@ export default async function CheckoutLayout({
                 departFlight={departData}
                 returnFlight={returnData}
             >
-                <div className="flex w-full px-32 gap-32">
+                <div className="flex w-full gap-32 px-32">
                     <div className="flex w-full">{children}</div>
-                    <div className="flex flex-col w-full gap-10 max-w-[21.25rem]">
+                    <div className="flex w-full max-w-[21.25rem] flex-col gap-10">
                         <BookingInfo />
-                        <PriceBreakdownCard tickets={tickets} />
+                        <PriceBreakdownCard
+                            tickets={tickets}
+                            isRoundTrip={isRoundTrip}
+                            flightPricing={flightPricing}
+                        />
                     </div>
                 </div>
                 <FooterButton cartId={cartId} />

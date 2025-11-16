@@ -1,9 +1,9 @@
 "use client";
 
+import { PassengerData } from "@/src/contexts/checkout/types";
 import {
     initialBaggageAllowance,
     initialSeatSelection,
-    PassengerData,
     useCheckout,
 } from "@/src/contexts/CheckoutContext";
 import ListChoice from "@components/list_choice";
@@ -152,10 +152,10 @@ export default function InformationCard({
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col w-[44.625rem] p-6 gap-8 rounded-lg bg-primary-50"
+            className="bg-primary-50 flex w-[44.625rem] flex-col gap-8 rounded-lg p-6"
         >
             {/* Header */}
-            <p className="!font-bold !text-[2rem] !text-primary-900">
+            <p className="!text-primary-900 !text-[2rem] !font-bold">
                 Passenger {passengerNum} Info
             </p>
             {/* Content */}
@@ -239,7 +239,7 @@ export default function InformationCard({
                     control={control}
                     render={({ field }) => (
                         <div className="flex flex-col gap-1">
-                            <p className="!text-[1rem] !text-primary-900">
+                            <p className="!text-primary-900 !text-[1rem]">
                                 Gender on ID*
                             </p>
                             <Select
@@ -309,7 +309,7 @@ export default function InformationCard({
                     control={control}
                     render={({ field }) => (
                         <div className="flex flex-col gap-1">
-                            <p className="!text-[1rem] !text-primary-900">
+                            <p className="!text-primary-900 !text-[1rem]">
                                 Nationality*
                             </p>
                             <Select
@@ -350,7 +350,7 @@ export default function InformationCard({
             {/* Only show for international flights */}
             {international && (
                 <div className="flex flex-col gap-2">
-                    <p className="!text-[1rem] !text-primary-600">
+                    <p className="!text-primary-600 !text-[1rem]">
                         Passport Info
                     </p>
                     <div className="flex flex-row gap-2">
@@ -458,16 +458,16 @@ export default function InformationCard({
             )}
             {/* FYI */}
             <div className="flex flex-col gap-1">
-                <p className="!text-[0.875rem] !text-primary-600">- {FYI[1]}</p>
-                <p className="!text-[0.875rem] !text-primary-600">
+                <p className="!text-primary-600 !text-[0.875rem]">- {FYI[1]}</p>
+                <p className="!text-primary-600 !text-[0.875rem]">
                     - {international ? FYI.international : FYI.domestic}
                 </p>
-                <p className="!text-[0.875rem] !text-primary-600">- {FYI[2]}</p>
+                <p className="!text-primary-600 !text-[0.875rem]">- {FYI[2]}</p>
             </div>
             {/* Footer */}
             <button
                 type="submit"
-                className="w-full h-[2.1875rem] bg-primary-500 text-white rounded-lg font-semibold hover:bg-primary-600 transition-colors"
+                className="bg-primary-500 hover:bg-primary-600 h-[2.1875rem] w-full rounded-lg font-semibold text-white transition-colors"
             >
                 Save
             </button>

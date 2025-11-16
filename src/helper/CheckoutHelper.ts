@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { Cart } from "../contexts/CheckoutContext";
+import { Cart } from "../contexts/checkout/types";
 import { nextAuthOptions } from "../lib/auth";
 
 export type Flight = {

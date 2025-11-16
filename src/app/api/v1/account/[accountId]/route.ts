@@ -333,12 +333,6 @@ export async function DELETE(
                 },
             });
 
-            await prisma.report_To.deleteMany({
-                where: {
-                    UserAccountID: accountId,
-                },
-            });
-
             await prisma.report.deleteMany({
                 where: {
                     UserAccountID: accountId,
@@ -346,18 +340,6 @@ export async function DELETE(
             });
 
             // Admin's Part
-            await prisma.report.deleteMany({
-                where: {
-                    AdminAccountID: accountId,
-                },
-            });
-
-            await prisma.report_To.deleteMany({
-                where: {
-                    AdminAccountID: accountId,
-                },
-            });
-
             await prisma.airline_Message.deleteMany({
                 where: {
                     AdminAccountID: accountId,

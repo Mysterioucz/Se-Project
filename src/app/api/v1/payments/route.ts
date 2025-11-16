@@ -2,12 +2,10 @@ import prisma from "@/db";
 import { ErrorMessages } from "@/src/enums/ErrorMessages";
 import { PaymentMethodSchema, PaymentStatusSchema } from "@/src/enums/Payment";
 import { nextAuthOptions } from "@/src/lib/auth";
-import { AdUnits } from "@mui/icons-material";
 import { randomUUID } from "crypto";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { late } from "zod/v3";
 
 /**
  * @swagger
@@ -200,6 +198,8 @@ import { late } from "zod/v3";
  *               message: "Internal server error. Please try again later."
  *   get:
  *     summary: Get user payments
+ *     security:
+ *       - bearerAuth: []
  *     description: Retrieve payment history for a specific user
  *     tags:
  *       - Payments
@@ -287,7 +287,7 @@ const TicketInputSchema = z.object({
     PassengerName: z.string().min(1),
     PassengerLastName: z.string().min(1),
     Gender: z.string().min(1),
-    DateOfBirth: z.string().refine((v) => !isNaN(Date .parse(v)), {
+    DateOfBirth: z.string().refine((v) => !isNaN(Date.parse(v)), {
         message: "Invalid date",
     }),
     Nationality: z.string().min(1),
@@ -299,7 +299,7 @@ const TicketInputSchema = z.object({
     DepartTime: z.coerce.date(),
     ArrivalTime: z.coerce.date(),
     PassportNo: z.string().optional(),
-    PassportExpiry: z.coerce.date().optional()
+    PassportExpiry: z.coerce.date().optional(),
 });
 
 const CreatePaymentSchema = z
@@ -384,7 +384,7 @@ export async function POST(request: NextRequest) {
             DepartFlightArrivalTime,
             ReturnFlightNo,
             ReturnFlightDepartTime,
-            ReturnFlightArrivalTime
+            ReturnFlightArrivalTime,
         } = parsed;
 
         // Create payment and purchase
@@ -412,7 +412,7 @@ export async function POST(request: NextRequest) {
                                 FlightNo: ticket.FlightNo,
                                 DepartTime: new Date(ticket.DepartTime),
                                 ArrivalTime: new Date(ticket.ArrivalTime),
-                                PassportNo: ticket.PassportNo
+                                PassportNo: ticket.PassportNo,
                             },
                         });
 
@@ -441,10 +441,10 @@ export async function POST(request: NextRequest) {
                             data: {
                                 IsAvailable: false,
                             },
-                        })
+                        });
 
                         return created;
-                    })
+                    }),
                 );
 
                 // Create Payment
@@ -566,7 +566,7 @@ export async function GET(req: NextRequest) {
                 purchase: {
                     some: {
                         UserAccountID: UserAccountID,
-                    }
+                    },
                 },
             },
             orderBy: {
@@ -578,13 +578,13 @@ export async function GET(req: NextRequest) {
                     include: {
                         departureAirport: true,
                         arrivalAirport: true,
-                    }
+                    },
                 },
                 ReturnFlight: {
                     include: {
                         departureAirport: true,
                         arrivalAirport: true,
-                    }
+                    },
                 },
             },
         });
@@ -618,13 +618,13 @@ export async function GET(req: NextRequest) {
                         BaggageCabin: true,
                         PassportNo: true,
                         PassportExpiry: true,
-                    }
-                }
+                    },
+                },
             },
         });
 
         const tickets = purchases.map((p) => {
-            return p.ticket
+            return p.ticket;
         });
 
         const paymentData = {
@@ -642,9 +642,9 @@ export async function GET(req: NextRequest) {
             Infants: latestPayment.Infants,
             ClassType: latestPayment.ClassType,
             FlightType: latestPayment.FlightType,
-            
+
             DepartFlight: latestPayment.DepartFlight,
-            ReturnFlight: latestPayment.ReturnFlight?? null
+            ReturnFlight: latestPayment.ReturnFlight ?? null,
         };
 
         return NextResponse.json(

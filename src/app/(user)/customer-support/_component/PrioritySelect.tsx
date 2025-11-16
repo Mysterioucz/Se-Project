@@ -3,8 +3,8 @@ import SelectComponent, { SelectEvent } from "@/src/components/select";
 import { MenuItem } from "@mui/material";
 
 const priorityOptions = [
-    { value: "Normal", label: "Normal" },
-    { value: "High", label: "High" },
+    { value: "NORMAL", label: "Normal" },
+    { value: "HIGH", label: "High" },
 ];
 
 interface Props {

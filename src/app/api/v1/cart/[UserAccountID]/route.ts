@@ -446,7 +446,7 @@ export async function POST(req: NextRequest) {
                 { status: 400 },
             );
         }
-
+        
         const existingCartItem = await prisma.cart.findFirst({
             where: {
                 UserAccountID: session.user.id,
@@ -454,20 +454,22 @@ export async function POST(req: NextRequest) {
                 DepartFlightDepartTime: new Date(body.DepartFlightDepartTime),
                 DepartFlightArrivalTime: new Date(body.DepartFlightArrivalTime),
                 ReturnFlightNo: body.ReturnFlightNo || null,
-                ReturnFlightDepartTime:
-                    new Date(body.ReturnFlightDepartTime) || null,
-                ReturnFlightArrivalTime:
-                    new Date(body.ReturnFlightArrivalTime) || null,
+                ReturnFlightDepartTime: (body.ReturnFlightDepartTime == null ? null : new Date(body.ReturnFlightDepartTime)),
+                ReturnFlightArrivalTime: (body.ReturnFlightArrivalTime == null ? null : new Date(body.ReturnFlightArrivalTime)),
+                Adults: body.Adults,
+                Childrens: body.Childrens,
+                Infants: body.Infants,
             },
         });
 
         if (existingCartItem) {
             return NextResponse.json(
                 {
-                    success: false,
+                    success: true,
                     message: "This flight is already in your cart.",
+                    data: existingCartItem,
                 },
-                { status: 409 },
+                { status: 200 },
             );
         }
 
