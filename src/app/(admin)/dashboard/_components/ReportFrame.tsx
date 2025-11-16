@@ -3,29 +3,38 @@ import { useState } from "react";
 import ReportModal from "./ReportModal";
 import ReportPiorityMarker from "./ReportPriorityMarker";
 import ReportStatusMarker from "./ReportStatusMarker";
-import type { ReportSummary } from "./ReportManagement";
 
 interface ReportFrameProps {
+    id: string;
     index: number;
-    report: ReportSummary;
+    priority: "normal" | "high";
+    status: "opened" | "in progress" | "resolved" | "cancelled";
+    problemType: string;
+    submitted: string;
+    lastUpdate: string;
+    bookingId?: string;
+    passengerEmail?: string;
+    passengerPhone?: string;
+    passengerFirstName?: string;
+    passengerLastName?: string;
+    description?: string;
 }
 
-export default function ReportFrame({ index, report }: ReportFrameProps) {
-    const {
-        id,
-        priority,
-        status,
-        problemType,
-        submittedAt,
-        updatedAt,
-        bookingID,
-        email,
-        telNo,
-        passengerFirstName,
-        passengerLastName,
-        description
-    } = report;
-
+export default function ReportFrame({
+    id,
+    index,
+    priority,
+    status,
+    problemType,
+    submitted,
+    lastUpdate,
+    bookingId,
+    passengerEmail,
+    passengerPhone,
+    passengerFirstName,
+    passengerLastName,
+    description,
+}: ReportFrameProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const problemTypeLabels: Record<string, string> = {
@@ -41,48 +50,59 @@ export default function ReportFrame({ index, report }: ReportFrameProps) {
         const date = new Date(dateString);
         const pad = (n: number) => n.toString().padStart(2, "0");
 
-        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-            date.getDate()
-        )} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(
-            date.getSeconds()
-        )}`;
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1);
+        const day = pad(date.getDate());
+
+        const hours = pad(date.getHours());
+        const minutes = pad(date.getMinutes());
+        const seconds = pad(date.getSeconds());
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
     return (
         <div className="flex items-start gap-[0.5rem] self-stretch">
-            <div className="flex w-[3.75rem] h-[3.125rem] flex-col justify-center items-center p-2">
+            {/* Report ID */}
+            <div className="flex h-[3.125rem] w-[3.75rem] flex-col items-center justify-center p-2">
                 <div className="font-sarabun text-[1rem] font-bold text-black">
                     {index}.
                 </div>
             </div>
 
-            <div className="flex w-[9.875rem] h-[3.125rem] flex-col justify-center items-center">
-                <ReportPiorityMarker priority={priority.toLowerCase() as any} />
+            {/* Priority */}
+            <div className="flex h-[3.125rem] w-[9.875rem] flex-col items-center justify-center px-0 py-2">
+                <ReportPiorityMarker priority={priority} />
             </div>
 
-            <div className="flex w-[9.875rem] h-[3.125rem] flex-col justify-center items-center">
-                <ReportStatusMarker status={status.toLowerCase() as any} />
+            {/* Status */}
+            <div className="flex h-[3.125rem] w-[9.875rem] flex-col items-center justify-center px-0 py-2">
+                <ReportStatusMarker status={status} />
             </div>
 
-            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center">
-                <div className="font-sarabun text-[1rem] font-normal text-black">
+            {/* Problem Type */}
+            <div className="flex h-[3.125rem] w-[11.25rem] flex-col items-center justify-center px-0 py-2">
+                <div className="font-sarabun text-[1rem] leading-[1.2rem] font-normal text-black">
                     {problemTypeLabels[problemType] || problemType}
                 </div>
             </div>
 
-            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center">
+            {/* Submitted */}
+            <div className="flex h-[3.125rem] w-[11.25rem] flex-col items-center justify-center px-0 py-2">
                 <div className="font-sarabun text-[1rem] text-black">
-                    {formatDateTime(submittedAt)}
+                    {formatDateTime(submitted)}
                 </div>
             </div>
 
-            <div className="flex w-[11.25rem] h-[3.125rem] flex-col justify-center items-center">
+            {/* Last Update */}
+            <div className="flex h-[3.125rem] w-[11.25rem] flex-col items-center justify-center px-0 py-2">
                 <div className="font-sarabun text-[1rem] text-black">
-                    {formatDateTime(updatedAt)}
+                    {formatDateTime(lastUpdate)}
                 </div>
             </div>
 
-            <div className="flex w-[5.625rem] h-[3.125rem] flex-col justify-center items-center">
+            {/* Button */}
+            <div className="flex h-[3.125rem] w-[5.625rem] flex-col items-center justify-center gap-[0.625rem] px-[0.6875rem] py-2">
                 <Button
                     text="View"
                     align="center"
@@ -94,21 +114,22 @@ export default function ReportFrame({ index, report }: ReportFrameProps) {
                 />
             </div>
 
+            {/* Modal */}
             <ReportModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 id={id}
-                bookingId={bookingID}
-                passengerEmail={email}
-                passengerPhone={telNo}
-                passengerFirstName={passengerFirstName}
-                passengerLastName={passengerLastName}
+                bookingId={bookingId || ""}
+                passengerEmail={passengerEmail || ""}
+                passengerPhone={passengerPhone || ""}
+                passengerFirstName={passengerFirstName || ""}
+                passengerLastName={passengerLastName || ""}
                 problemType={problemType}
-                description={description}
-                status={status.toLowerCase() as any}
-                priority={priority.toLowerCase() as any}
-                submitted={submittedAt}
-                lastUpdate={updatedAt}
+                description={description || ""}
+                status={status}
+                priority={priority}
+                submitted={submitted}
+                lastUpdate={lastUpdate}
             />
         </div>
     );
