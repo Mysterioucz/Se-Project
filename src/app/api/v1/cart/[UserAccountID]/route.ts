@@ -446,30 +446,32 @@ export async function POST(req: NextRequest) {
                 { status: 400 },
             );
         }
+        
+        const existingCartItem = await prisma.cart.findFirst({
+            where: {
+                UserAccountID: session.user.id,
+                DepartFlightNo: body.DepartFlightNo,
+                DepartFlightDepartTime: new Date(body.DepartFlightDepartTime),
+                DepartFlightArrivalTime: new Date(body.DepartFlightArrivalTime),
+                ReturnFlightNo: body.ReturnFlightNo || null,
+                ReturnFlightDepartTime: (body.ReturnFlightDepartTime == null ? null : new Date(body.ReturnFlightDepartTime)),
+                ReturnFlightArrivalTime: (body.ReturnFlightArrivalTime == null ? null : new Date(body.ReturnFlightArrivalTime)),
+                Adults: body.Adults,
+                Childrens: body.Childrens,
+                Infants: body.Infants,
+            },
+        });
 
-        // const existingCartItem = await prisma.cart.findFirst({
-        //     where: {
-        //         UserAccountID: session.user.id,
-        //         DepartFlightNo: body.DepartFlightNo,
-        //         DepartFlightDepartTime: new Date(body.DepartFlightDepartTime),
-        //         DepartFlightArrivalTime: new Date(body.DepartFlightArrivalTime),
-        //         ReturnFlightNo: body.ReturnFlightNo || null,
-        //         ReturnFlightDepartTime:
-        //             new Date(body.ReturnFlightDepartTime) || null,
-        //         ReturnFlightArrivalTime:
-        //             new Date(body.ReturnFlightArrivalTime) || null,
-        //     },
-        // });
-
-        // if (existingCartItem) {
-        //     return NextResponse.json(
-        //         {
-        //             success: false,
-        //             message: "This flight is already in your cart.",
-        //         },
-        //         { status: 409 },
-        //     );
-        // }
+        if (existingCartItem) {
+            return NextResponse.json(
+                {
+                    success: true,
+                    message: "This flight is already in your cart.",
+                    data: existingCartItem,
+                },
+                { status: 200 },
+            );
+        }
 
         const newCartItem = await prisma.cart.create({
             data: {
