@@ -84,8 +84,6 @@ logs: ## Show logs (use: make logs f=1 for follow)
 status: ## Show container status
 	@$(COMPOSE) ps
 
-ps: status ## Alias for status
-
 health: ## Check application health
 	@curl -f http://localhost:3000/api/health || echo "$(YELLOW)Health check failed$(NC)"
 
