@@ -5,6 +5,7 @@ import { useCheckout } from "@/src/contexts/CheckoutContext";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { checkoutPaths, isCheckoutPath, postPaymentCompletion } from "./helper";
+import { clearCheckoutStorage } from "@/src/contexts/checkout";
 
 export default function FooterButton({ cartId }: { cartId: string }) {
     let pathname = usePathname();
@@ -66,8 +67,9 @@ export default function FooterButton({ cartId }: { cartId: string }) {
                         departFlight,
                         returnFlight,
                     );
-                    console.log(res);
                     if (res.success && res.data.payment.PaymentID) {
+                        // Clear checkout data after successful payment
+                        clearCheckoutStorage();
                         router.push(`/payment-success/${res.data.payment.PaymentID}`);
                     }
                 }

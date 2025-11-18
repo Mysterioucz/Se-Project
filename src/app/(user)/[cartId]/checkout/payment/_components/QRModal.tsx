@@ -37,28 +37,35 @@ export default function QRModal({ open, onClose }: QRModalProps) {
     };
     useEffect(() => {
         if (!open) return;
-        // Calculate total amount (base price + service fees for all passengers)
-        const totalAmount =
-            checkoutData?.passengerData.reduce((sum, passenger) => {
-                const departureBaggageFee =
-                    passenger.baggageAllowance.departureBaggage.Price || 0;
-                return cartData.Price;
-            }, 0) || 0;
-        const departFee =
+
+        // Get cart price
+        const cartPrice = cartData.Price;
+
+        // Calculate total baggage fees for departure flights
+        const departureBaggageFees =
             checkoutData?.passengerData.reduce((sum, passenger) => {
                 const departureBaggageFee =
                     passenger.baggageAllowance.departureBaggage.Price || 0;
                 return sum + departureBaggageFee;
             }, 0) || 0;
-        const returnFee =
+
+        // Calculate total baggage fees for return flights
+        const returnBaggageFees =
             checkoutData?.passengerData.reduce((sum, passenger) => {
                 const returnBaggageFee =
                     passenger.baggageAllowance.returnBaggage?.Price || 0;
                 return sum + returnBaggageFee;
             }, 0) || 0;
-        console.log("returnFee", returnFee, departFee);
-        setAmount(totalAmount + returnFee + departFee);
-    }, [open]);
+
+        console.log("Cart Price:", cartPrice);
+        console.log("Departure Baggage Fees:", departureBaggageFees);
+        console.log("Return Baggage Fees:", returnBaggageFees);
+
+        // Total = Cart Price + All Baggage Fees
+        const totalAmount =
+            cartPrice + departureBaggageFees + returnBaggageFees;
+        setAmount(totalAmount);
+    }, [open, checkoutData, cartData]);
 
     return (
         <Dialog
@@ -97,7 +104,7 @@ export default function QRModal({ open, onClose }: QRModalProps) {
                 }}
             >
                 <img
-                    src="/payment/QR.svg"
+                    src="/payment/QR.jpg"
                     alt="QR Code"
                     className="h-[17.9375rem] w-[17.9375rem] object-contain"
                 />
