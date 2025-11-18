@@ -2,7 +2,6 @@
 
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { useEffect, useState } from "react";
-import { useCheckout } from "../contexts/CheckoutContext";
 
 export interface TicketSummaryProps {
     type: PassengerTypes;
@@ -116,16 +115,23 @@ interface PriceBreakdownCardProps {
     servicesFee?: number;
     flightPricing?: FlightPricing; // Optional: for detailed round-trip breakdown
     isRoundTrip?: boolean; // Flag to indicate if this is a round-trip booking
+    passengerData?: Array<{
+        baggageAllowance: {
+            departureBaggage: { Price?: number };
+            returnBaggage?: { Price?: number };
+        };
+    }>; // Optional: for checkout context, will fetch from context if not provided
 }
 
 export default function PriceBreakdownCard({
     tickets,
+    servicesFee,
     flightPricing,
     isRoundTrip = false,
+    passengerData,
 }: PriceBreakdownCardProps) {
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [totalBaggagePrice, setTotalBaggagePrice] = useState<number>(0);
-    const { checkoutData } = useCheckout();
 
     useEffect(() => {
         // Calculate total ticket price
@@ -134,19 +140,31 @@ export default function PriceBreakdownCard({
             0,
         );
         console.log(tickets);
+
         // Calculate total baggage price
-        const departServiceFee = checkoutData.passengerData.reduce(
-            (sum, p) => sum + (p.baggageAllowance.departureBaggage.Price || 0),
-            0,
-        );
-        const returnServiceFee = checkoutData.passengerData.reduce(
-            (sum, p) => sum + (p.baggageAllowance.returnBaggage?.Price || 0),
-            0,
-        );
-        const baggageTotal = departServiceFee + returnServiceFee;
+        let baggageTotal = 0;
+
+        if (servicesFee !== undefined) {
+            // Use servicesFee if provided (for order-summary page)
+            baggageTotal = servicesFee;
+        } else if (passengerData) {
+            // Calculate from passengerData if provided (for checkout page)
+            const departServiceFee = passengerData.reduce(
+                (sum, p) =>
+                    sum + (p.baggageAllowance.departureBaggage.Price || 0),
+                0,
+            );
+            const returnServiceFee = passengerData.reduce(
+                (sum, p) =>
+                    sum + (p.baggageAllowance.returnBaggage?.Price || 0),
+                0,
+            );
+            baggageTotal = departServiceFee + returnServiceFee;
+        }
+
         setTotalBaggagePrice(baggageTotal);
         setTotalPrice(ticketTotal + baggageTotal);
-    }, [tickets, checkoutData.passengerData]);
+    }, [tickets, passengerData, servicesFee]);
 
     // Check if we have detailed flight pricing for round-trip
     const hasDetailedPricing =

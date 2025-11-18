@@ -1,10 +1,15 @@
 import CheckoutProgress from "@/src/app/(user)/[cartId]/checkout/_components/CheckoutProgress";
 import FooterButton from "@/src/app/(user)/[cartId]/checkout/_components/FooterButton";
 import Navbar from "@/src/components/Navbar";
+import PriceBreakdownCardWrapper from "@/src/components/PriceBreakdownCardWrapper";
 import { CheckoutProvider } from "@/src/contexts/CheckoutContext";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
-import { fetchCartData, fetchFlightData, Flight } from "@/src/helper/CheckoutHelper";
-import PriceBreakdownCard, {
+import {
+    fetchCartData,
+    fetchFlightData,
+    Flight,
+} from "@/src/helper/CheckoutHelper";
+import {
     FlightPricing,
     TicketSummaryProps,
 } from "@components/priceBreakdownCard";
@@ -93,7 +98,7 @@ export default async function CheckoutLayout({
                     <div className="flex w-full">{children}</div>
                     <div className="flex w-full max-w-[21.25rem] flex-col gap-10">
                         <BookingInfo />
-                        <PriceBreakdownCard
+                        <PriceBreakdownCardWrapper
                             tickets={tickets}
                             isRoundTrip={isRoundTrip}
                             flightPricing={flightPricing}
