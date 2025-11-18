@@ -22,7 +22,7 @@ export default function Page() {
                 />
             ))}
             <span className="text-[3rem] font-bold">{cardTitle[1]}</span>
-            <BaggageAllowance passengersData={passengerData} />
+            <BaggageAllowance passengersData={passengerData} hasReturn={cartData.Return !== undefined} />
         </div>
     );
 }

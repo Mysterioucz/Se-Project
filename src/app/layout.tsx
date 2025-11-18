@@ -2,10 +2,10 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import SessionGuard from "@src/components/SessionGuard";
 import SessionProvider from "@src/lib/SessionProvider";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { Sarabun } from "next/font/google";
 import { nextAuthOptions } from "../lib/auth";
 import "./globals.css";
+import { getServerSession } from "next-auth/next";
 
 const sarabun = Sarabun({
     variable: "--font-sarabun",

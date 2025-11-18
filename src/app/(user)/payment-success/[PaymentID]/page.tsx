@@ -53,6 +53,7 @@ export default function Page() {
                     const payment: PaymentData = result.data.payment;
                     setBookingID(payment.PaymentID);
                     setPaymentMethods(payment.PaymentMethod);
+                    
                     setPaymentAmount(payment.Amount);
                 } else {
                     setError(result.message || "Failed to fetch payment data");

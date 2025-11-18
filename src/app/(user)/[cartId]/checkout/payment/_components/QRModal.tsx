@@ -42,15 +42,22 @@ export default function QRModal({ open, onClose }: QRModalProps) {
             checkoutData?.passengerData.reduce((sum, passenger) => {
                 const departureBaggageFee =
                     passenger.baggageAllowance.departureBaggage.Price || 0;
+                return cartData.Price;
+            }, 0) || 0;
+        const departFee =
+            checkoutData?.passengerData.reduce((sum, passenger) => {
+                const departureBaggageFee =
+                    passenger.baggageAllowance.departureBaggage.Price || 0;
+                return sum + departureBaggageFee;
+            }, 0) || 0;
+        const returnFee =
+            checkoutData?.passengerData.reduce((sum, passenger) => {
                 const returnBaggageFee =
                     passenger.baggageAllowance.returnBaggage?.Price || 0;
-                return (
-                    cartData.Price +
-                    departureBaggageFee +
-                    returnBaggageFee
-                );
+                return sum + returnBaggageFee;
             }, 0) || 0;
-        setAmount(totalAmount);
+        console.log("returnFee", returnFee, departFee);
+        setAmount(totalAmount + returnFee + departFee);
     }, [open]);
 
     return (

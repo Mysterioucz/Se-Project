@@ -2,6 +2,7 @@
 
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import { useEffect, useState } from "react";
+import { useCheckout } from "../contexts/CheckoutContext";
 
 export interface TicketSummaryProps {
     type: PassengerTypes;
@@ -18,7 +19,6 @@ export interface BaggageSummaryProps {
     personal_item_price: number;
     carry_on_item_price: number;
     checked_baggage_price: number;
-    services_fee: number;
 }
 
 function TicketSummary({ type, price, quantity }: TicketSummaryProps) {
@@ -120,12 +120,12 @@ interface PriceBreakdownCardProps {
 
 export default function PriceBreakdownCard({
     tickets,
-    servicesFee = 0,
     flightPricing,
     isRoundTrip = false,
 }: PriceBreakdownCardProps) {
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [totalBaggagePrice, setTotalBaggagePrice] = useState<number>(0);
+    const { checkoutData } = useCheckout();
 
     useEffect(() => {
         // Calculate total ticket price
@@ -135,10 +135,18 @@ export default function PriceBreakdownCard({
         );
         console.log(tickets);
         // Calculate total baggage price
-        const baggageTotal = servicesFee;
-        setTotalBaggagePrice(servicesFee);
+        const departServiceFee = checkoutData.passengerData.reduce(
+            (sum, p) => sum + (p.baggageAllowance.departureBaggage.Price || 0),
+            0,
+        );
+        const returnServiceFee = checkoutData.passengerData.reduce(
+            (sum, p) => sum + (p.baggageAllowance.returnBaggage?.Price || 0),
+            0,
+        );
+        const baggageTotal = departServiceFee + returnServiceFee;
+        setTotalBaggagePrice(baggageTotal);
         setTotalPrice(ticketTotal + baggageTotal);
-    }, [tickets, servicesFee]);
+    }, [tickets, checkoutData.passengerData]);
 
     // Check if we have detailed flight pricing for round-trip
     const hasDetailedPricing =
@@ -236,7 +244,6 @@ export default function PriceBreakdownCard({
                             personal_item_price={0}
                             carry_on_item_price={0}
                             checked_baggage_price={totalBaggagePrice}
-                            services_fee={servicesFee}
                         />
                     </div>
                 </div>
