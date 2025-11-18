@@ -10,7 +10,7 @@ export default function Page() {
     const passengerData = checkoutData.passengerData || [];
     const totalPassengers =
         cartData.Adults + cartData.Childrens + cartData.Infants;
-
+    console.log("cartdata", cartData);
     return (
         <div className="flex h-fit w-full flex-col gap-6">
             <span className="text-[3rem] font-bold">{cardTitle[0]}</span>
@@ -22,7 +22,10 @@ export default function Page() {
                 />
             ))}
             <span className="text-[3rem] font-bold">{cardTitle[1]}</span>
-            <BaggageAllowance passengersData={passengerData} hasReturn={cartData.Return !== undefined} />
+            <BaggageAllowance
+                passengersData={passengerData}
+                hasReturn={cartData.FlightType !== "One Way"}
+            />
         </div>
     );
 }

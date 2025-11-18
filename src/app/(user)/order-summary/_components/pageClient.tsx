@@ -2,8 +2,8 @@
 import FlightDetailSummary from "@/src/app/(user)/order-summary/_components/flightDetailSummary";
 import PassengerInfoSummary from "@/src/app/(user)/order-summary/_components/passengerInfoSummary";
 import PaymentDetailSummary from "@/src/app/(user)/order-summary/_components/paymentDetailSummary";
-import PriceBreakdownCard from "@/src/components/priceBreakdownCard";
 import Button from "@/src/components/Button";
+import PriceBreakdownCard from "@/src/components/priceBreakdownCard";
 import { FlightLegTypes } from "@/src/enums/FlightLegTypes";
 import { PassengerTypes } from "@/src/enums/PassengerTypes";
 import formatDateLocal from "@/src/lib/formatDateLocal";
@@ -76,7 +76,8 @@ export default function PageClient({
     UserAccountID: string;
 }) {
     const flightType = data.payment.FlightType;
-    const pricePerPassenger = data.tickets[0].Price * (data.payment.ReturnFlight ? 2 : 1);
+    const pricePerPassenger =
+        data.tickets[0].Price * (data.payment.ReturnFlight ? 2 : 1);
     const tickets = [
         {
             type: PassengerTypes.Adult,

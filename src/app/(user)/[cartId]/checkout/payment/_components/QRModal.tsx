@@ -104,7 +104,7 @@ export default function QRModal({ open, onClose }: QRModalProps) {
                 }}
             >
                 <img
-                    src="/payment/QR.svg"
+                    src="/payment/QR.jpg"
                     alt="QR Code"
                     className="h-[17.9375rem] w-[17.9375rem] object-contain"
                 />
